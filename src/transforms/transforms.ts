@@ -23,7 +23,7 @@
  * Orbital Object ToolKit. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Earth, Sensor, Sgp4, Utils } from '../ootk';
+import { Earth, Sensor, Sgp4, Utils } from '../ootk-core';
 import {
   Degrees,
   EcefVec3,

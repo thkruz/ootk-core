@@ -1,4 +1,4 @@
-import { AzEl, Degrees, RaDec, Radians } from '../ootk';
+import { AzEl, Degrees, RaDec, Radians } from '../ootk-core';
 import { RAD2DEG } from '../utils/constants';
 import { Sun } from './Sun';
 

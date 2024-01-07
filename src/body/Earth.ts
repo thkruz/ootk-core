@@ -1,5 +1,5 @@
 import { DataHandler } from '../data/DataHandler';
-import { AngularDiameterMethod, Kilometers, Radians } from '../ootk';
+import { AngularDiameterMethod, Kilometers, Radians } from '../ootk-core';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { asec2rad, DEG2RAD, RAD2DEG, secondsPerDay, secondsPerSiderealDay, TAU, ttasec2rad } from '../utils/constants';

@@ -4,7 +4,7 @@
  * @since  1.2.0
  */
 
-import { Satellite } from '../../lib/ootk';
+import { Satellite } from '../../lib/ootk-core';
 import { RAD2DEG } from '../../lib/utils/constants';
 
 const dateObj = new Date(1661400000000);

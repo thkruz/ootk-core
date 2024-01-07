@@ -5,7 +5,7 @@
  */
 
 import { Star } from '../../lib/objects';
-import { Degrees, Kilometers, Radians } from '../../lib/ootk';
+import { Degrees, Kilometers, Radians } from '../../lib/ootk-core';
 
 describe('Basic Star functionality', () => {
   const star = new Star({

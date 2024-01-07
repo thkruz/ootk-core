@@ -1,9 +1,19 @@
 /* eslint-disable no-console */
-import { Sensor } from '../src/objects';
-import { Satellite } from '../src/objects/Satellite';
-import { Degrees, Kilometers, SensorParams, SpaceObjectType, TleLine1, TleLine2 } from '../src/ootk';
-import { calcGmst, ecf2eci, eci2lla, eci2rae } from '../src/transforms/transforms';
-import { DEG2RAD } from '../src/utils/constants';
+import {
+  calcGmst,
+  DEG2RAD,
+  Degrees,
+  ecf2eci,
+  eci2lla,
+  eci2rae,
+  Kilometers,
+  Satellite,
+  Sensor,
+  SensorParams,
+  SpaceObjectType,
+  TleLine1,
+  TleLine2,
+} from '../lib/ootk-core';
 
 const capeCodRadar = new Sensor({
   lat: <Degrees>41.754785,

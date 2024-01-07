@@ -1,4 +1,4 @@
-import { AngularDiameterMethod } from '../ootk';
+import { AngularDiameterMethod } from '../ootk-core';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD } from '../utils/constants';

@@ -1,4 +1,4 @@
-import { Radians } from '../ootk';
+import { Radians } from '../ootk-core';
 
 // / Earth nutation angles _(rad)_.
 export type NutationAngles = {

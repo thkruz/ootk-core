@@ -36,7 +36,7 @@
 
 import { Celestial } from '../body/Celestial';
 import { Sun } from '../body/Sun';
-import { Degrees, Kilometers, RaDec, Radians } from '../ootk';
+import { Degrees, Kilometers, RaDec, Radians } from '../ootk-core';
 import { MS_PER_DAY } from '../utils/constants';
 import { DEG2RAD } from './constants';
 

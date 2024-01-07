@@ -1,7 +1,7 @@
 {
-  "name": "ootk",
-  "version": "4.0.0",
-  "description": "Orbital Object Toolkit including SGP4 Propagator and Coordinate Transforms",
+  "name": "ootk-core",
+  "version": "0.0.0",
+  "description": "Orbital Object Toolkit Core including SGP4 Propagator and Coordinate Transforms",
   "scripts": {
     "build": "node ./scripts/cleanup.mjs && ttsc -p tsconfig.build.json",
     "lcov": "node ./scripts/openLcov.mjs",
@@ -10,17 +10,16 @@
     "lint:test": "eslint test",
     "test": "npm run build && jest",
     "test:coverage": "jest --coverage",
-    "test:performance": "node test/performance/timing.test.mjs",
     "version": "auto-changelog -p && git add CHANGELOG.md"
   },
-  "main": "./lib/ootk.js",
+  "main": "./lib/ootk-core.js",
   "exports": {
-    "import": "./lib/ootk.js",
-    "require": "./lib/ootk.js"
+    "import": "./lib/ootk-core.js",
+    "require": "./lib/ootk-core.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thkruz/ootk"
+    "url": "git://github.com/thkruz/ootk-core"
   },
   "keywords": [
     "sgp4",
@@ -29,10 +28,10 @@
     "space",
     "satellite"
   ],
-  "author": "Theodore Kruczek <theodore.kruczek@gmail.com> (https://github.com/ootk/)",
+  "author": "Theodore Kruczek <theodore.kruczek@gmail.com> (https://github.com/thkruz/ootk-core/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/thkruz/ootk/issues"
+    "url": "https://github.com/thkruz/ootk-core/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
@@ -61,11 +60,6 @@
     "webpack-cli": "^4.10.0"
   },
   "homepage": "https://github.com/thkruz/ootk",
-  "directories": {
-    "lib": "lib",
-    "src": "src",
-    "test": "test"
-  },
   "dependencies": {
     "ttypescript": "^1.5.15",
     "typescript-transform-paths": "^3.4.6"

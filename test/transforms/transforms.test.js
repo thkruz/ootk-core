@@ -15,7 +15,7 @@ import {
   lla2ecf,
   rae2ecf,
   rae2sez,
-} from '../../lib/ootk';
+} from '../../lib/ootk-core';
 import { RAD2DEG } from '../../lib/utils/constants';
 import transformData from './transforms.json';
 

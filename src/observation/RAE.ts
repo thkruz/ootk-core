@@ -1,7 +1,7 @@
 /* eslint-disable no-undefined */
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
-import { Radians } from '../ootk';
+import { Radians } from '../ootk-core';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { AngularDistanceMethod } from '../types/types';
