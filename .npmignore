@@ -1,0 +1,24 @@
+.github
+.vscode
+coverage
+examples
+node_modules
+scripts
+src/*
+test
+
+# Files
+.editorconfig
+.eslintignore
+.eslintrc
+.gitattributes
+.gitignore
+.npmignore
+.prettierrc
+babel.config.js
+codecov.yml
+jest.config.js
+package-lock.json
+sandbox.html
+tsconfig.*
+

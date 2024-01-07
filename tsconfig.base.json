@@ -1,0 +1,25 @@
+{
+  "typeAcquisition": {
+    "enable": true
+  },
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "es6",
+    "lib": ["esnext"],
+    "declaration": true,
+    // "noImplicitAny": true,
+    // "removeComments": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "listFiles": true,
+    "newLine": "LF",
+    "skipLibCheck": true,
+    // "noEmitOnError": true,
+    "types": ["jest", "node"],
+    "moduleResolution": "Node",
+    "esModuleInterop": true
+  }
+}
