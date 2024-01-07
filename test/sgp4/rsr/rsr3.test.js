@@ -8,10 +8,10 @@
  * sgp4Data is from https://www.celestrak.com/publications/AIAA/2006-6753/AIAA-2006-6753-Rev1.pdf
  * Only using the first and last state vectors for verification
  */
-import { Sgp4 } from '@lib/ootk';
-import { compareVectors } from '@test/lib/compareVectors';
-import sgp4Data from './rsr3.json';
+import { Sgp4 } from '../../../lib/ootk';
+import { compareVectors } from '../../lib/compareVectors';
 import sgp4FailData from './rsr3-fail.json';
+import sgp4Data from './rsr3.json';
 
 describe('Verification TLE Data in Appendix D of Revisiting Spacetrack Report #3: Rev 1', () => {
   sgp4Data.forEach((sgp4DataItem) => {

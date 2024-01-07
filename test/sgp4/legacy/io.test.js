@@ -3,7 +3,7 @@
  * @since  0.2.0
  */
 
-import { Sgp4 } from '@lib/ootk'; // eslint-disable-line
+import { Sgp4 } from '../../../src/ootk'; // eslint-disable-line
 import badTleData from './io.json';
 
 describe('Twoline', () => {

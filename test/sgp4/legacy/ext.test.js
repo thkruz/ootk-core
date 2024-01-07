@@ -3,8 +3,7 @@
  * @since  0.2.0
  */
 
-import { Sgp4 } from '@lib/ootk';
-import { compareVectors } from '@test/lib/compareVectors';
+import { Sgp4 } from '../../../lib/ootk';
 
 describe('Julian date / time', () => {
   // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines

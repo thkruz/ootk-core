@@ -1,9 +1,21 @@
 /**
- * @file   Tests from Transforms.js to ensure compatibility
+ * @file   Tests from js to ensure compatibility
  * @since  0.2.0
  */
 
-import { Transforms } from '../../lib/ootk';
+import {
+  ecf2eci,
+  ecf2rae,
+  eci2ecf,
+  eci2lla,
+  getDegLat,
+  getDegLon,
+  getRadLat,
+  getRadLon,
+  lla2ecf,
+  rae2ecf,
+  rae2sez,
+} from '../../lib/ootk';
 import { RAD2DEG } from '../../lib/utils/constants';
 import transformData from './transforms.json';
 
@@ -24,25 +36,25 @@ describe('Latitude & longitude conversions', () => {
 
   validLatitudes.forEach((item) => {
     it(`convert valid latitude value (${item.radians} radians) to degrees`, () => {
-      expect(Transforms.getDegLat(item.radians)).toBeCloseTo(item.degrees, numDigits);
+      expect(getDegLat(item.radians)).toBeCloseTo(item.degrees, numDigits);
     });
     it(`convert valid latitude value (${item.degrees} degrees) to radians`, () => {
-      expect(Transforms.getRadLat(item.degrees)).toBeCloseTo(item.radians, numDigits);
+      expect(getRadLat(item.degrees)).toBeCloseTo(item.radians, numDigits);
     });
   });
 
   validLongitudes.forEach((item) => {
     it(`convert valid longitude value (${item.radians} radians) to degrees`, () => {
-      expect(Transforms.getDegLon(item.radians)).toBeCloseTo(item.degrees, numDigits);
+      expect(getDegLon(item.radians)).toBeCloseTo(item.degrees, numDigits);
     });
     it(`convert valid longitude value (${item.degrees} degrees) to radians`, () => {
-      expect(Transforms.getRadLon(item.degrees)).toBeCloseTo(item.radians, numDigits);
+      expect(getRadLon(item.degrees)).toBeCloseTo(item.radians, numDigits);
     });
   });
 
   validGeodeticToEcf.forEach((item) => {
     it('convert valid LLA coordinates to ECF', () => {
-      const ecfCoordinates = Transforms.lla2ecf(item.lla);
+      const ecfCoordinates = lla2ecf(item.lla);
 
       expect(ecfCoordinates.x).toBeCloseTo(item.ecf.x);
       expect(ecfCoordinates.y).toBeCloseTo(item.ecf.y);
@@ -52,7 +64,7 @@ describe('Latitude & longitude conversions', () => {
 
   validEciToGeodetic.forEach((item) => {
     it('convert valid ECI coordinates to LLA', () => {
-      const llaCoordinates = Transforms.eci2lla(item.eci, item.gmst);
+      const llaCoordinates = eci2lla(item.eci, item.gmst);
 
       expect(llaCoordinates.lon).toBeCloseTo(item.lla.lon * RAD2DEG);
       expect(llaCoordinates.lat).toBeCloseTo(item.lla.lat * RAD2DEG);
@@ -62,7 +74,7 @@ describe('Latitude & longitude conversions', () => {
 
   validEciToEcf.forEach((item) => {
     it('convert valid ECI coordinates to ECF', () => {
-      const ecfCoordinates = Transforms.eci2ecf(item.eci, item.gmst);
+      const ecfCoordinates = eci2ecf(item.eci, item.gmst);
 
       expect(ecfCoordinates.x).toBeCloseTo(item.ecf.x);
       expect(ecfCoordinates.y).toBeCloseTo(item.ecf.y);
@@ -72,7 +84,7 @@ describe('Latitude & longitude conversions', () => {
 
   validEcfToEci.forEach((item) => {
     it('convert valid ECF coordinates to ECI', () => {
-      const eciCoordinates = Transforms.ecf2eci(item.ecf, item.gmst);
+      const eciCoordinates = ecf2eci(item.ecf, item.gmst);
 
       expect(eciCoordinates.x).toBeCloseTo(item.eci.x);
       expect(eciCoordinates.y).toBeCloseTo(item.eci.y);
@@ -82,7 +94,7 @@ describe('Latitude & longitude conversions', () => {
 
   validEcfToLookangles.forEach((item) => {
     it('convert valid ECF coordinates to RAE', () => {
-      const raeCoordinates = Transforms.ecf2rae(item.lla, item.satelliteEcf);
+      const raeCoordinates = ecf2rae(item.lla, item.satelliteEcf);
 
       expect(raeCoordinates.rng).toBeCloseTo(item.rae.rng, 0);
       expect(raeCoordinates.az).toBeCloseTo(item.rae.az * RAD2DEG, 1);
@@ -92,19 +104,19 @@ describe('Latitude & longitude conversions', () => {
 
   invalidLatitudes.forEach((item) => {
     it(`convert invalid latitude value (${item.radians} radians) to degrees`, () => {
-      expect(() => Transforms.getDegLat(item.radians)).toThrowError(RangeError);
+      expect(() => getDegLat(item.radians)).toThrowError(RangeError);
     });
     it(`convert invalid latitude value (${item.degrees} degrees) to radians`, () => {
-      expect(() => Transforms.getRadLat(item.degrees)).toThrowError(RangeError);
+      expect(() => getRadLat(item.degrees)).toThrowError(RangeError);
     });
   });
 
   invalidLongitudes.forEach((item) => {
     it(`convert invalid longitude value (${item.radians} radians) to degrees`, () => {
-      expect(() => Transforms.getDegLon(item.radians)).toThrowError(RangeError);
+      expect(() => getDegLon(item.radians)).toThrowError(RangeError);
     });
     it(`convert invalid longitude value (${item.degrees} degrees) to radians`, () => {
-      expect(() => Transforms.getRadLon(item.degrees)).toThrowError(RangeError);
+      expect(() => getRadLon(item.degrees)).toThrowError(RangeError);
     });
   });
 });
@@ -112,7 +124,7 @@ describe('Latitude & longitude conversions', () => {
 describe('Rae2Sez', () => {
   it('should convert valid RAE coordinates to SEZ', () => {
     const { rae, sez } = transformData.validRae2Sez[0];
-    const sezCoordinates = Transforms.rae2sez(rae);
+    const sezCoordinates = rae2sez(rae);
 
     expect(sezCoordinates.s).toBeCloseTo(sez.s);
     expect(sezCoordinates.e).toBeCloseTo(sez.e);
@@ -133,12 +145,12 @@ describe('Rae2Ecf', () => {
       lat: 0,
       alt: 0,
     };
-    const rae = Transforms.ecf2rae(lla, ecf);
+    const rae = ecf2rae(lla, ecf);
 
     // eslint-disable-next-line no-console
     console.warn(rae);
 
-    const ecfCoordinates = Transforms.rae2ecf(rae, lla);
+    const ecfCoordinates = rae2ecf(rae, lla);
 
     expect(ecfCoordinates.x).toBeCloseTo(ecf.x);
     expect(ecfCoordinates.y).toBeCloseTo(ecf.y);
