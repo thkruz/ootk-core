@@ -9,8 +9,12 @@
 
 > An Orbital Object Toolkit in Your Web Browser
 
-**ootk** is a collection libraries for doing math related to orbital objects written in TypeScript. **ootk** was
-developed to simplify the math and let you focus on using the results.
+**ootk-core** is the core libraries of [ootk](https://github.com/thkruz/ootk) for doing math related to orbital objects
+written in TypeScript. **ootk-core** was developed to simplify the math and let you focus on using the results.
+
+If you would like more functionality the expanded **ootk** library is available free under the AGPL license
+[here](https://github.com/thkruz/ootk). The full library has features for doing initial orbit determination, maneuver
+calculations, and more.
 
 Most of the functionality was originally written for [KeepTrack](https://github.com/thkruz/keeptrack.space) and then
 later refactored into this library for others to use.
@@ -33,13 +37,13 @@ later refactored into this library for others to use.
 Install the library with [NPM](https://www.npmjs.com/):
 
 ```bash
-npm i ootk
+npm i ootk-core
 ```
 
 ### Loading the Library
 
 ```js
-import { Sgp4 } as Ootk from 'ootk';
+import { Sgp4 } from 'ootk-core';
 ...
 const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
 ```
@@ -49,8 +53,10 @@ const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
 ### Propagating a TLE
 
 ```js
-const satrec = Ootk.Sgp4.createSatrec(line1, line2);
-const state = Ootk.Sgp4.propagate(satrec, time);
+import { Sgp4 } from 'ootk-core';
+
+const satrec = Sgp4.createSatrec(line1, line2);
+const state = Sgp4.propagate(satrec, time);
 console.log(state.position); // [x, y, z]
 console.log(state.velocity); // [vx, vy, vz]
 ```
@@ -58,7 +64,10 @@ console.log(state.velocity); // [vx, vy, vz]
 ### Creating a Satellite
 
 ```js
-const sat = new Ootk.Sat({ name: 'Test', tle1, tle2 });
+import { Satellite } from 'ootk-core';
+
+const sat = new Satellite({ name: 'Test', tle1, tle2 });
+
 console.log(sat.intlDes); // International Designator
 console.log(sat.epochYear); // Epoch Year
 console.log(sat.epochDay); // Epoch Day
@@ -112,7 +121,7 @@ sensor.getRae(sat, time); // Get position in range, aziimuth, elevation relative
 - `lint` lints source code located in `src` directory with [ESLint](http://eslint.org/)
 - `lint:fix` lints tests located in `src` directory with ESLint and attempts to auto-fix errors
 - `lint:test` lints tests located in `test` directory with ESLint
-- `test` runs jest to verify code remains functional
+- `test` builds the software and then runs jest to verify the final library remains functional
 - `test:coverage` generates lcov report to view code coverage
 
 ## :man_teacher: Contributing
@@ -156,5 +165,6 @@ the previous work of the following:
 
 ## :balance_scale: License
 
-I have placed the code under the [AGPL License](LICENSE.md) in order to ensure that good ideas can be shared and that
-the code is open for everyone to use. [Learn more here](https://www.gnu.org/philosophy/philosophy.html).
+In order to maximize the usabiltiy of the core modules of OOTK with other projects I support, I have placed this
+repository under the [MIT License](LICENSE.md). I strongly encourage you to conisder a GPL license for your own project
+to keep your project free for everyone to use. [Learn more here](https://www.gnu.org/philosophy/philosophy.html).
