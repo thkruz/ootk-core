@@ -42,7 +42,7 @@ class Utils {
     return <Kilometers>Math.sqrt((pos1.x - pos2.x) ** 2 + (pos1.y - pos2.y) ** 2 + (pos1.z - pos2.z) ** 2);
   }
 
-  static dopplerFactor(location: EciVec3, position: EciVec3, velocity: EciVec3): Kilometers {
+  static dopplerFactor(location: EciVec3, position: EciVec3, velocity: EciVec3): number {
     const mfactor = 7.292115e-5;
     const c = 299792.458; // Speed of light in km/s
 
@@ -60,8 +60,17 @@ class Utils {
     };
 
     const rangeRate = (range.x * rangeVel.x + range.y * rangeVel.y + range.z * rangeVel.z) / distance;
+    let dopplerFactor = 0;
 
-    return <Kilometers>(1 + (rangeRate / c) * sign(rangeRate));
+    if (rangeRate < 0) {
+      dopplerFactor = 1 + (rangeRate / c) * sign(rangeRate);
+    }
+
+    if (rangeRate >= 0) {
+      dopplerFactor = 1 - (rangeRate / c) * sign(rangeRate);
+    }
+
+    return dopplerFactor;
   }
 }
 

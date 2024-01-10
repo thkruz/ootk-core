@@ -74,7 +74,7 @@ describe('Doppler factor', () => {
     };
     const dopFactor = Utils.dopplerFactor(observerEcf, positionEcf, velocityEcf);
 
-    expect(dopFactor).toBeCloseTo(1.0000107847789212, numDigits);
+    expect(dopFactor).toBeCloseTo(0.9999892152210788, numDigits);
   });
 
   test('if negative range rate works', () => {
