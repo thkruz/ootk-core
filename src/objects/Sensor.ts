@@ -89,7 +89,7 @@ export class Sensor extends BaseObject {
 
       if (timeOffset === 0) {
         // Propagate Backwards to get the previous pass
-        const oldRae = this.getRae(sat, new Date(Date.now() - 1 * 1000));
+        const oldRae = this.rae(sat, new Date(date.getTime() - 1 * 1000));
 
         isInViewLast = this.isRaeInFov(oldRae);
       }
