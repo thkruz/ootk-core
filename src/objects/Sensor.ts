@@ -1,16 +1,10 @@
 import { SensorParams } from 'src/interfaces/SensorParams';
 import { PassType } from '../enums/PassType';
 import { Degrees, Kilometers, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
-
 import { GroundPosition } from './GroundPosition';
 import { Satellite } from './Satellite';
 
 export class Sensor extends GroundPosition {
-  name: string;
-  type: SpaceObjectType;
-  lat: Degrees;
-  lon: Degrees;
-  alt: Kilometers;
   minRng: Kilometers;
   minAz: Degrees;
   minEl: Degrees;

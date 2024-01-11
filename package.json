@@ -3,8 +3,9 @@
   "version": "1.0.0-0",
   "description": "Orbital Object Toolkit Core including SGP4 Propagator and Coordinate Transforms",
   "scripts": {
-    "build": "node ./scripts/cleanup.mjs && ttsc -p tsconfig.build.json",
-    "lcov": "node ./scripts/openLcov.mjs",
+    "mjs": "ttsc -p tsconfig.build.json && node ./scripts/moveMjs.mjs",
+    "cjs": "ttsc -p tsconfig.build.json -m commonjs",
+    "build": "node ./scripts/cleanup.mjs && npm run mjs && npm run cjs",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "lint:test": "eslint test",
@@ -39,29 +40,20 @@
     "@babel/preset-env": "^7.22.9",
     "@babel/preset-typescript": "^7.22.5",
     "@types/jest": "^28.1.8",
-    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "auto-changelog": "^2.2.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.3.0",
-    "codecov": "^3.8.1",
-    "copy-webpack-plugin": "^11.0.0",
     "eslint": "^7.32.0",
     "jest": "^28.1.3",
-    "node-fetch": "^2.6.7",
-    "opener": "^1.5.2",
     "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^3.2.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^4.9.5",
-    "webpack": "^5.11.1",
-    "webpack-cli": "^4.10.0"
-  },
-  "homepage": "https://github.com/thkruz/ootk",
-  "dependencies": {
     "ttypescript": "^1.5.15",
+    "typescript": "^4.9.5",
     "typescript-transform-paths": "^3.4.6"
-  }
+  },
+  "homepage": "https://github.com/thkruz/ootk"
 }

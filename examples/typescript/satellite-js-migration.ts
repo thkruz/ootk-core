@@ -12,7 +12,7 @@ import {
   Sgp4,
   TleLine1,
   TleLine2,
-} from '../src/ootk-core';
+} from '../../src/ootk-core';
 
 // Sample TLE
 const tle1 = '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992' as TleLine1;

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Degrees, ecf2rae, EcfVec3, GroundPosition, Kilometers, lla2ecf, lla2sez, RAD2DEG } from '../src/ootk-core';
+import { Degrees, ecf2rae, EcfVec3, GroundPosition, Kilometers, lla2ecf, lla2sez, RAD2DEG } from '../../src/ootk-core';
 
 const observer = new GroundPosition({
   name: 'ground-position',

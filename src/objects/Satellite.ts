@@ -1,4 +1,3 @@
-import { dopplerFactor } from './../utils/functions';
 /**
  * @author Theodore Kruczek.
  * @description Orbital Object ToolKit (OOTK) is a collection of tools for working
@@ -31,23 +30,6 @@ import { dopplerFactor } from './../utils/functions';
 
 import { OptionsParams } from 'src/interfaces/OptionsParams';
 import { SatelliteParams } from 'src/interfaces/SatelliteParams';
-import {
-  Degrees,
-  EcfVec3,
-  EciVec3,
-  GreenwichMeanSiderealTime,
-  Kilometers,
-  LlaVec3,
-  PosVel,
-  Radians,
-  RaeVec3,
-  SatelliteRecord,
-  SpaceObjectType,
-  TleLine1,
-  TleLine2,
-} from '../types/types';
-import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants';
-
 import { FormatTle } from '../coordinate/FormatTle';
 import { Geodetic } from '../coordinate/Geodetic';
 import { ITRF } from '../coordinate/ITRF';
@@ -59,6 +41,22 @@ import { Sgp4 } from '../sgp4/sgp4';
 import { EpochUTC } from '../time/EpochUTC';
 import { Tle } from '../tle/tle';
 import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms';
+import {
+  Degrees,
+  EcfVec3,
+  EciVec3,
+  GreenwichMeanSiderealTime,
+  Kilometers,
+  LlaVec3,
+  PosVel,
+  Radians,
+  RaeVec3,
+  SatelliteRecord,
+  TleLine1,
+  TleLine2,
+} from '../types/types';
+import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants';
+import { dopplerFactor } from './../utils/functions';
 import { BaseObject } from './BaseObject';
 import { GroundPosition } from './GroundPosition';
 
@@ -71,10 +69,6 @@ import { GroundPosition } from './GroundPosition';
  * Represents a satellite object with orbital information and methods for calculating its position and other properties.
  */
 export class Satellite extends BaseObject {
-  name: string;
-  type: SpaceObjectType;
-  position: EciVec3; // Where is the object
-  time: Date; // When is the object there
   apogee: number;
   argOfPerigee: number;
   bstar: number;
