@@ -33,6 +33,7 @@
 
 export * from './body';
 export * from './coordinate';
+export { Tle } from './coordinate/Tle';
 export * from './data/DataHandler';
 export * from './enums';
 export * from './interfaces';
@@ -41,7 +42,6 @@ export * from './observation';
 export * from './operations/operations';
 export { Sgp4 } from './sgp4/sgp4';
 export * from './time/time';
-export { Tle } from './tle/tle';
 export * from './transforms';
 export * from './types/types';
 export * from './utils/constants';

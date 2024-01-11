@@ -1,4 +1,5 @@
-import { Satellite } from 'src/objects';
+import { Satellite } from '../objects';
+import { Tle } from './Tle';
 
 export type StringifiedNumber = `${number}.${number}`;
 
@@ -36,7 +37,7 @@ export abstract class FormatTle {
 
   static createTle(tleParams: TleParams): { tle1: string; tle2: string } {
     const { inc, meanmo, rasc, argPe, meana, ecen, epochyr, epochday, intl } = tleParams;
-    const scc = FormatTle.convert6DigitToA5(tleParams.scc);
+    const scc = Tle.convert6DigitToA5(tleParams.scc);
     const epochYrStr = epochyr.padStart(2, '0');
     const epochdayStr = parseFloat(epochday).toFixed(8).padStart(12, '0');
     const incStr = FormatTle.inclination(inc);
@@ -142,57 +143,5 @@ export abstract class FormatTle {
     }
 
     return `${str.substring(0, index)}${chr}${str.substring(index + 1)}`;
-  }
-
-  /**
-   * Converts a 6 digit SCC number to a 5 digit SCC alpha 5 number
-   */
-  static convert6DigitToA5(sccNum: string): string {
-    // Only applies to 6 digit numbers
-    if (sccNum.length < 6) {
-      return sccNum;
-    }
-
-    if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0])) {
-      return sccNum;
-    }
-
-    // Extract the trailing 4 digits
-    const rest = sccNum.slice(2, 6);
-
-    /*
-     * Convert the first two digit numbers into a Letter. Skip I and O as they look too similar to 1 and 0
-     * A=10, B=11, C=12, D=13, E=14, F=15, G=16, H=17, J=18, K=19, L=20, M=21, N=22, P=23, Q=24, R=25, S=26,
-     * T=27, U=28, V=29, W=30, X=31, Y=32, Z=33
-     */
-    let first = parseInt(`${sccNum[0]}${sccNum[1]}`);
-    const iPlus = first >= 18 ? 1 : 0;
-    const tPlus = first >= 24 ? 1 : 0;
-
-    first = first + iPlus + tPlus;
-
-    return `${String.fromCharCode(first + 55)}${rest}`;
-  }
-
-  static convertA5to6Digit(sccNum: string): string {
-    if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0])) {
-      // Extract the trailing 4 digits
-      const rest = sccNum.slice(1, 5);
-
-      /*
-       * Convert the first letter to a two digit number. Skip I and O as they look too similar to 1 and 0
-       * A=10, B=11, C=12, D=13, E=14, F=15, G=16, H=17, J=18, K=19, L=20, M=21, N=22, P=23, Q=24, R=25, S=26,
-       * T=27, U=28, V=29, W=30, X=31, Y=32, Z=33
-       */
-      let first = sccNum[0].toUpperCase().charCodeAt(0) - 55;
-      const iPlus = first >= 18 ? 1 : 0;
-      const tPlus = first >= 24 ? 1 : 0;
-
-      first = first - iPlus - tPlus;
-
-      return `${first}${rest}`;
-    }
-
-    return sccNum;
   }
 }

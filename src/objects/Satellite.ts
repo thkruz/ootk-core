@@ -30,16 +30,15 @@
 
 import { OptionsParams } from 'src/interfaces/OptionsParams';
 import { SatelliteParams } from 'src/interfaces/SatelliteParams';
-import { FormatTle } from '../coordinate/FormatTle';
 import { Geodetic } from '../coordinate/Geodetic';
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
 import { RIC } from '../coordinate/RIC';
+import { Tle } from '../coordinate/Tle';
 import { RAE } from '../observation/RAE';
 import { Vector3D } from '../operations/Vector3D';
 import { Sgp4 } from '../sgp4/sgp4';
 import { EpochUTC } from '../time/EpochUTC';
-import { Tle } from '../tle/tle';
 import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms';
 import {
   Degrees,
@@ -105,14 +104,14 @@ export class Satellite extends BaseObject {
   constructor(info: SatelliteParams, options?: OptionsParams) {
     super(info);
 
-    const tleData = Tle.parseTle(info.tle1, info.tle2);
+    const tleData = Tle.parse(info.tle1, info.tle2);
 
     this.tle1 = info.tle1;
     this.tle2 = info.tle2;
 
     this.sccNum = info.sccNum || tleData.satNum.toString();
-    this.sccNum5 = FormatTle.convert6DigitToA5(this.sccNum);
-    this.sccNum6 = FormatTle.convertA5to6Digit(this.sccNum5);
+    this.sccNum5 = Tle.convert6DigitToA5(this.sccNum);
+    this.sccNum6 = Tle.convertA5to6Digit(this.sccNum5);
     this.epochYear = tleData.epochYear;
     this.epochDay = tleData.epochDay;
     this.meanMoDev1 = tleData.meanMoDev1;
@@ -124,7 +123,7 @@ export class Satellite extends BaseObject {
     this.argOfPerigee = tleData.argOfPerigee;
     this.meanAnomaly = tleData.meanAnomaly;
     this.meanMotion = tleData.meanMotion;
-    this.period = 1440 / this.meanMotion;
+    this.period = tleData.period;
 
     // NOTE: Calculate apogee and perigee
 

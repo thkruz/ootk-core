@@ -521,6 +521,7 @@ export type Line1Data = {
  * - meanMotion: The mean motion of the satellite.
  * - revNum: The revolution number at epoch.
  * - checksum2: The checksum of the second line of the TLE.
+ * - period: The period of the satellite's orbit, derived from the mean motion.
  *
  * @see https://en.wikipedia.org/wiki/Two-line_element_set
  */
@@ -536,6 +537,7 @@ export type Line2Data = {
   meanMotion: number;
   revNum: number;
   checksum2: number;
+  period: number;
 };
 
 /**
@@ -680,3 +682,26 @@ export type Lookangle = {
   rng: Kilometers;
   maxElPass?: Degrees;
 };
+/**
+ * Two-line element set data for a satellite.
+ */
+export type TleData = {
+  satNum: number;
+  intlDes: string;
+  epochYear: number;
+  epochDay: number;
+  meanMoDev1: number;
+  meanMoDev2: number;
+  bstar: number;
+  inclination: number;
+  raan: number;
+  eccentricity: number;
+  argOfPerigee: number;
+  meanAnomaly: number;
+  meanMotion: number;
+  period: number;
+};
+/**
+ * Represents a set of data containing both Line 1 and Line 2 TLE information.
+ */
+export type TleDataFull = Line1Data & Line2Data;

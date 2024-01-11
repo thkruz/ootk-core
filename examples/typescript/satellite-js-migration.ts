@@ -79,8 +79,10 @@ const satelliteY = position.y; // to prevent you from accidentally
 const satelliteZ = position.z; // mixing Meters with Kilometers.
 
 // Look Angles may be accessed by `azimuth`, `elevation`, `range` properties.
-const azimuth = lookAngles.azimuth; // Typed as Degrees
-const elevation = lookAngles.elevation; // Typed as Degrees
+const azimuth = lookAngles.azimuth; // Typed as Radians
+const azimuthDegress = lookAngles.azimuthDegrees; // Typed as Degrees
+const elevation = lookAngles.elevation; // Typed as Radains
+const elevationDegrees = lookAngles.elevationDegrees; // Typed as Degrees
 const rangeSat = lookAngles.range; // Typed as Kilometers
 
 // Geodetic coords are accessed via `longitude`, `latitude`, `height`.

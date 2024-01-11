@@ -16,8 +16,17 @@ export class RAE {
     public range: number,
     public azimuth: Radians,
     public elevation: Radians,
+    /**
+     * The range rate of the satellite relative to the observer in kilometers per second.
+     */
     public rangeRate?: number,
+    /**
+     * The azimuth rate of the satellite relative to the observer in radians per second.
+     */
     public azimuthRate?: number,
+    /**
+     * The elevation rate of the satellite relative to the observer in radians per second.
+     */
     public elevationRate?: number,
   ) {
     // Do nothing

@@ -42,7 +42,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
 
-import { Sgp4OpsMode } from '../coordinate/TLE';
+import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
 import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types';
 import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants';
 
@@ -233,7 +233,7 @@ class Sgp4 {
     tleLine1: string,
     tleLine2: string,
     whichconst = Sgp4GravConstants.wgs72,
-    opsmode = Sgp4OpsMode.improved,
+    opsmode = Sgp4OpsMode.IMPROVED,
   ): SatelliteRecord {
     let year = 0;
 
@@ -3519,7 +3519,7 @@ class Sgp4 {
     /* eslint-disable no-param-reassign */
     const {
       whichconst = Sgp4GravConstants.wgs72,
-      opsmode = Sgp4OpsMode.improved,
+      opsmode = Sgp4OpsMode.IMPROVED,
       satn = satrec.satnum,
       epoch,
       xbstar,
