@@ -46,4 +46,3 @@ export * from './transforms';
 export * from './types/types';
 export * from './utils/constants';
 export * from './utils/functions';
-export { Utils } from './utils/utils';

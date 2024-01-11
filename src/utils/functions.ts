@@ -625,7 +625,7 @@ export function sign(value: number) {
   return value >= 0 ? 1 : -1;
 }
 
-const spaceObjTypeStrMap = {
+const spaceObjTypeStrMap_ = {
   [SpaceObjectType.UNKNOWN]: 'Unknown',
   [SpaceObjectType.PAYLOAD]: 'Payload',
   [SpaceObjectType.ROCKET_BODY]: 'Rocket Body',
@@ -657,9 +657,24 @@ const spaceObjTypeStrMap = {
   [SpaceObjectType.FRAGMENT]: 'Fragment',
 };
 
+/**
+ * Converts a SpaceObjectType to a string representation.
+ * @param spaceObjType - The SpaceObjectType to convert.
+ * @returns The string representation of the SpaceObjectType.
+ */
 export const spaceObjType2Str = (spaceObjType: SpaceObjectType): string =>
-  spaceObjTypeStrMap[spaceObjType] || 'Unknown';
+  spaceObjTypeStrMap_[spaceObjType] || 'Unknown';
 
+/**
+ * Calculates the Doppler factor for a given location, position, and velocity.
+ * The Doppler factor is a measure of the change in frequency or wavelength of a wave
+ * as observed by an observer moving relative to the source of the wave.
+ *
+ * @param location - The location vector of the observer.
+ * @param position - The position vector of the source.
+ * @param velocity - The velocity vector of the source.
+ * @returns The calculated Doppler factor.
+ */
 export const dopplerFactor = (location: EciVec3, position: EciVec3, velocity: EciVec3): number => {
   const mfactor = 7.292115e-5;
   const c = 299792.458; // Speed of light in km/s
@@ -690,3 +705,21 @@ export const dopplerFactor = (location: EciVec3, position: EciVec3, velocity: Ec
 
   return dopplerFactor;
 };
+
+/**
+ * Creates an array of numbers from start to stop (inclusive) with the specified step.
+ *
+ * @param start The starting number.
+ * @param stop The ending number.
+ * @param step The step value.
+ * @returns An array of numbers.
+ */
+export function createVec(start: number, stop: number, step: number): number[] {
+  const array = [];
+
+  for (let i = start; i <= stop; i += step) {
+    array.push(i);
+  }
+
+  return array;
+}

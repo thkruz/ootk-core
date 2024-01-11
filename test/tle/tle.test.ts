@@ -6,65 +6,65 @@
  */
 
 import { Tle } from '../../lib/ootk-core';
-import tleData from './tle.json';
+import { tleData } from './tleData';
 
 describe('Valid TLEs', () => {
   tleData.forEach((testCase) => {
     describe(`TLE ${testCase.satNum}: Line 1 Parsing`, () => {
       it('should parse the line number', () => {
-        expect(Tle.getLineNumber(testCase.line1)).toBe(testCase.linenum1);
-        expect(Tle.getLineNumber(testCase.line2)).toBe(testCase.linenum2);
+        expect(Tle.lineNumber(testCase.line1)).toBe(testCase.linenum1);
+        expect(Tle.lineNumber(testCase.line2)).toBe(testCase.linenum2);
       });
 
       it('should parse satellite number', () => {
-        expect(Tle.getSatNum(testCase.line1)).toBe(testCase.satNum);
-        expect(Tle.getSatNum(testCase.line2)).toBe(testCase.satNum2);
+        expect(Tle.satNum(testCase.line1)).toBe(testCase.satNum);
+        expect(Tle.satNum(testCase.line2)).toBe(testCase.satNum2);
       });
 
       it('should parse satellite number as a raw string', () => {
-        expect(Tle.getRawSatNum(testCase.line1)).toBe(testCase.satNumRaw);
-        expect(Tle.getRawSatNum(testCase.line2)).toBe(testCase.satNumRaw2);
+        expect(Tle.rawSatNum(testCase.line1)).toBe(testCase.satNumRaw);
+        expect(Tle.rawSatNum(testCase.line2)).toBe(testCase.satNumRaw2);
       });
 
       it('should parse satellite classification', () => {
-        expect(Tle.getClassification(testCase.line1)).toBe(testCase.classification);
+        expect(Tle.classification(testCase.line1)).toBe(testCase.classification);
       });
 
       it('should parse International Designator', () => {
-        expect(Tle.getIntlDesYear(testCase.line1)).toBe(testCase.intlDesYear);
-        expect(Tle.getIntlDesLaunchNum(testCase.line1)).toBe(testCase.intlDesLaunchNum);
-        expect(Tle.getIntlDesLaunchPiece(testCase.line1)).toBe(testCase.intlDesLaunchPiece);
-        expect(Tle.getIntlDes(testCase.line1)).toBe(testCase.intlDes);
+        expect(Tle.intlDesYear(testCase.line1)).toBe(testCase.intlDesYear);
+        expect(Tle.intlDesLaunchNum(testCase.line1)).toBe(testCase.intlDesLaunchNum);
+        expect(Tle.intlDesLaunchPiece(testCase.line1)).toBe(testCase.intlDesLaunchPiece);
+        expect(Tle.intlDes(testCase.line1)).toBe(testCase.intlDes);
       });
 
       it('should parse epoch', () => {
-        expect(Tle.getEpochYear(testCase.line1)).toBe(testCase.epochYear);
-        expect(Tle.getEpochYearFull(testCase.line1)).toBe(testCase.epochYearFull);
-        expect(Tle.getEpochDay(testCase.line1)).toBe(testCase.epochDay);
+        expect(Tle.epochYear(testCase.line1)).toBe(testCase.epochYear);
+        expect(Tle.epochYearFull(testCase.line1)).toBe(testCase.epochYearFull);
+        expect(Tle.epochDay(testCase.line1)).toBe(testCase.epochDay);
       });
 
       it('should parse first derivative', () => {
-        expect(Tle.getMeanMoDev1(testCase.line1)).toBe(testCase.meanMoDev1);
+        expect(Tle.meanMoDev1(testCase.line1)).toBe(testCase.meanMoDev1);
       });
 
       it('should parse second derivative', () => {
-        expect(Tle.getMeanMoDev2(testCase.line1)).toBe(testCase.meanMoDev2);
+        expect(Tle.meanMoDev2(testCase.line1)).toBe(testCase.meanMoDev2);
       });
 
       it('should parse bstar', () => {
-        expect(Tle.getBstar(testCase.line1)).toBe(testCase.bstar);
+        expect(Tle.bstar(testCase.line1)).toBe(testCase.bstar);
       });
 
       it('should parse ephemerisType', () => {
-        expect(Tle.getEphemerisType(testCase.line1)).toBe(testCase.ephemerisType);
+        expect(Tle.ephemerisType(testCase.line1)).toBe(testCase.ephemerisType);
       });
 
       it('should parse element number', () => {
-        expect(Tle.getElsetNum(testCase.line1)).toBe(testCase.elsetNum);
+        expect(Tle.elsetNum(testCase.line1)).toBe(testCase.elsetNum);
       });
 
       it('should parse checksum', () => {
-        expect(Tle.getChecksum(testCase.line1)).toBe(testCase.checksum1);
+        expect(Tle.checksum(testCase.line1)).toBe(testCase.checksum1);
       });
 
       it('should parse all of line 1', () => {
@@ -92,35 +92,35 @@ describe('Valid TLEs', () => {
 
     describe(`TLE ${testCase.satNum}: Line 2 Parsing`, () => {
       it('should parse satellite inclination', () => {
-        expect(Tle.getInclination(testCase.line2)).toBe(testCase.inclination);
+        expect(Tle.inclination(testCase.line2)).toBe(testCase.inclination);
       });
 
       it('should parse right ascension of ascending node', () => {
-        expect(Tle.getRaan(testCase.line2)).toBe(testCase.raan);
+        expect(Tle.rightAscension(testCase.line2)).toBe(testCase.raan);
       });
 
       it('should parse eccentricity', () => {
-        expect(Tle.getEccentricity(testCase.line2)).toBe(testCase.eccentricity);
+        expect(Tle.eccentricity(testCase.line2)).toBe(testCase.eccentricity);
       });
 
       it('should parse argument of perigee', () => {
-        expect(Tle.getArgOfPerigee(testCase.line2)).toBe(testCase.argOfPerigee);
+        expect(Tle.argOfPerigee(testCase.line2)).toBe(testCase.argOfPerigee);
       });
 
       it('should parse mean anomaly', () => {
-        expect(Tle.getMeanAnomaly(testCase.line2)).toBe(testCase.meanAnomaly);
+        expect(Tle.meanAnomaly(testCase.line2)).toBe(testCase.meanAnomaly);
       });
 
       it('should parse mean motion', () => {
-        expect(Tle.getMeanMotion(testCase.line2)).toBe(testCase.meanMotion);
+        expect(Tle.meanMotion(testCase.line2)).toBe(testCase.meanMotion);
       });
 
       it('should parse revolution number', () => {
-        expect(Tle.getRevNum(testCase.line2)).toBe(testCase.revNum);
+        expect(Tle.revNum(testCase.line2)).toBe(testCase.revNum);
       });
 
       it('should parse checksum', () => {
-        expect(Tle.getChecksum(testCase.line2)).toBe(testCase.checksum2);
+        expect(Tle.checksum(testCase.line2)).toBe(testCase.checksum2);
       });
 
       it('should parse all of line 2', () => {
@@ -136,11 +136,12 @@ describe('Valid TLEs', () => {
           meanMotion: testCase.meanMotion,
           revNum: testCase.revNum,
           checksum2: testCase.checksum2,
+          period: testCase.period,
         });
       });
       describe('TLE Parsing', () => {
         it('should parse a TLE for main orbital data', () => {
-          const tle = Tle.parseTle(testCase.line1, testCase.line2);
+          const tle = Tle.parse(testCase.line1, testCase.line2);
 
           expect(tle).toEqual({
             satNum: testCase.satNum,
@@ -156,11 +157,12 @@ describe('Valid TLEs', () => {
             argOfPerigee: testCase.argOfPerigee,
             meanAnomaly: testCase.meanAnomaly,
             meanMotion: testCase.meanMotion,
+            period: testCase.period,
           });
         });
 
         it('should parse a TLE for all data', () => {
-          const tle = Tle.parseTleFull(testCase.line1, testCase.line2);
+          const tle = Tle.parseAll(testCase.line1, testCase.line2);
 
           expect(tle).toEqual({
             lineNumber1: testCase.linenum1,
@@ -189,6 +191,7 @@ describe('Valid TLEs', () => {
             revNum: testCase.revNum,
             checksum1: testCase.checksum1,
             checksum2: testCase.checksum2,
+            period: testCase.period,
           });
         });
       });

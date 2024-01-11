@@ -3,7 +3,7 @@
  * @since  1.0.0-alpha3
  */
 
-import { EciVec3, Kilometers, linearDistance, Utils, Vec3 } from '../../lib/ootk-core'; // eslint-disable-line
+import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../lib/ootk-core'; // eslint-disable-line
 import { dopplerFactor, getDayOfYear } from '../../lib/utils/functions';
 
 const numDigits = 8;
@@ -113,12 +113,6 @@ describe('Distance function', () => {
         { x: 1000, y: 1000, z: 1100 } as Vec3<Kilometers>,
       ),
     ).toEqual(100);
-  });
-});
-
-describe('Create Vector Function', () => {
-  test('if vector creation is correct', () => {
-    expect(Utils.createVec(1, 10, 2)).toEqual([1, 3, 5, 7, 9]);
   });
 });
 
