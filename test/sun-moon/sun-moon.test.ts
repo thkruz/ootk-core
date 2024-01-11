@@ -5,10 +5,10 @@
  */
 
 import { Celestial } from '../../lib/body/Celestial';
+import { Moon } from '../../lib/body/Moon';
 import { Sun } from '../../lib/body/Sun';
-import { Utils } from '../../lib/ootk-core';
+import { Degrees, Meters } from '../../lib/ootk-core';
 
-const { MoonMath } = Utils;
 // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
 const dateObj = new Date(1661400000000);
 
@@ -17,27 +17,27 @@ describe('Sun and Moon', () => {
     const d = Sun.julian2date(Sun.date2jSince2000(dateObj));
     const c = Sun.raDec(d);
 
-    Celestial.getStarAzEl(dateObj, 0, 0, c.ra, c.dec);
-    Sun.azEl(dateObj, 0, 0);
+    Celestial.getStarAzEl(dateObj, 0 as Degrees, 0 as Degrees, c.ra, c.dec);
+    Sun.azEl(dateObj, 0 as Degrees, 0 as Degrees);
   });
 
   test('Local Solar Time', () => {
     // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
-    const lst = Sun.getSolarTime(new Date(1658807880000), -5, -71);
+    const lst = Sun.getSolarTime(new Date(1658807880000), -5, -71 as Degrees);
 
     expect(lst.toUTCString()).toEqual('Tue, 26 Jul 2022 04:07:49 GMT');
   });
 
-  test('MoonMath Unit Tests', () => {
-    expect(MoonMath.getMoonIllumination(dateObj)).toMatchSnapshot();
+  test('Moon Unit Tests', () => {
+    expect(Moon.getMoonIllumination(dateObj)).toMatchSnapshot();
 
-    MoonMath.getMoonPosition(dateObj, 0, 0);
-    MoonMath.getMoonTimes(dateObj, 0, 0, true);
-    MoonMath.getMoonTimes(dateObj, -10, -10, false);
+    Moon.rae(dateObj, 0 as Degrees, 0 as Degrees);
+    Moon.getMoonTimes(dateObj, 0 as Degrees, 0 as Degrees, true);
+    Moon.getMoonTimes(dateObj, -10 as Degrees, -10 as Degrees, false);
   });
 
   test('getMoonIllumination returns fraction and angle of moons illuminated limb and phase', () => {
-    const moonIllum = MoonMath.getMoonIllumination(dateObj);
+    const moonIllum = Moon.getMoonIllumination(dateObj);
 
     expect(moonIllum).toMatchSnapshot();
   });
@@ -50,7 +50,7 @@ describe('Sun and Moon', () => {
 describe('Test for #6 fix', () => {
   test('Test for #6 fix', () => {
     const date = new Date('2013-03-05UTC');
-    const result = (Sun.azEl(date, 50.5, 30.5).az * 180) / Math.PI;
+    const result = (Sun.azEl(date, 50.5 as Degrees, 30.5 as Degrees).az * 180) / Math.PI;
 
     expect(result).toBeCloseTo(36.742354609606814);
   });
@@ -85,7 +85,7 @@ describe('Test for variety of date/time stamps', () => {
         const date = new Date(testDateStrings[i]);
         const testDateDay = date.getDate();
 
-        const times = Sun.getTimes(date, lat, lng);
+        const times = Sun.getTimes(date, lat as Degrees, lng as Degrees);
 
         expect(times.solarNoon.getDate()).toEqual(testDateDay);
       });
@@ -124,7 +124,7 @@ describe('Suncalc.js tests', () => {
   };
 
   test('getTimes returns sun phases for the given date and location', () => {
-    const times = Sun.getTimes(date, lat, lon, 0, true);
+    const times = Sun.getTimes(date, lat as Degrees, lon as Degrees, 0 as Meters, true);
 
     // eslint-disable-next-line guard-for-in
     for (const i in testTimes) {
@@ -133,7 +133,7 @@ describe('Suncalc.js tests', () => {
   });
 
   test('getTimes adjusts sun phases when additionally given the observer height', () => {
-    const times = Sun.getTimes(date, lat, lon, alt, true);
+    const times = Sun.getTimes(date, lat as Degrees, lon as Degrees, alt as Meters, true);
 
     // eslint-disable-next-line guard-for-in
     for (const i in heightTestTimes) {
@@ -142,14 +142,14 @@ describe('Suncalc.js tests', () => {
   });
 
   test('getSunAzEl returns azimuth and altitude for the given time and location', () => {
-    const sunPos = Sun.azEl(date, lat, lon);
+    const sunPos = Sun.azEl(date, lat as Degrees, lon as Degrees);
 
     expect(sunPos.az).toBeCloseTo(0.6412750628729547);
     expect(sunPos.el).toBeCloseTo(-0.7000406838781611);
   });
 
   test('getMoonIllumination returns fraction and angle of moons illuminated limb and phase', () => {
-    const moonIllum = MoonMath.getMoonIllumination(date);
+    const moonIllum = Moon.getMoonIllumination(date);
 
     expect(moonIllum.fraction).toBeCloseTo(0.4848068202456373);
     expect(moonIllum.phaseValue).toBeCloseTo(0.7548368838538762);
@@ -157,7 +157,7 @@ describe('Suncalc.js tests', () => {
   });
 
   test('getMoonPosition returns moon position data given time and location', () => {
-    const moonPos = MoonMath.getMoonPosition(date, lat, lon);
+    const moonPos = Moon.rae(date, lat as Degrees, lon as Degrees);
 
     expect(moonPos.az).toBeCloseTo(2.1631927013459706);
     expect(moonPos.el).toBeCloseTo(0.014551482243892251);
@@ -165,7 +165,7 @@ describe('Suncalc.js tests', () => {
   });
 
   test('getMoonTimes returns moon rise and set times', () => {
-    const moonTimes = MoonMath.getMoonTimes(new Date('2013-03-04UTC'), lat, lon, true);
+    const moonTimes = Moon.getMoonTimes(new Date('2013-03-04UTC'), lat as Degrees, lon as Degrees, true);
 
     expect(moonTimes.rise.toUTCString()).toEqual('Mon, 04 Mar 2013 23:54:29 GMT');
     expect(moonTimes.set.toUTCString()).toEqual('Mon, 04 Mar 2013 07:47:58 GMT');
@@ -204,7 +204,7 @@ describe('Tests from Hypnos3', () => {
   };
 
   test('southern hemisphere', () => {
-    const times = Sun.getTimes(date, lat, lon);
+    const times = Sun.getTimes(date, lat as Degrees, lon as Degrees);
 
     // eslint-disable-next-line guard-for-in
     for (const i in testTimes) {
@@ -213,7 +213,7 @@ describe('Tests from Hypnos3', () => {
   });
 
   test('getSolarTime returns the solar time', () => {
-    const solarTime = Sun.getSolarTime(date, -5, -71);
+    const solarTime = Sun.getSolarTime(date, -5, -71 as Degrees);
 
     expect(solarTime.toUTCString()).toEqual('Tue, 05 Mar 2013 00:03:33 GMT');
   });

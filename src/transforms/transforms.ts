@@ -28,7 +28,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { Earth, Sensor, Sgp4, Utils } from '../ootk-core';
+import { Earth, Sensor, Sgp4 } from '../ootk-core';
 import {
   Degrees,
   EcefVec3,
@@ -190,9 +190,9 @@ export function enu2rf<D extends number, A extends number = Radians>({ x, y, z }
 }
 
 /**
- * Calculates Geodetic Lat Lon Alt to ECF coordinates.
+ * Converts geodetic coordinates (longitude, latitude, altitude) to Earth-Centered Earth-Fixed (ECF) coordinates.
  */
-export function lla2ecf<D extends number>(lla: LlaVec3<Radians, D>): EcfVec3<D> {
+export function llaRad2ecf<AltitudeUnits extends number>(lla: LlaVec3<Radians, AltitudeUnits>): EcfVec3<AltitudeUnits> {
   const { lon, lat, alt } = lla;
 
   const a = 6378.137;
@@ -206,10 +206,26 @@ export function lla2ecf<D extends number>(lla: LlaVec3<Radians, D>): EcfVec3<D> 
   const z = (normal * (1 - e2) + alt) * Math.sin(lat);
 
   return {
-    x: <D>x,
-    y: <D>y,
-    z: <D>z,
+    x: <AltitudeUnits>x,
+    y: <AltitudeUnits>y,
+    z: <AltitudeUnits>z,
   };
+}
+
+/**
+ * Converts geodetic coordinates (longitude, latitude, altitude) to Earth-Centered Earth-Fixed (ECF) coordinates.
+ */
+export function lla2ecf<AltitudeUnits extends number>(lla: LlaVec3<Degrees, AltitudeUnits>): EcfVec3<AltitudeUnits> {
+  const { lon, lat, alt } = lla;
+
+  const lonRad = lon * DEG2RAD;
+  const latRad = lat * DEG2RAD;
+
+  return llaRad2ecf({
+    lon: lonRad as Radians,
+    lat: latRad as Radians,
+    alt,
+  });
 }
 
 /**
@@ -255,10 +271,10 @@ export function lla2ecef<D extends number>(lla: LlaVec3<Degrees, D>): EcefVec3<D
  * @see http://www.celestrak.com/columns/v02n02/
  */
 export function lla2sez<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfVec3<D>): SezVec3<D> {
-  const lat = lla.lat;
   const lon = lla.lon;
+  const lat = lla.lat;
 
-  const observerEcf = lla2ecf({
+  const observerEcf = llaRad2ecf({
     lat,
     lon,
     alt: <Kilometers>0,
@@ -319,7 +335,7 @@ export function rae2ecf<D extends number>(rae: RaeVec3<D, Degrees>, lla: LlaVec3
     rng: rae.rng,
   };
 
-  const obsEcf = lla2ecf(llaRad);
+  const obsEcf = llaRad2ecf(llaRad);
   const sez = rae2sez(raeRad);
 
   // Some needed calculations
@@ -446,12 +462,47 @@ export function uv2azel(u: Radians, v: Radians, coneHalfAngle: Radians): { az: R
  * @param ecf The Earth-Centered Fixed (ECF) coordinates.
  * @returns The Right Ascension (RA), Elevation (E), and Azimuth (A) coordinates.
  */
-export function ecf2rae<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfVec3<D>): RaeVec3<D, Degrees> {
+export function ecfRad2rae<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfVec3<D>): RaeVec3<D, Degrees> {
   const sezCoords = lla2sez(lla, ecf);
   const rae = sez2rae(sezCoords);
 
   return { rng: rae.rng, az: (rae.az * RAD2DEG) as Degrees, el: (rae.el * RAD2DEG) as Degrees };
 }
+
+/**
+ * Converts Earth-Centered Fixed (ECF) coordinates to Right Ascension (RA),
+ * Elevation (E), and Azimuth (A) coordinates.
+ *
+ * @param lla The Latitude, Longitude, and Altitude (LLA) coordinates.
+ * @param ecf The Earth-Centered Fixed (ECF) coordinates.
+ * @returns The Right Ascension (RA), Elevation (E), and Azimuth (A) coordinates.
+ */
+export function ecf2rae<D extends number>(lla: LlaVec3<Degrees, D>, ecf: EcfVec3<D>): RaeVec3<D, Degrees> {
+  const { lat, lon } = lla;
+  const latRad = (lat * DEG2RAD) as Radians;
+  const lonRad = (lon * DEG2RAD) as Radians;
+
+  return ecfRad2rae({ lat: latRad, lon: lonRad, alt: lla.alt }, ecf);
+}
+
+export const jday = (year?: number, mon?: number, day?: number, hr?: number, minute?: number, sec?: number) => {
+  if (!year) {
+    const now = new Date();
+    const jDayStart = new Date(now.getUTCFullYear(), 0, 0);
+    const jDayDiff = now.getDate() - jDayStart.getDate();
+
+    return Math.floor(jDayDiff / MILLISECONDS_TO_DAYS);
+  }
+
+  return (
+    367.0 * year -
+    Math.floor(7 * (year + Math.floor((mon + 9) / 12.0)) * 0.25) +
+    Math.floor((275 * mon) / 9.0) +
+    day +
+    1721013.5 +
+    ((sec / 60.0 + minute) / 60.0 + hr) / 24.0
+  );
+};
 
 /**
  * Calculates the Greenwich Mean Sidereal Time (GMST) for a given date.
@@ -461,7 +512,7 @@ export function ecf2rae<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfVec3
  */
 export function calcGmst(date: Date): { gmst: GreenwichMeanSiderealTime; j: number } {
   const j =
-    Utils.jday(
+    jday(
       date.getUTCFullYear(),
       date.getUTCMonth() + 1,
       date.getUTCDate(),
@@ -505,7 +556,7 @@ export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): Ra
     alt: sensor.alt,
   };
 
-  const rae = ecf2rae(lla, positionEcf);
+  const rae = ecfRad2rae(lla, positionEcf);
 
   // Add to cache
   eci2raeCache.set(key, rae);

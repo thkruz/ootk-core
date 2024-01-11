@@ -4,13 +4,13 @@
  * @since  1.2.0
  */
 
-import { Satellite } from '../../lib/ootk-core';
+import { Satellite, TleLine1, TleLine2 } from '../../lib/ootk-core';
 import { RAD2DEG } from '../../lib/utils/constants';
 
 const dateObj = new Date(1661400000000);
 
-const tle1 = '1 25544U 98067A   22203.46960946  .00003068  00000+0  61583-4 0  9996';
-const tle2 = '2 25544  51.6415 161.8339 0005168  35.9781  54.7009 15.50067047350657';
+const tle1 = '1 25544U 98067A   22203.46960946  .00003068  00000+0  61583-4 0  9996' as TleLine1;
+const tle2 = '2 25544  51.6415 161.8339 0005168  35.9781  54.7009 15.50067047350657' as TleLine2;
 
 describe('Basic Satellite functionality', () => {
   it('should create a new Sat object', () => {
@@ -23,7 +23,7 @@ describe('Basic Satellite functionality', () => {
   });
 
   it('should allow chaining', () => {
-    const eci = new Satellite({ name: 'Test', tle1, tle2 }).propagateTo(dateObj).getEci().position;
+    const eci = new Satellite({ name: 'Test', tle1, tle2 }).propagateTo(dateObj).eci().position;
 
     expect(eci.x).toBeCloseTo(6512.640035319078);
     expect(eci.y).toBeCloseTo(-1545.524934684146);
@@ -33,7 +33,7 @@ describe('Basic Satellite functionality', () => {
   it('should allow getting eci coordinates', () => {
     const sat = new Satellite({ name: 'Test', tle1, tle2 });
 
-    const eci = sat.getEci(dateObj).position;
+    const eci = sat.eci(dateObj).position;
 
     expect(eci.x).toBeCloseTo(6512.640035319078);
     expect(eci.y).toBeCloseTo(-1545.524934684146);
@@ -43,7 +43,7 @@ describe('Basic Satellite functionality', () => {
   it('should allow getting ecf coordinates', () => {
     const sat = new Satellite({ name: 'Test', tle1, tle2 });
 
-    const eci = sat.getEcf(dateObj);
+    const eci = sat.ecf(dateObj);
 
     expect(eci.x).toBeCloseTo(4585.677469309576);
     expect(eci.y).toBeCloseTo(-4875.929624270418);

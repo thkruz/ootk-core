@@ -41,8 +41,7 @@ import { MILLISECONDS_TO_DAYS } from '../utils/constants';
 
 import { Celestial } from '../body';
 import { Sgp4 } from '../sgp4/sgp4';
-import { ecf2eci, rae2ecf } from '../transforms/transforms';
-import { Utils } from '../utils/utils';
+import { ecf2eci, jday, rae2ecf } from '../transforms/transforms';
 import { BaseObject } from './BaseObject';
 
 export class Star extends BaseObject {
@@ -92,7 +91,7 @@ export class Star extends BaseObject {
 
   private static calculateTimeVariables_(date: Date): { gmst: GreenwichMeanSiderealTime; j: number } {
     const j =
-      Utils.jday(
+      jday(
         date.getUTCFullYear(),
         date.getUTCMonth() + 1,
         date.getUTCDate(),

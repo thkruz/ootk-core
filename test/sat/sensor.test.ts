@@ -28,7 +28,7 @@ describe('Basic Sensor functionality', () => {
       maxRng: 100000 as Kilometers,
     });
 
-    const rae = sensor.getRae(sat, dateObj);
+    const rae = sensor.rae(sat, dateObj);
 
     expect(rae.az).toMatchSnapshot();
     expect(rae.el).toMatchSnapshot();
