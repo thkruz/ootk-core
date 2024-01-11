@@ -1,20 +1,9 @@
-import {
-  Degrees,
-  Kilometers,
-  LlaVec3,
-  Lookangle,
-  PassType,
-  Radians,
-  RaeVec3,
-  SensorParams,
-  SpaceObjectType,
-} from '../types/types';
-import { DEG2RAD } from '../utils/constants';
+import { Degrees, Kilometers, Lookangle, PassType, RaeVec3, SensorParams, SpaceObjectType } from '../types/types';
 
-import { BaseObject } from './BaseObject';
+import { GroundPosition } from './GroundPosition';
 import { Satellite } from './Satellite';
 
-export class Sensor extends BaseObject {
+export class Sensor extends GroundPosition {
   name: string;
   type: SpaceObjectType;
   lat: Degrees;
@@ -83,7 +72,7 @@ export class Sensor extends BaseObject {
 
     for (let timeOffset = 0; timeOffset < planningInterval; timeOffset++) {
       const curTime = new Date(startTime + timeOffset * 1000);
-      const rae = this.getRae(sat, curTime);
+      const rae = this.rae(sat, curTime);
 
       const isInView = this.isRaeInFov(rae);
 
@@ -122,10 +111,6 @@ export class Sensor extends BaseObject {
     return msnPlanPasses;
   }
 
-  getRae(sat: Satellite, date: Date = this.time): RaeVec3<Kilometers, Degrees> {
-    return sat.raeOpt(this, date);
-  }
-
   isRaeInFov(rae: RaeVec3<Kilometers, Degrees>): boolean {
     if (rae.el < this.minEl || rae.el > this.maxEl) {
       return false;
@@ -149,21 +134,13 @@ export class Sensor extends BaseObject {
   }
 
   isSatInFov(sat: Satellite, date: Date = this.time): boolean {
-    return this.isRaeInFov(this.getRae(sat, date));
+    return this.isRaeInFov(this.rae(sat, date));
   }
 
   setTime(date: Date): this {
     this.time = date;
 
     return this;
-  }
-
-  getLlaRad(): LlaVec3<Radians, Kilometers> {
-    return {
-      lat: (this.lat * DEG2RAD) as Radians,
-      lon: (this.lon * DEG2RAD) as Radians,
-      alt: this.alt,
-    };
   }
 
   isDeepSpace(): boolean {
