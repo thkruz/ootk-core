@@ -1,4 +1,4 @@
-import { Degrees, Kilometers } from './../types/types';
+import { Degrees, Kilometers } from '../types/types';
 
 export interface GroundPositionParams {
   name?: string;

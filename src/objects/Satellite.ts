@@ -29,6 +29,8 @@ import { dopplerFactor } from './../utils/functions';
  * SOFTWARE.
  */
 
+import { OptionsParams } from 'src/interfaces/OptionsParams';
+import { SatelliteParams } from 'src/interfaces/SatelliteParams';
 import {
   Degrees,
   EcfVec3,
@@ -36,11 +38,9 @@ import {
   GreenwichMeanSiderealTime,
   Kilometers,
   LlaVec3,
-  OptionsParams,
   PosVel,
   Radians,
   RaeVec3,
-  SatelliteParams,
   SatelliteRecord,
   SpaceObjectType,
   TleLine1,

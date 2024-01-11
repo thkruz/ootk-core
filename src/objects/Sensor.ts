@@ -1,4 +1,6 @@
-import { Degrees, Kilometers, Lookangle, PassType, RaeVec3, SensorParams, SpaceObjectType } from '../types/types';
+import { SensorParams } from 'src/interfaces/SensorParams';
+import { PassType } from '../enums/PassType';
+import { Degrees, Kilometers, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
 
 import { GroundPosition } from './GroundPosition';
 import { Satellite } from './Satellite';

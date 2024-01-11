@@ -26,7 +26,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { BaseObjectParams, EciVec3, Kilometers, SpaceObjectType } from '../types/types';
+import { BaseObjectParams } from 'src/interfaces/BaseObjectParams';
+import { EciVec3, Kilometers, SpaceObjectType } from '../types/types';
 
 export class BaseObject {
   id: number; // Unique ID

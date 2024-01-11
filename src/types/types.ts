@@ -1,3 +1,4 @@
+import { PassType } from '../enums/PassType';
 import { Sensor } from '../objects';
 
 /**
@@ -658,22 +659,6 @@ export type OperationsDetails = {
   country?: string;
 };
 /**
- * Enumeration representing different methods for calculating angular diameter.
- */
-
-export enum AngularDiameterMethod {
-  Circle,
-  Sphere,
-}
-/**
- * Enumeration representing different methods for calculating angular distance.
- */
-
-export enum AngularDistanceMethod {
-  Cosine,
-  Haversine,
-}
-/**
  * Represents a function that calculates the Jacobian matrix.
  * @param xs - The input values as a Float64Array.
  * @returns The Jacobian matrix as a Float64Array.
@@ -686,72 +671,6 @@ export type JacobianFunction = (xs: Float64Array) => Float64Array;
  */
 
 export type DifferentiableFunction = (x: number) => number;
-
-/**
- * TODO: Reduce unnecessary calls to calculateTimeVariables using optional
- * parameters and caching.
- */
-/**
- * Information about a space object.
- */
-export interface SatelliteParams {
-  name?: string;
-  rcs?: number;
-  tle1: TleLine1;
-  tle2: TleLine2;
-  type?: SpaceObjectType;
-  vmag?: number;
-  sccNum?: string;
-  intlDes?: string;
-  position?: EciVec3;
-  time?: Date;
-}
-export interface OptionsParams {
-  notes: string;
-}
-export interface BaseObjectParams {
-  id?: number;
-  name?: string;
-  type?: SpaceObjectType;
-  position?: EciVec3;
-  velocity?: EciVec3;
-  time?: Date;
-  active?: boolean;
-}
-export interface StarObjectParams {
-  ra: Radians;
-  dec: Radians;
-  bf?: string;
-  h?: string;
-  name?: string;
-  pname?: string;
-  vmag?: number;
-}
-export interface SensorParams {
-  alt: Kilometers;
-  lat: Degrees;
-  lon: Degrees;
-  maxAz: Degrees;
-  maxAz2?: Degrees;
-  maxEl: Degrees;
-  maxEl2?: Degrees;
-  maxRng: Kilometers;
-  maxRng2?: Kilometers;
-  minAz: Degrees;
-  minAz2?: Degrees;
-  minEl: Degrees;
-  minEl2?: Degrees;
-  minRng: Kilometers;
-  minRng2?: Kilometers;
-  name?: string;
-  type?: SpaceObjectType;
-}
-export enum PassType {
-  OUT_OF_VIEW = -1,
-  ENTER = 0,
-  IN_VIEW = 1,
-  EXIT = 2,
-}
 
 export type Lookangle = {
   type: PassType;

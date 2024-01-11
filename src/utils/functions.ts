@@ -1,17 +1,10 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable func-style */
+import { AngularDiameterMethod } from '../enums/AngularDiameterMethod';
+import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
 import { Matrix } from '../operations/Matrix';
 import { Vector } from '../operations/Vector';
-import {
-  AngularDiameterMethod,
-  AngularDistanceMethod,
-  DifferentiableFunction,
-  EciVec3,
-  JacobianFunction,
-  Radians,
-  SpaceObjectType,
-  Vec3,
-} from '../types/types';
+import { DifferentiableFunction, EciVec3, JacobianFunction, Radians, SpaceObjectType, Vec3 } from '../types/types';
 
 /**
  * Calculates the factorial of a given number.

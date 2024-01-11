@@ -26,6 +26,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import { StarObjectParams } from 'src/interfaces/StarObjectParams';
 import {
   Degrees,
   EciVec3,
@@ -35,7 +36,6 @@ import {
   Radians,
   RaeVec3,
   SpaceObjectType,
-  StarObjectParams,
 } from '../types/types';
 import { MILLISECONDS_TO_DAYS } from '../utils/constants';
 

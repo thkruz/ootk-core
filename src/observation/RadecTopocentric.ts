@@ -1,8 +1,8 @@
 /* eslint-disable no-undefined */
 import { J2000 } from '../coordinate/J2000';
+import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
-import { AngularDistanceMethod } from '../types/types';
 import { DEG2RAD, RAD2DEG, TAU } from '../utils/constants';
 import { angularDistance } from '../utils/functions';
 import { radecToPosition, radecToVelocity } from './ObservationUtils';
