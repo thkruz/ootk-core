@@ -65,15 +65,15 @@ export class Star extends BaseObject {
     this.vmag = info.vmag;
   }
 
-  getEci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = this.time): EciVec3 {
-    const rae = this.getRae(lla, date);
+  eci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = this.time): EciVec3 {
+    const rae = this.rae(lla, date);
     const { gmst } = Star.calculateTimeVariables_(date);
 
     // Arbitrary distance to enable using ECI coordinates
     return ecf2eci(rae2ecf(rae, { lat: <Degrees>0, lon: <Degrees>0, alt: <Kilometers>0 }), gmst);
   }
 
-  getRae(
+  rae(
     lla: LlaVec3<Degrees, Kilometers> = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 },
     date: Date = this.time,
   ): RaeVec3 {
