@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "command": "npm run build",
+      "type": "shell",
+      "args": [],
+      "isBackground": true,
+      "problemMatcher": [],
+      "icon": {
+        "id": "symbol-method",
+        "color": "terminal.ansiBlue"
+      }
+    },
+    {
+      "label": "Test with Jest",
+      "command": "npm test",
+      "type": "shell",
+      "args": [],
+      "isBackground": true,
+      "problemMatcher": [],
+      "icon": {
+        "id": "go-to-file",
+        "color": "terminal.ansiGreen"
+      }
+    },
+    {
+      "label": "Test without Building",
+      "command": "npm run test:nobuild",
+      "type": "shell",
+      "args": [],
+      "isBackground": true,
+      "problemMatcher": [],
+      "icon": {
+        "id": "go-to-file",
+        "color": "terminal.ansiGreen"
+      }
+    },
+    {
+      "label": "Open Test Coverage",
+      "command": "npm run lcov",
+      "type": "shell",
+      "args": [],
+      "isBackground": true,
+      "problemMatcher": [],
+      "icon": {
+        "id": "file-code",
+        "color": "terminal.ansiYellow"
+      }
+    }
+  ],
+  "extensions": {
+    "recommendations": [
+      "prettier.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "steoates.autoimport",
+      "vivaxy.vscode-conventional-commits",
+      "usernamehw.errorlens",
+      "usernamehw.remove-empty-lines",
+      "aljazsim.tsco"
+    ]
+  },
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib"
+  }
+}
