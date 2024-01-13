@@ -1,7 +1,7 @@
 {
   "name": "ootk-core",
   "version": "1.0.0-1",
-  "description": "Orbital Object Toolkit Core including SGP4 Propagator and Coordinate Transforms",
+  "description": "Orbital Object Toolkit. A modern typed replacement for satellite.js including SGP4 propagation, TLE parsing, Sun and Moon calculations, and more.",
   "scripts": {
     "mjs": "ttsc -p tsconfig.build.json -m esnext && node ./scripts/makeMjs.mjs",
     "cjs": "ttsc -p tsconfig.c.json -m commonjs",
