@@ -16,9 +16,9 @@ export class GroundPosition extends BaseObject {
     super(info);
 
     this.validateInputData_(info);
-    Object.keys(info).forEach((key) => {
-      this[key] = info[key];
-    });
+    this.lat = info.lat;
+    this.lon = info.lon;
+    this.alt = info.alt;
   }
 
   isSensor(): boolean {
@@ -65,10 +65,10 @@ export class GroundPosition extends BaseObject {
   }
 
   private validateParameter_<T>(value: T, minValue: T, maxValue: T, errorMessage: string): void {
-    if (minValue !== null && value < minValue) {
+    if (minValue && value < minValue) {
       throw new Error(errorMessage);
     }
-    if (maxValue !== null && value > maxValue) {
+    if (maxValue && value > maxValue) {
       throw new Error(errorMessage);
     }
   }

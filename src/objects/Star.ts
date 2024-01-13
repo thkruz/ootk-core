@@ -26,7 +26,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { StarObjectParams } from 'src/interfaces/StarObjectParams';
+import { StarObjectParams } from '../interfaces/StarObjectParams';
 import {
   Degrees,
   EciVec3,
@@ -50,7 +50,7 @@ export class Star extends BaseObject {
   bf: string;
   h: string;
   pname: string;
-  vmag: number;
+  vmag?: number;
 
   constructor(info: StarObjectParams) {
     super(info);
@@ -59,17 +59,10 @@ export class Star extends BaseObject {
     this.ra = info.ra;
     this.dec = info.dec;
 
-    if (info.pname) {
-      this.pname = info.pname;
-    }
-
-    if (info.bf) {
-      this.bf = info.bf;
-    }
-
-    if (info.h) {
-      this.h = info.h;
-    }
+    this.pname = info.pname ?? '';
+    this.bf = info.bf ?? '';
+    this.h = info.h ?? '';
+    this.vmag = info.vmag;
   }
 
   getEci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = this.time): EciVec3 {

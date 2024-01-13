@@ -223,13 +223,17 @@ export class Moon {
      */
     const next = Math.min(nextNewMoon, nextFirstQuarter, nextFullMoon, nextThirdQuarter);
     // eslint-disable-next-line init-declarations
-    let phase;
+    let phase: (typeof Moon.moonCycles_)[0] | null = null;
 
     for (const moonCycle of Moon.moonCycles_) {
       if (phaseValue >= moonCycle.from && phaseValue <= moonCycle.to) {
         phase = moonCycle;
         break;
       }
+    }
+
+    if (!phase) {
+      throw new Error('Moon phase not found');
     }
 
     let type = '';
@@ -315,12 +319,12 @@ export class Moon {
     const { rise, set, ye } = Moon.calculateRiseSetTimes_(date, lat, lon);
 
     const result = {
-      rise: null,
-      set: null,
-      ye: null,
-      alwaysUp: null,
-      alwaysDown: null,
-      highest: null,
+      rise: NaN as Date | number,
+      set: NaN as Date | number,
+      ye: null as number | null,
+      alwaysUp: null as boolean | null,
+      alwaysDown: null as boolean | null,
+      highest: null as Date | null,
     };
 
     if (rise) {

@@ -28,13 +28,13 @@
  * SOFTWARE.
  */
 
-import { OptionsParams } from 'src/interfaces/OptionsParams';
-import { SatelliteParams } from 'src/interfaces/SatelliteParams';
 import { Geodetic } from '../coordinate/Geodetic';
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
 import { RIC } from '../coordinate/RIC';
 import { Tle } from '../coordinate/Tle';
+import { OptionsParams } from '../interfaces/OptionsParams';
+import { SatelliteParams } from '../interfaces/SatelliteParams';
 import { RAE } from '../observation/RAE';
 import { Vector3D } from '../operations/Vector3D';
 import { Sgp4 } from '../sgp4/sgp4';
@@ -194,9 +194,21 @@ export class Satellite extends BaseObject {
    */
   rae(observer: GroundPosition, date: Date = this.time): RAE {
     const rae = this.raeOpt(observer, date);
+    const rae2 = this.raeOpt(observer, new Date(date.getTime() + 1000));
     const epoch = new EpochUTC(date.getTime());
+    const rangeRate = rae2.rng - rae.rng;
+    const azimuthRate = rae2.az - rae.az;
+    const elevationRate = rae2.el - rae.el;
 
-    return new RAE(epoch, rae.rng, (rae.az * DEG2RAD) as Radians, (rae.el * DEG2RAD) as Radians);
+    return new RAE(
+      epoch,
+      rae.rng,
+      (rae.az * DEG2RAD) as Radians,
+      (rae.el * DEG2RAD) as Radians,
+      rangeRate,
+      azimuthRate,
+      elevationRate,
+    );
   }
 
   /**
@@ -312,6 +324,26 @@ export class Satellite extends BaseObject {
     return this.raeOpt(observer, date).rng;
   }
 
+  /**
+   * Applies the Doppler effect to the given frequency based on the observer's position and the date.
+   * @param freq - The frequency to apply the Doppler effect to.
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the Doppler effect. Optional, defaults to the current date.
+   * @returns The frequency after applying the Doppler effect.
+   */
+  applyDoppler(freq: number, observer: GroundPosition, date?: Date): number {
+    const doppler = this.dopplerFactor(observer, date);
+
+    return freq * doppler;
+  }
+
+  /**
+   * Calculates the Doppler factor for the satellite.
+   *
+   * @param observer The observer's ground position.
+   * @param date The optional date for which to calculate the Doppler factor. If not provided, the current date is used.
+   * @returns The calculated Doppler factor.
+   */
   dopplerFactor(observer: GroundPosition, date?: Date): number {
     const position = this.eci(date);
 

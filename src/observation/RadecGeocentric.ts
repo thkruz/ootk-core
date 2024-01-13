@@ -35,8 +35,8 @@ export class RadecGeocentric {
     declinationRateDegrees?: number,
     rangeRate?: number,
   ): RadecGeocentric {
-    const rightAscensionRate = !rightAscensionRateDegrees && rightAscensionRateDegrees * DEG2RAD;
-    const declinationRate = !declinationRateDegrees && declinationRateDegrees * DEG2RAD;
+    const rightAscensionRate = rightAscensionRateDegrees && rightAscensionRateDegrees * DEG2RAD;
+    const declinationRate = declinationRateDegrees && declinationRateDegrees * DEG2RAD;
 
     return new RadecGeocentric(
       epoch,
@@ -94,12 +94,12 @@ export class RadecGeocentric {
 
   // / Right-ascension rate _(°/s)_.
   get rightAscensionRateDegrees(): number | undefined {
-    return this.rightAscensionRate !== null ? this.rightAscensionRate * RAD2DEG : undefined;
+    return this.rightAscensionRate ? this.rightAscensionRate * RAD2DEG : undefined;
   }
 
   // / Declination rate _(°/s)_.
   get declinationRateDegrees(): number | undefined {
-    return this.declinationRate !== null ? this.declinationRate * RAD2DEG : undefined;
+    return this.declinationRate ? this.declinationRate * RAD2DEG : undefined;
   }
 
   /**
@@ -121,7 +121,7 @@ export class RadecGeocentric {
    * to override the value contained in this observation.
    */
   velocity(range?: number, rangeRate?: number): Vector3D {
-    if (this.rightAscensionRate === null || this.declinationRate === null) {
+    if (!this.rightAscensionRate || !this.declinationRate) {
       throw new Error('Velocity unsolvable, missing ra/dec rates.');
     }
     const r = range ?? this.range ?? 1.0;

@@ -550,7 +550,7 @@ export function jacobian(f: JacobianFunction, m: number, x0: Float64Array, step 
     const cd = fp.subtract(fm).scale(1.0 / step);
 
     for (let i = 0; i < m; i++) {
-      j[i][k] = cd[i];
+      j[i][k] = cd.elements[i];
     }
   }
 
@@ -655,6 +655,8 @@ const spaceObjTypeStrMap_ = {
   [SpaceObjectType.ENGINE_MANUFACTURER]: 'Engine Manufacturer',
   [SpaceObjectType.NOTIONAL]: 'Notional',
   [SpaceObjectType.FRAGMENT]: 'Fragment',
+  [SpaceObjectType.SHORT_TERM_FENCE]: 'Short Term Fence',
+  [SpaceObjectType.MAX_SPACE_OBJECT_TYPE]: 'Max Space Object Type',
 };
 
 /**

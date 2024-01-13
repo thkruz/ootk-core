@@ -3,7 +3,7 @@
  * @since  0.2.0
  */
 
-import { Sgp4 } from '../../../lib/ootk-core';
+import { Sgp4 } from '../../../lib/index';
 
 describe('Julian date / time', () => {
   // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines

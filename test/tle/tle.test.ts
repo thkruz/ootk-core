@@ -5,7 +5,7 @@
  * @since  1.1.0
  */
 
-import { Tle } from '../../lib/ootk-core';
+import { Tle } from '../../lib/index';
 import { tleData } from './tleData';
 
 describe('Valid TLEs', () => {

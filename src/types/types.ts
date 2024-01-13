@@ -607,7 +607,7 @@ export type AzEl<Units = Radians> = {
 export type RaDec = {
   dec: Radians;
   ra: Radians;
-  dist?: Kilometers;
+  dist: Kilometers;
 };
 
 export interface RadarSensor extends Sensor {
@@ -629,7 +629,7 @@ export interface RadarSensor extends Sensor {
 export type SunTime = {
   solarNoon: Date;
   nadir: Date;
-};
+} & { [key: string]: Date };
 
 export type LaunchDetails = {
   launchDate?: string;

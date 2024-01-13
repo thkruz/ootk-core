@@ -10,7 +10,8 @@
     "rootDir": "./src" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
     "plugins": [{ "transform": "typescript-transform-paths" }],
     "declaration": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "strict": true
   },
   "include": ["./src/**/*.ts"],
   "filesGlob": ["./src/**/*.ts"]

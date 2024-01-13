@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Tle, TleLine1, TleLine2 } from '../../lib/ootk-core';
+import { Tle, TleLine1, TleLine2 } from '../../lib/index';
 
 // Sample TLE
 const tle1 = '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992' as TleLine1;

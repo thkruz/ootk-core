@@ -42,8 +42,8 @@ export class RAE {
     azimuthRateDegrees?: number,
     elevationRateDegrees?: number,
   ): RAE {
-    const azimuthRate = azimuthRateDegrees !== null ? azimuthRateDegrees * DEG2RAD : undefined;
-    const elevationRate = elevationRateDegrees !== null ? elevationRateDegrees * DEG2RAD : undefined;
+    const azimuthRate = azimuthRateDegrees ? azimuthRateDegrees * DEG2RAD : undefined;
+    const elevationRate = elevationRateDegrees ? elevationRateDegrees * DEG2RAD : undefined;
 
     return new RAE(
       epoch,
@@ -111,12 +111,12 @@ export class RAE {
 
   // / Azimuth rate _(°/s)_.
   get azimuthRateDegrees(): number | undefined {
-    return this.azimuthRate !== null ? this.azimuthRate * RAD2DEG : undefined;
+    return this.azimuthRate ? this.azimuthRate * RAD2DEG : undefined;
   }
 
   // / Elevation rate _(°/s)_.
   get elevationRateDegrees(): number | undefined {
-    return this.elevationRate !== null ? this.elevationRate * RAD2DEG : undefined;
+    return this.elevationRate ? this.elevationRate * RAD2DEG : undefined;
   }
 
   toString(): string {
@@ -161,7 +161,7 @@ export class RAE {
    * [azimuthRate] are not defined.
    */
   toStateVector(site: J2000): J2000 {
-    if (this.rangeRate === null || this.elevationRate === null || this.azimuthRate === null) {
+    if (!this.rangeRate || !this.elevationRate || !this.azimuthRate) {
       throw new Error('Cannot create state, required values are undefined.');
     }
     const ecef = site.toITRF();

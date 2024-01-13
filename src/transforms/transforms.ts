@@ -155,7 +155,7 @@ export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers
   const kmax = 20;
   let k = 0;
   let lat = Math.atan2(eci.z, Math.sqrt(eci.x * eci.x + eci.y * eci.y));
-  let C: number;
+  let C = 0;
 
   while (k < kmax) {
     C = 1 / Math.sqrt(1 - e2 * (Math.sin(lat) * Math.sin(lat)));
@@ -486,12 +486,22 @@ export function ecf2rae<D extends number>(lla: LlaVec3<Degrees, D>, ecf: EcfVec3
 }
 
 export const jday = (year?: number, mon?: number, day?: number, hr?: number, minute?: number, sec?: number) => {
-  if (!year) {
+  if (typeof year === 'undefined') {
     const now = new Date();
     const jDayStart = new Date(now.getUTCFullYear(), 0, 0);
     const jDayDiff = now.getDate() - jDayStart.getDate();
 
     return Math.floor(jDayDiff / MILLISECONDS_TO_DAYS);
+  }
+
+  if (
+    typeof mon === 'undefined' ||
+    typeof day === 'undefined' ||
+    typeof hr === 'undefined' ||
+    typeof minute === 'undefined' ||
+    typeof sec === 'undefined'
+  ) {
+    throw new Error('Invalid date');
   }
 
   return (

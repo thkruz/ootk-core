@@ -13,7 +13,7 @@ export class Vector3D<T extends number = number> {
    * [Vector] object.
    */
   static fromVector(v: Vector): Vector3D {
-    return new Vector3D(v[0], v[1], v[2]);
+    return new Vector3D(v.x, v.y, v.z);
   }
 
   // / Origin vector.

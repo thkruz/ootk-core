@@ -3,7 +3,7 @@
  * @since  1.0.0-alpha3
  */
 
-import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../lib/ootk-core'; // eslint-disable-line
+import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../lib/index'; // eslint-disable-line
 import { dopplerFactor, getDayOfYear } from '../../lib/utils/functions';
 
 const numDigits = 8;

@@ -7,7 +7,7 @@
 import { Celestial } from '../../lib/body/Celestial';
 import { Moon } from '../../lib/body/Moon';
 import { Sun } from '../../lib/body/Sun';
-import { Degrees, Meters } from '../../lib/ootk-core';
+import { Degrees, Meters } from '../../lib/index';
 
 // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
 const dateObj = new Date(1661400000000);

@@ -1,8 +1,11 @@
-import { calcGmst, GroundPosition, Satellite, Sgp4 } from '../../lib/ootk-core';
+import { calcGmst, GroundPosition, Satellite, Sgp4 } from '../../lib/index.mjs';
+
+// Example Date
+const exampleDate = new Date(1705109326817);
 
 // Sample TLE
-const tle1 = '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992';
-const tle2 = '2 25544  51.6433  59.2583 0008217  16.4489 347.6017 15.51174618173442';
+const tle1 = '1 56006U 23042W   24012.45049317  .00000296  00000-0  36967-4 0  9992';
+const tle2 = '2 56006  43.0043  13.3620 0001137 267.5965  92.4747 15.02542972 44491';
 
 // Initialize a Satellite Object
 const satellite = new Satellite({
@@ -26,8 +29,8 @@ const velocityEci = positionAndVelocity.velocity;
 
 // Set the Observer at 122.03 West by 36.96 North, in DEGREES (because who likes working in radians?)
 const observer = new GroundPosition({
-  lon: -122.0308,
-  lat: 36.9613422,
+  lon: -71.0308,
+  lat: 41.9613422,
   alt: 0.37,
 });
 
@@ -37,14 +40,17 @@ const { gmst, j } = calcGmst(new Date());
 // You can get ECF, Geodetic, Look Angles, and Doppler Factor.
 const positionEcf = satellite.ecf();
 const observerEcf = observer.ecf();
-const positionGd = satellite.lla();
-const lookAngles = satellite.rae(observer);
+const positionGd = satellite.lla(exampleDate);
+const lookAngles = satellite.rae(observer, exampleDate);
 // This never worked in satellite.js, but it does now!
-const dopplerFactor = satellite.dopplerFactor(observer);
+const uplinkFreq = 420e6;
+const dopplerFactor = satellite.dopplerFactor(observer, exampleDate);
+let dopplerShiftedFrequency = uplinkFreq * dopplerFactor;
+dopplerShiftedFrequency = satellite.applyDoppler(uplinkFreq, observer, exampleDate);
 
 // The coordinates are all stored in strongly typed key-value pairs.
 // ECI and ECF are accessed by `x`, `y`, `z` properties.
-const position = satellite.eci().position;
+const position = satellite.eci(exampleDate).position;
 const satelliteX = position.x;
 const satelliteY = position.y;
 const satelliteZ = position.z;
@@ -69,3 +75,31 @@ const latitudeRad = latitude * DEG2RAD;
 // There is no need to use the units seen in TypeScript examples.
 // const longitudeRad = (longitude * DEG2RAD) as Radians;
 // const latitudeRad = (latitude * DEG2RAD) as Radians;
+
+console.log('Satellite.js Migration Example');
+console.log('======================================');
+console.log('TLE: ', tle1);
+console.log('     ', tle2);
+console.log('======================================');
+console.log('Position (ECI):');
+console.log('     x: ', satelliteX);
+console.log('     y: ', satelliteY);
+console.log('     z: ', satelliteZ);
+console.log('Position (ECF):');
+console.log('     x: ', positionEcf.x);
+console.log('     y: ', positionEcf.y);
+console.log('     z: ', positionEcf.z);
+console.log('Position (Geodetic):');
+console.log('     longitude: ', longitude);
+console.log('     latitude: ', latitude);
+console.log('     height: ', height);
+console.log('Look Angles:');
+console.log('     azimuth: ', azimuthDegrees);
+console.log('     elevation: ', elevationDegrees);
+console.log('     rangeSat: ', rangeSat);
+console.log('     rangeRate: ', rangeRate);
+console.log('Doppler Factor:');
+console.log('     dopplerFactor: ', dopplerFactor);
+dopplerShiftedFrequency = dopplerShiftedFrequency / 1e6; // Hz to MHz
+console.log('     420MHz: ', `${dopplerShiftedFrequency.toPrecision(6)} MHz`);
+console.log('======================================');

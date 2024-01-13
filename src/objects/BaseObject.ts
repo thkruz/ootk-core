@@ -26,11 +26,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { BaseObjectParams } from 'src/interfaces/BaseObjectParams';
+import { BaseObjectParams } from '../interfaces/BaseObjectParams';
 import { EciVec3, Kilometers, SpaceObjectType } from '../types/types';
 
 export class BaseObject {
-  id: number; // Unique ID
+  id?: number; // Unique ID
   name: string;
   type: SpaceObjectType;
   position: EciVec3; // Where is the object
@@ -40,24 +40,25 @@ export class BaseObject {
   active = true; // Is the object active
 
   constructor(info: BaseObjectParams) {
-    this.type = info.type || SpaceObjectType.UNKNOWN;
-    this.name = info.name || 'Unknown';
+    this.type = info.type ?? SpaceObjectType.UNKNOWN;
+    this.name = info.name ?? 'Unknown';
     this.id = info.id;
-    this.active = info.active;
+    this.active = info.active ?? true;
 
-    this.position = info.position || {
+    this.position = info.position ?? {
       x: <Kilometers>0,
       y: <Kilometers>0,
       z: <Kilometers>0,
     }; // Default to the center of the earth until position is calculated
 
-    this.velocity = info.velocity || {
+    this.velocity = info.velocity ?? {
       x: <Kilometers>0,
       y: <Kilometers>0,
       z: <Kilometers>0,
     }; // Default to 0 velocity until velocity is calculated
+    this.totalVelocity = Math.sqrt(this.velocity.x ** 2 + this.velocity.y ** 2 + this.velocity.z ** 2);
 
-    this.time = info.time || new Date();
+    this.time = info.time ?? new Date();
   }
 
   /**
@@ -169,6 +170,6 @@ export class BaseObject {
       [SpaceObjectType.ENGINE_MANUFACTURER]: 'Engine Manufacturer',
     };
 
-    return typeToStringMap[this.type] || 'Unknown';
+    return typeToStringMap[this.type] ?? 'Unknown';
   }
 }

@@ -4,7 +4,7 @@
  * @since  1.2.0
  */
 
-import { Satellite, TleLine1, TleLine2 } from '../../lib/ootk-core';
+import { Satellite, TleLine1, TleLine2 } from '../../lib/index';
 import { RAD2DEG } from '../../lib/utils/constants';
 
 const dateObj = new Date(1661400000000);

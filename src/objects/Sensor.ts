@@ -1,5 +1,5 @@
-import { SensorParams } from 'src/interfaces/SensorParams';
 import { PassType } from '../enums/PassType';
+import { SensorParams } from '../interfaces/SensorParams';
 import { Degrees, Kilometers, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
 import { GroundPosition } from './GroundPosition';
 import { Satellite } from './Satellite';
@@ -51,9 +51,19 @@ export class Sensor extends GroundPosition {
     super(info);
 
     this.validateInputData(info);
-    Object.keys(info).forEach((key) => {
-      this[key] = info[key];
-    });
+
+    this.minRng = info.minRng;
+    this.minAz = info.minAz;
+    this.minEl = info.minEl;
+    this.maxRng = info.maxRng;
+    this.maxAz = info.maxAz;
+    this.maxEl = info.maxEl;
+    this.minRng2 = info.minRng2;
+    this.minAz2 = info.minAz2;
+    this.minEl2 = info.minEl2;
+    this.maxRng2 = info.maxRng2;
+    this.maxAz2 = info.maxAz2;
+    this.maxEl2 = info.maxEl2;
   }
 
   isSensor(): boolean {
@@ -194,10 +204,10 @@ export class Sensor extends GroundPosition {
   }
 
   private validateParameter<T>(value: T, minValue: T, maxValue: T, errorMessage: string): void {
-    if (minValue !== null && value < minValue) {
+    if (typeof minValue !== 'undefined' && minValue !== null && (value as number) < (minValue as number)) {
       throw new Error(errorMessage);
     }
-    if (maxValue !== null && value > maxValue) {
+    if (typeof maxValue !== 'undefined' && maxValue !== null && (value as number) > (maxValue as number)) {
       throw new Error(errorMessage);
     }
   }

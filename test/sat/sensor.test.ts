@@ -4,7 +4,7 @@
  * @since  1.2.0
  */
 
-import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../lib/ootk-core';
+import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../lib/index';
 
 const dateObj = new Date(1661400000000);
 

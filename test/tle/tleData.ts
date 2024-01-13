@@ -1,4 +1,4 @@
-import { TleLine1, TleLine2 } from 'lib/ootk-core';
+import { TleLine1, TleLine2 } from 'lib/index';
 
 export const tleData = [
   {

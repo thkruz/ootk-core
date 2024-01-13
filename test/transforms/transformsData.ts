@@ -1,4 +1,4 @@
-import { Degrees, EcfVec3, EciVec3, Kilometers, RAD2DEG, Radians } from '../../lib/ootk-core';
+import { Degrees, EcfVec3, EciVec3, Kilometers, RAD2DEG, Radians } from '../../lib/index';
 
 export const transformsData = {
   validLatitudes: [

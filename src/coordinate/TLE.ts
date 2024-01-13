@@ -25,9 +25,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import { ClassicalElements, FormatTle, TEME } from '.';
 import { Sgp4, Vector3D } from '..';
 import { Earth } from '../body';
-import { ClassicalElements, FormatTle, TEME } from '../coordinate';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
 import { Sgp4GravConstants } from '../sgp4/sgp4';
 import { EpochUTC } from '../time/EpochUTC';
@@ -945,7 +945,9 @@ export class Tle {
     const values = sccNum.toUpperCase().split('');
 
     if (values[0] in Tle.alpha5_) {
-      values[0] = Tle.alpha5_[values[0]];
+      const firstLetter = values[0] as keyof typeof Tle.alpha5_;
+
+      values[0] = Tle.alpha5_[firstLetter];
     }
 
     return values.join('');

@@ -2,12 +2,12 @@ import { Vector } from './Vector';
 import { Vector3D } from './Vector3D';
 
 export class Matrix {
-  private _elements: number[][];
+  public elements: number[][];
   public readonly rows: number;
   public readonly columns: number;
 
   constructor(elements: number[][]) {
-    this._elements = elements;
+    this.elements = elements;
     this.rows = elements.length;
     this.columns = elements[0].length;
   }
@@ -34,11 +34,11 @@ export class Matrix {
     const sinT = Math.sin(theta);
     const result = Matrix.zero(3, 3);
 
-    result._elements[0][0] = 1.0;
-    result._elements[1][1] = cosT;
-    result._elements[1][2] = sinT;
-    result._elements[2][1] = -sinT;
-    result._elements[2][2] = cosT;
+    result.elements[0][0] = 1.0;
+    result.elements[1][1] = cosT;
+    result.elements[1][2] = sinT;
+    result.elements[2][1] = -sinT;
+    result.elements[2][2] = cosT;
 
     return result;
   }
@@ -48,11 +48,11 @@ export class Matrix {
     const sinT = Math.sin(theta);
     const result = Matrix.zero(3, 3);
 
-    result._elements[0][0] = cosT;
-    result._elements[0][2] = -sinT;
-    result._elements[1][1] = 1.0;
-    result._elements[2][0] = sinT;
-    result._elements[2][2] = cosT;
+    result.elements[0][0] = cosT;
+    result.elements[0][2] = -sinT;
+    result.elements[1][1] = 1.0;
+    result.elements[2][0] = sinT;
+    result.elements[2][2] = cosT;
 
     return result;
   }
@@ -62,11 +62,11 @@ export class Matrix {
     const sinT = Math.sin(theta);
     const result = Matrix.zero(3, 3);
 
-    result._elements[0][0] = cosT;
-    result._elements[0][1] = sinT;
-    result._elements[1][0] = -sinT;
-    result._elements[1][1] = cosT;
-    result._elements[2][2] = 1.0;
+    result.elements[0][0] = cosT;
+    result.elements[0][1] = sinT;
+    result.elements[1][0] = -sinT;
+    result.elements[1][1] = cosT;
+    result.elements[2][2] = 1.0;
 
     return result;
   }
@@ -116,7 +116,7 @@ export class Matrix {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        result._elements[i][j] = this._elements[i][j] + m._elements[i][j];
+        result.elements[i][j] = this.elements[i][j] + m.elements[i][j];
       }
     }
 
@@ -128,7 +128,7 @@ export class Matrix {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        result._elements[i][j] = this._elements[i][j] - m._elements[i][j];
+        result.elements[i][j] = this.elements[i][j] - m.elements[i][j];
       }
     }
 
@@ -140,7 +140,7 @@ export class Matrix {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        result._elements[i][j] = this._elements[i][j] * n;
+        result.elements[i][j] = this.elements[i][j] * n;
       }
     }
 
@@ -157,7 +157,7 @@ export class Matrix {
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < m.columns; j++) {
         for (let k = 0; k < this.columns; k++) {
-          result._elements[i][j] += this._elements[i][k] * m._elements[k][j];
+          result.elements[i][j] += this.elements[i][k] * m.elements[k][j];
         }
       }
     }
@@ -170,7 +170,7 @@ export class Matrix {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        result._elements[i][j] = this._elements[i][j] * m._elements[i][j];
+        result.elements[i][j] = this.elements[i][j] * m.elements[i][j];
       }
     }
 
@@ -184,7 +184,7 @@ export class Matrix {
       let total = 0.0;
 
       for (let j = 0; j < this.columns; j++) {
-        total += this._elements[i][j] * v[j];
+        total += this.elements[i][j] * v.elements[j];
       }
       result[i] = total;
     }
@@ -199,7 +199,19 @@ export class Matrix {
       let total = 0.0;
 
       for (let j = 0; j < this.columns; j++) {
-        total += this._elements[i][j] * v[j];
+        switch (j) {
+          case 0:
+            total += this.elements[i][j] * v.x;
+            break;
+          case 1:
+            total += this.elements[i][j] * v.y;
+            break;
+          case 2:
+            total += this.elements[i][j] * v.z;
+            break;
+          default:
+            break;
+        }
       }
       result[i] = total;
     }
@@ -212,8 +224,8 @@ export class Matrix {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        if (this._elements[i][j] !== 0) {
-          output._elements[i][j] = 1 / this._elements[i][j];
+        if (this.elements[i][j] !== 0) {
+          output.elements[i][j] = 1 / this.elements[i][j];
         }
       }
     }
@@ -226,7 +238,7 @@ export class Matrix {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        result._elements[j][i] = this._elements[i][j];
+        result.elements[j][i] = this.elements[i][j];
       }
     }
 
@@ -241,12 +253,12 @@ export class Matrix {
         let total = 0.0;
 
         for (let j = 0; j < k; j++) {
-          total += result._elements[i][j] * result._elements[k][j];
+          total += result.elements[i][j] * result.elements[k][j];
         }
-        result._elements[i][k] =
+        result.elements[i][k] =
           i === k
-            ? Math.sqrt(this._elements[i][i] - total)
-            : (1 / result._elements[k][k]) * (this._elements[i][k] - total);
+            ? Math.sqrt(this.elements[i][i] - total)
+            : (1 / result.elements[k][k]) * (this.elements[i][k] - total);
       }
     }
 
@@ -257,17 +269,17 @@ export class Matrix {
     if (i === j) {
       return;
     }
-    const tmp = this._elements[i];
+    const tmp = this.elements[i];
 
-    this._elements[i] = this._elements[j];
-    this._elements[j] = tmp;
+    this.elements[i] = this.elements[j];
+    this.elements[j] = tmp;
   }
 
   private _toReducedRowEchelonForm(): void {
     for (let lead = 0, row = 0; row < this.rows && lead < this.columns; ++row, ++lead) {
       let i = row;
 
-      while (this._elements[i][lead] === 0) {
+      while (this.elements[i][lead] === 0) {
         if (++i === this.rows) {
           i = row;
           if (++lead === this.columns) {
@@ -276,21 +288,21 @@ export class Matrix {
         }
       }
       this._swapRows(i, row);
-      if (this._elements[row][lead] !== 0) {
-        const f = this._elements[row][lead];
+      if (this.elements[row][lead] !== 0) {
+        const f = this.elements[row][lead];
 
         for (let column = 0; column < this.columns; ++column) {
-          this._elements[row][column] /= f;
+          this.elements[row][column] /= f;
         }
       }
       for (let j = 0; j < this.rows; ++j) {
         if (j === row) {
           continue;
         }
-        const f = this._elements[j][lead];
+        const f = this.elements[j][lead];
 
         for (let column = 0; column < this.columns; ++column) {
-          this._elements[j][column] -= f * this._elements[row][column];
+          this.elements[j][column] -= f * this.elements[row][column];
         }
       }
     }
@@ -301,16 +313,16 @@ export class Matrix {
 
     for (let row = 0; row < this.rows; ++row) {
       for (let column = 0; column < this.columns; ++column) {
-        tmp._elements[row][column] = this._elements[row][column];
+        tmp.elements[row][column] = this.elements[row][column];
       }
-      tmp._elements[row][row + this.columns] = 1.0;
+      tmp.elements[row][row + this.columns] = 1.0;
     }
     tmp._toReducedRowEchelonForm();
     const inv = Matrix.zero(this.rows, this.columns);
 
     for (let row = 0; row < this.rows; ++row) {
       for (let column = 0; column < this.columns; ++column) {
-        inv._elements[row][column] = tmp._elements[row][column + this.columns];
+        inv.elements[row][column] = tmp.elements[row][column + this.columns];
       }
     }
 
