@@ -16,6 +16,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
   lint:
+    needs: compliance
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
@@ -37,11 +38,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
 
       - run: npm run lint
   build:
-    name: build
     needs: lint
     runs-on: ubuntu-latest
     steps:
@@ -64,9 +64,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
+      - run: npm ci --ignore-scripts
+
       - run: npm run build
   test:
-    name: test
     needs: build
     runs-on: ubuntu-latest
     steps:
