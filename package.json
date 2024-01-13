@@ -7,9 +7,8 @@
     "js": "ttsc -p tsconfig.build.json -m esnext",
     "cjs": "ttsc -p tsconfig.c.json -m commonjs",
     "build": "node ./scripts/cleanup.mjs && npm run js && npm run cjs && node ./scripts/makeMjs.mjs",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "lint:test": "eslint test",
+    "lint": "npx eslint src",
+    "lint:fix": "npx eslint src --fix",
     "test": "npm run build && jest",
     "test:coverage": "jest --coverage",
     "version": "auto-changelog -p && git add CHANGELOG.md"
