@@ -1,5 +1,4 @@
 import { PassType } from '../enums/PassType';
-import { Sensor } from '../objects';
 
 /**
  * Represents a distinct type.
@@ -609,14 +608,6 @@ export type RaDec = {
   ra: Radians;
   dist: Kilometers;
 };
-
-export interface RadarSensor extends Sensor {
-  coneHalfAngle: Radians;
-  boresight: {
-    az: Radians;
-    el: Radians;
-  };
-}
 
 /**
  * Represents the solar noon and nadir times.

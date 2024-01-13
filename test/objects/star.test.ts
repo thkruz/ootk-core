@@ -1,10 +1,4 @@
-/**
- * @file   Test Suite to verify star class work as expected
- * @author Theodore Kruczek.
- * @since  3.0.0
- */
-
-import { Degrees, Kilometers, Radians, Star } from '../../lib/index';
+import { Degrees, Kilometers, Radians, Star } from '../../src/index';
 
 describe('Basic Star functionality', () => {
   const star = new Star({

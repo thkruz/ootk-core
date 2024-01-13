@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Tle module contains a collection of functions for working with TLEs.
@@ -27,7 +27,6 @@
 
 import { ClassicalElements, FormatTle, TEME } from '.';
 import { Sgp4, Vector3D } from '..';
-import { Earth } from '../body';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
 import { Sgp4GravConstants } from '../sgp4/sgp4';
 import { EpochUTC } from '../time/EpochUTC';
@@ -44,7 +43,7 @@ import {
   TleLine1,
   TleLine2,
 } from '../types/types';
-import { DEG2RAD, RAD2DEG, secondsPerDay, TAU } from '../utils/constants';
+import { DEG2RAD, earthGravityParam, RAD2DEG, secondsPerDay, TAU } from '../utils/constants';
 import { newtonNu, toPrecision } from '../utils/functions';
 import { TleFormatData } from './tle-format-data';
 
@@ -173,7 +172,7 @@ export class Tle {
   }
 
   get period(): number {
-    return TAU * Math.sqrt(this.semimajorAxis ** 3 / Earth.mu);
+    return TAU * Math.sqrt(this.semimajorAxis ** 3 / earthGravityParam);
   }
 
   private static parseEpoch_(epochStr: string): EpochUTC {
@@ -234,7 +233,7 @@ export class Tle {
   private static tleSma_(line2: string): number {
     const n = parseFloat(line2.substring(52, 63));
 
-    return Earth.mu ** (1 / 3) / ((TAU * n) / secondsPerDay) ** (2 / 3);
+    return earthGravityParam ** (1 / 3) / ((TAU * n) / secondsPerDay) ** (2 / 3);
   }
 
   private static tleEcc_(line2: string): number {

@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Sgp4 module contains a TypeScript port of the 2020 version of
@@ -1243,7 +1243,6 @@ export class Sgp4 {
 
     /*
      * Sgp4fix recover singly averaged mean elements
-     * TODO: Skip these?
      * satrec.am = am;
      * satrec.em = em;
      * satrec.im = inclm;

@@ -2,7 +2,7 @@
  * Helper from satellite.js to compare vectors
  */
 
-import { Vec3 } from 'lib/ootk-core';
+import { Vec3 } from '../../src/index';
 
 export const compareVectors = (vector1: Vec3, vector2: Vec3, numDigits: number) => {
   if (!numDigits) {

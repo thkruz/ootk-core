@@ -1,6 +1,5 @@
-import { Earth } from '../body/Earth';
 import { EpochUTC } from '../time/EpochUTC';
-import { secondsPerDay, TAU } from '../utils/constants';
+import { earthGravityParam, secondsPerDay, TAU } from '../utils/constants';
 import { newtonM } from '../utils/functions';
 import { ClassicalElements } from './ClassicalElements';
 import { PositionVelocity } from './StateVector';
@@ -17,7 +16,7 @@ export class EquinoctialElements {
     public n: number,
     public chi: number,
     public psi: number,
-    { mu = Earth.mu, fr = 1 }: { mu?: number; fr?: number } = {},
+    { mu = earthGravityParam, fr = 1 }: { mu?: number; fr?: number } = {},
   ) {
     this.mu = mu;
     this.fr = fr;

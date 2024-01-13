@@ -1,33 +1,38 @@
-/**
- * @file   Test Suite to verify results match Appendix D from Revisiting Spacetrack Report #3
- * @author Theodore Kruczek.
- * @since  0.2.0
- */
-
-import { Sgp4 } from '../../lib/index';
-import sgp4FailData from './sgp4-full-cov-fail.json';
-import sgp4Data from './sgp4-full-cov.json';
+import { EciVec3, Sgp4 } from '../../src/index';
+import { sgp4FullCovFail } from './sgp4-full-cov-fail';
+import { sgp4FullCov } from './sgp4-full-cov';
+import { Sgp4GravConstants } from '../../src/sgp4/sgp4';
+import { Sgp4OpsMode } from '../../src/enums/Sgp4OpsMode';
 
 describe('Verification TLE Data in Appendix D of Revisiting Spacetrack Report #3: Rev 1', () => {
-  sgp4Data.forEach((sgp4DataItem) => {
+  sgp4FullCov.forEach((sgp4DataItem) => {
     // Fetching satellite record from TLE lines
-    const satrec = Sgp4.createSatrec(sgp4DataItem.tleLine1, sgp4DataItem.tleLine2);
+    const satrec = Sgp4.createSatrec(
+      sgp4DataItem.tleLine1,
+      sgp4DataItem.tleLine2,
+      Sgp4GravConstants.wgs72,
+      Sgp4OpsMode.AFSPC,
+    );
 
-    if (sgp4DataItem.error) {
+    if ((sgp4DataItem as unknown as { error: true }).error) {
       test(`if ${sgp4DataItem.description} fails`, () => {
-        expect(satrec.error).toEqual(sgp4DataItem.error);
+        expect(satrec.error).toEqual((sgp4DataItem as unknown as { error: true }).error);
       });
     } else {
       test(`if ${sgp4DataItem.description} passes`, () => {
         sgp4DataItem.results.forEach((expected) => {
-          const sgp4Result = Sgp4.propagate(satrec, expected.time, 'a');
+          const sgp4Result = Sgp4.propagate(satrec, expected.time);
 
-          expect(sgp4Result.position.x).toBeCloseTo(expected.position.x);
-          expect(sgp4Result.position.y).toBeCloseTo(expected.position.y);
-          expect(sgp4Result.position.z).toBeCloseTo(expected.position.z);
-          expect(sgp4Result.velocity.x).toBeCloseTo(expected.velocity.x);
-          expect(sgp4Result.velocity.y).toBeCloseTo(expected.velocity.y);
-          expect(sgp4Result.velocity.z).toBeCloseTo(expected.velocity.z);
+          expect(sgp4Result).not.toBe(false);
+          const position = sgp4Result?.position as EciVec3;
+          const velocity = sgp4Result?.velocity as EciVec3;
+
+          expect(position.x).toBeCloseTo(expected.position.x);
+          expect(position.y).toBeCloseTo(expected.position.y);
+          expect(position.z).toBeCloseTo(expected.position.z);
+          expect(velocity.x).toBeCloseTo(expected.velocity.x);
+          expect(velocity.y).toBeCloseTo(expected.velocity.y);
+          expect(velocity.z).toBeCloseTo(expected.velocity.z);
         });
       });
     }
@@ -39,22 +44,24 @@ describe('Verify getgravconst options', () => {
   const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
 
   test('if wgs72old can be selected', () => {
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72old', 'a');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72old, Sgp4OpsMode.AFSPC);
 
     expect(satrec.xmcof).toEqual(-1.8859361255715234e-11);
   });
   test('if wgs84 can be selected', () => {
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs84', 'a');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs84, Sgp4OpsMode.AFSPC);
 
     expect(satrec.xmcof).toEqual(-1.8859472970032445e-11);
   });
   test('if other gravconst values cause an error', () => {
-    expect(() => Sgp4.createSatrec(line1, line2, 'wgs96', 'a')).toThrowError(new Error('unknown gravity option wgs96'));
+    expect(() => Sgp4.createSatrec(line1, line2, 'wgs96' as Sgp4GravConstants, Sgp4OpsMode.AFSPC)).toThrow(
+      new Error('unknown gravity option wgs96'),
+    );
   });
 });
 
 describe('Verification of Fail Cases', () => {
-  sgp4FailData.forEach((sgp4DataItem) => {
+  sgp4FullCovFail.forEach((sgp4DataItem) => {
     // Fetching satellite record from TLE lines
     const satrec = Sgp4.createSatrec(sgp4DataItem.tleLine1, sgp4DataItem.tleLine2);
 
@@ -88,95 +95,46 @@ describe('Test vector equations in SGP4', () => {
   });
 });
 
-/*
- * Describe('Test conversions in sgp4-utils', () => {
- *   test('If degreesLat is accurate', () => {
- *     expect(Sgp4Utils.degreesLat(0.5)).toEqual(28.64788975654116);
- *   });
- *   test('If degreesLong is accurate', () => {
- *     expect(Sgp4Utils.degreesLong(0.5)).toEqual(28.64788975654116);
- *   });
- *   test('If radiansLat is accurate', () => {
- *     expect(Sgp4Utils.radiansLat(45)).toEqual(0.7853981633974483);
- *   });
- *   test('If radiansLong is accurate', () => {
- *     expect(Sgp4Utils.radiansLong(45)).toEqual(0.7853981633974483);
- *   });
- */
-
-/*
- *   Test(`if sgp4-utils checks for errors`, () => {
- *     expect(() => Sgp4Utils.degreesLat(-100)).toThrowError(
- *       new RangeError('Latitude radians must be in range [-PI/2; PI/2].')
- *     );
- *     expect(() => Sgp4Utils.degreesLat(100)).toThrowError(
- *       new RangeError('Latitude radians must be in range [-PI/2; PI/2].')
- *     );
- *     expect(() => Sgp4Utils.degreesLong(-100)).toThrowError(
- *       new RangeError('Longitude radians must be in range [-PI; PI].')
- *     );
- *     expect(() => Sgp4Utils.degreesLong(100)).toThrowError(
- *       new RangeError('Longitude radians must be in range [-PI; PI].')
- *     );
- */
-
-/*
- *     Expect(() => Sgp4Utils.radiansLat(-100)).toThrowError(
- *       new RangeError('Latitude degrees must be in range [-90; 90].')
- *     );
- *     expect(() => Sgp4Utils.radiansLat(100)).toThrowError(
- *       new RangeError('Latitude degrees must be in range [-90; 90].')
- *     );
- *     expect(() => Sgp4Utils.radiansLong(-300)).toThrowError(
- *       new RangeError('Longitude degrees must be in range [-180; 180].')
- *     );
- *     expect(() => Sgp4Utils.radiansLong(300)).toThrowError(
- *       new RangeError('Longitude degrees must be in range [-180; 180].')
- *     );
- *   });
- * });
- */
-
 describe('Ensure bstar and ndot account for leading zeros', () => {
   test('if bstar reads in leading zero without exponent', () => {
     const line1 = '1 00005U 58002B   00179.78495062  .00000023  00000-0  00098-0 0  4753';
     const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.bstar).toEqual(0.00098);
   });
   test('if bstar reads in leading zero when doing exponents', () => {
     const line1 = '1 00005U 58002B   00179.78495062  .00000023  00000-0  00098-5 0  4753';
     const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.bstar).toEqual(0.0000000098);
   });
   test('if bstar reads in negative number', () => {
     const line1 = '1 00005U 58002B   00179.78495062  .00000023  00000-0 -00098-5 0  4753';
     const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.bstar).toEqual(-0.0000000098);
   });
   test('if ndot reads in leading zero', () => {
     const line1 = '1 00005U 58002B   00179.78495062  .10000000  00023-0  12398-0 0  4753';
     const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.nddot).toEqual(0.00023);
   });
   test('if ndot reads in leading zero and applies exponents', () => {
     const line1 = '1 00005U 58002B   00179.78495062  .10000000  00023-4  12398-0 0  4753';
     const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.nddot).toEqual(0.000000023);
   });
   test('if ndot reads in negative value with leading zeroes', () => {
     const line1 = '1 00005U 58002B   00179.78495062 -.10000000 -00023-0  12398-5 0  4753';
     const line2 = '2 00005  34.2682 348.7242 1859667 331.7664  19.3264 10.82419157413667';
-    const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+    const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.nddot).toEqual(-0.00023);
   });

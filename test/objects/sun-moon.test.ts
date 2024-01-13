@@ -1,13 +1,7 @@
-/**
- * @file   Test Suite to verify tle functions work as expected
- * @author Theodore Kruczek.
- * @since  1.3.0
- */
-
-import { Celestial } from '../../lib/body/Celestial';
-import { Moon } from '../../lib/body/Moon';
-import { Sun } from '../../lib/body/Sun';
-import { Degrees, Meters } from '../../lib/index';
+import { Celestial } from '../../src/body/Celestial';
+import { Moon } from '../../src/body/Moon';
+import { Sun } from '../../src/body/Sun';
+import { Degrees, Meters } from '../../src/index';
 
 // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
 const dateObj = new Date(1661406000000);
@@ -17,7 +11,7 @@ describe('Sun and Moon', () => {
     const d = Sun.julian2date(Sun.date2jSince2000(dateObj));
     const c = Sun.raDec(d);
 
-    Celestial.getStarAzEl(dateObj, 0 as Degrees, 0 as Degrees, c.ra, c.dec);
+    Celestial.azEl(dateObj, 0 as Degrees, 0 as Degrees, c.ra, c.dec);
     Sun.azEl(dateObj, 0 as Degrees, 0 as Degrees);
   });
 
@@ -34,7 +28,7 @@ describe('Sun and Moon', () => {
     Moon.rae(dateObj, 0 as Degrees, 0 as Degrees);
 
     /*
-     * TODO: Fix this test to work on ci/cd pipeline
+     * TODO: #4 Fix this test to work on ci/cd pipeline
      * Moon.getMoonTimes(dateObj, 0 as Degrees, 0 as Degrees, true);
      * Moon.getMoonTimes(dateObj, -10 as Degrees, -10 as Degrees, false);
      */
@@ -135,7 +129,9 @@ describe('Suncalc.js tests', () => {
 
     // eslint-disable-next-line guard-for-in
     for (const i in testTimes) {
-      expect(times[i].toUTCString()).toEqual(new Date(testTimes[i]).toUTCString());
+      const key = i as keyof typeof testTimes;
+
+      expect(times[i].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
     }
   });
 
@@ -144,7 +140,9 @@ describe('Suncalc.js tests', () => {
 
     // eslint-disable-next-line guard-for-in
     for (const i in heightTestTimes) {
-      expect(times[i].toUTCString()).toEqual(new Date(heightTestTimes[i]).toUTCString());
+      const key = i as keyof typeof heightTestTimes;
+
+      expect(times[i].toUTCString()).toEqual(new Date(heightTestTimes[key]).toUTCString());
     }
   });
 
@@ -215,7 +213,9 @@ describe('Tests from Hypnos3', () => {
 
     // eslint-disable-next-line guard-for-in
     for (const i in testTimes) {
-      expect(times[i].toUTCString()).toEqual(new Date(testTimes[i]).toUTCString());
+      const key = i as keyof typeof testTimes;
+
+      expect(times[i].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
     }
   });
 

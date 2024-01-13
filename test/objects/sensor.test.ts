@@ -1,10 +1,4 @@
-/**
- * @file   Test Suite to verify sat class work as expected
- * @author Theodore Kruczek.
- * @since  1.2.0
- */
-
-import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../lib/index';
+import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../src/index';
 
 const dateObj = new Date(1661400000000);
 

@@ -1,5 +1,4 @@
-import { Degrees, Radians } from '..';
-import { DEG2RAD, PI, RAD2DEG } from '../utils/constants';
+import { DEG2RAD, PI, RAD2DEG, Degrees, Radians } from '..';
 
 /**
  * Converts radians to degrees.

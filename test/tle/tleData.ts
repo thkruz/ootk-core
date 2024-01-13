@@ -1,4 +1,4 @@
-import { TleLine1, TleLine2 } from 'lib/index';
+import { TleLine1, TleLine2 } from '../../src/index';
 
 export const tleData = [
   {

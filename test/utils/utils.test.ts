@@ -1,10 +1,5 @@
-/**
- * @file   Tests from Utils Module to ensure compatibility
- * @since  1.0.0-alpha3
- */
-
-import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../lib/index'; // eslint-disable-line
-import { dopplerFactor, getDayOfYear } from '../../lib/utils/functions';
+import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../src/index';
+import { dopplerFactor, getDayOfYear } from '../../src/utils/functions';
 
 const numDigits = 8;
 

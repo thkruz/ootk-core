@@ -12,7 +12,7 @@ import {
   lla2ecf,
   rae2ecf,
   rae2sez,
-} from '../../lib/index';
+} from '../../src/index';
 import { transformsData } from './transformsData';
 
 const numDigits = 6;

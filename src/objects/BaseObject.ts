@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The BaseObject class is used for creating core properties and methods applicable

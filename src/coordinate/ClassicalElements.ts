@@ -1,7 +1,6 @@
-import { Earth } from '../body/Earth';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
-import { RAD2DEG, sec2min, secondsPerDay, TAU } from '../utils/constants';
+import { earthGravityParam, RAD2DEG, sec2min, secondsPerDay, TAU } from '../utils/constants';
 import { clamp, matchHalfPlane, newtonNu } from '../utils/functions';
 import { EquinoctialElements } from './EquinoctialElements';
 import { OrbitRegime } from './OrbitRegime';
@@ -46,7 +45,7 @@ export class ClassicalElements {
     rightAscension,
     argPerigee,
     trueAnomaly,
-    mu = Earth.mu,
+    mu = earthGravityParam,
   }: ClassicalElementsParams) {
     this.epoch = epoch;
     this.semimajorAxis = semimajorAxis;
@@ -65,7 +64,7 @@ export class ClassicalElements {
    * @returns A new instance of ClassicalElements.
    * @throws Error if classical elements are undefined for fixed frames.
    */
-  static fromStateVector(state: StateVector, mu = Earth.mu): ClassicalElements {
+  static fromStateVector(state: StateVector, mu = earthGravityParam): ClassicalElements {
     if (!state.inertial) {
       throw new Error('Classical elements are undefined for fixed frames.');
     }

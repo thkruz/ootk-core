@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Star class is meant to help with cacluating star positions relative to
@@ -26,8 +26,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { StarObjectParams } from '../interfaces/StarObjectParams';
+import { BaseObject } from './BaseObject';
 import {
+  StarObjectParams,
   Degrees,
   EciVec3,
   GreenwichMeanSiderealTime,
@@ -36,13 +37,13 @@ import {
   Radians,
   RaeVec3,
   SpaceObjectType,
-} from '../types/types';
-import { MILLISECONDS_TO_DAYS } from '../utils/constants';
-
-import { Celestial } from '../body';
-import { Sgp4 } from '../sgp4/sgp4';
-import { ecf2eci, jday, rae2ecf } from '../transforms/transforms';
-import { BaseObject } from './BaseObject';
+  MILLISECONDS_TO_DAYS,
+  Celestial,
+  Sgp4,
+  ecf2eci,
+  jday,
+  rae2ecf,
+} from '../index';
 
 export class Star extends BaseObject {
   ra: Radians;
@@ -77,7 +78,7 @@ export class Star extends BaseObject {
     lla: LlaVec3<Degrees, Kilometers> = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 },
     date: Date = this.time,
   ): RaeVec3 {
-    const starPos = Celestial.getStarAzEl(date, lla.lat, lla.lon, this.ra, this.dec);
+    const starPos = Celestial.azEl(date, lla.lat, lla.lon, this.ra, this.dec);
 
     return { az: starPos.az, el: starPos.el, rng: <Kilometers>250000 };
   }

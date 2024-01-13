@@ -1,13 +1,25 @@
-import { AzEl, Degrees, Kilometers, RaDec, Radians } from '..';
-import { RAD2DEG } from '../utils/constants';
-import { Sun } from './Sun';
+import { Sun, RAD2DEG, AzEl, Degrees, Kilometers, RaDec, Radians } from '..';
 
+/**
+ * Celestial is a static class that provides methods for calculating the position of celestial objects such
+ * as the Sun, Moon, and planets in the sky.
+ */
 export class Celestial {
   private constructor() {
     // disable constructor
   }
 
-  static getStarAzEl(date: Date, lat: Degrees, lon: Degrees, ra: Radians, dec: Radians): AzEl<Degrees> {
+  /**
+   * Calculates the azimuth and elevation of a celestial object at a given date, latitude,
+   * longitude, right ascension, and declination.
+   * @param date - The date for which to calculate the azimuth and elevation.
+   * @param lat - The latitude of the observer.
+   * @param lon - The longitude of the observer.
+   * @param ra - The right ascension of the celestial object.
+   * @param dec - The declination of the celestial object.
+   * @returns An object containing the azimuth and elevation in degrees.
+   */
+  static azEl(date: Date, lat: Degrees, lon: Degrees, ra: Radians, dec: Radians): AzEl<Degrees> {
     const c: RaDec = {
       ra,
       dec,
@@ -15,7 +27,7 @@ export class Celestial {
     };
     const azEl = Sun.azEl(date, lat, lon, c);
 
-    const el = <Radians>(azEl.el + Celestial.astroRefraction(azEl.el)); // elevation correction for refraction
+    const el = <Radians>(azEl.el + Celestial.atmosphericRefraction(azEl.el)); // elevation correction for refraction
 
     return {
       az: (azEl.az * RAD2DEG) as Degrees,
@@ -24,11 +36,22 @@ export class Celestial {
   }
 
   /**
-   * get astro refraction
+   * Atmospheric refraction in astronomy, refers to the bending of light as it passes through the Earth's
+   * atmosphere. This effect is most noticeable for celestial objects like stars and planets when they are
+   * close to the horizon. Here's a breakdown of how it works:
+   *
+   * Actual Position: Due to this bending of light, the apparent position of a celestial object is slightly
+   * different from its true position in the sky. When a star or planet is near the horizon, the effect is more
+   * pronounced because the light path passes through more of the Earth's atmosphere, which increases the amount of
+   * bending.
+   *
+   * A familiar example of atmospheric refraction is observed during sunrise and sunset. The Sun appears to
+   * be above the horizon when it is actually just below it. This is because the light from the Sun is bent
+   * upwards as it passes through the atmosphere.
    * @param {Radians} h - elevation
    * @returns {number} refraction
    */
-  static astroRefraction(h: Radians): Radians {
+  static atmosphericRefraction(h: Radians): Radians {
     if (h < 0) {
       h = <Radians>0;
     }
@@ -37,7 +60,8 @@ export class Celestial {
   }
 
   /**
-   * get declination
+   * Calculate the declination. Similar to latitude on Earth, declination is another celestial coordinate.
+   * It measures how far north or south an object is from the celestial equator
    * @param {number} l - ecliptic longitude
    * @param {number} b - ecliptic latitude
    * @returns {number} declination
@@ -47,7 +71,9 @@ export class Celestial {
   }
 
   /**
-   * get right ascension
+   * Calculate the right ascension. This is a celestial coordinate used to determine the position of objects
+   * in the sky. It's analogous to longitude on Earth. Right Ascension indicates how far east an object is
+   * from the vernal equinox along the celestial equator.
    * @param {number} l - ecliptic longitude
    * @param {number} b - ecliptic latitude
    * @returns {number} right ascension
@@ -57,7 +83,10 @@ export class Celestial {
   }
 
   /**
-   * get elevation (sometimes called altitude)
+   * Calculate the elevation. Elevation, or altitude, is the angle between an object in the sky and the
+   * observer's local horizon. It's commonly expressed in degrees, where 0 degrees is right at the horizon
+   * and 90 degrees is directly overhead (the zenith), but we are using radians to support trigonometric
+   * functions like Math.sin() and Math.cos().
    * @param {number} H - siderealTime
    * @param {Radians} phi - latitude
    * @param {Radians} dec - The declination of the sun
@@ -68,7 +97,9 @@ export class Celestial {
   }
 
   /**
-   * get azimuth
+   * Calculate the azimuth. This is a compass direction measurement. Azimuth measures the angle along
+   * the horizon from a specific reference direction (usually true north) to the point where a vertical
+   * line from the object intersects the horizon.
    * @param {number} H - siderealTime
    * @param {Radians} phi - latitude
    * @param {Radians} dec - The declination of the sun

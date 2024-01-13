@@ -1,9 +1,21 @@
-import { AngularDiameterMethod, Kilometers, Radians } from '..';
-import { DataHandler } from '../data/DataHandler';
-import { Vector3D } from '../operations/Vector3D';
-import { EpochUTC } from '../time/EpochUTC';
-import { asec2rad, DEG2RAD, RAD2DEG, secondsPerDay, secondsPerSiderealDay, TAU, ttasec2rad } from '../utils/constants';
-import { angularDiameter, evalPoly } from '../utils/functions';
+import {
+  earthGravityParam,
+  angularDiameter,
+  evalPoly,
+  asec2rad,
+  DEG2RAD,
+  RAD2DEG,
+  secondsPerDay,
+  secondsPerSiderealDay,
+  TAU,
+  ttasec2rad,
+  EpochUTC,
+  Vector3D,
+  DataHandler,
+  AngularDiameterMethod,
+  Kilometers,
+  Radians,
+} from '..';
 import { NutationAngles } from './NutationAngles';
 import { PrecessionAngles } from './PrecessionAngles';
 
@@ -14,7 +26,7 @@ export class Earth {
   }
 
   // / Earth gravitational parameter _(km²/s³)_.
-  static readonly mu: number = 398600.4415;
+  static readonly mu: number = earthGravityParam;
 
   // / Earth equatorial radius.
   static readonly radiusEquator = 6378.1363 as Kilometers;

@@ -3,7 +3,7 @@
  * @since  0.2.0
  */
 
-import { Sgp4 } from '../../../lib/index';
+import { Sgp4 } from '../../../src/index';
 import badTleData from './io.json';
 
 describe('Twoline', () => {

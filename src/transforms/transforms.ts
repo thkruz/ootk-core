@@ -1,7 +1,7 @@
 /* eslint-disable init-declarations */
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Transforms module contains a collection of conversions not contained
@@ -28,7 +28,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { Earth, Sensor, Sgp4 } from '..';
 import {
   Degrees,
   EcefVec3,
@@ -38,14 +37,21 @@ import {
   GreenwichMeanSiderealTime,
   Kilometers,
   LlaVec3,
-  RadarSensor,
   Radians,
   RaeVec3,
   RfVec3,
   RuvVec3,
   SezVec3,
-} from '../types/types';
-import { DEG2RAD, MILLISECONDS_TO_DAYS, PI, RAD2DEG, TAU } from '../utils/constants';
+  DEG2RAD,
+  MILLISECONDS_TO_DAYS,
+  PI,
+  RAD2DEG,
+  TAU,
+  Earth,
+  Sensor,
+  Sgp4,
+  RadarSensor,
+} from '..';
 
 /**
  * Converts Azimuth and Elevation to U and V.

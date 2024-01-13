@@ -9,8 +9,7 @@
     "build": "node ./scripts/cleanup.mjs && npm run js && npm run cjs && node ./scripts/makeMjs.mjs",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
-    "test": "npm run build && jest",
-    "test:nobuild": "jest",
+    "test": "jest",
     "test:coverage": "jest --coverage",
     "version": "auto-changelog -p && git add CHANGELOG.md"
   },

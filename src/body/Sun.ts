@@ -1,10 +1,24 @@
-import { AngularDiameterMethod, AzEl, Degrees, Kilometers, Meters, RaDec, Radians, SunTime } from '..';
-import { Vector3D } from '../operations/Vector3D';
-import { EpochUTC } from '../time/EpochUTC';
-import { astronomicalUnit, cKmPerSec, DEG2RAD, MS_PER_DAY, RAD2DEG, TAU } from '../utils/constants';
-import { angularDiameter } from '../utils/functions';
-import { Celestial } from './Celestial';
-import { Earth } from './Earth';
+import {
+  Earth,
+  Celestial,
+  angularDiameter,
+  astronomicalUnit,
+  cKmPerSec,
+  DEG2RAD,
+  MS_PER_DAY,
+  RAD2DEG,
+  TAU,
+  EpochUTC,
+  Vector3D,
+  AngularDiameterMethod,
+  AzEl,
+  Degrees,
+  Kilometers,
+  Meters,
+  RaDec,
+  Radians,
+  SunTime,
+} from '..';
 
 /**
  * Sun metrics and operations.
@@ -163,7 +177,7 @@ export class Sun {
 
   /**
    * returns set time for the given sun altitude
-   * @param {number} h - heigh at 0
+   * @param {number} h - height at 0
    * @param {number} lw - rad * -lng
    * @param {number} phi -  rad * lat;
    * @param {number} dec - declination
@@ -347,7 +361,7 @@ export class Sun {
    * @param {Degrees} lon - Degrees longitude
    * @returns {number} julian cycle
    */
-  static julianCyle(date: Date, lon: Degrees): number {
+  static julianCycle(date: Date, lon: Degrees): number {
     const lw = <Radians>(-lon * DEG2RAD);
     const d = Sun.date2jSince2000(date);
 

@@ -1,4 +1,4 @@
-import { Satellite } from '../objects';
+import type { Satellite } from '../objects';
 import { Tle } from './Tle';
 
 export type StringifiedNumber = `${number}.${number}`;

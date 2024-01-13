@@ -104,3 +104,5 @@ export const MILLISECONDS_PER_DAY = <Days>1000 * 60 * 60 * 24;
 export const MILLISECONDS_PER_SECOND = <Milliseconds>1000;
 
 export const RADIUS_OF_EARTH = 6371; // Radius of Earth in kilometers
+
+export const earthGravityParam = 398600.4415;

@@ -1,4 +1,4 @@
-import { Degrees, EcfVec3, EciVec3, Kilometers, RAD2DEG, Radians } from '../../lib/index';
+import { Degrees, EcfVec3, EciVec3, Kilometers, RAD2DEG, Radians } from '../../src/index';
 
 export const transformsData = {
   validLatitudes: [

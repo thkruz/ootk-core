@@ -1,11 +1,4 @@
-/* eslint-disable max-lines-per-function */
-/**
- * @file   Test Suite to verify tle functions work as expected
- * @author Theodore Kruczek.
- * @since  1.1.0
- */
-
-import { Tle } from '../../lib/index';
+import { Tle } from '../../src/index';
 import { tleData } from './tleData';
 
 describe('Valid TLEs', () => {

@@ -31,18 +31,18 @@
  * SOFTWARE.
  */
 
-export { Celestial, Earth, Moon, Sun } from './body';
-export * from './coordinate';
-export { Tle } from './coordinate/Tle';
-export * from './data/DataHandler';
 export * from './enums';
+export * from './types/types';
 export * from './interfaces';
-export { BaseObject, GroundPosition, Satellite, Sensor, Star } from './objects';
-export * from './observation';
-export * from './operations/operations';
-export * from './sgp4';
 export * from './time/time';
 export * from './transforms';
-export * from './types/types';
-export * from './utils/constants';
-export * from './utils/functions';
+export * from './utils';
+export * from './operations/operations';
+export { BaseObject } from './objects';
+export { Earth } from './body';
+export * from './coordinate';
+export * from './observation';
+export * from './data/DataHandler';
+export * from './sgp4';
+export * from './objects';
+export * from './body';

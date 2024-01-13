@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * Some of the math in this file was originally created by Vladimir Agafonkin.
@@ -96,7 +96,7 @@ export class Moon {
   static radiusEquator = 1738.0;
 
   // / Calculate the Moon's ECI position _(km)_ for a given UTC [epoch].
-  static eci(epoch: EpochUTC): Vector3D {
+  static eci(epoch: EpochUTC = EpochUTC.fromDateTime(new Date())): Vector3D {
     const jc = epoch.toJulianCenturies();
     const dtr = DEG2RAD;
     const lamEcl =
@@ -296,7 +296,7 @@ export class Moon {
     // formula 14.1 of "Astronomical Algorithms" 2nd edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
     const pa = Math.atan2(Math.sin(H), Math.tan(phi) * Math.cos(c.dec) - Math.sin(c.dec) * Math.cos(H));
 
-    h = <Radians>(h + Celestial.astroRefraction(h)); // altitude correction for refraction
+    h = <Radians>(h + Celestial.atmosphericRefraction(h)); // altitude correction for refraction
 
     return {
       az: Celestial.azimuth(H, phi, c.dec),
