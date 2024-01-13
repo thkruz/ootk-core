@@ -74,4 +74,4 @@ jobs:
       - run: npm ci --ignore-scripts
 
       - name: Test
-        run: npm run test:nobuild
+        run: npm run test
