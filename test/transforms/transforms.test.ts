@@ -1,9 +1,5 @@
-/**
- * @file   Tests from js to ensure compatibility
- * @since  0.2.0
- */
-
 import {
+  Degrees,
   ecf2eci,
   ecf2rae,
   eci2ecf,
@@ -12,12 +8,12 @@ import {
   getDegLon,
   getRadLat,
   getRadLon,
+  Kilometers,
   lla2ecf,
   rae2ecf,
   rae2sez,
-} from '../../lib/ootk-core';
-import { RAD2DEG } from '../../lib/utils/constants';
-import transformData from './transforms.json';
+} from '../../lib/index';
+import { transformsData } from './transformsData';
 
 const numDigits = 6;
 
@@ -32,7 +28,7 @@ describe('Latitude & longitude conversions', () => {
     validEcfToLookangles,
     invalidLatitudes,
     invalidLongitudes,
-  } = transformData;
+  } = transformsData;
 
   validLatitudes.forEach((item) => {
     it(`convert valid latitude value (${item.radians} radians) to degrees`, () => {
@@ -66,8 +62,8 @@ describe('Latitude & longitude conversions', () => {
     it('convert valid ECI coordinates to LLA', () => {
       const llaCoordinates = eci2lla(item.eci, item.gmst);
 
-      expect(llaCoordinates.lon).toBeCloseTo(item.lla.lon * RAD2DEG);
-      expect(llaCoordinates.lat).toBeCloseTo(item.lla.lat * RAD2DEG);
+      expect(llaCoordinates.lon).toBeCloseTo(item.lla.lon);
+      expect(llaCoordinates.lat).toBeCloseTo(item.lla.lat);
       expect(llaCoordinates.alt).toBeCloseTo(item.lla.alt);
     });
   });
@@ -97,8 +93,8 @@ describe('Latitude & longitude conversions', () => {
       const raeCoordinates = ecf2rae(item.lla, item.satelliteEcf);
 
       expect(raeCoordinates.rng).toBeCloseTo(item.rae.rng, 0);
-      expect(raeCoordinates.az).toBeCloseTo(item.rae.az * RAD2DEG, 1);
-      expect(raeCoordinates.el).toBeCloseTo(item.rae.el * RAD2DEG, 1);
+      expect(raeCoordinates.az).toBeCloseTo(item.rae.az, 1);
+      expect(raeCoordinates.el).toBeCloseTo(item.rae.el, 1);
     });
   });
 
@@ -123,7 +119,7 @@ describe('Latitude & longitude conversions', () => {
 
 describe('Rae2Sez', () => {
   it('should convert valid RAE coordinates to SEZ', () => {
-    const { rae, sez } = transformData.validRae2Sez[0];
+    const { rae, sez } = transformsData.validRae2Sez[0];
     const sezCoordinates = rae2sez(rae);
 
     expect(sezCoordinates.s).toBeCloseTo(sez.s);
@@ -141,14 +137,11 @@ describe('Rae2Ecf', () => {
       z: 4000,
     };
     const lla = {
-      lon: 0,
-      lat: 0,
-      alt: 0,
+      lon: 0 as Degrees,
+      lat: 0 as Degrees,
+      alt: 0 as Kilometers,
     };
     const rae = ecf2rae(lla, ecf);
-
-    // eslint-disable-next-line no-console
-    console.warn(rae);
 
     const ecfCoordinates = rae2ecf(rae, lla);
 

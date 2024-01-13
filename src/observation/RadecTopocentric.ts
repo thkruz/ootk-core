@@ -1,8 +1,8 @@
 /* eslint-disable no-undefined */
 import { J2000 } from '../coordinate/J2000';
+import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
-import { AngularDistanceMethod } from '../types/types';
 import { DEG2RAD, RAD2DEG, TAU } from '../utils/constants';
 import { angularDistance } from '../utils/functions';
 import { radecToPosition, radecToVelocity } from './ObservationUtils';
@@ -35,8 +35,8 @@ export class RadecTopocentric {
     declinationRateDegrees?: number,
     rangeRate?: number,
   ): RadecTopocentric {
-    const rightAscensionRate = rightAscensionRateDegrees !== null ? rightAscensionRateDegrees * DEG2RAD : undefined;
-    const declinationRate = declinationRateDegrees !== null ? declinationRateDegrees * DEG2RAD : undefined;
+    const rightAscensionRate = rightAscensionRateDegrees ? rightAscensionRateDegrees * DEG2RAD : undefined;
+    const declinationRate = declinationRateDegrees ? declinationRateDegrees * DEG2RAD : undefined;
 
     return new RadecTopocentric(
       epoch,
@@ -99,12 +99,12 @@ export class RadecTopocentric {
 
   // / Right-ascension rate _(°/s)_.
   get rightAscensionRateDegrees(): number | undefined {
-    return this.rightAscensionRate !== null ? this.rightAscensionRate * RAD2DEG : undefined;
+    return this.rightAscensionRate ? this.rightAscensionRate * RAD2DEG : undefined;
   }
 
   // / Declination rate _(°/s)_.
   get declinationRateDegrees(): number | undefined {
-    return this.declinationRate !== null ? this.declinationRate * RAD2DEG : undefined;
+    return this.declinationRate ? this.declinationRate * RAD2DEG : undefined;
   }
 
   /**
@@ -126,7 +126,7 @@ export class RadecTopocentric {
    * to override the values contained in this observation.
    */
   velocity(site: J2000, range?: number, rangeRate?: number): Vector3D {
-    if (this.rightAscensionRate === null || this.declinationRate === null) {
+    if (!this.rightAscensionRate || !this.declinationRate) {
       throw new Error('Velocity unsolvable, missing ra/dec rates.');
     }
     const r = range ?? this.range ?? 1.0;

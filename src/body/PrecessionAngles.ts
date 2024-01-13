@@ -1,4 +1,4 @@
-import { Radians } from '../ootk-core';
+import { Radians } from '..';
 
 // / Earth precession angles _(rad)_.
 export type PrecessionAngles = {

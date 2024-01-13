@@ -4,7 +4,7 @@
  * @since  1.2.0
  */
 
-import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../lib/ootk-core';
+import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../lib/index';
 
 const dateObj = new Date(1661400000000);
 
@@ -28,7 +28,7 @@ describe('Basic Sensor functionality', () => {
       maxRng: 100000 as Kilometers,
     });
 
-    const rae = sensor.getRae(sat, dateObj);
+    const rae = sensor.rae(sat, dateObj);
 
     expect(rae.az).toMatchSnapshot();
     expect(rae.el).toMatchSnapshot();

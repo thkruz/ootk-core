@@ -9,4 +9,4 @@ export * from './RelativeState';
 export * from './RIC';
 export * from './StateVector';
 export * from './TEME';
-export * from './TLE';
+export * from './Tle';

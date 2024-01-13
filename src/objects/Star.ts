@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (OOTK) is a collection of tools for working
+ * @description Orbital Object ToolKit (ootk) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Star class is meant to help with cacluating star positions relative to
@@ -26,6 +26,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import { StarObjectParams } from '../interfaces/StarObjectParams';
 import {
   Degrees,
   EciVec3,
@@ -35,14 +36,12 @@ import {
   Radians,
   RaeVec3,
   SpaceObjectType,
-  StarObjectParams,
 } from '../types/types';
 import { MILLISECONDS_TO_DAYS } from '../utils/constants';
 
 import { Celestial } from '../body';
 import { Sgp4 } from '../sgp4/sgp4';
-import { ecf2eci, rae2ecf } from '../transforms/transforms';
-import { Utils } from '../utils/utils';
+import { ecf2eci, jday, rae2ecf } from '../transforms/transforms';
 import { BaseObject } from './BaseObject';
 
 export class Star extends BaseObject {
@@ -51,7 +50,7 @@ export class Star extends BaseObject {
   bf: string;
   h: string;
   pname: string;
-  vmag: number;
+  vmag?: number;
 
   constructor(info: StarObjectParams) {
     super(info);
@@ -60,28 +59,21 @@ export class Star extends BaseObject {
     this.ra = info.ra;
     this.dec = info.dec;
 
-    if (info.pname) {
-      this.pname = info.pname;
-    }
-
-    if (info.bf) {
-      this.bf = info.bf;
-    }
-
-    if (info.h) {
-      this.h = info.h;
-    }
+    this.pname = info.pname ?? '';
+    this.bf = info.bf ?? '';
+    this.h = info.h ?? '';
+    this.vmag = info.vmag;
   }
 
-  getEci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = this.time): EciVec3 {
-    const rae = this.getRae(lla, date);
+  eci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = this.time): EciVec3 {
+    const rae = this.rae(lla, date);
     const { gmst } = Star.calculateTimeVariables_(date);
 
     // Arbitrary distance to enable using ECI coordinates
     return ecf2eci(rae2ecf(rae, { lat: <Degrees>0, lon: <Degrees>0, alt: <Kilometers>0 }), gmst);
   }
 
-  getRae(
+  rae(
     lla: LlaVec3<Degrees, Kilometers> = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 },
     date: Date = this.time,
   ): RaeVec3 {
@@ -92,7 +84,7 @@ export class Star extends BaseObject {
 
   private static calculateTimeVariables_(date: Date): { gmst: GreenwichMeanSiderealTime; j: number } {
     const j =
-      Utils.jday(
+      jday(
         date.getUTCFullYear(),
         date.getUTCMonth() + 1,
         date.getUTCDate(),

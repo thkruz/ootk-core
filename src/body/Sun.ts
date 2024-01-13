@@ -1,4 +1,4 @@
-import { AngularDiameterMethod, AzEl, Degrees, Kilometers, Meters, RaDec, Radians, SunTime } from '../ootk-core';
+import { AngularDiameterMethod, AzEl, Degrees, Kilometers, Meters, RaDec, Radians, SunTime } from '..';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { astronomicalUnit, cKmPerSec, DEG2RAD, MS_PER_DAY, RAD2DEG, TAU } from '../utils/constants';
@@ -287,18 +287,20 @@ export class Sun {
     const result = {
       solarNoon: Sun.julian2date(Jnoon),
       nadir: Sun.julian2date(Jnoon + 0.5), // https://github.com/mourner/suncalc/pull/125
-    };
+    } as SunTime;
 
     // Add all other unique times using Jnoon as a reference
     for (let i = 0, len = Sun.times_.length; i < len; i += 1) {
       time = Sun.times_[i];
-      h0 = <Meters>((time[0] + dh) * DEG2RAD);
+      const angle = time[0] as Degrees;
+
+      h0 = <Meters>((angle + dh) * DEG2RAD);
 
       Jset = Sun.getSetJ_(h0, lw, phi, dec, n, M, L);
       Jrise = Jnoon - (Jset - Jnoon);
 
-      result[time[1]] = Sun.julian2date(Jrise);
-      result[time[2]] = Sun.julian2date(Jset);
+      result[time[1] as string] = Sun.julian2date(Jrise);
+      result[time[2] as string] = Sun.julian2date(Jset);
     }
 
     return result;
@@ -481,6 +483,7 @@ export class Sun {
     return {
       dec: Celestial.declination(L, 0),
       ra: Celestial.rightAscension(L, 0),
+      dist: 0 as Kilometers,
     };
   }
 

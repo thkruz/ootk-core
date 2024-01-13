@@ -1,4 +1,4 @@
-import { AzEl, Degrees, RaDec, Radians } from '../ootk-core';
+import { AzEl, Degrees, Kilometers, RaDec, Radians } from '..';
 import { RAD2DEG } from '../utils/constants';
 import { Sun } from './Sun';
 
@@ -11,6 +11,7 @@ export class Celestial {
     const c: RaDec = {
       ra,
       dec,
+      dist: 0 as Kilometers,
     };
     const azEl = Sun.azEl(date, lat, lon, c);
 

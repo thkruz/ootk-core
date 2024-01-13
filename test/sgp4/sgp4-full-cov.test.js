@@ -4,7 +4,7 @@
  * @since  0.2.0
  */
 
-import { Sgp4 } from '../../lib/ootk-core';
+import { Sgp4 } from '../../lib/index';
 import sgp4FailData from './sgp4-full-cov-fail.json';
 import sgp4Data from './sgp4-full-cov.json';
 

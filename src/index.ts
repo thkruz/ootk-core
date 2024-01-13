@@ -1,6 +1,6 @@
 /**
  * @author @thkruz Theodore Kruczek
- * @description Orbital Object ToolKit Core (OOTK-Core) is a base collection
+ * @description Orbital Object ToolKit Core (ootk-Core) is a base collection
  * of tools for working with satellites and other orbital objects. This core
  * library is provided under the MIT license and is free to use in any project.
  * For additional features, see the full library at:
@@ -31,17 +31,18 @@
  * SOFTWARE.
  */
 
-export * from './body';
+export { Celestial, Earth, Moon, Sun } from './body';
 export * from './coordinate';
+export { Tle } from './coordinate/Tle';
 export * from './data/DataHandler';
-export * from './objects';
+export * from './enums';
+export * from './interfaces';
+export { BaseObject, GroundPosition, Satellite, Sensor, Star } from './objects';
 export * from './observation';
 export * from './operations/operations';
-export { Sgp4 } from './sgp4/sgp4';
+export * from './sgp4';
 export * from './time/time';
-export { Tle } from './tle/tle';
 export * from './transforms';
 export * from './types/types';
 export * from './utils/constants';
 export * from './utils/functions';
-export { Utils } from './utils/utils';

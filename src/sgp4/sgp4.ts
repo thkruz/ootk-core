@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (OOTK) is a collection of tools for working
+ * @description Orbital Object ToolKit (ootk) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Sgp4 module contains a TypeScript port of the 2020 version of
@@ -42,7 +42,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
 
-import { Sgp4OpsMode } from '../coordinate/TLE';
+import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
 import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types';
 import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants';
 
@@ -50,6 +50,81 @@ export enum Sgp4GravConstants {
   wgs72old = 'wgs72old',
   wgs72 = 'wgs72',
   wgs84 = 'wgs84',
+}
+
+interface DsInitParams {
+  xke: number;
+  cosim: number;
+  argpo: number;
+  s1: number;
+  s2: number;
+  s3: number;
+  s4: number;
+  s5: number;
+  sinim: number;
+  ss1: number;
+  ss2: number;
+  ss3: number;
+  ss4: number;
+  ss5: number;
+  sz1: number;
+  sz3: number;
+  sz11: number;
+  sz13: number;
+  sz21: number;
+  sz23: number;
+  sz31: number;
+  sz33: number;
+  t: number;
+  tc: number;
+  gsto: number;
+  mo: number;
+  mdot: number;
+  no: number;
+  nodeo: number;
+  nodedot: number;
+  xPIdot: number;
+  z1: number;
+  z3: number;
+  z11: number;
+  z13: number;
+  z21: number;
+  z23: number;
+  z31: number;
+  z33: number;
+  ecco: number;
+  eccsq: number;
+  emsq: number;
+  em: number;
+  argpm: number;
+  inclm: number;
+  mm: number;
+  nm: number;
+  nodem: number;
+  irez: number;
+  atime: number;
+  d2201: number;
+  d2211: number;
+  d3210: number;
+  d3222: number;
+  d4410: number;
+  d4422: number;
+  d5220: number;
+  d5232: number;
+  d5421: number;
+  d5433: number;
+  dedt: number;
+  didt: number;
+  dmdt: number;
+  dnodt: number;
+  domdt: number;
+  del1: number;
+  del2: number;
+  del3: number;
+  xfact: number;
+  xlamo: number;
+  xli: number;
+  xni: number;
 }
 
 /*
@@ -110,7 +185,7 @@ export enum Sgp4GravConstants {
  *                           original baseline
  *       ----------------------------------------------------------------
  */
-class Sgp4 {
+export class Sgp4 {
   // Dot
 
   /*
@@ -233,19 +308,19 @@ class Sgp4 {
     tleLine1: string,
     tleLine2: string,
     whichconst = Sgp4GravConstants.wgs72,
-    opsmode = Sgp4OpsMode.improved,
+    opsmode = Sgp4OpsMode.IMPROVED,
   ): SatelliteRecord {
     let year = 0;
 
     const satrec = {
-      a: null,
+      a: null as number | null,
       am: null,
       alta: null,
       altp: null,
       argpdot: null,
-      argpo: null,
+      argpo: null as number | null,
       aycof: null,
-      bstar: null,
+      bstar: null as number | null,
       cc1: null,
       cc4: null,
       cc5: null,
@@ -259,33 +334,33 @@ class Sgp4 {
       dedt: null,
       delmo: null,
       del1: null,
-      ecco: null,
+      ecco: null as number | null,
       em: null,
-      epochdays: null,
-      epochyr: null,
-      error: null,
+      epochdays: null as number | null,
+      epochyr: null as number | null,
+      error: null as number | null,
       eta: null,
       gsto: null,
       im: null,
-      inclo: null,
+      inclo: null as number | null,
       init: null,
       isimp: null,
-      jdsatepoch: null,
+      jdsatepoch: null as number | null,
       mdot: null,
       method: null,
-      mo: null,
+      mo: null as number | null,
       mm: null,
-      nddot: null,
-      ndot: null,
-      no: null,
+      nddot: null as number | null,
+      ndot: null as number | null,
+      no: null as number | null,
       nodecf: null,
       nodedot: null,
-      nodeo: null,
+      nodeo: null as number | null,
       om: null,
       Om: null,
       omgcof: null,
       operationmode: null,
-      satnum: null,
+      satnum: null as string | null,
       sinmao: null,
       t: null,
       t2cof: null,
@@ -441,7 +516,7 @@ class Sgp4 {
     satrec.jdsatepoch = jdayRes.jd + jdayRes.jdFrac;
 
     //  ---------------- initialize the orbit at sgp4epoch -------------------
-    Sgp4.sgp4init_(satrec, {
+    Sgp4.sgp4init_(satrec as unknown as SatelliteRecord, {
       whichconst,
       opsmode,
       satn: satrec.satnum,
@@ -457,7 +532,7 @@ class Sgp4 {
       xnodeo: satrec.nodeo,
     });
 
-    return satrec;
+    return satrec as unknown as SatelliteRecord;
   }
 
   // Mag
@@ -1252,7 +1327,8 @@ class Sgp4 {
      *    Sgp4fix for kepler iteration
      *    the following iteration needs better limits on corrections
      */
-    let coseo1, sineo1;
+    let coseo1 = 0;
+    let sineo1 = 0;
 
     while (Math.abs(tem5) >= 1.0e-12 && ktr <= 10) {
       sineo1 = Math.sin(eo1);
@@ -1447,7 +1523,7 @@ class Sgp4 {
     let omega: number;
     let argp: number;
     let nu: number;
-    let m: number;
+    let m = 0;
     let arglat: number;
     let truelon: number;
     let lonper: number;
@@ -2018,32 +2094,32 @@ class Sgp4 {
     sl2: number;
     sl3: number;
     sl4: number;
-    s1: number;
-    s2: number;
-    s3: number;
-    s4: number;
-    s5: number;
-    s6: number;
-    s7: number;
-    ss1: number;
-    ss2: number;
-    ss3: number;
-    ss4: number;
-    ss5: number;
-    ss6: number;
-    ss7: number;
-    sz1: number;
-    sz2: number;
-    sz3: number;
-    sz11: number;
-    sz12: number;
-    sz13: number;
-    sz21: number;
-    sz22: number;
-    sz23: number;
-    sz31: number;
-    sz32: number;
-    sz33: number;
+    s1?: number;
+    s2?: number;
+    s3?: number;
+    s4?: number;
+    s5?: number;
+    s6?: number;
+    s7?: number;
+    ss1?: number;
+    ss2?: number;
+    ss3?: number;
+    ss4?: number;
+    ss5?: number;
+    ss6?: number;
+    ss7?: number;
+    sz1?: number;
+    sz2?: number;
+    sz3?: number;
+    sz11?: number;
+    sz12?: number;
+    sz13?: number;
+    sz21?: number;
+    sz22?: number;
+    sz23?: number;
+    sz31?: number;
+    sz32?: number;
+    sz33?: number;
     xgh2: number;
     xgh3: number;
     xgh4: number;
@@ -2055,18 +2131,18 @@ class Sgp4 {
     xl3: number;
     xl4: number;
     nm: number;
-    z1: number;
-    z2: number;
-    z3: number;
-    z11: number;
-    z12: number;
-    z13: number;
-    z21: number;
-    z22: number;
-    z23: number;
-    z31: number;
-    z32: number;
-    z33: number;
+    z1?: number;
+    z2?: number;
+    z3?: number;
+    z11?: number;
+    z12?: number;
+    z13?: number;
+    z21?: number;
+    z22?: number;
+    z23?: number;
+    z31?: number;
+    z32?: number;
+    z33?: number;
     zmol: number;
     zmos: number;
   } {
@@ -2085,44 +2161,44 @@ class Sgp4 {
     const TAU = 2.0 * Math.PI;
 
     //  --------------------- local variables ------------------------
-    let s1,
-      s2,
-      s3,
-      s4,
-      s5,
-      s6,
-      s7,
-      ss1,
-      ss2,
-      ss3,
-      ss4,
-      ss5,
-      ss6,
-      ss7,
-      sz1,
-      sz11,
-      sz12,
-      sz13,
-      sz2,
-      sz21,
-      sz22,
-      sz23,
-      sz3,
-      sz31,
-      sz32,
-      sz33,
-      z1,
-      z11,
-      z12,
-      z13,
-      z2,
-      z21,
-      z22,
-      z23,
-      z3,
-      z31,
-      z32,
-      z33;
+    let s1 = 0,
+      s2 = 0,
+      s3 = 0,
+      s4 = 0,
+      s5 = 0,
+      s6 = 0,
+      s7 = 0,
+      ss1 = 0,
+      ss2 = 0,
+      ss3 = 0,
+      ss4 = 0,
+      ss5 = 0,
+      ss6 = 0,
+      ss7 = 0,
+      sz1 = 0,
+      sz11 = 0,
+      sz12 = 0,
+      sz13 = 0,
+      sz2 = 0,
+      sz21 = 0,
+      sz22 = 0,
+      sz23 = 0,
+      sz3 = 0,
+      sz31 = 0,
+      sz32 = 0,
+      sz33 = 0,
+      z1 = 0,
+      z11 = 0,
+      z12 = 0,
+      z13 = 0,
+      z2 = 0,
+      z21 = 0,
+      z22 = 0,
+      z23 = 0,
+      z3 = 0,
+      z31 = 0,
+      z32 = 0,
+      z33 = 0;
     const nm = np;
     const em = ep;
     const snodm = Math.sin(nodep);
@@ -2447,80 +2523,7 @@ class Sgp4 {
    *    vallado, crawford, hujsak, kelso  2006
    *----------------------------------------------------------------------------
    */
-  private static dsinit_(options: {
-    xke: number;
-    cosim: number;
-    argpo: number;
-    s1: number;
-    s2: number;
-    s3: number;
-    s4: number;
-    s5: number;
-    sinim: number;
-    ss1: number;
-    ss2: number;
-    ss3: number;
-    ss4: number;
-    ss5: number;
-    sz1: number;
-    sz3: number;
-    sz11: number;
-    sz13: number;
-    sz21: number;
-    sz23: number;
-    sz31: number;
-    sz33: number;
-    t: number;
-    tc: number;
-    gsto: number;
-    mo: number;
-    mdot: number;
-    no: number;
-    nodeo: number;
-    nodedot: number;
-    xPIdot: number;
-    z1: number;
-    z3: number;
-    z11: number;
-    z13: number;
-    z21: number;
-    z23: number;
-    z31: number;
-    z33: number;
-    ecco: number;
-    eccsq: number;
-    emsq: number;
-    em: number;
-    argpm: number;
-    inclm: number;
-    mm: number;
-    nm: number;
-    nodem: number;
-    irez: number;
-    atime: number;
-    d2201: number;
-    d2211: number;
-    d3210: number;
-    d3222: number;
-    d4410: number;
-    d4422: number;
-    d5220: number;
-    d5232: number;
-    d5421: number;
-    d5433: number;
-    dedt: number;
-    didt: number;
-    dmdt: number;
-    dnodt: number;
-    domdt: number;
-    del1: number;
-    del2: number;
-    del3: number;
-    xfact: number;
-    xlamo: number;
-    xli: number;
-    xni: number;
-  }): {
+  private static dsinit_(options: DsInitParams): {
     em: number;
     argpm: number;
     inclm: number;
@@ -3053,7 +3056,13 @@ class Sgp4 {
         delt = stepn;
       }
 
-      let ft, x2li, x2omi, xldot, xnddt, xndt, xomi;
+      let ft = 0;
+      let x2li = 0;
+      let x2omi = 0;
+      let xldot = 0;
+      let xnddt = 0;
+      let xndt = 0;
+      let xomi = 0;
       let iretn = 381; // Added for do loop
 
       while (iretn === 381) {
@@ -3500,7 +3509,7 @@ class Sgp4 {
    */
   private static sgp4init_(
     satrec: SatelliteRecord,
-    options?: {
+    options: {
       whichconst?: Sgp4GravConstants;
       opsmode?: Sgp4OpsMode;
       satn?: string;
@@ -3519,7 +3528,7 @@ class Sgp4 {
     /* eslint-disable no-param-reassign */
     const {
       whichconst = Sgp4GravConstants.wgs72,
-      opsmode = Sgp4OpsMode.improved,
+      opsmode = Sgp4OpsMode.IMPROVED,
       satn = satrec.satnum,
       epoch,
       xbstar,
@@ -4046,7 +4055,7 @@ class Sgp4 {
           xni: satrec.xni,
         };
 
-        const dsinitResult = Sgp4.dsinit_(dsinitOptions);
+        const dsinitResult = Sgp4.dsinit_(dsinitOptions as DsInitParams);
 
         satrec.irez = dsinitResult.irez;
         satrec.atime = dsinitResult.atime;
@@ -4119,5 +4128,3 @@ class Sgp4 {
    * Invjday
    */
 }
-
-export { Sgp4 };

@@ -3,8 +3,8 @@
  * @since  1.0.0-alpha3
  */
 
-import { Utils } from '../../lib/ootk-core'; // eslint-disable-line
-import { getDayOfYear } from '../../lib/utils/functions';
+import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../lib/index'; // eslint-disable-line
+import { dopplerFactor, getDayOfYear } from '../../lib/utils/functions';
 
 const numDigits = 8;
 
@@ -14,86 +14,86 @@ const sincos45deg = Math.sqrt(2) / 2;
 describe('Doppler factor', () => {
   it('without observer movement', () => {
     // North Pole
-    const observerEcf = {
+    const observerEci = {
       x: 0,
       y: 0,
       z: earthRadius,
-    };
-    const positionEcf = {
+    } as EciVec3;
+    const positionEci = {
       x: 0,
       y: 0,
       z: earthRadius + 500,
-    };
+    } as EciVec3;
     // Escape velocity
-    const velocityEcf = {
+    const velocityEci = {
       x: 7.91,
       y: 0,
       z: 0,
-    };
-    const dopFactor = Utils.dopplerFactor(observerEcf, positionEcf, velocityEcf);
+    } as EciVec3;
+    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
 
     expect(dopFactor).toBeCloseTo(1, numDigits);
   });
 
   it('movement of observer is not affected', () => {
-    const observerEcf = {
+    const observerEci = {
       x: earthRadius,
       y: 0,
       z: 0,
-    };
-    const positionEcf = {
+    } as EciVec3;
+    const positionEci = {
       x: earthRadius + 500,
       y: 0,
       z: 0,
-    };
-    const velocityEcf = {
+    } as EciVec3;
+    const velocityEci = {
       x: 0,
       y: 7.91,
       z: 0,
-    };
-    const dopFactor = Utils.dopplerFactor(observerEcf, positionEcf, velocityEcf);
+    } as EciVec3;
+    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
 
     expect(dopFactor).toBeCloseTo(1, numDigits);
   });
 
   it('special case', () => {
-    const observerEcf = {
+    const observerEci = {
       x: earthRadius,
       y: 0,
       z: 0,
-    };
-    const positionEcf = {
+    } as EciVec3;
+    const positionEci = {
       x: (earthRadius + 500) * sincos45deg, // z*sin(45)
       y: (earthRadius + 500) * sincos45deg, // z*cos(45)
       z: 0,
-    };
-    const velocityEcf = {
+    } as EciVec3;
+    const velocityEci = {
       x: 7.91 * sincos45deg,
       y: 7.91 * sincos45deg,
       z: 0,
-    };
-    const dopFactor = Utils.dopplerFactor(observerEcf, positionEcf, velocityEcf);
+    } as EciVec3;
+    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
 
     expect(dopFactor).toBeCloseTo(0.9999892152210788, numDigits);
   });
 
   test('if negative range rate works', () => {
-    const observerEcf = {
+    const observerEci = {
       x: earthRadius,
       y: 0,
       z: 0,
-    };
-    const positionEcf = {
+    } as EciVec3;
+    const positionEci = {
       x: (earthRadius + 500) * sincos45deg, // z*sin(45)
       y: (earthRadius + 500) * sincos45deg, // z*cos(45)
       z: 0,
-    };
-    const velocityEcf = {
+    } as EciVec3;
+    const velocityEci = {
       x: -7.91 * sincos45deg,
       y: -7.91 * sincos45deg,
       z: 0,
-    };
-    const dopFactor = Utils.dopplerFactor(observerEcf, positionEcf, velocityEcf);
+    } as EciVec3;
+    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
 
     expect(dopFactor).toBeCloseTo(1.000013747277977, numDigits);
   });
@@ -101,14 +101,18 @@ describe('Doppler factor', () => {
 
 describe('Distance function', () => {
   test('if distance calculation is correct', () => {
-    expect(Utils.distance({ x: 1000, y: 1000, z: 1000 }, { x: 1000, y: 1000, z: 1000 })).toEqual(0);
-    expect(Utils.distance({ x: 1000, y: 1000, z: 1000 }, { x: 1000, y: 1000, z: 1100 })).toEqual(100);
-  });
-});
-
-describe('Create Vector Function', () => {
-  test('if vector creation is correct', () => {
-    expect(Utils.createVec(1, 10, 2)).toEqual([1, 3, 5, 7, 9]);
+    expect(
+      linearDistance(
+        { x: 1000, y: 1000, z: 1000 } as Vec3<Kilometers>,
+        { x: 1000, y: 1000, z: 1000 } as Vec3<Kilometers>,
+      ),
+    ).toEqual(0);
+    expect(
+      linearDistance(
+        { x: 1000, y: 1000, z: 1000 } as Vec3<Kilometers>,
+        { x: 1000, y: 1000, z: 1100 } as Vec3<Kilometers>,
+      ),
+    ).toEqual(100);
   });
 });
 

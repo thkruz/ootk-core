@@ -1,7 +1,8 @@
 .idea
-.vscode
+.vscode/settings.json
 coverage
-lib
+/commonjs/
+/lib/
 node_modules
 *.log
 

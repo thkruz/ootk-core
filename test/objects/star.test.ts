@@ -4,8 +4,7 @@
  * @since  3.0.0
  */
 
-import { Star } from '../../lib/objects';
-import { Degrees, Kilometers, Radians } from '../../lib/ootk-core';
+import { Degrees, Kilometers, Radians, Star } from '../../lib/index';
 
 describe('Basic Star functionality', () => {
   const star = new Star({
@@ -15,7 +14,7 @@ describe('Basic Star functionality', () => {
   });
 
   it('should be able to get rae coordinates', () => {
-    const rae = star.getRae(
+    const rae = star.rae(
       {
         lat: <Degrees>0,
         lon: <Degrees>0,
@@ -30,7 +29,7 @@ describe('Basic Star functionality', () => {
   });
 
   it('should be able to get ECI coordinates', () => {
-    const eci = star.getEci(
+    const eci = star.eci(
       {
         lat: <Degrees>0,
         lon: <Degrees>0,

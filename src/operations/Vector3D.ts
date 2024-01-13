@@ -1,3 +1,4 @@
+import { linearDistance } from '..';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 
@@ -12,7 +13,7 @@ export class Vector3D<T extends number = number> {
    * [Vector] object.
    */
   static fromVector(v: Vector): Vector3D {
-    return new Vector3D(v[0], v[1], v[2]);
+    return new Vector3D(v.x, v.y, v.z);
   }
 
   // / Origin vector.
@@ -107,11 +108,7 @@ export class Vector3D<T extends number = number> {
    * Return the Euclidean distance between this and another [Vector3D].
    */
   distance(v: Vector3D): number {
-    const dx = this.x - v.x;
-    const dy = this.y - v.y;
-    const dz = this.z - v.z;
-
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    return linearDistance(this, v);
   }
 
   /**

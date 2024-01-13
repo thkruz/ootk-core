@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (OOTK) is a collection of tools for working
+ * @description Orbital Object ToolKit (ootk) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Satellite class provides functions for calculating satellites positions
@@ -28,6 +28,18 @@
  * SOFTWARE.
  */
 
+import { Geodetic } from '../coordinate/Geodetic';
+import { ITRF } from '../coordinate/ITRF';
+import { J2000 } from '../coordinate/J2000';
+import { RIC } from '../coordinate/RIC';
+import { Tle } from '../coordinate/Tle';
+import { OptionsParams } from '../interfaces/OptionsParams';
+import { SatelliteParams } from '../interfaces/SatelliteParams';
+import { RAE } from '../observation/RAE';
+import { Vector3D } from '../operations/Vector3D';
+import { Sgp4 } from '../sgp4/sgp4';
+import { EpochUTC } from '../time/EpochUTC';
+import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms';
 import {
   Degrees,
   EcfVec3,
@@ -35,32 +47,18 @@ import {
   GreenwichMeanSiderealTime,
   Kilometers,
   LlaVec3,
-  OptionsParams,
+  Minutes,
   PosVel,
   Radians,
   RaeVec3,
-  SatelliteParams,
   SatelliteRecord,
-  SpaceObjectType,
   TleLine1,
   TleLine2,
 } from '../types/types';
 import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants';
-
-import { FormatTle } from '../coordinate/FormatTle';
-import { Geodetic } from '../coordinate/Geodetic';
-import { ITRF } from '../coordinate/ITRF';
-import { J2000 } from '../coordinate/J2000';
-import { RIC } from '../coordinate/RIC';
-import { RAE } from '../observation/RAE';
-import { Vector3D } from '../operations/Vector3D';
-import { Sgp4 } from '../sgp4/sgp4';
-import { EpochUTC } from '../time/EpochUTC';
-import { Tle } from '../tle/tle';
-import { ecf2rae, eci2ecf, eci2lla } from '../transforms';
-import { Utils } from '../utils/utils';
+import { dopplerFactor } from './../utils/functions';
 import { BaseObject } from './BaseObject';
-import { Sensor } from './Sensor';
+import { GroundPosition } from './GroundPosition';
 
 /**
  * TODO: Reduce unnecessary calls to calculateTimeVariables using optional
@@ -71,27 +69,23 @@ import { Sensor } from './Sensor';
  * Represents a satellite object with orbital information and methods for calculating its position and other properties.
  */
 export class Satellite extends BaseObject {
-  name: string;
-  type: SpaceObjectType;
-  position: EciVec3; // Where is the object
-  time: Date; // When is the object there
-  apogee: number;
-  argOfPerigee: number;
+  apogee: Kilometers;
+  argOfPerigee: Degrees;
   bstar: number;
   eccentricity: number;
   epochDay: number;
   epochYear: number;
-  inclination: number;
+  inclination: Degrees;
   intlDes: string;
-  meanAnomaly: number;
+  meanAnomaly: Degrees;
   meanMoDev1: number;
   meanMoDev2: number;
   meanMotion: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: OptionsParams;
-  perigee: number;
-  period: number;
-  raan: number;
+  perigee: Kilometers;
+  period: Minutes;
+  rightAscension: Degrees;
   satrec: SatelliteRecord;
   /**
    * The satellite catalog number as listed in the TLE.
@@ -107,35 +101,48 @@ export class Satellite extends BaseObject {
   sccNum6: string;
   tle1: TleLine1;
   tle2: TleLine2;
+  /**
+   * The semi-major axis of the satellite's orbit.
+   */
+  semiMajorAxis: Kilometers;
+  /**
+   * The semi-minor axis of the satellite's orbit.
+   */
+  semiMinorAxis: Kilometers;
 
   constructor(info: SatelliteParams, options?: OptionsParams) {
     super(info);
 
-    const tleData = Tle.parseTle(info.tle1, info.tle2);
+    const tleData = Tle.parse(info.tle1, info.tle2);
 
     this.tle1 = info.tle1;
     this.tle2 = info.tle2;
 
-    this.sccNum = info.sccNum || tleData.satNum.toString();
-    this.sccNum5 = FormatTle.convert6DigitToA5(this.sccNum);
-    this.sccNum6 = FormatTle.convertA5to6Digit(this.sccNum5);
+    this.sccNum = info.sccNum ?? tleData.satNum.toString();
+    this.sccNum5 = Tle.convert6DigitToA5(this.sccNum);
+    this.sccNum6 = Tle.convertA5to6Digit(this.sccNum5);
+    this.intlDes = tleData.intlDes;
     this.epochYear = tleData.epochYear;
     this.epochDay = tleData.epochDay;
     this.meanMoDev1 = tleData.meanMoDev1;
     this.meanMoDev2 = tleData.meanMoDev2;
     this.bstar = tleData.bstar;
     this.inclination = tleData.inclination;
-    this.raan = tleData.raan;
+    this.rightAscension = tleData.rightAscension;
     this.eccentricity = tleData.eccentricity;
     this.argOfPerigee = tleData.argOfPerigee;
     this.meanAnomaly = tleData.meanAnomaly;
     this.meanMotion = tleData.meanMotion;
-    this.period = 1440 / this.meanMotion;
+    this.period = tleData.period;
+    this.semiMajorAxis = ((8681663.653 / this.meanMotion) ** (2 / 3)) as Kilometers;
+    this.semiMinorAxis = (this.semiMajorAxis * Math.sqrt(1 - this.eccentricity ** 2)) as Kilometers;
+    this.apogee = (this.semiMajorAxis * (1 + this.eccentricity) - 6371) as Kilometers;
+    this.perigee = (this.semiMajorAxis * (1 - this.eccentricity) - 6371) as Kilometers;
 
     // NOTE: Calculate apogee and perigee
 
     this.satrec = Sgp4.createSatrec(info.tle1, info.tle2);
-    this.options = options || {
+    this.options = options ?? {
       notes: '',
     };
   }
@@ -175,8 +182,8 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  az(sensor: Sensor, date: Date = this.time): Degrees {
-    return (this.raeOpt(sensor, date).az * RAD2DEG) as Degrees;
+  az(observer: GroundPosition, date: Date = this.time): Degrees {
+    return (this.raeOpt(observer, date).az * RAD2DEG) as Degrees;
   }
 
   /**
@@ -185,11 +192,23 @@ export class Satellite extends BaseObject {
    *
    * @expanded
    */
-  rae(sensor: Sensor, date: Date = this.time): RAE {
-    const rae = this.raeOpt(sensor, date);
+  rae(observer: GroundPosition, date: Date = this.time): RAE {
+    const rae = this.raeOpt(observer, date);
+    const rae2 = this.raeOpt(observer, new Date(date.getTime() + 1000));
     const epoch = new EpochUTC(date.getTime());
+    const rangeRate = rae2.rng - rae.rng;
+    const azimuthRate = rae2.az - rae.az;
+    const elevationRate = rae2.el - rae.el;
 
-    return new RAE(epoch, rae.rng, (rae.az * DEG2RAD) as Radians, (rae.el * DEG2RAD) as Radians);
+    return new RAE(
+      epoch,
+      rae.rng,
+      (rae.az * DEG2RAD) as Radians,
+      (rae.el * DEG2RAD) as Radians,
+      rangeRate,
+      azimuthRate,
+      elevationRate,
+    );
   }
 
   /**
@@ -197,10 +216,10 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  getEcf(date: Date = this.time): EcfVec3<Kilometers> {
+  ecf(date: Date = this.time): EcfVec3<Kilometers> {
     const { gmst } = Satellite.calculateTimeVariables(date);
 
-    return eci2ecf(this.getEci(date).position, gmst);
+    return eci2ecf(this.eci(date).position, gmst);
   }
 
   /**
@@ -208,8 +227,12 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  getEci(date: Date = this.time): PosVel<Kilometers> {
+  eci(date: Date = this.time): PosVel<Kilometers> {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
+
+    if (!m) {
+      throw new Error('Propagation failed!');
+    }
     const pv = Sgp4.propagate(this.satrec, m);
 
     if (!pv) {
@@ -228,6 +251,10 @@ export class Satellite extends BaseObject {
    */
   getJ2000(date: Date = this.time): J2000 {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
+
+    if (!m) {
+      throw new Error('Propagation failed!');
+    }
     const pv = Sgp4.propagate(this.satrec, m);
 
     if (!pv.position) {
@@ -249,8 +276,8 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  el(sensor: Sensor, date: Date = this.time): Degrees {
-    return (this.raeOpt(sensor, date).el * RAD2DEG) as Degrees;
+  el(observer: GroundPosition, date: Date = this.time): Degrees {
+    return (this.raeOpt(observer, date).el * RAD2DEG) as Degrees;
   }
 
   /**
@@ -258,7 +285,7 @@ export class Satellite extends BaseObject {
    */
   lla(date: Date = this.time): LlaVec3<Degrees, Kilometers> {
     const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
-    const pos = this.getEci(date).position;
+    const pos = this.eci(date).position;
 
     return eci2lla(pos, gmst);
   }
@@ -280,18 +307,12 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  raeOpt(sensor: Sensor, date: Date = this.time): RaeVec3<Kilometers, Degrees> {
+  raeOpt(observer: GroundPosition, date: Date = this.time): RaeVec3<Kilometers, Degrees> {
     const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
-    const eci = this.getEci(date).position;
+    const eci = this.eci(date).position;
     const ecf = eci2ecf(eci, gmst);
 
-    const lla = {
-      lat: (sensor.lat * DEG2RAD) as Radians,
-      lon: (sensor.lon * DEG2RAD) as Radians,
-      alt: sensor.alt,
-    };
-
-    return ecf2rae(lla, ecf);
+    return ecf2rae(observer, ecf);
   }
 
   /**
@@ -299,8 +320,34 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  range(sensor: Sensor, date: Date = this.time): Kilometers {
-    return this.raeOpt(sensor, date).rng;
+  range(observer: GroundPosition, date: Date = this.time): Kilometers {
+    return this.raeOpt(observer, date).rng;
+  }
+
+  /**
+   * Applies the Doppler effect to the given frequency based on the observer's position and the date.
+   * @param freq - The frequency to apply the Doppler effect to.
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the Doppler effect. Optional, defaults to the current date.
+   * @returns The frequency after applying the Doppler effect.
+   */
+  applyDoppler(freq: number, observer: GroundPosition, date?: Date): number {
+    const doppler = this.dopplerFactor(observer, date);
+
+    return freq * doppler;
+  }
+
+  /**
+   * Calculates the Doppler factor for the satellite.
+   *
+   * @param observer The observer's ground position.
+   * @param date The optional date for which to calculate the Doppler factor. If not provided, the current date is used.
+   * @returns The calculated Doppler factor.
+   */
+  dopplerFactor(observer: GroundPosition, date?: Date): number {
+    const position = this.eci(date);
+
+    return dopplerFactor(observer.eci(date), position.position, position.velocity);
   }
 
   /**
@@ -309,7 +356,7 @@ export class Satellite extends BaseObject {
    * This method changes the position and time properties of the satellite object.
    */
   propagateTo(date: Date): this {
-    const pv = this.getEci(date);
+    const pv = this.eci(date);
 
     this.position = pv.position as EciVec3;
     this.time = date;
@@ -326,9 +373,9 @@ export class Satellite extends BaseObject {
   private static calculateTimeVariables(
     date: Date,
     satrec?: SatelliteRecord,
-  ): { gmst: GreenwichMeanSiderealTime; m: number; j: number } {
+  ): { gmst: GreenwichMeanSiderealTime; m: number | null; j: number } {
     const j =
-      Utils.jday(
+      jday(
         date.getUTCFullYear(),
         date.getUTCMonth() + 1,
         date.getUTCDate(),

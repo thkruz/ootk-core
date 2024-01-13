@@ -1,4 +1,4 @@
-import { Degrees, Radians } from '../ootk-core';
+import { Degrees, Radians } from '..';
 import { DEG2RAD, PI, RAD2DEG } from '../utils/constants';
 
 /**

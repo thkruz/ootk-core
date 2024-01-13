@@ -1,3 +1,4 @@
+import { PassType } from '../enums/PassType';
 import { Sensor } from '../objects';
 
 /**
@@ -513,13 +514,14 @@ export type Line1Data = {
  * - satNum: The satellite number.
  * - satNumRaw: The raw string representation of the satellite number.
  * - inclination: The inclination of the satellite's orbit.
- * - raan: The Right Ascension of the Ascending Node.
+ * - rightAscension: The Right Ascension of the Ascending Node.
  * - eccentricity: The eccentricity of the satellite's orbit.
  * - argOfPerigee: The argument of perigee.
  * - meanAnomaly: The mean anomaly of the satellite.
  * - meanMotion: The mean motion of the satellite.
  * - revNum: The revolution number at epoch.
  * - checksum2: The checksum of the second line of the TLE.
+ * - period: The period of the satellite's orbit, derived from the mean motion.
  *
  * @see https://en.wikipedia.org/wiki/Two-line_element_set
  */
@@ -527,14 +529,15 @@ export type Line2Data = {
   lineNumber2: number;
   satNum: number;
   satNumRaw: string;
-  inclination: number;
-  raan: number;
+  inclination: Degrees;
+  rightAscension: Degrees;
   eccentricity: number;
-  argOfPerigee: number;
-  meanAnomaly: number;
+  argOfPerigee: Degrees;
+  meanAnomaly: Degrees;
   meanMotion: number;
   revNum: number;
   checksum2: number;
+  period: Minutes;
 };
 
 /**
@@ -604,7 +607,7 @@ export type AzEl<Units = Radians> = {
 export type RaDec = {
   dec: Radians;
   ra: Radians;
-  dist?: Kilometers;
+  dist: Kilometers;
 };
 
 export interface RadarSensor extends Sensor {
@@ -626,7 +629,7 @@ export interface RadarSensor extends Sensor {
 export type SunTime = {
   solarNoon: Date;
   nadir: Date;
-};
+} & { [key: string]: Date };
 
 export type LaunchDetails = {
   launchDate?: string;
@@ -658,22 +661,6 @@ export type OperationsDetails = {
   country?: string;
 };
 /**
- * Enumeration representing different methods for calculating angular diameter.
- */
-
-export enum AngularDiameterMethod {
-  Circle,
-  Sphere,
-}
-/**
- * Enumeration representing different methods for calculating angular distance.
- */
-
-export enum AngularDistanceMethod {
-  Cosine,
-  Haversine,
-}
-/**
  * Represents a function that calculates the Jacobian matrix.
  * @param xs - The input values as a Float64Array.
  * @returns The Jacobian matrix as a Float64Array.
@@ -687,72 +674,6 @@ export type JacobianFunction = (xs: Float64Array) => Float64Array;
 
 export type DifferentiableFunction = (x: number) => number;
 
-/**
- * TODO: Reduce unnecessary calls to calculateTimeVariables using optional
- * parameters and caching.
- */
-/**
- * Information about a space object.
- */
-export interface SatelliteParams {
-  name?: string;
-  rcs?: number;
-  tle1: TleLine1;
-  tle2: TleLine2;
-  type?: SpaceObjectType;
-  vmag?: number;
-  sccNum?: string;
-  intlDes?: string;
-  position?: EciVec3;
-  time?: Date;
-}
-export interface OptionsParams {
-  notes: string;
-}
-export interface BaseObjectParams {
-  id?: number;
-  name?: string;
-  type?: SpaceObjectType;
-  position?: EciVec3;
-  velocity?: EciVec3;
-  time?: Date;
-  active?: boolean;
-}
-export interface StarObjectParams {
-  ra: Radians;
-  dec: Radians;
-  bf?: string;
-  h?: string;
-  name?: string;
-  pname?: string;
-  vmag?: number;
-}
-export interface SensorParams {
-  alt: Kilometers;
-  lat: Degrees;
-  lon: Degrees;
-  maxAz: Degrees;
-  maxAz2?: Degrees;
-  maxEl: Degrees;
-  maxEl2?: Degrees;
-  maxRng: Kilometers;
-  maxRng2?: Kilometers;
-  minAz: Degrees;
-  minAz2?: Degrees;
-  minEl: Degrees;
-  minEl2?: Degrees;
-  minRng: Kilometers;
-  minRng2?: Kilometers;
-  name?: string;
-  type?: SpaceObjectType;
-}
-export enum PassType {
-  OUT_OF_VIEW = -1,
-  ENTER = 0,
-  IN_VIEW = 1,
-  EXIT = 2,
-}
-
 export type Lookangle = {
   type: PassType;
   time: Date;
@@ -761,3 +682,26 @@ export type Lookangle = {
   rng: Kilometers;
   maxElPass?: Degrees;
 };
+/**
+ * Two-line element set data for a satellite.
+ */
+export type TleData = {
+  satNum: number;
+  intlDes: string;
+  epochYear: number;
+  epochDay: number;
+  meanMoDev1: number;
+  meanMoDev2: number;
+  bstar: number;
+  inclination: Degrees;
+  rightAscension: Degrees;
+  eccentricity: number;
+  argOfPerigee: Degrees;
+  meanAnomaly: Degrees;
+  meanMotion: number;
+  period: Minutes;
+};
+/**
+ * Represents a set of data containing both Line 1 and Line 2 TLE information.
+ */
+export type TleDataFull = Line1Data & Line2Data;

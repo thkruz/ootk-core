@@ -1,9 +1,15 @@
-import rimraf from 'rimraf';
+import { rmSync } from 'fs';
 
-// eslint-disable-next-line no-console
 console.log('Removing ./lib...');
 try {
-  rimraf.sync('./lib');
+  rmSync('./lib', { recursive: true });
+} catch (error) {
+  // Intentionally left blank
+}
+
+console.log('Removing ./commonjs...');
+try {
+  rmSync('./commonjs', { recursive: true });
 } catch (error) {
   // Intentionally left blank
 }
