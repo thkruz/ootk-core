@@ -1,4 +1,9 @@
-import { calcGmst, GroundPosition, Satellite, Sgp4 } from '../../lib/index.mjs';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable multiline-comment-style */
+/* eslint-disable no-console */
+
+const { Satellite, Sgp4, GroundPosition, calcGmst, DEG2RAD } = require('../../commonjs/index.js');
 
 // Example Date
 const exampleDate = new Date(1705109326817);
@@ -27,7 +32,7 @@ positionAndVelocity = satellite.eci();
 const positionEci = positionAndVelocity.position;
 const velocityEci = positionAndVelocity.velocity;
 
-// Set the Observer at 122.03 West by 36.96 North, in DEGREES (because who likes working in radians?)
+// Set the Observer at 71°W, 41°N, 0.37 km altitude using DEGREES because who likes using Radians?
 const observer = new GroundPosition({
   lon: -71.0308,
   lat: 41.9613422,
@@ -38,7 +43,7 @@ const observer = new GroundPosition({
 const { gmst, j } = calcGmst(new Date());
 
 // You can get ECF, Geodetic, Look Angles, and Doppler Factor.
-const positionEcf = satellite.ecf();
+const positionEcf = satellite.ecf(exampleDate);
 const observerEcf = observer.ecf();
 const positionGd = satellite.lla(exampleDate);
 const lookAngles = satellite.rae(observer, exampleDate);
@@ -46,6 +51,7 @@ const lookAngles = satellite.rae(observer, exampleDate);
 const uplinkFreq = 420e6;
 const dopplerFactor = satellite.dopplerFactor(observer, exampleDate);
 let dopplerShiftedFrequency = uplinkFreq * dopplerFactor;
+
 dopplerShiftedFrequency = satellite.applyDoppler(uplinkFreq, observer, exampleDate);
 
 // The coordinates are all stored in strongly typed key-value pairs.
@@ -100,6 +106,6 @@ console.log('     rangeSat: ', rangeSat);
 console.log('     rangeRate: ', rangeRate);
 console.log('Doppler Factor:');
 console.log('     dopplerFactor: ', dopplerFactor);
-dopplerShiftedFrequency = dopplerShiftedFrequency / 1e6; // Hz to MHz
+dopplerShiftedFrequency /= 1e6; // Hz to MHz
 console.log('     420MHz: ', `${dopplerShiftedFrequency.toPrecision(6)} MHz`);
 console.log('======================================');

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
@@ -12,11 +13,14 @@ import {
   Sgp4,
   TleLine1,
   TleLine2,
-} from '../../src/index';
+} from '../../lib/index';
+
+// Example Date
+const exampleDate = new Date(1705109326817);
 
 // Sample TLE
-const tle1 = '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992' as TleLine1;
-const tle2 = '2 25544  51.6433  59.2583 0008217  16.4489 347.6017 15.51174618173442' as TleLine2;
+const tle1 = '1 56006U 23042W   24012.45049317  .00000296  00000-0  36967-4 0  9992' as TleLine1;
+const tle2 = '2 56006  43.0043  13.3620 0001137 267.5965  92.4747 15.02542972 44491' as TleLine2;
 
 // Initialize a Satellite Object
 const satellite = new Satellite({
@@ -47,10 +51,10 @@ const velocityEci = positionAndVelocity.velocity; // typescript will error on th
  */
 const positionEci2 = satellite.eci().position; // This is correctly typed
 
-// Set the Observer at 122.03 West by 36.96 North, in DEGREES (because who likes working in radians?)
+// Set the Observer at 71°W, 41°N, 0.37 km altitude using DEGREES because who likes using Radians?
 const observer = new GroundPosition({
-  lon: -122.0308 as Degrees,
-  lat: 36.9613422 as Degrees,
+  lon: -71.0308 as Degrees,
+  lat: 41.9613422 as Degrees,
   alt: 0.37 as Kilometers,
 });
 
@@ -60,12 +64,16 @@ const observer = new GroundPosition({
 const { gmst, j } = calcGmst(new Date());
 
 // You can get ECF, Geodetic, Look Angles, and Doppler Factor.
-const positionEcf = satellite.ecf();
+const positionEcf = satellite.ecf(exampleDate);
 const observerEcf = observer.ecf();
-const positionGd = satellite.lla();
-const lookAngles = satellite.rae(observer);
+const positionGd = satellite.lla(exampleDate);
+const lookAngles = satellite.rae(observer, exampleDate);
 // This never worked in satellite.js, but it does now!
-const dopplerFactor = satellite.dopplerFactor(observer);
+const uplinkFreq = 420e6;
+const dopplerFactor = satellite.dopplerFactor(observer, exampleDate);
+let dopplerShiftedFrequency = uplinkFreq * dopplerFactor;
+
+dopplerShiftedFrequency = satellite.applyDoppler(uplinkFreq, observer, exampleDate);
 
 /**
  * The coordinates are all stored in strongly typed key-value pairs.
@@ -73,17 +81,18 @@ const dopplerFactor = satellite.dopplerFactor(observer);
  *
  * satellite.js generates Property 'x' does not exist on type 'boolean | { x: number; y: number; z: number; }'.
  */
-const position = satellite.eci().position;
+const position = satellite.eci(exampleDate).position;
 const satelliteX = position.x; // This is typed as Kilometers
 const satelliteY = position.y; // to prevent you from accidentally
 const satelliteZ = position.z; // mixing Meters with Kilometers.
 
 // Look Angles may be accessed by `azimuth`, `elevation`, `range` properties.
 const azimuth = lookAngles.azimuth; // Typed as Radians
-const azimuthDegress = lookAngles.azimuthDegrees; // Typed as Degrees
+const azimuthDegrees = lookAngles.azimuthDegrees; // Typed as Degrees
 const elevation = lookAngles.elevation; // Typed as Radains
 const elevationDegrees = lookAngles.elevationDegrees; // Typed as Degrees
 const rangeSat = lookAngles.range; // Typed as Kilometers
+const rangeRate = lookAngles.rangeRate; // Kilometers/Second
 
 // Geodetic coords are accessed via `longitude`, `latitude`, `height`.
 const longitude = positionGd.lon; // Longitude is in Degrees
@@ -103,25 +112,30 @@ const latitudeRad2 = (latitude * DEG2RAD) as Radians;
 // lla2eci(positionGd, gmst); // Throws an error: Argument of type 'LlaVec3<Degrees, Kilometers>' is not assignable to parameter of type 'LlaVec3<Radians, Kilometers>'.
 lla2eci(observer.llaRad(), gmst); // This is correctly typed
 
-// eslint-disable-next-line no-console
-console.log(
-  positionEci2,
-  positionEcf,
-  observerEcf,
-  positionGd,
-  lookAngles,
-  dopplerFactor,
-  satelliteX,
-  satelliteY,
-  satelliteZ,
-  azimuth,
-  elevation,
-  rangeSat,
-  longitude,
-  latitude,
-  height,
-  longitudeRad,
-  latitudeRad,
-  longitudeRad2,
-  latitudeRad2,
-);
+console.log('Satellite.js Migration Example');
+console.log('======================================');
+console.log('TLE: ', tle1);
+console.log('     ', tle2);
+console.log('======================================');
+console.log('Position (ECI):');
+console.log('     x: ', satelliteX);
+console.log('     y: ', satelliteY);
+console.log('     z: ', satelliteZ);
+console.log('Position (ECF):');
+console.log('     x: ', positionEcf.x);
+console.log('     y: ', positionEcf.y);
+console.log('     z: ', positionEcf.z);
+console.log('Position (Geodetic):');
+console.log('     longitude: ', longitude);
+console.log('     latitude: ', latitude);
+console.log('     height: ', height);
+console.log('Look Angles:');
+console.log('     azimuth: ', azimuthDegrees);
+console.log('     elevation: ', elevationDegrees);
+console.log('     rangeSat: ', rangeSat);
+console.log('     rangeRate: ', rangeRate);
+console.log('Doppler Factor:');
+console.log('     dopplerFactor: ', dopplerFactor);
+dopplerShiftedFrequency /= 1e6; // Hz to MHz
+console.log('     420MHz: ', `${dopplerShiftedFrequency.toPrecision(6)} MHz`);
+console.log('======================================');

@@ -14,3 +14,10 @@ try {
 } catch (error) {
   // Intentionally left blank
 }
+
+console.log('Removing ./mjs...');
+try {
+  rimraf.sync('./mjs');
+} catch (error) {
+  // Intentionally left blank
+}
