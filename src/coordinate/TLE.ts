@@ -25,16 +25,18 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import { Sgp4, Vector3D } from '..';
 import { Earth } from '../body';
 import { ClassicalElements, FormatTle, TEME } from '../coordinate';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
-import { Sgp4, Vector3D } from '../ootk-core';
 import { Sgp4GravConstants } from '../sgp4/sgp4';
 import { EpochUTC } from '../time/EpochUTC';
 import {
+  Degrees,
   EciVec3,
   Line1Data,
   Line2Data,
+  Minutes,
   SatelliteRecord,
   StateVectorSgp4,
   TleData,
@@ -123,7 +125,7 @@ export class Tle {
   /** The mean motion field. */
   private static readonly meanMo_ = new TleFormatData(53, 63);
   /** The right ascension of the ascending node field. */
-  private static readonly raan_ = new TleFormatData(18, 25);
+  private static readonly rightAscension_ = new TleFormatData(18, 25);
   /** The revolution number field. */
   private static readonly revNum_ = new TleFormatData(64, 68);
   /** The satellite number field. */
@@ -274,16 +276,16 @@ export class Tle {
    * Example: 69.9862
    *
    * @param {string} tleLine2 The second line of the Tle to parse.
-   * @returns {number} The argument of perigee in degrees.
+   * @returns {Degrees} The argument of perigee in degrees.
    */
-  static argOfPerigee(tleLine2: TleLine2): number {
+  static argOfPerigee(tleLine2: TleLine2): Degrees {
     const argPe = parseFloat(tleLine2.substring(Tle.argPerigee_.start, Tle.argPerigee_.stop));
 
     if (!(argPe >= 0 && argPe < 360)) {
       throw new Error(`Invalid argument of perigee: ${argPe}`);
     }
 
-    return toPrecision(argPe, 4);
+    return toPrecision(argPe, 4) as Degrees;
   }
 
   /**
@@ -494,16 +496,16 @@ export class Tle {
    * Example: 51.6400
    *
    * @param {string} tleLine2 The second line of the Tle to parse.
-   * @returns {number} The inclination of the satellite.
+   * @returns {Degrees} The inclination of the satellite.
    */
-  static inclination(tleLine2: TleLine2): number {
+  static inclination(tleLine2: TleLine2): Degrees {
     const inc = parseFloat(tleLine2.substring(Tle.inclination_.start, Tle.inclination_.stop));
 
     if (inc < 0 || inc > 180) {
       throw new Error(`Invalid inclination: ${inc}`);
     }
 
-    return toPrecision(inc, 4);
+    return toPrecision(inc, 4) as Degrees;
   }
 
   /**
@@ -585,16 +587,16 @@ export class Tle {
    * Example: 25.2906
    *
    * @param {string} tleLine2 The second line of the Tle to parse.
-   * @returns {number} The mean anomaly of the satellite.
+   * @returns {Degrees} The mean anomaly of the satellite.
    */
-  static meanAnomaly(tleLine2: TleLine2): number {
+  static meanAnomaly(tleLine2: TleLine2): Degrees {
     const meanA = parseFloat(tleLine2.substring(Tle.meanAnom_.start, Tle.meanAnom_.stop));
 
     if (!(meanA >= 0 && meanA <= 360)) {
       throw new Error(`Invalid mean anomaly: ${meanA}`);
     }
 
-    return toPrecision(meanA, 4);
+    return toPrecision(meanA, 4) as Degrees;
   }
 
   /**
@@ -669,10 +671,10 @@ export class Tle {
    * @param tleLine2 The Tle line 2.
    * @returns The period of the satellite orbit in minutes.
    */
-  static period(tleLine2: TleLine2): number {
+  static period(tleLine2: TleLine2): Minutes {
     const meanMo = Tle.meanMotion(tleLine2);
 
-    return 1440 / meanMo;
+    return (1440 / meanMo) as Minutes;
   }
 
   /**
@@ -687,16 +689,16 @@ export class Tle {
    * Example: 208.9163
    *
    * @param {string} tleLine2 The second line of the Tle to parse.
-   * @returns {number} The right ascension of the satellite.
+   * @returns {Degrees} The right ascension of the satellite.
    */
-  static rightAscension(tleLine2: TleLine2): number {
-    const raan = parseFloat(tleLine2.substring(Tle.raan_.start, Tle.raan_.stop));
+  static rightAscension(tleLine2: TleLine2): Degrees {
+    const rightAscension = parseFloat(tleLine2.substring(Tle.rightAscension_.start, Tle.rightAscension_.stop));
 
-    if (!(raan >= 0 && raan <= 360)) {
-      throw new Error(`Invalid RAAN: ${raan}`);
+    if (!(rightAscension >= 0 && rightAscension <= 360)) {
+      throw new Error(`Invalid Right Ascension: ${rightAscension}`);
     }
 
-    return toPrecision(raan, 4);
+    return toPrecision(rightAscension, 4) as Degrees;
   }
 
   /**
@@ -806,7 +808,7 @@ export class Tle {
     const satNum = Tle.satNum(tleLine2);
     const satNumRaw = Tle.rawSatNum(tleLine2);
     const inclination = Tle.inclination(tleLine2);
-    const raan = Tle.rightAscension(tleLine2);
+    const rightAscension = Tle.rightAscension(tleLine2);
     const eccentricity = Tle.eccentricity(tleLine2);
     const argOfPerigee = Tle.argOfPerigee(tleLine2);
     const meanAnomaly = Tle.meanAnomaly(tleLine2);
@@ -820,7 +822,7 @@ export class Tle {
       satNum,
       satNumRaw,
       inclination,
-      raan,
+      rightAscension,
       eccentricity,
       argOfPerigee,
       meanAnomaly,
@@ -868,7 +870,7 @@ export class Tle {
       meanMoDev2: line1.meanMoDev2,
       bstar: line1.bstar,
       inclination: line2.inclination,
-      raan: line2.raan,
+      rightAscension: line2.rightAscension,
       eccentricity: line2.eccentricity,
       argOfPerigee: line2.argOfPerigee,
       meanAnomaly: line2.meanAnomaly,

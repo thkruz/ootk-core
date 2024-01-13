@@ -1,4 +1,4 @@
-import { linearDistance } from '../ootk-core';
+import { linearDistance } from '..';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 

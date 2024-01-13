@@ -1,4 +1,5 @@
-import { renameSync } from 'fs';
+import { cpSync, renameSync } from 'fs';
 
-renameSync('./lib/ootk-core.js', './lib/ootk-core.mjs');
-renameSync('./lib/ootk-core.js.map', './lib/ootk-core.mjs.map');
+renameSync('./lib/index.js', './lib/index.mjs');
+renameSync('./lib/index.js.map', './lib/index.mjs.map');
+cpSync('./lib/index.d.ts', './lib/index.d.mts');

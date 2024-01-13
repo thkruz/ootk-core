@@ -28,7 +28,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { Earth, Sensor, Sgp4 } from '../ootk-core';
+import { Earth, Sensor, Sgp4 } from '..';
 import {
   Degrees,
   EcefVec3,

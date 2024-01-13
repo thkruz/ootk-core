@@ -110,7 +110,7 @@ export enum Sgp4GravConstants {
  *                           original baseline
  *       ----------------------------------------------------------------
  */
-class Sgp4 {
+export class Sgp4 {
   // Dot
 
   /*
@@ -238,7 +238,7 @@ class Sgp4 {
     let year = 0;
 
     const satrec = {
-      a: null,
+      a: null as number | null,
       am: null,
       alta: null,
       altp: null,
@@ -263,7 +263,7 @@ class Sgp4 {
       em: null,
       epochdays: null,
       epochyr: null,
-      error: null,
+      error: null as number | null,
       eta: null,
       gsto: null,
       im: null,
@@ -285,7 +285,7 @@ class Sgp4 {
       Om: null,
       omgcof: null,
       operationmode: null,
-      satnum: null,
+      satnum: null as string | null,
       sinmao: null,
       t: null,
       t2cof: null,
@@ -4119,5 +4119,3 @@ class Sgp4 {
    * Invjday
    */
 }
-
-export { Sgp4 };

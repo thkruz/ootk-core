@@ -1,8 +1,8 @@
 /* eslint-disable no-undefined */
+import { Radians } from '..';
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { Radians } from '../ootk-core';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, halfPi, RAD2DEG, TAU } from '../utils/constants';

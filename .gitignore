@@ -1,6 +1,7 @@
 .idea
 .vscode
 coverage
+commonjs
 lib
 node_modules
 *.log

@@ -1,6 +1,6 @@
-export { BaseObjectParams } from './BaseObjectParams';
-export { GroundPositionParams } from './GroundPositionParams';
-export { OptionsParams } from './OptionsParams';
-export { SatelliteParams } from './SatelliteParams';
-export { SensorParams } from './SensorParams';
-export { StarObjectParams } from './StarObjectParams';
+export type { BaseObjectParams } from './BaseObjectParams';
+export type { GroundPositionParams } from './GroundPositionParams';
+export type { OptionsParams } from './OptionsParams';
+export type { SatelliteParams } from './SatelliteParams';
+export type { SensorParams } from './SensorParams';
+export type { StarObjectParams } from './StarObjectParams';

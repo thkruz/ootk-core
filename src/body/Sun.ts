@@ -1,4 +1,4 @@
-import { AngularDiameterMethod, AzEl, Degrees, Kilometers, Meters, RaDec, Radians, SunTime } from '../ootk-core';
+import { AngularDiameterMethod, AzEl, Degrees, Kilometers, Meters, RaDec, Radians, SunTime } from '..';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { astronomicalUnit, cKmPerSec, DEG2RAD, MS_PER_DAY, RAD2DEG, TAU } from '../utils/constants';

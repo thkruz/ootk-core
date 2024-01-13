@@ -74,7 +74,7 @@ console.log(sat.meanMoDev1); // Mean Motion Deviation 1
 console.log(sat.meanMoDev2); // Mean Motion Deviation 2
 console.log(sat.bstar); // Bstar (Drag Coefficient)
 console.log(sat.inclination); // inclination in degrees
-console.log(sat.raan); // right ascension of the ascending node in degrees
+console.log(sat.rightAscension); // right ascension of the ascending node in degrees
 console.log(sat.eccentricity); // eccentricity
 console.log(sat.argOfPerigee); // argument of perigee in degrees
 console.log(sat.meanAnomaly); // mean anomaly in degrees

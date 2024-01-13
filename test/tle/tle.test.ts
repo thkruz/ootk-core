@@ -96,7 +96,7 @@ describe('Valid TLEs', () => {
       });
 
       it('should parse right ascension of ascending node', () => {
-        expect(Tle.rightAscension(testCase.line2)).toBe(testCase.raan);
+        expect(Tle.rightAscension(testCase.line2)).toBe(testCase.rightAscension);
       });
 
       it('should parse eccentricity', () => {
@@ -129,7 +129,7 @@ describe('Valid TLEs', () => {
           satNum: testCase.satNum,
           satNumRaw: testCase.satNumRaw,
           inclination: testCase.inclination,
-          raan: testCase.raan,
+          rightAscension: testCase.rightAscension,
           eccentricity: testCase.eccentricity,
           argOfPerigee: testCase.argOfPerigee,
           meanAnomaly: testCase.meanAnomaly,
@@ -152,7 +152,7 @@ describe('Valid TLEs', () => {
             meanMoDev2: testCase.meanMoDev2,
             bstar: testCase.bstar,
             inclination: testCase.inclination,
-            raan: testCase.raan,
+            rightAscension: testCase.rightAscension,
             eccentricity: testCase.eccentricity,
             argOfPerigee: testCase.argOfPerigee,
             meanAnomaly: testCase.meanAnomaly,
@@ -183,7 +183,7 @@ describe('Valid TLEs', () => {
             ephemerisType: testCase.ephemerisType,
             elsetNum: testCase.elsetNum,
             inclination: testCase.inclination,
-            raan: testCase.raan,
+            rightAscension: testCase.rightAscension,
             eccentricity: testCase.eccentricity,
             argOfPerigee: testCase.argOfPerigee,
             meanAnomaly: testCase.meanAnomaly,

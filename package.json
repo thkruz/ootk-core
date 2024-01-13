@@ -3,8 +3,8 @@
   "version": "1.0.0-0",
   "description": "Orbital Object Toolkit Core including SGP4 Propagator and Coordinate Transforms",
   "scripts": {
-    "mjs": "ttsc -p tsconfig.build.json && node ./scripts/moveMjs.mjs",
-    "cjs": "ttsc -p tsconfig.build.json -m commonjs",
+    "mjs": "ttsc -p tsconfig.build.json -m esnext",
+    "cjs": "ttsc -p tsconfig.c.json -m commonjs",
     "build": "node ./scripts/cleanup.mjs && npm run mjs && npm run cjs",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
@@ -13,11 +13,12 @@
     "test:coverage": "jest --coverage",
     "version": "auto-changelog -p && git add CHANGELOG.md"
   },
-  "main": "./lib/ootk-core.js",
+  "main": "./lib/index.js",
   "exports": {
-    "import": "./lib/ootk-core.js",
-    "require": "./lib/ootk-core.js"
+    "import": "./lib/index.js",
+    "require": "./commonjs/index.js"
   },
+  "typings": "./lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/thkruz/ootk-core"

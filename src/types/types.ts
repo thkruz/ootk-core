@@ -514,7 +514,7 @@ export type Line1Data = {
  * - satNum: The satellite number.
  * - satNumRaw: The raw string representation of the satellite number.
  * - inclination: The inclination of the satellite's orbit.
- * - raan: The Right Ascension of the Ascending Node.
+ * - rightAscension: The Right Ascension of the Ascending Node.
  * - eccentricity: The eccentricity of the satellite's orbit.
  * - argOfPerigee: The argument of perigee.
  * - meanAnomaly: The mean anomaly of the satellite.
@@ -529,15 +529,15 @@ export type Line2Data = {
   lineNumber2: number;
   satNum: number;
   satNumRaw: string;
-  inclination: number;
-  raan: number;
+  inclination: Degrees;
+  rightAscension: Degrees;
   eccentricity: number;
-  argOfPerigee: number;
-  meanAnomaly: number;
+  argOfPerigee: Degrees;
+  meanAnomaly: Degrees;
   meanMotion: number;
   revNum: number;
   checksum2: number;
-  period: number;
+  period: Minutes;
 };
 
 /**
@@ -693,13 +693,13 @@ export type TleData = {
   meanMoDev1: number;
   meanMoDev2: number;
   bstar: number;
-  inclination: number;
-  raan: number;
+  inclination: Degrees;
+  rightAscension: Degrees;
   eccentricity: number;
-  argOfPerigee: number;
-  meanAnomaly: number;
+  argOfPerigee: Degrees;
+  meanAnomaly: Degrees;
   meanMotion: number;
-  period: number;
+  period: Minutes;
 };
 /**
  * Represents a set of data containing both Line 1 and Line 2 TLE information.

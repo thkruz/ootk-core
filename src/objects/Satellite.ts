@@ -47,6 +47,7 @@ import {
   GreenwichMeanSiderealTime,
   Kilometers,
   LlaVec3,
+  Minutes,
   PosVel,
   Radians,
   RaeVec3,
@@ -68,23 +69,23 @@ import { GroundPosition } from './GroundPosition';
  * Represents a satellite object with orbital information and methods for calculating its position and other properties.
  */
 export class Satellite extends BaseObject {
-  apogee: number;
-  argOfPerigee: number;
+  apogee: Kilometers;
+  argOfPerigee: Degrees;
   bstar: number;
   eccentricity: number;
   epochDay: number;
   epochYear: number;
-  inclination: number;
+  inclination: Degrees;
   intlDes: string;
-  meanAnomaly: number;
+  meanAnomaly: Degrees;
   meanMoDev1: number;
   meanMoDev2: number;
   meanMotion: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: OptionsParams;
-  perigee: number;
-  period: number;
-  raan: number;
+  perigee: Kilometers;
+  period: Minutes;
+  rightAscension: Degrees;
   satrec: SatelliteRecord;
   /**
    * The satellite catalog number as listed in the TLE.
@@ -100,6 +101,14 @@ export class Satellite extends BaseObject {
   sccNum6: string;
   tle1: TleLine1;
   tle2: TleLine2;
+  /**
+   * The semi-major axis of the satellite's orbit.
+   */
+  semiMajorAxis: Kilometers;
+  /**
+   * The semi-minor axis of the satellite's orbit.
+   */
+  semiMinorAxis: Kilometers;
 
   constructor(info: SatelliteParams, options?: OptionsParams) {
     super(info);
@@ -109,26 +118,31 @@ export class Satellite extends BaseObject {
     this.tle1 = info.tle1;
     this.tle2 = info.tle2;
 
-    this.sccNum = info.sccNum || tleData.satNum.toString();
+    this.sccNum = info.sccNum ?? tleData.satNum.toString();
     this.sccNum5 = Tle.convert6DigitToA5(this.sccNum);
     this.sccNum6 = Tle.convertA5to6Digit(this.sccNum5);
+    this.intlDes = tleData.intlDes;
     this.epochYear = tleData.epochYear;
     this.epochDay = tleData.epochDay;
     this.meanMoDev1 = tleData.meanMoDev1;
     this.meanMoDev2 = tleData.meanMoDev2;
     this.bstar = tleData.bstar;
     this.inclination = tleData.inclination;
-    this.raan = tleData.raan;
+    this.rightAscension = tleData.rightAscension;
     this.eccentricity = tleData.eccentricity;
     this.argOfPerigee = tleData.argOfPerigee;
     this.meanAnomaly = tleData.meanAnomaly;
     this.meanMotion = tleData.meanMotion;
     this.period = tleData.period;
+    this.semiMajorAxis = ((8681663.653 / this.meanMotion) ** (2 / 3)) as Kilometers;
+    this.semiMinorAxis = (this.semiMajorAxis * Math.sqrt(1 - this.eccentricity ** 2)) as Kilometers;
+    this.apogee = (this.semiMajorAxis * (1 + this.eccentricity) - 6371) as Kilometers;
+    this.perigee = (this.semiMajorAxis * (1 - this.eccentricity) - 6371) as Kilometers;
 
     // NOTE: Calculate apogee and perigee
 
     this.satrec = Sgp4.createSatrec(info.tle1, info.tle2);
-    this.options = options || {
+    this.options = options ?? {
       notes: '',
     };
   }
@@ -203,6 +217,10 @@ export class Satellite extends BaseObject {
    */
   eci(date: Date = this.time): PosVel<Kilometers> {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
+
+    if (!m) {
+      throw new Error('Propagation failed!');
+    }
     const pv = Sgp4.propagate(this.satrec, m);
 
     if (!pv) {
@@ -221,6 +239,10 @@ export class Satellite extends BaseObject {
    */
   getJ2000(date: Date = this.time): J2000 {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
+
+    if (!m) {
+      throw new Error('Propagation failed!');
+    }
     const pv = Sgp4.propagate(this.satrec, m);
 
     if (!pv.position) {
@@ -319,7 +341,7 @@ export class Satellite extends BaseObject {
   private static calculateTimeVariables(
     date: Date,
     satrec?: SatelliteRecord,
-  ): { gmst: GreenwichMeanSiderealTime; m: number; j: number } {
+  ): { gmst: GreenwichMeanSiderealTime; m: number | null; j: number } {
     const j =
       jday(
         date.getUTCFullYear(),

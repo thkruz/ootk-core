@@ -18,7 +18,7 @@ describe('Basic Satellite functionality', () => {
 
     expect(sat).toBeDefined();
     expect(sat.inclination).toBe(51.6415);
-    expect(sat.raan).toBe(161.8339);
+    expect(sat.rightAscension).toBe(161.8339);
     expect(sat.satrec).toBeDefined();
   });
 
