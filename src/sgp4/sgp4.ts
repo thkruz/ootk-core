@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (OOTK) is a collection of tools for working
+ * @description Orbital Object ToolKit (ootk) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * @file The Sgp4 module contains a TypeScript port of the 2020 version of

@@ -1,15 +1,17 @@
-# ootk
+# ootk-core
+
+<!-- [![Release](https://img.shields.io/github/v/release/thkruz/ootk-core?style=flat-square)](https://www.npmjs.com/package/ootk-core) -->
 
 ![Size](https://img.shields.io/github/languages/code-size/thkruz/ootk-core?style=flat-square)
-[![Release](https://img.shields.io/github/v/release/thkruz/ootk-core?style=flat-square)](https://www.npmjs.com/package/ootk)
 [![Issues](https://img.shields.io/github/issues/thkruz/ootk-core?style=flat-square)](https://github.com/thkruz/ootk/issues)
-[![Coverage](https://img.shields.io/codecov/c/github/thkruz/ootk-core?style=flat-square)](https://codecov.io/gh/thkruz/ootk)
 [![License](https://img.shields.io/github/license/thkruz/ootk-core?style=flat-square)](LICENSE.md)
 
 > An Orbital Object Toolkit in Your Web Browser
 
 **ootk-core** is the core libraries of [ootk](https://github.com/thkruz/ootk) for doing math related to orbital objects
-written in TypeScript. **ootk-core** was developed to simplify the math and let you focus on using the results.
+written in TypeScript and built for both CommonJS and ES6 JavaScript or TypeScript. **ootk-core** was developed to
+simplify the math and let you focus on using the results. It is the culmination of years of fixes and improvements to
+other libraries.
 
 If you would like more functionality the expanded **ootk** library is available free under the AGPL license
 [here](https://github.com/thkruz/ootk). The full library has features for doing initial orbit determination, maneuver
@@ -42,9 +44,12 @@ npm i ootk-core
 ### Loading the Library
 
 ```js
-import { Sgp4 } from 'ootk-core';
+import { Satellite } from 'ootk-core';
 ...
-const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
+const satellite = new Satellite({
+   tle1: line1,
+   tle2: line2
+});
 ```
 
 ## :satellite: Usage
@@ -52,12 +57,25 @@ const satrec = Sgp4.createSatrec(line1, line2, 'wgs72', 'i');
 ### Propagating a TLE
 
 ```js
-import { Sgp4 } from 'ootk-core';
-
-const satrec = Sgp4.createSatrec(line1, line2);
-const state = Sgp4.propagate(satrec, time);
-console.log(state.position); // [x, y, z]
-console.log(state.velocity); // [vx, vy, vz]
+import { Satellite } from 'ootk-core';
+...
+const satellite = new Satellite({
+   tle1: line1,
+   tle2: line2
+});
+const state = satellite.eci();
+console.log(state.position);
+// {
+//   x:  1538.223335842895
+//   y:  5102.261204021967
+//   z:  4432.634965003577
+// }
+console.log(state.velocity);
+// {
+//   x:  -4.26262363267920
+//   y:  0.159169020320195
+//   z:  1.502351885030190
+// }
 ```
 
 ### Creating a Satellite
@@ -83,19 +101,18 @@ console.log(sat.period); // period in seconds
 console.log(sat.apogee); // apogee in kilometers
 console.log(sat.perigee); // perigee in kilometers
 
-sat.propagate(time); // Propagate the satellite to the given time
-sat.getLla(); // Get the satellite's position in latitude, longitude, altitude at its current time
-sat.getEci(time); // Get the satellite's position in Earth-Centered Inertial coordinates at the given time without changing its state
-sat.getRae(sensor, time); // Get position in range, aziimuth, elevation relative to a sensor object at the given time without changing its state
+sat.lla(); // Get the satellite's position in latitude, longitude, altitude at its current time
+sat.eci(time); // Get the satellite's position in Earth-Centered Inertial coordinates at the given time
+sat.rae(sensor, time); // Get position in range, aziimuth, elevation relative to a sensor object at the given time
 ```
 
 ### Creating a Sensor
 
 ```js
 const sensor = new Ootk.Sensor({ name: 'Test', lat: lat, lon: lon, alt: alt });
-sensor.setTime(time); // Set the sensor's time to the given time
-sensor.getRae(sat); // Get satellite position in range, aziimuth, elevation at the sensor's current time
-sensor.getRae(sat, time); // Get position in range, aziimuth, elevation relative to a satellite object at the given time without changing its state
+sensor.rae(sat); // Get satellite position in range, aziimuth, elevation at the sensor's current time
+sensor.rae(sat, time); // Get position in range, aziimuth, elevation relative to a satellite object at the given time
+sensor.eci() // Get the sensor's position in ECI coordinates
 ```
 
 ## :desktop_computer: Building
@@ -116,12 +133,9 @@ sensor.getRae(sat, time); // Get position in range, aziimuth, elevation relative
 
 ## :gem: NPM Scripts
 
-- `build` compiles TypeScript into ES6 Modules and combines them into a single file in the `dist` directory.
+- `build` compiles TypeScript into ES6 Modules in `lib` directory and CommonJs in `commonjs` directory
 - `lint` lints source code located in `src` directory with [ESLint](http://eslint.org/)
-- `lint:fix` lints tests located in `src` directory with ESLint and attempts to auto-fix errors
-- `lint:test` lints tests located in `test` directory with ESLint
 - `test` builds the software and then runs jest to verify the final library remains functional
-- `test:coverage` generates lcov report to view code coverage
 
 ## :man_teacher: Contributing
 
@@ -137,17 +151,15 @@ git merge origin/develop
 git checkout -b my-feature
 ```
 
-Make sure that your changes don't break the existing code by running:
+When you are done, make sure that your changes don't break the existing code by running:
 
 ```bash
 npm test
 ```
 
-Check that your code follows the rules established in eslint.rc:
+After you have pushed your branch you can [create a pull request here](https://github.com/thkruz/ootk-core/pulls).
 
-```bash
-npm run lint
-```
+If you need help, just open an issue and I'll happily walk you through the process.
 
 ## :man_scientist: Contributors
 
@@ -164,6 +176,6 @@ the previous work of the following:
 
 ## :balance_scale: License
 
-In order to maximize the usabiltiy of the core modules of OOTK with other projects I support, I have placed this
+In order to maximize the usabiltiy of the core modules of ootk with other projects I support, I have placed this
 repository under the [MIT License](LICENSE.md). I strongly encourage you to conisder a GPL license for your own project
 to keep your project free for everyone to use. [Learn more here](https://www.gnu.org/philosophy/philosophy.html).

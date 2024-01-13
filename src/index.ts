@@ -1,6 +1,6 @@
 /**
  * @author @thkruz Theodore Kruczek
- * @description Orbital Object ToolKit Core (OOTK-Core) is a base collection
+ * @description Orbital Object ToolKit Core (ootk-Core) is a base collection
  * of tools for working with satellites and other orbital objects. This core
  * library is provided under the MIT license and is free to use in any project.
  * For additional features, see the full library at:

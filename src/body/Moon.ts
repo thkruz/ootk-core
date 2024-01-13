@@ -1,6 +1,6 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (OOTK) is a collection of tools for working
+ * @description Orbital Object ToolKit (ootk) is a collection of tools for working
  * with satellites and other orbital objects.
  *
  * Some of the math in this file was originally created by Vladimir Agafonkin.

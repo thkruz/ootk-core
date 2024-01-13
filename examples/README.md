@@ -6,9 +6,9 @@ Run the examples using tsx as below:
 
 npx tsx ./examples/typescript/satellite-js-migration.ts
 
-## ES5 Module
+## ES6 Module
 
-npx tsx ./examples/es5/satellite-js-migration.mjs
+npx tsx ./examples/es6/satellite-js-migration.mjs
 
 ## CommonJs
 
