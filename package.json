@@ -1,6 +1,6 @@
 {
   "name": "ootk-core",
-  "version": "1.0.0-0",
+  "version": "1.0.0-1",
   "description": "Orbital Object Toolkit Core including SGP4 Propagator and Coordinate Transforms",
   "scripts": {
     "mjs": "ttsc -p tsconfig.build.json -m esnext",
