@@ -31,9 +31,15 @@ describe('Sun and Moon', () => {
   test('Moon Unit Tests', () => {
     expect(Moon.getMoonIllumination(dateObj)).toMatchSnapshot();
 
+    // eslint-disable-next-line no-console
+    console.log('dateObj', dateObj);
+
     Moon.rae(dateObj, 0 as Degrees, 0 as Degrees);
     Moon.getMoonTimes(dateObj, 0 as Degrees, 0 as Degrees, true);
     Moon.getMoonTimes(dateObj, -10 as Degrees, -10 as Degrees, false);
+
+    // eslint-disable-next-line no-console
+    console.log('dateObj', dateObj);
   });
 
   test('getMoonIllumination returns fraction and angle of moons illuminated limb and phase', () => {
@@ -170,8 +176,8 @@ describe('Suncalc.js tests', () => {
   test('getMoonTimes returns moon rise and set times', () => {
     const moonTimes = Moon.getMoonTimes(new Date('2013-03-04UTC'), lat as Degrees, lon as Degrees, true);
 
-    expect(moonTimes.rise.toUTCString()).toEqual('Mon, 04 Mar 2013 23:54:29 GMT');
-    expect(moonTimes.set.toUTCString()).toEqual('Mon, 04 Mar 2013 07:47:58 GMT');
+    expect(moonTimes.rise?.toUTCString()).toEqual('Mon, 04 Mar 2013 23:54:29 GMT');
+    expect(moonTimes.set?.toUTCString()).toEqual('Mon, 04 Mar 2013 07:47:58 GMT');
   });
 });
 

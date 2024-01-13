@@ -143,9 +143,6 @@ describe('Rae2Ecf', () => {
     };
     const rae = ecf2rae(lla, ecf);
 
-    // eslint-disable-next-line no-console
-    console.warn(rae);
-
     const ecfCoordinates = rae2ecf(rae, lla);
 
     expect(ecfCoordinates.x).toBeCloseTo(ecf.x);

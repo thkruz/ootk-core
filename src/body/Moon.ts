@@ -310,17 +310,20 @@ export class Moon {
    * calculations for moon rise/set times are based on http://www.stargazing.net/kepler/moonrise.html article
    */
   static getMoonTimes(date: Date, lat: Degrees, lon: Degrees, isUtc = false) {
+    // Clone the date so we don't change the original
+    const date_ = new Date(date);
+
     if (isUtc) {
-      date.setUTCHours(0, 0, 0, 0);
+      date_.setUTCHours(0, 0, 0, 0);
     } else {
-      date.setHours(0, 0, 0, 0);
+      date_.setHours(0, 0, 0, 0);
     }
 
-    const { rise, set, ye } = Moon.calculateRiseSetTimes_(date, lat, lon);
+    const { rise, set, ye } = Moon.calculateRiseSetTimes_(date_, lat, lon);
 
     const result = {
-      rise: NaN as Date | number,
-      set: NaN as Date | number,
+      rise: null as Date | null,
+      set: null as Date | null,
       ye: null as number | null,
       alwaysUp: null as boolean | null,
       alwaysDown: null as boolean | null,
@@ -328,15 +331,11 @@ export class Moon {
     };
 
     if (rise) {
-      result.rise = new Date(Moon.hoursLater_(date, rise));
-    } else {
-      result.rise = NaN;
+      result.rise = new Date(Moon.hoursLater_(date_, rise));
     }
 
     if (set) {
-      result.set = new Date(Moon.hoursLater_(date, set));
-    } else {
-      result.set = NaN;
+      result.set = new Date(Moon.hoursLater_(date_, set));
     }
 
     if (!rise && !set) {
@@ -350,7 +349,7 @@ export class Moon {
     } else if (rise && set) {
       result.alwaysUp = false;
       result.alwaysDown = false;
-      result.highest = new Date(Moon.hoursLater_(date, Math.min(rise, set) + Math.abs(set - rise) / 2));
+      result.highest = new Date(Moon.hoursLater_(date_, Math.min(rise, set) + Math.abs(set - rise) / 2));
     } else {
       result.alwaysUp = false;
       result.alwaysDown = false;
