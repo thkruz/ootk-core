@@ -37,6 +37,9 @@ describe('Sun and Moon', () => {
   });
 
   test('getMoonIllumination returns fraction and angle of moons illuminated limb and phase', () => {
+    // eslint-disable-next-line no-console
+    console.log('dateObj', dateObj);
+
     const moonIllum = Moon.getMoonIllumination(dateObj);
 
     expect(moonIllum).toMatchSnapshot();

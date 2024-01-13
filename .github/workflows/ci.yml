@@ -50,8 +50,6 @@ jobs:
 
       - run: npm ci --ignore-scripts
 
-      - run: npm ci --ignore-scripts
-
       - run: npm run build
   test:
     needs: build

@@ -2,7 +2,7 @@
 .vscode/settings.json
 coverage
 /commonjs/
-lib
+/lib/
 node_modules
 *.log
 
