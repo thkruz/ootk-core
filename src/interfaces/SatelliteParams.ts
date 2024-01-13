@@ -1,10 +1,6 @@
 import { EciVec3, SpaceObjectType, TleLine1, TleLine2 } from '../types/types';
 
 /**
- * TODO: Reduce unnecessary calls to calculateTimeVariables using optional
- * parameters and caching.
- */
-/**
  * Information about a space object.
  */
 

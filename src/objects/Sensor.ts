@@ -70,7 +70,7 @@ export class Sensor extends GroundPosition {
     return true;
   }
 
-  calculatePasses(planningInterval: number, sat: Satellite, date: Date = this.time) {
+  calculatePasses(planningInterval: number, sat: Satellite, date: Date = new Date()) {
     let isInViewLast = false;
     let maxElThisPass = <Degrees>0;
     const msnPlanPasses: Lookangle[] = [];
@@ -139,14 +139,8 @@ export class Sensor extends GroundPosition {
     return true;
   }
 
-  isSatInFov(sat: Satellite, date: Date = this.time): boolean {
+  isSatInFov(sat: Satellite, date: Date = new Date()): boolean {
     return this.isRaeInFov(this.rae(sat, date));
-  }
-
-  setTime(date: Date): this {
-    this.time = date;
-
-    return this;
   }
 
   isDeepSpace(): boolean {

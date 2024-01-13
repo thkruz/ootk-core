@@ -52,6 +52,7 @@ import {
   Sgp4,
   RadarSensor,
 } from '..';
+import { TransformCache } from './TransformCache';
 
 /**
  * Converts Azimuth and Elevation to U and V.
@@ -137,11 +138,22 @@ export function eci2ecf<T extends number>(eci: EciVec3<T>, gmst: number): EcfVec
 
 /**
  * EciToGeodetic converts eci coordinates to lla coordinates
+ *
+ * @cached
+ *
  * @param {vec3} eci takes xyz coordinates
  * @param {number} gmst takes a number in gmst time
  * @returns {array} array containing lla coordinates
  */
 export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers> {
+  // Check cache
+  const key = `${gmst},${eci.x},${eci.y},${eci.z}`;
+  const cached = TransformCache.get(key);
+
+  if (cached) {
+    return cached as LlaVec3<Degrees, Kilometers>;
+  }
+
   // http://www.celestrak.com/columns/v02n03/
   const a = 6378.137;
   const b = 6356.7523142;
@@ -173,7 +185,11 @@ export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers
   lon = (lon * RAD2DEG) as Degrees;
   lat = (lat * RAD2DEG) as Degrees;
 
-  return { lon: <Degrees>lon, lat: <Degrees>lat, alt: <Kilometers>alt };
+  const lla = { lon: <Degrees>lon, lat: <Degrees>lat, alt: <Kilometers>alt };
+
+  TransformCache.add(key, lla);
+
+  return lla;
 }
 
 /**
@@ -236,11 +252,22 @@ export function lla2ecf<AltitudeUnits extends number>(lla: LlaVec3<Degrees, Alti
 
 /**
  * Converts geodetic coordinates (latitude, longitude, altitude) to Earth-centered inertial (ECI) coordinates.
+ *
+ * @cached
+ *
  * @param lla The geodetic coordinates in radians and meters.
  * @param gmst The Greenwich Mean Sidereal Time in seconds.
  * @returns The ECI coordinates in meters.
  */
 export function lla2eci(lla: LlaVec3<Radians, Kilometers>, gmst: GreenwichMeanSiderealTime): EciVec3<Kilometers> {
+  // Check cache
+  const key = `${gmst},${lla.lat},${lla.lon},${lla.alt}`;
+  const cached = TransformCache.get(key);
+
+  if (cached) {
+    return cached as EciVec3<Kilometers>;
+  }
+
   const { lat, lon, alt } = lla;
 
   const cosLat = Math.cos(lat);
@@ -251,7 +278,11 @@ export function lla2eci(lla: LlaVec3<Radians, Kilometers>, gmst: GreenwichMeanSi
   const y = (Earth.radiusMean + alt) * cosLat * sinLon;
   const z = (Earth.radiusMean + alt) * sinLat;
 
-  return { x, y, z } as EciVec3<Kilometers>;
+  const eci = { x, y, z } as EciVec3<Kilometers>;
+
+  TransformCache.add(key, eci);
+
+  return eci;
 }
 
 /**
@@ -360,6 +391,8 @@ export function rae2ecf<D extends number>(rae: RaeVec3<D, Degrees>, lla: LlaVec3
 /**
  * Converts a vector from RAE (Range, Azimuth, Elevation) coordinates to ECI (Earth-Centered Inertial) coordinates.
  *
+ * @cached
+ *
  * @param rae The vector in RAE coordinates.
  * @param lla The vector in LLA (Latitude, Longitude, Altitude) coordinates.
  * @param gmst The Greenwich Mean Sidereal Time.
@@ -370,8 +403,18 @@ export function rae2eci<D extends number>(
   lla: LlaVec3<Degrees, D>,
   gmst: number,
 ): EciVec3<D> {
+  // Check cache
+  const key = `${gmst},${rae.rng},${rae.az},${rae.el},${lla.lat},${lla.lon},${lla.alt}`;
+  const cached = TransformCache.get(key);
+
+  if (cached) {
+    return cached as EciVec3<D>;
+  }
+
   const ecf = rae2ecf(rae, lla);
   const eci = ecf2eci(ecf, gmst);
+
+  TransformCache.add(key, eci);
 
   return eci;
 }
@@ -479,16 +522,29 @@ export function ecfRad2rae<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfV
  * Converts Earth-Centered Fixed (ECF) coordinates to Right Ascension (RA),
  * Elevation (E), and Azimuth (A) coordinates.
  *
+ * @cached
+ *
  * @param lla The Latitude, Longitude, and Altitude (LLA) coordinates.
  * @param ecf The Earth-Centered Fixed (ECF) coordinates.
  * @returns The Right Ascension (RA), Elevation (E), and Azimuth (A) coordinates.
  */
 export function ecf2rae<D extends number>(lla: LlaVec3<Degrees, D>, ecf: EcfVec3<D>): RaeVec3<D, Degrees> {
+  // Check cache
+  const key = `${lla.lat},${lla.lon},${lla.alt},${ecf.x},${ecf.y},${ecf.z}`;
+  const cached = TransformCache.get(key);
+
+  if (cached) {
+    return cached as RaeVec3<D, Degrees>;
+  }
+
   const { lat, lon } = lla;
   const latRad = (lat * DEG2RAD) as Radians;
   const lonRad = (lon * DEG2RAD) as Radians;
+  const rae = ecfRad2rae({ lat: latRad, lon: lonRad, alt: lla.alt }, ecf);
 
-  return ecfRad2rae({ lat: latRad, lon: lonRad, alt: lla.alt }, ecf);
+  TransformCache.add(key, rae);
+
+  return rae;
 }
 
 export const jday = (year?: number, mon?: number, day?: number, hr?: number, minute?: number, sec?: number) => {
@@ -543,11 +599,11 @@ export function calcGmst(date: Date): { gmst: GreenwichMeanSiderealTime; j: numb
   return { gmst, j };
 }
 
-// Create a cache for eci2rae
-const eci2raeCache = new Map<string, RaeVec3<Kilometers, Degrees>>();
-
 /**
  * Converts ECI coordinates to RAE (Right Ascension, Azimuth, Elevation) coordinates.
+ *
+ * @cached
+ *
  * @param {Date} now - Current date and time.
  * @param {EciArr3} eci - ECI coordinates of the satellite.
  * @param {SensorObject} sensor - Sensor object containing observer's geodetic coordinates.
@@ -559,10 +615,10 @@ export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): Ra
 
   // Check cache
   const key = `${gmst},${eci.x},${eci.y},${eci.z},${sensor.lat},${sensor.lon},${sensor.alt}`;
-  const cached = eci2raeCache.get(key);
+  const cached = TransformCache.get(key);
 
   if (cached) {
-    return cached;
+    return cached as RaeVec3<Kilometers, Degrees>;
   }
 
   const positionEcf = eci2ecf(eci, gmst);
@@ -574,12 +630,7 @@ export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): Ra
 
   const rae = ecfRad2rae(lla, positionEcf);
 
-  // Add to cache
-  eci2raeCache.set(key, rae);
-  // Ensure eci2raeCache isnt too big
-  if (eci2raeCache.size > 1000) {
-    eci2raeCache.delete(eci2raeCache.keys().next().value);
-  }
+  TransformCache.add(key, rae);
 
   return rae;
 }

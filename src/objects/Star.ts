@@ -66,7 +66,7 @@ export class Star extends BaseObject {
     this.vmag = info.vmag;
   }
 
-  eci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = this.time): EciVec3 {
+  eci(lla: LlaVec3 = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 }, date: Date = new Date()): EciVec3 {
     const rae = this.rae(lla, date);
     const { gmst } = Star.calculateTimeVariables_(date);
 
@@ -76,7 +76,7 @@ export class Star extends BaseObject {
 
   rae(
     lla: LlaVec3<Degrees, Kilometers> = { lat: <Degrees>180, lon: <Degrees>0, alt: <Kilometers>0 },
-    date: Date = this.time,
+    date: Date = new Date(),
   ): RaeVec3 {
     const starPos = Celestial.azEl(date, lla.lat, lla.lon, this.ra, this.dec);
 

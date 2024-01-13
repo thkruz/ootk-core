@@ -32,7 +32,6 @@ describe('BaseObject', () => {
     expect(baseObject.velocity.x).toBe(mockVelocity.x);
     expect(baseObject.velocity.y).toBe(mockVelocity.y);
     expect(baseObject.velocity.z).toBe(mockVelocity.z);
-    expect(baseObject.time).toBe(info.time);
     expect(baseObject.active).toBe(true);
   });
 
@@ -48,7 +47,6 @@ describe('BaseObject', () => {
     expect(baseObject.velocity.x).toBe(0);
     expect(baseObject.velocity.y).toBe(0);
     expect(baseObject.velocity.z).toBe(0);
-    expect(baseObject.time).toBeInstanceOf(Date);
     expect(baseObject.active).toBe(true);
   });
 

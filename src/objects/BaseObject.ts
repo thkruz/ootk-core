@@ -36,7 +36,6 @@ export class BaseObject {
   position: EciVec3; // Where is the object
   totalVelocity: number; // How fast is the object moving
   velocity: EciVec3; // How fast is the object moving
-  time: Date; // When is the object
   active = true; // Is the object active
 
   constructor(info: BaseObjectParams) {
@@ -57,8 +56,6 @@ export class BaseObject {
       z: <Kilometers>0,
     }; // Default to 0 velocity until velocity is calculated
     this.totalVelocity = Math.sqrt(this.velocity.x ** 2 + this.velocity.y ** 2 + this.velocity.z ** 2);
-
-    this.time = info.time ?? new Date();
   }
 
   /**

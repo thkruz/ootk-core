@@ -69,6 +69,15 @@ const elevationDegrees = lookAngles.elevationDegrees; // Degrees
 const rangeSat = lookAngles.range; // Kilometers
 const rangeRate = lookAngles.rangeRate; // Kilometers/Second
 
+// There is a built in cache to allow fast retrieval of repeated calculations.
+// This means you can make repeat calls to `.rae()` for minimal performance hit.
+const rangeCache = satellite.rae(observer, exampleDate).range;
+const azimuthCached = satellite.rae(observer, exampleDate).azimuth;
+const elevationCached = satellite.rae(observer, exampleDate).elevation;
+const latitudeCached = satellite.lla(exampleDate).lat;
+const longitudeCached = satellite.lla(exampleDate).lon;
+const heightCached = satellite.lla(exampleDate).alt;
+
 // Geodetic coords are accessed via `longitude`, `latitude`, `height`.
 const longitude = positionGd.lon; // longitude is in degrees
 const latitude = positionGd.lat; // latitude is in degrees

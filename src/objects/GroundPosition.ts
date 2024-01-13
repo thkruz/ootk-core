@@ -25,7 +25,7 @@ export class GroundPosition extends BaseObject {
     return false;
   }
 
-  rae(sat: Satellite, date: Date = this.time): RaeVec3<Kilometers, Degrees> {
+  rae(sat: Satellite, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
     return sat.raeOpt(this, date);
   }
 
@@ -38,16 +38,10 @@ export class GroundPosition extends BaseObject {
     return llaRad2ecf(this.llaRad());
   }
 
-  eci(date: Date = this.time): EciVec3<Kilometers> {
+  eci(date: Date = new Date()): EciVec3<Kilometers> {
     const { gmst } = calcGmst(date);
 
     return lla2eci(this.llaRad(), gmst);
-  }
-
-  setTime(date: Date): this {
-    this.time = date;
-
-    return this;
   }
 
   llaRad(): LlaVec3<Radians, Kilometers> {
