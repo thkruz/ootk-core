@@ -9,17 +9,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
 
-      - name: Load cached modules
-        uses: actions/cache@v3.3.3
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-
       - name: Load Node.js latest
         uses: actions/setup-node@v4.0.1
         with:
           node-version: '20.x'
+
+      - name: Load cached modules
+        uses: actions/cache/save@v3.3.3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install all dependencies
         run: npm ci
@@ -33,16 +33,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
 
+      - uses: actions/setup-node@v4.0.1
+        with:
+          node-version: '20.x'
+
       - uses: actions/cache@v3.3.3
         with:
           path: |
             **/node_modules
             **/lib
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - uses: actions/setup-node@v4.0.1
-        with:
-          node-version: '20.x'
 
       - run: npm run build
   test:
@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: '20.x'
 
-      - uses: actions/cache@v3.3.3
+      - uses: actions/cache/restore@v3.3.3
         with:
           path: |
             **/node_modules
