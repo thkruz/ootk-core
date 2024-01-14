@@ -4,7 +4,7 @@ import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, RAD2DEG, sec2min, secondsPerDay, TAU } from '../utils/constants';
 import { clamp, matchHalfPlane, newtonNu } from '../utils/functions';
 import { EquinoctialElements } from './EquinoctialElements';
-import { OrbitRegime } from './OrbitRegime';
+import { OrbitRegime } from '../enums/OrbitRegime';
 import { PositionVelocity, StateVector } from './StateVector';
 import { ClassicalElementsParams } from '../interfaces/ClassicalElementsParams';
 

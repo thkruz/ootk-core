@@ -1,3 +1,4 @@
+import { Satellite } from 'src/objects';
 import { PassType } from '../enums/PassType';
 
 /**
@@ -696,3 +697,20 @@ export type TleData = {
  * Represents a set of data containing both Line 1 and Line 2 TLE information.
  */
 export type TleDataFull = Line1Data & Line2Data;
+export type StringifiedNumber = `${number}.${number}`;
+
+export type TleParams = {
+  sat?: Satellite;
+  inc: StringifiedNumber;
+  meanmo: StringifiedNumber;
+  rasc: StringifiedNumber;
+  argPe: StringifiedNumber;
+  meana: StringifiedNumber;
+  ecen: string;
+  epochyr: string;
+  epochday: string;
+  /** COSPAR International Designator */
+  intl: string;
+  /** alpha 5 satellite number */
+  scc: string;
+};
