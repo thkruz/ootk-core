@@ -1,21 +1,21 @@
 import {
-  earthGravityParam,
   angularDiameter,
-  evalPoly,
+  AngularDiameterMethod,
   asec2rad,
+  DataHandler,
   DEG2RAD,
+  earthGravityParam,
+  EpochUTC,
+  evalPoly,
+  Kilometers,
   RAD2DEG,
+  Radians,
   secondsPerDay,
   secondsPerSiderealDay,
   TAU,
   ttasec2rad,
-  EpochUTC,
   Vector3D,
-  DataHandler,
-  AngularDiameterMethod,
-  Kilometers,
-  Radians,
-} from '..';
+} from '../main';
 import { NutationAngles } from './NutationAngles';
 import { PrecessionAngles } from './PrecessionAngles';
 

@@ -1,24 +1,24 @@
 import {
-  Earth,
-  Celestial,
   angularDiameter,
+  AngularDiameterMethod,
   astronomicalUnit,
+  AzEl,
+  Celestial,
   cKmPerSec,
   DEG2RAD,
-  MS_PER_DAY,
-  RAD2DEG,
-  TAU,
-  EpochUTC,
-  Vector3D,
-  AngularDiameterMethod,
-  AzEl,
   Degrees,
+  Earth,
+  EpochUTC,
   Kilometers,
   Meters,
+  MS_PER_DAY,
+  RAD2DEG,
   RaDec,
   Radians,
   SunTime,
-} from '..';
+  TAU,
+  Vector3D,
+} from '../main';
 
 /**
  * Sun metrics and operations.

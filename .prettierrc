@@ -13,8 +13,5 @@
   "proseWrap": "always",
   "htmlWhitespaceSensitivity": "ignore",
   "endOfLine": "lf",
-  "embeddedLanguageFormatting": "off",
-  "plugins": [
-    "prettier-plugin-organize-imports"
-  ]
+  "embeddedLanguageFormatting": "off"
 }

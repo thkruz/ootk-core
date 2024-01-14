@@ -1,5 +1,5 @@
+import { Degrees, EpochUTC, Moon, Vector3D } from '../../src/main';
 import { exampleDate } from '../lib/mockData';
-import { Degrees, EpochUTC, Moon, Vector3D } from '../../src';
 
 describe('Moon', () => {
   // The static property 'mu' should be accessible and have a value of 4902.799.

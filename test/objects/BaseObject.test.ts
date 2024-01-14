@@ -1,4 +1,4 @@
-import { BaseObject, BaseObjectParams, EciVec3, SpaceObjectType } from '../../src';
+import { BaseObject, BaseObjectParams, EciVec3, SpaceObjectType } from '../../src/main';
 const mockVelocity = {
   x: 8000,
   y: 0,

@@ -3,7 +3,7 @@
 /* eslint-disable multiline-comment-style */
 /* eslint-disable no-console */
 
-import { calcGmst, DEG2RAD, GroundPosition, Satellite, Sgp4 } from '../../dist/index.js';
+import { calcGmst, DEG2RAD, GroundPosition, Satellite, Sgp4 } from '../dist/main.js';
 
 // Example Date
 const exampleDate = new Date(1705109326817);

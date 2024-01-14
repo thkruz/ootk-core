@@ -1,8 +1,8 @@
-import { EciVec3, Sgp4 } from '../../src/index';
-import { sgp4FullCovFail } from './sgp4-full-cov-fail';
-import { sgp4FullCov } from './sgp4-full-cov';
-import { Sgp4GravConstants } from '../../src/sgp4/sgp4';
 import { Sgp4OpsMode } from '../../src/enums/Sgp4OpsMode';
+import { EciVec3, Sgp4 } from '../../src/main';
+import { Sgp4GravConstants } from '../../src/sgp4/sgp4';
+import { sgp4FullCov } from './sgp4-full-cov';
+import { sgp4FullCovFail } from './sgp4-full-cov-fail';
 
 describe('Verification TLE Data in Appendix D of Revisiting Spacetrack Report #3: Rev 1', () => {
   sgp4FullCov.forEach((sgp4DataItem) => {

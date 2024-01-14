@@ -1,7 +1,7 @@
 import { Celestial } from '../../src/body/Celestial';
 import { Moon } from '../../src/body/Moon';
 import { Sun } from '../../src/body/Sun';
-import { Degrees, Meters } from '../../src/index';
+import { Degrees, Meters } from '../../src/main';
 
 // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
 const dateObj = new Date(1661406000000);

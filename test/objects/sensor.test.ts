@@ -1,4 +1,4 @@
-import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../src/index';
+import { Degrees, Kilometers, Satellite, Sensor, SpaceObjectType, TleLine1, TleLine2 } from '../../src/main';
 
 const dateObj = new Date(1661400000000);
 

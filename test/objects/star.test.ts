@@ -1,4 +1,4 @@
-import { Degrees, Kilometers, Radians, Star } from '../../src/index';
+import { Degrees, Kilometers, Radians, Star } from '../../src/main';
 
 describe('Basic Star functionality', () => {
   const star = new Star({

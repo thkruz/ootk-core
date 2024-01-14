@@ -1,4 +1,4 @@
-import { Radians } from '..';
+import { Radians } from '../main';
 
 /**
  * Represents the nutation angles.

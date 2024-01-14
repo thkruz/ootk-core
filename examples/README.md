@@ -2,10 +2,6 @@
 
 Run the examples using tsx as below:
 
-## TypeScript
+npx tsx ./examples/tle.ts
 
-npx tsx ./examples/typescript/satellite-js-migration.ts
-
-## JavaScript
-
-npx tsx ./examples/javascript/satellite-js-migration.mjs
+npx tsx ./examples/satellite-js-migration.js

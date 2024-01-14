@@ -1,4 +1,4 @@
-import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../src/index';
+import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../src/main';
 import { dopplerFactor, getDayOfYear } from '../../src/utils/functions';
 
 const numDigits = 8;

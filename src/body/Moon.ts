@@ -38,7 +38,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { AngularDiameterMethod, Celestial, Degrees, Kilometers, RaDec, Radians } from '..';
+import { AngularDiameterMethod, Celestial, Degrees, Kilometers, RaDec, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, MS_PER_DAY } from '../utils/constants';

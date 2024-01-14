@@ -1,10 +1,14 @@
-import { linearDistance } from '..';
+import { linearDistance } from '../main';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 
 // / 3-dimensional vector.
 export class Vector3D<T extends number = number> {
-  constructor(public x: T, public y: T, public z: T) {
+  constructor(
+    public x: T,
+    public y: T,
+    public z: T,
+  ) {
     // Nothing to do here.
   }
 

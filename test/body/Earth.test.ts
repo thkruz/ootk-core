@@ -1,5 +1,5 @@
+import { Earth, EpochUTC, Vector3D } from '../../src/main';
 import { exampleDate } from '../lib/mockData';
-import { Earth, EpochUTC, Vector3D } from '../../src/index';
 
 describe('Earth', () => {
   // can calculate mean motion from semimajor axis

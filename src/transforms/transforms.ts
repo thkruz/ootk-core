@@ -29,7 +29,9 @@
  */
 
 import {
+  DEG2RAD,
   Degrees,
+  Earth,
   EcefVec3,
   EcfVec3,
   EciVec3,
@@ -37,21 +39,19 @@ import {
   GreenwichMeanSiderealTime,
   Kilometers,
   LlaVec3,
+  MILLISECONDS_TO_DAYS,
+  PI,
+  RAD2DEG,
+  RadarSensor,
   Radians,
   RaeVec3,
   RfVec3,
   RuvVec3,
-  SezVec3,
-  DEG2RAD,
-  MILLISECONDS_TO_DAYS,
-  PI,
-  RAD2DEG,
-  TAU,
-  Earth,
   Sensor,
+  SezVec3,
   Sgp4,
-  RadarSensor,
-} from '..';
+  TAU,
+} from '../main';
 import { TransformCache } from './TransformCache';
 
 /**

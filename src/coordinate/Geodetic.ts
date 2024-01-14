@@ -1,5 +1,5 @@
-import { AngularDistanceMethod } from '..';
 import { Earth } from '../body/Earth';
+import { AngularDistanceMethod } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, RAD2DEG } from '../utils/constants';

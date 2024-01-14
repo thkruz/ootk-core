@@ -1,4 +1,4 @@
-import * as ootk from '../src/index';
+import * as ootk from '../src/main';
 
 describe('ootk-core', () => {
   it('should export Celestial', () => {

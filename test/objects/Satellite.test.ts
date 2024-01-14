@@ -1,4 +1,3 @@
-import { exampleDate } from '../lib/mockData';
 import {
   Degrees,
   GroundPosition,
@@ -8,7 +7,8 @@ import {
   SatelliteParams,
   TleLine1,
   TleLine2,
-} from '../../src';
+} from '../../src/main';
+import { exampleDate } from '../lib/mockData';
 
 const dateObj = new Date(1661400000000);
 

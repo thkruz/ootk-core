@@ -13,7 +13,7 @@ import {
   Sgp4,
   TleLine1,
   TleLine2,
-} from '../../lib/index';
+} from '../dist/main';
 
 // Example Date
 const exampleDate = new Date(1705109326817);

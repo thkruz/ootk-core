@@ -26,24 +26,24 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import { BaseObject } from './BaseObject';
 import {
-  StarObjectParams,
+  Celestial,
   Degrees,
+  ecf2eci,
   EciVec3,
   GreenwichMeanSiderealTime,
+  jday,
   Kilometers,
   LlaVec3,
-  Radians,
-  RaeVec3,
-  SpaceObjectType,
   MILLISECONDS_TO_DAYS,
-  Celestial,
-  Sgp4,
-  ecf2eci,
-  jday,
+  Radians,
   rae2ecf,
-} from '../index';
+  RaeVec3,
+  Sgp4,
+  SpaceObjectType,
+  StarObjectParams,
+} from '../main';
+import { BaseObject } from './BaseObject';
 
 export class Star extends BaseObject {
   ra: Radians;

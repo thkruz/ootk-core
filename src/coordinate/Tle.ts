@@ -26,8 +26,8 @@
  */
 
 import { ClassicalElements, FormatTle, TEME } from '.';
-import { Sgp4, Vector3D } from '..';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
+import { Sgp4, Vector3D } from '../main';
 import { Sgp4GravConstants } from '../sgp4/sgp4';
 import { EpochUTC } from '../time/EpochUTC';
 import {

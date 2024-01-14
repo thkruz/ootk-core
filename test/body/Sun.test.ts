@@ -1,4 +1,4 @@
-import { Vector3D, Degrees, Meters, Sun, EpochUTC } from './../../src';
+import { Degrees, EpochUTC, Meters, Sun, Vector3D } from '../../src/main';
 import { exampleDate } from '../lib/mockData';
 
 describe('Sun', () => {

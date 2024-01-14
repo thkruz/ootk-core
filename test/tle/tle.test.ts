@@ -1,4 +1,4 @@
-import { Tle } from '../../src/index';
+import { Tle } from '../../src/main';
 import { tleData } from './tleData';
 
 describe('Valid TLEs', () => {

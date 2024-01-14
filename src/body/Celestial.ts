@@ -1,4 +1,4 @@
-import { Sun, RAD2DEG, AzEl, Degrees, Kilometers, RaDec, Radians } from '..';
+import { AzEl, Degrees, Kilometers, RAD2DEG, RaDec, Radians, Sun } from '../main';
 
 /**
  * Celestial is a static class that provides methods for calculating the position of celestial objects such
