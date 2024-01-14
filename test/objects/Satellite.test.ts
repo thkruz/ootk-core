@@ -31,14 +31,6 @@ describe('Basic Satellite functionality', () => {
     expect(sat.satrec).toBeDefined();
   });
 
-  it('should allow chaining', () => {
-    const eci = new Satellite({ name: 'Test', tle1, tle2 }).propagateTo(dateObj).eci().position;
-
-    expect(eci.x).toBeCloseTo(6512.640035319078);
-    expect(eci.y).toBeCloseTo(-1545.524934684146);
-    expect(eci.z).toBeCloseTo(-1195.219347050479);
-  });
-
   it('should allow getting eci coordinates', () => {
     const sat = new Satellite({ name: 'Test', tle1, tle2 });
 
@@ -94,16 +86,9 @@ describe('Satellite', () => {
     expect(satellite).toMatchSnapshot();
   });
 
-  // can propagate to a given date
-  it('should propagate Satellite to a given date', () => {
-    satellite.propagateTo(exampleDate);
-
-    expect(satellite).toMatchSnapshot();
-  });
-
   // can calculate and return RAE coordinates
   it('should calculate and return RAE coordinates', () => {
-    const rae = satellite.rae(observer);
+    const rae = satellite.rae(observer, exampleDate);
 
     expect(rae).toMatchSnapshot();
   });
