@@ -23,7 +23,7 @@ describe('ootk-core', () => {
     expect(ootk.BaseObject).toBeDefined();
   });
   it('should export GroundPosition', () => {
-    expect(ootk.GroundPosition).toBeDefined();
+    expect(ootk.GroundObject).toBeDefined();
   });
   it('should export Satellite', () => {
     expect(ootk.Satellite).toBeDefined();

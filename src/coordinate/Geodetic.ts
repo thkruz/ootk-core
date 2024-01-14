@@ -1,74 +1,173 @@
 import { Earth } from '../body/Earth';
-import { AngularDistanceMethod } from '../main';
+import { AngularDistanceMethod, Degrees, GroundObject, Kilometers, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, RAD2DEG } from '../utils/constants';
 import { angularDistance } from '../utils/functions';
 import { ITRF } from './ITRF';
 
-// / Geodetic coordinates.
+/**
+ * This Geodetic class represents a geodetic coordinate in three-dimensional
+ * space, consisting of latitude, longitude, and altitude. It provides various
+ * methods to perform calculations and operations related to geodetic
+ * coordinates.
+ *
+ * This is a class for geodetic coordinates. This is related to the GroundObject
+ * class, which is used to represent an object on the surface of the Earth.
+ */
 export class Geodetic {
-  latitude: number;
-  longitude: number;
-  altitude: number;
+  lat: Radians;
+  lon: Radians;
+  alt: Kilometers;
 
-  constructor(latitude: number, longitude: number, altitude: number) {
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.altitude = altitude;
+  constructor(latitude: Radians, longitude: Radians, altitude: Kilometers) {
+    if (Math.abs(latitude) > Math.PI / 2) {
+      // eslint-disable-next-line no-console
+      console.warn(longitude * RAD2DEG);
+      throw new RangeError('Latitude must be between -90° and 90° in Radians.');
+    }
+
+    if (Math.abs(longitude) > Math.PI) {
+      // eslint-disable-next-line no-console
+      console.warn(longitude * RAD2DEG);
+      throw new RangeError('Longitude must be between -180° and 180° in Radians.');
+    }
+
+    if (altitude < -Earth.radiusMean) {
+      throw new RangeError('Altitude cannot be less than -6378.137 km.');
+    }
+
+    this.lat = latitude;
+    this.lon = longitude;
+    this.alt = altitude;
   }
 
-  static fromDegrees(latDeg: number, lonDeg: number, alt: number): Geodetic {
-    return new Geodetic(latDeg * DEG2RAD, lonDeg * DEG2RAD, alt);
+  /**
+   * Creates a Geodetic object from latitude, longitude, and altitude values in
+   * degrees.
+   * @param latitude The latitude value in degrees.
+   *
+   * @param longitude The longitude value in degrees.
+   *
+   * @param altitude The altitude value in kilometers.
+   *
+   * @returns A Geodetic object representing the specified latitude, longitude,
+   * and altitude.
+   */
+  static fromDegrees(latitude: Degrees, longitude: Degrees, altitude: Kilometers): Geodetic {
+    return new Geodetic((latitude * DEG2RAD) as Radians, (longitude * DEG2RAD) as Radians, altitude);
   }
 
+  /**
+   * Returns a string representation of the Geodetic object.
+   *
+   * @returns A string containing the latitude, longitude, and altitude of the
+   * Geodetic object.
+   */
   toString(): string {
     return [
       'Geodetic',
-      `  Latitude:  ${this.latitudeDegrees.toFixed(4)}°`,
-      `  Longitude: ${this.longitudeDegrees.toFixed(4)}°`,
-      `  Altitude:  ${this.altitude.toFixed(3)} km`,
+      `  Latitude:  ${this.latDeg.toFixed(4)}°`,
+      `  Longitude: ${this.lonDeg.toFixed(4)}°`,
+      `  Altitude:  ${this.alt.toFixed(3)} km`,
     ].join('\n');
   }
 
-  get latitudeDegrees(): number {
-    return this.latitude * RAD2DEG;
+  /**
+   * Gets the latitude in degrees.
+   * @returns The latitude in degrees.
+   */
+  get latDeg(): number {
+    return this.lat * RAD2DEG;
   }
 
-  get longitudeDegrees(): number {
-    return this.longitude * RAD2DEG;
+  /**
+   * Gets the longitude in degrees.
+   * @returns The longitude in degrees.
+   */
+  get lonDeg(): number {
+    return this.lon * RAD2DEG;
   }
 
+  /**
+   * Converts the geodetic coordinates to a ground position.
+   * @returns The ground position object.
+   */
+  toGroundObject(): GroundObject {
+    return new GroundObject({
+      lat: this.latDeg as Degrees,
+      lon: this.lonDeg as Degrees,
+      alt: this.alt,
+    });
+  }
+
+  /**
+   * Converts the geodetic coordinates to the International Terrestrial
+   * Reference Frame (ITRF) coordinates.
+   * @param epoch The epoch in UTC. @returns The ITRF coordinates.
+   */
   toITRF(epoch: EpochUTC): ITRF {
-    const sLat = Math.sin(this.latitude);
-    const cLat = Math.cos(this.latitude);
+    const sLat = Math.sin(this.lat);
+    const cLat = Math.cos(this.lat);
     const nVal = Earth.radiusEquator / Math.sqrt(1 - Earth.eccentricitySquared * sLat * sLat);
     const r = new Vector3D(
-      (nVal + this.altitude) * cLat * Math.cos(this.longitude),
-      (nVal + this.altitude) * cLat * Math.sin(this.longitude),
-      (nVal * (1 - Earth.eccentricitySquared) + this.altitude) * sLat,
+      (nVal + this.alt) * cLat * Math.cos(this.lon),
+      (nVal + this.alt) * cLat * Math.sin(this.lon),
+      (nVal * (1 - Earth.eccentricitySquared) + this.alt) * sLat,
     );
 
     return new ITRF(epoch, r, Vector3D.origin);
   }
 
-  angle(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): number {
-    return angularDistance(this.longitude, this.latitude, g.longitude, g.latitude, method);
+  /**
+   * Calculates the angle between two geodetic coordinates.
+   * @param g The geodetic coordinate to calculate the angle to. @param method
+   * The method to use for calculating the angular distance (optional, default
+   * is Haversine). @returns The angle between the two geodetic coordinates in
+   * radians.
+   */
+  angle(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Radians {
+    return angularDistance(this.lon, this.lat, g.lon, g.lat, method) as Radians;
   }
 
-  angleDegrees(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): number {
-    return this.angle(g, method) * RAD2DEG;
+  /**
+   * Calculates the angle in degrees between two Geodetic coordinates.
+   * @param g The Geodetic coordinate to calculate the angle with. @param method
+   * The method to use for calculating the angular distance (optional, default
+   * is Haversine). @returns The angle in degrees.
+   */
+  angleDeg(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Degrees {
+    return (this.angle(g, method) * RAD2DEG) as Degrees;
   }
 
-  distance(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): number {
-    return this.angle(g, method) * Earth.radiusMean;
+  /**
+   * Calculates the distance between two geodetic coordinates.
+   * @param g The geodetic coordinates to calculate the distance to. @param
+   * method The method to use for calculating the angular distance. Default is
+   * Haversine. @returns The distance between the two geodetic coordinates in
+   * kilometers.
+   */
+  distance(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Kilometers {
+    return (this.angle(g, method) * Earth.radiusMean) as Kilometers;
   }
 
-  fieldOfView(): number {
-    return Math.acos(Earth.radiusMean / (Earth.radiusMean + this.altitude));
+  /**
+   * Calculates the field of view based on the altitude of the Geodetic object.
+   * @returns The field of view in radians.
+   */
+  fieldOfView(): Radians {
+    return Math.acos(Earth.radiusMean / (Earth.radiusMean + this.alt)) as Radians;
   }
 
-  sight(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): boolean {
+  /**
+   * Determines if the current geodetic coordinate can see another geodetic
+   * coordinate.
+   * @param g The geodetic coordinate to check for visibility. @param method The
+   * method to use for calculating the angular distance (optional, default is
+   * Haversine). @returns A boolean indicating if the current coordinate can see
+   * the other coordinate.
+   */
+  isInView(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): boolean {
     const fov = Math.max(this.fieldOfView(), g.fieldOfView());
 
     return this.angle(g, method) <= fov;

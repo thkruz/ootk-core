@@ -29,7 +29,7 @@ describe('Basic Sensor functionality', () => {
     expect(rae.rng).toMatchSnapshot();
 
     // Verify it works in reverse
-    const rae2 = sat.raeOpt(sensor, dateObj);
+    const rae2 = sat.rae(sensor, dateObj);
 
     expect(rae2.az).toMatchSnapshot();
     expect(rae2.el).toMatchSnapshot();
@@ -52,7 +52,7 @@ describe('Basic Sensor functionality', () => {
     });
 
     const inView = sensor.isSatInFov(sat, dateObj);
-    const rae = sat.raeOpt(sensor, dateObj);
+    const rae = sat.rae(sensor, dateObj);
 
     const inView2 = sensor.isRaeInFov(rae);
 
@@ -74,7 +74,7 @@ describe('Basic Sensor functionality', () => {
     });
 
     const inView = sensor.isSatInFov(sat, dateObj);
-    const rae = sat.raeOpt(sensor, dateObj);
+    const rae = sat.rae(sensor, dateObj);
 
     const inView2 = sensor.isRaeInFov(rae);
 

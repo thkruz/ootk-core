@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import { Kilometers, Radians } from 'src/main';
 import { Earth } from '../body/Earth';
 import { Geodetic } from './Geodetic';
 import { J2000 } from './J2000';
@@ -7,20 +8,19 @@ import { StateVector } from './StateVector';
 /**
  * The International Terrestrial Reference Frame (ITRF) is a geocentric
  * reference frame for the Earth. It is the successor to the International
- * Terrestrial Reference System (ITRS). The ITRF definition is maintained by
- * the International Earth Rotation and Reference Systems Service (IERS).
- * Several versions of ITRF exist, each with a different epoch, to address the
- * issue of crustal motion. The latest version is ITRF2014, based on data
- * collected from 1980 to 2014.
+ * Terrestrial Reference System (ITRS). The ITRF definition is maintained by the
+ * International Earth Rotation and Reference Systems Service (IERS). Several
+ * versions of ITRF exist, each with a different epoch, to address the issue of
+ * crustal motion. The latest version is ITRF2014, based on data collected from
+ * 1980 to 2014.
  * @see https://en.wikipedia.org/wiki/International_Terrestrial_Reference_Frame
  *
  * This is a geocentric coordinate system, also referenced as ECEF (Earth
- * Centered Earth Fixed). It is a Cartesian coordinate system with the origin
- * at the center of the Earth. The x-axis intersects the sphere of the Earth
- * at 0° latitude (the equator) and 0° longitude (the Prime Meridian). The
- * z-axis goes through the North Pole. The y-axis goes through 90° East
- * longitude.
- * @see https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system
+ * Centered Earth Fixed). It is a Cartesian coordinate system with the origin at
+ * the center of the Earth. The x-axis intersects the sphere of the Earth at 0°
+ * latitude (the equator) and 0° longitude (the Prime Meridian). The z-axis goes
+ * through the North Pole. The y-axis goes through 90° East longitude. @see
+ * https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system
  */
 export class ITRF extends StateVector {
   get name(): string {
@@ -92,7 +92,7 @@ export class ITRF extends StateVector {
     }
     const alt = r / Math.cos(lat) - sma * c;
 
-    return new Geodetic(lat, lon, alt);
+    return new Geodetic(lat as Radians, lon as Radians, alt as Kilometers);
   }
 
   /**

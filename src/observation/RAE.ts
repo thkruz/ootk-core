@@ -67,8 +67,8 @@ export class RAE {
     const r = stateEcef.position.subtract(siteEcef.position);
     const rDot = stateEcef.velocity;
     const geo = siteEcef.toGeodetic();
-    const p = r.rotZ(geo.longitude).rotY(po2 - geo.latitude);
-    const pDot = rDot.rotZ(geo.longitude).rotY(po2 - geo.latitude);
+    const p = r.rotZ(geo.lon).rotY(po2 - geo.lat);
+    const pDot = rDot.rotZ(geo.lon).rotY(po2 - geo.lat);
     const pS = p.x;
     const pE = p.y;
     const pZ = p.z;
@@ -147,8 +147,8 @@ export class RAE {
     const cEl = Math.cos(newEl);
     const pSez = new Vector3D(-this.range * cEl * cAz, this.range * cEl * sAz, this.range * sEl);
     const rEcef = pSez
-      .rotY(-(po2 - geo.latitude))
-      .rotZ(-geo.longitude)
+      .rotY(-(po2 - geo.lat))
+      .rotZ(-geo.lon)
       .add(ecef.position);
 
     return new ITRF(this.epoch, rEcef, Vector3D.origin).toJ2000().position;
@@ -181,8 +181,8 @@ export class RAE {
         this.range * cEl * cAz * this.azimuthRate,
       this.rangeRate * sEl + this.range * cEl * this.elevationRate,
     );
-    const pEcef = pSez.rotY(-(po2 - geo.latitude)).rotZ(-geo.longitude);
-    const pDotEcef = pDotSez.rotY(-(po2 - geo.latitude)).rotZ(-geo.longitude);
+    const pEcef = pSez.rotY(-(po2 - geo.lat)).rotZ(-geo.lon);
+    const pDotEcef = pDotSez.rotY(-(po2 - geo.lat)).rotZ(-geo.lon);
     const rEcef = pEcef.add(ecef.position);
 
     return new ITRF(this.epoch, rEcef, pDotEcef).toJ2000();

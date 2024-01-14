@@ -25,9 +25,9 @@ Object {
 
 exports[`Satellite should calculate and return Geodetic coordinates when given a date 1`] = `
 Geodetic {
-  "altitude": 405.17244322847,
-  "latitude": 0.1099327125671112,
-  "longitude": 0.2809557331563047,
+  "alt": 405.17244322847,
+  "lat": 0.1099327125671112,
+  "lon": 0.2809557331563047,
 }
 `;
 

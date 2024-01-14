@@ -58,7 +58,7 @@ import {
 import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants';
 import { dopplerFactor } from './../utils/functions';
 import { BaseObject } from './BaseObject';
-import { GroundPosition } from './GroundPosition';
+import { GroundObject } from './GroundObject';
 
 /**
  * Represents a satellite object with orbital information and methods for
@@ -180,8 +180,8 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  az(observer: GroundPosition, date: Date = new Date()): Degrees {
-    return (this.raeOpt(observer, date).az * RAD2DEG) as Degrees;
+  az(observer: GroundObject, date: Date = new Date()): Degrees {
+    return (this.rae(observer, date).az * RAD2DEG) as Degrees;
   }
 
   /**
@@ -190,9 +190,9 @@ export class Satellite extends BaseObject {
    *
    * @expanded
    */
-  rae(observer: GroundPosition, date: Date = new Date()): RAE {
-    const rae = this.raeOpt(observer, date);
-    const rae2 = this.raeOpt(observer, new Date(date.getTime() + 1000));
+  toRae(observer: GroundObject, date: Date = new Date()): RAE {
+    const rae = this.rae(observer, date);
+    const rae2 = this.rae(observer, new Date(date.getTime() + 1000));
     const epoch = new EpochUTC(date.getTime());
     const rangeRate = rae2.rng - rae.rng;
     const azimuthRate = rae2.az - rae.az;
@@ -247,7 +247,7 @@ export class Satellite extends BaseObject {
    * @returns The J2000 coordinates for the specified date. @throws Error if
    * propagation fails.
    */
-  getJ2000(date: Date = new Date()): J2000 {
+  toJ2000(date: Date = new Date()): J2000 {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
 
     if (!m) {
@@ -275,8 +275,8 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  el(observer: GroundPosition, date: Date = new Date()): Degrees {
-    return (this.raeOpt(observer, date).el * RAD2DEG) as Degrees;
+  el(observer: GroundObject, date: Date = new Date()): Degrees {
+    return (this.rae(observer, date).el * RAD2DEG) as Degrees;
   }
 
   /**
@@ -290,24 +290,24 @@ export class Satellite extends BaseObject {
     return lla;
   }
 
-  getGeodetic(date: Date = new Date()): Geodetic {
-    return this.getJ2000(date).toITRF().toGeodetic();
+  toGeodetic(date: Date = new Date()): Geodetic {
+    return this.toJ2000(date).toITRF().toGeodetic();
   }
 
-  getITRF(date: Date = new Date()): ITRF {
-    return this.getJ2000(date).toITRF();
+  toITRF(date: Date = new Date()): ITRF {
+    return this.toJ2000(date).toITRF();
   }
 
-  getRIC(reference: Satellite, date: Date = new Date()): RIC {
-    return RIC.fromJ2000(this.getJ2000(date), reference.getJ2000(date));
+  toRIC(reference: Satellite, date: Date = new Date()): RIC {
+    return RIC.fromJ2000(this.toJ2000(date), reference.toJ2000(date));
   }
 
-  getTle(): Tle {
+  toTle(): Tle {
     return new Tle(this.tle1, this.tle2);
   }
 
-  getClassicalElements(date: Date = new Date()): ClassicalElements {
-    return this.getJ2000(date).toClassicalElements();
+  toClassicalElements(date: Date = new Date()): ClassicalElements {
+    return this.toJ2000(date).toClassicalElements();
   }
 
   /**
@@ -316,7 +316,7 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  raeOpt(observer: GroundPosition, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
+  rae(observer: GroundObject, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
     const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
     const eci = this.eci(date).position;
     const ecf = eci2ecf(eci, gmst);
@@ -330,8 +330,8 @@ export class Satellite extends BaseObject {
    *
    * @optimized
    */
-  range(observer: GroundPosition, date: Date = new Date()): Kilometers {
-    return this.raeOpt(observer, date).rng;
+  range(observer: GroundObject, date: Date = new Date()): Kilometers {
+    return this.rae(observer, date).rng;
   }
 
   /**
@@ -342,7 +342,7 @@ export class Satellite extends BaseObject {
    * calculate the Doppler effect. Optional, defaults to the current date.
    * @returns The frequency after applying the Doppler effect.
    */
-  applyDoppler(freq: number, observer: GroundPosition, date?: Date): number {
+  applyDoppler(freq: number, observer: GroundObject, date?: Date): number {
     const doppler = this.dopplerFactor(observer, date);
 
     return freq * doppler;
@@ -356,7 +356,7 @@ export class Satellite extends BaseObject {
    * not provided, the current date is used. @returns The calculated Doppler
    * factor.
    */
-  dopplerFactor(observer: GroundPosition, date?: Date): number {
+  dopplerFactor(observer: GroundObject, date?: Date): number {
     const position = this.eci(date);
 
     return dopplerFactor(observer.eci(date), position.position, position.velocity);

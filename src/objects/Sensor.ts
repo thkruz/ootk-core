@@ -1,10 +1,10 @@
 import { PassType } from '../enums/PassType';
 import { SensorParams } from '../interfaces/SensorParams';
 import { Degrees, Kilometers, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
-import { GroundPosition } from './GroundPosition';
+import { GroundObject } from './GroundObject';
 import { Satellite } from './Satellite';
 
-export class Sensor extends GroundPosition {
+export class Sensor extends GroundObject {
   minRng: Kilometers;
   minAz: Degrees;
   minEl: Degrees;

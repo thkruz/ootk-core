@@ -1,6 +1,6 @@
 import {
   Degrees,
-  GroundPosition,
+  GroundObject,
   Kilometers,
   RAD2DEG,
   Satellite,
@@ -70,7 +70,7 @@ describe('Basic Satellite functionality', () => {
 
 describe('Satellite', () => {
   let satellite: Satellite;
-  let observer: GroundPosition;
+  let observer: GroundObject;
 
   beforeEach(() => {
     const satelliteParams: SatelliteParams = {
@@ -79,7 +79,7 @@ describe('Satellite', () => {
     };
 
     satellite = new Satellite(satelliteParams);
-    observer = new GroundPosition(llaObserver);
+    observer = new GroundObject(llaObserver);
   });
   // can be instantiated with valid input parameters
   it('should instantiate Satellite with valid input parameters', () => {
@@ -88,7 +88,7 @@ describe('Satellite', () => {
 
   // can calculate and return RAE coordinates
   it('should calculate and return RAE coordinates', () => {
-    const rae = satellite.rae(observer, exampleDate);
+    const rae = satellite.toRae(observer, exampleDate);
 
     expect(rae).toMatchSnapshot();
   });
@@ -116,14 +116,14 @@ describe('Satellite', () => {
 
   // can calculate and return Geodetic coordinates
   it('should calculate and return Geodetic coordinates when given a date', () => {
-    const geodetic = satellite.getGeodetic(exampleDate);
+    const geodetic = satellite.toGeodetic(exampleDate);
 
     expect(geodetic).toMatchSnapshot();
   });
 
   // can calculate and return ITRF coordinates
   it('should calculate and return ITRF coordinates when called', () => {
-    const itrfCoordinates = satellite.getITRF(exampleDate);
+    const itrfCoordinates = satellite.toITRF(exampleDate);
 
     expect(itrfCoordinates).toMatchSnapshot();
   });
@@ -135,7 +135,7 @@ describe('Satellite', () => {
       tle2: '2 25544  51.6442  13.1247 0008036  23.6079 336.5377 15.48861704303602' as TleLine2,
     });
 
-    const ric = satellite.getRIC(referenceSatellite, exampleDate);
+    const ric = satellite.toRIC(referenceSatellite, exampleDate);
 
     expect(ric).toMatchSnapshot();
   });
