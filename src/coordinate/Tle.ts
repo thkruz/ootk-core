@@ -1,28 +1,31 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
- * with satellites and other orbital objects.
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools
+ * for working with satellites and other orbital objects.
  *
- * @file The Tle module contains a collection of functions for working with TLEs.
+ * @file The Tle module contains a collection of functions for working with
+ * TLEs.
  *
  * @license MIT License
  *
- * @Copyright (c) 2024 Theodore Kruczek
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
- * to whom the Software is furnished to do so, subject to the following conditions:
+ * @Copyright (c) 2024 Theodore Kruczek Permission is hereby granted, free of
+ * charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 import { ClassicalElements, FormatTle, TEME } from '.';
@@ -329,10 +332,10 @@ export class Tle {
   }
 
   /**
-   * Tle line 1 checksum (modulo 10), for verifying the integrity of this line of the Tle.
+   * Tle line 1 checksum (modulo 10), for verifying the integrity of this line
+   * of the Tle.
    *
-   * Range: 0 to 9
-   * Example: 3
+   * Range: 0 to 9 Example: 3
    *
    * @param {string} tleLine The first line of the Tle to parse.
    * @returns {number} The checksum value.
@@ -349,8 +352,8 @@ export class Tle {
    *
    * Example: 'U'
    *
-   * Some websites like https://KeepTrack.space and Celestrak.org will embed information
-   * in this field about the source of the Tle.
+   * Some websites like https://KeepTrack.space and Celestrak.org will embed
+   * information in this field about the source of the Tle.
    *
    */
   static classification(tleLine1: TleLine1): string {
@@ -358,8 +361,9 @@ export class Tle {
   }
 
   /**
-   * Orbital eccentricity, decimal point assumed. All artificial Earth satellites have an
-   * eccentricity between 0 (perfect circle) and 1 (parabolic orbit).
+   * Orbital eccentricity, decimal point assumed. All artificial Earth
+   * satellites have an eccentricity between 0 (perfect circle) and 1 (parabolic
+   * orbit).
    *
    * Range: 0 to 1
    *
@@ -379,29 +383,30 @@ export class Tle {
   }
 
   /**
-   * Tle element set number, incremented for each new Tle generated. 999 seems to mean the Tle
-   * has maxed out.
+   * Tle element set number, incremented for each new Tle generated. 999 seems
+   * to mean the Tle has maxed out.
    *
-   * Range: Technically 1 to 9999, though in practice the maximum number seems to be 999.
+   * Range: Technically 1 to 9999, though in practice the maximum number seems
+   * to be 999.
    *
    * Example: 999
-   * @param {string} tleLine1 The first line of the Tle to parse.
-   * @returns {number} The element number.
+   * @param {string} tleLine1 The first line of the Tle to parse. @returns
+   * {number} The element number.
    */
   static elsetNum(tleLine1: TleLine1): number {
     return parseInt(tleLine1.substring(Tle.elsetNum_.start, Tle.elsetNum_.stop));
   }
 
   /**
-   * Private value - used by United States Space Force to reference the orbit model used to
-   * generate the Tle.  Will always be seen as zero externally (e.g. by "us", unless you are
-   * "them" - in which case, hello!).
+   * Private value - used by United States Space Force to reference the orbit
+   * model used to generate the Tle.  Will always be seen as zero externally
+   * (e.g. by "us", unless you are "them" - in which case, hello!).
    *
    * Example: 0
    *
-   * Starting in 2024, this may contain a 4 if the Tle was generated using the new SGP4-XP
-   * model. Until the source code is released, there is no way to support that format in
-   * JavaScript or TypeScript.
+   * Starting in 2024, this may contain a 4 if the Tle was generated using the
+   * new SGP4-XP model. Until the source code is released, there is no way to
+   * support that format in JavaScript or TypeScript.
    *
    * @param {string} tleLine1 The first line of the Tle to parse.
    * @returns {0} The ephemeris type.
@@ -485,8 +490,8 @@ export class Tle {
   }
 
   /**
-   * Inclination relative to the Earth's equatorial plane in degrees. 0 to 90 degrees is a
-   * prograde orbit and 90 to 180 degrees is a retrograde orbit.
+   * Inclination relative to the Earth's equatorial plane in degrees. 0 to 90
+   * degrees is a prograde orbit and 90 to 180 degrees is a retrograde orbit.
    *
    * Units: degrees
    *
@@ -508,10 +513,10 @@ export class Tle {
   }
 
   /**
-   * International Designator (COSPAR ID)
-   * See https://en.wikipedia.org/wiki/International_Designator
-   * @param {string} tleLine1 The first line of the Tle to parse.
-   * @returns {string} The International Designator.
+   * International Designator (COSPAR ID) See
+   * https://en.wikipedia.org/wiki/International_Designator
+   * @param {string} tleLine1 The first line of the Tle to parse. @returns
+   * {string} The International Designator.
    */
   static intlDes(tleLine1: TleLine1): string {
     return tleLine1.substring(Tle.intlDes_.start, Tle.intlDes_.stop).trim();
@@ -561,8 +566,8 @@ export class Tle {
 
   /**
    * This should always return a 1 or a 2.
-   * @param {string} tleLine The first line of the Tle to parse.
-   * @returns {number} The line number of the Tle.
+   * @param {string} tleLine The first line of the Tle to parse. @returns
+   * {number} The line number of the Tle.
    */
   static lineNumber(tleLine: TleLine1 | TleLine2): 1 | 2 {
     const lineNum = parseInt(tleLine.substring(Tle.lineNumber_.start, Tle.lineNumber_.stop));
@@ -575,9 +580,8 @@ export class Tle {
   }
 
   /**
-   * Mean anomaly. Indicates where the satellite was located within its orbit at the time of the
-   * Tle epoch.
-   * See https://en.wikipedia.org/wiki/Mean_Anomaly
+   * Mean anomaly. Indicates where the satellite was located within its orbit at
+   * the time of the Tle epoch. See https://en.wikipedia.org/wiki/Mean_Anomaly
    *
    * Units: degrees
    *
@@ -599,9 +603,9 @@ export class Tle {
   }
 
   /**
-   * First Time Derivative of the Mean Motion divided by two.  Defines how mean motion changes
-   * over time, so Tle propagators can still be used to make reasonable guesses when
-   * times are distant from the original Tle epoch.
+   * First Time Derivative of the Mean Motion divided by two.  Defines how mean
+   * motion changes over time, so Tle propagators can still be used to make
+   * reasonable guesses when times are distant from the original Tle epoch.
    *
    * Units: Orbits / day ^ 2
    *
@@ -621,9 +625,9 @@ export class Tle {
   }
 
   /**
-   * Second Time Derivative of Mean Motion divided by six (decimal point assumed). Measures rate
-   * of change in the Mean Motion Dot so software can make reasonable guesses when times are
-   * distant from the original Tle epoch.
+   * Second Time Derivative of Mean Motion divided by six (decimal point
+   * assumed). Measures rate of change in the Mean Motion Dot so software can
+   * make reasonable guesses when times are distant from the original Tle epoch.
    *
    * Usually zero, unless the satellite is manuevering or in a decaying orbit.
    *
@@ -646,13 +650,12 @@ export class Tle {
   }
 
   /**
-   * Revolutions around the Earth per day (mean motion).
-   * See https://en.wikipedia.org/wiki/Mean_Motion
+   * Revolutions around the Earth per day (mean motion). See
+   * https://en.wikipedia.org/wiki/Mean_Motion
    *
-   * Range: 0 to 17 (theoretically)
-   * Example: 15.54225995
-   * @param {string} tleLine2 The second line of the Tle to parse.
-   * @returns {number} The mean motion of the satellite.
+   * Range: 0 to 17 (theoretically) Example: 15.54225995
+   * @param {string} tleLine2 The second line of the Tle to parse. @returns
+   * {number} The mean motion of the satellite.
    */
   static meanMotion(tleLine2: TleLine2): number {
     const meanMo = parseFloat(tleLine2.substring(Tle.meanMo_.start, Tle.meanMo_.stop));
@@ -677,9 +680,9 @@ export class Tle {
   }
 
   /**
-   * Right ascension of the ascending node in degrees. Essentially, this is the angle of the
-   * satellite as it crosses northward (ascending) across the Earth's equator (equatorial
-   * plane).
+   * Right ascension of the ascending node in degrees. Essentially, this is the
+   * angle of the satellite as it crosses northward (ascending) across the
+   * Earth's equator (equatorial plane).
    *
    * Units: degrees
    *
@@ -705,8 +708,8 @@ export class Tle {
    *
    * Range: 0 to 99999 or 26999.
    *
-   * NOTE: To support Alpha-5, the first digit can be a letter.
-   * This will NOT be converted to a number. Use getSatNum() for that.
+   * NOTE: To support Alpha-5, the first digit can be a letter. This will NOT be
+   * converted to a number. Use getSatNum() for that.
    *
    * Example: 25544 or B1234 (e.g. Sputnik's rocket body was number 00001)
    *
@@ -718,8 +721,8 @@ export class Tle {
   }
 
   /**
-   * Total satellite revolutions when this Tle was generated. This number rolls over
-   * (e.g. 99999 -> 0).
+   * Total satellite revolutions when this Tle was generated. This number rolls
+   * over (e.g. 99999 -> 0).
    *
    * Range: 0 to 99999
    *
@@ -737,8 +740,8 @@ export class Tle {
    *
    * Range: 0 to 99999 or 26999.
    *
-   * NOTE: To support Alpha-5, the first digit can be a letter.
-   * This will be converted to a number in order to expand the range to 26999.
+   * NOTE: To support Alpha-5, the first digit can be a letter. This will be
+   * converted to a number in order to expand the range to 26999.
    *
    * Example: 25544 or B1234 (e.g. Sputnik's rocket body was number 00001)
    *
@@ -754,8 +757,8 @@ export class Tle {
 
   /**
    * Parse the first line of the Tle.
-   * @param {TleLine1} tleLine1 The first line of the Tle to parse.
-   * @returns {Line1Data} Returns the data from the first line of the Tle.
+   * @param {TleLine1} tleLine1 The first line of the Tle to parse. @returns
+   * {Line1Data} Returns the data from the first line of the Tle.
    */
   static parseLine1(tleLine1: TleLine1): Line1Data {
     const lineNumber1 = Tle.lineNumber(tleLine1);
@@ -799,8 +802,8 @@ export class Tle {
 
   /**
    * Parse the second line of the Tle.
-   * @param {TleLine2} tleLine2 The second line of the Tle to parse.
-   * @returns {Line2Data} Returns the data from the second line of the Tle.
+   * @param {TleLine2} tleLine2 The second line of the Tle to parse. @returns
+   * {Line2Data} Returns the data from the second line of the Tle.
    */
   static parseLine2(tleLine2: TleLine2): Line2Data {
     const lineNumber2 = Tle.lineNumber(tleLine2);
@@ -836,8 +839,7 @@ export class Tle {
    * Parses the Tle into orbital data.
    *
    * If you want all of the data then use parseTleFull instead.
-   * @param {TleLine1} tleLine1 Tle line 1
-   * @param {TleLine2} tleLine2 Tle line 2
+   * @param {TleLine1} tleLine1 Tle line 1 @param {TleLine2} tleLine2 Tle line 2
    * @returns {TleData} Returns most commonly used orbital data from Tle
    */
   static parse(tleLine1: TleLine1, tleLine2: TleLine2): TleData {
@@ -882,9 +884,9 @@ export class Tle {
    * Parses all of the data contained in the Tle.
    *
    * If you only want the most commonly used data then use parseTle instead.
-   * @param {TleLine1} tleLine1 The first line of the Tle to parse.
-   * @param {TleLine2} tleLine2 The second line of the Tle to parse.
-   * @returns {TleDataFull} Returns all of the data from the Tle.
+   * @param {TleLine1} tleLine1 The first line of the Tle to parse. @param
+   * {TleLine2} tleLine2 The second line of the Tle to parse. @returns
+   * {TleDataFull} Returns all of the data from the Tle.
    */
   static parseAll(tleLine1: TleLine1, tleLine2: TleLine2): TleDataFull {
     const line1 = Tle.parseLine1(tleLine1);
@@ -927,9 +929,10 @@ export class Tle {
     const rest = sccNum.slice(2, 6);
 
     /*
-     * Convert the first two digit numbers into a Letter. Skip I and O as they look too similar to 1 and 0
-     * A=10, B=11, C=12, D=13, E=14, F=15, G=16, H=17, J=18, K=19, L=20, M=21, N=22, P=23, Q=24, R=25, S=26,
-     * T=27, U=28, V=29, W=30, X=31, Y=32, Z=33
+     * Convert the first two digit numbers into a Letter. Skip I and O as they
+     * look too similar to 1 and 0 A=10, B=11, C=12, D=13, E=14, F=15, G=16,
+     * H=17, J=18, K=19, L=20, M=21, N=22, P=23, Q=24, R=25, S=26, T=27, U=28,
+     * V=29, W=30, X=31, Y=32, Z=33
      */
     let first = parseInt(`${sccNum[0]}${sccNum[1]}`);
     const iPlus = first >= 18 ? 1 : 0;

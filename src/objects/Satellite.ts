@@ -1,13 +1,12 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
- * with satellites and other orbital objects.
+ * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools
+ * for working with satellites and other orbital objects.
  *
- * @file The Satellite class provides functions for calculating satellites positions
- * relative to earth based sensors and other orbital objects.
+ * @file The Satellite class provides functions for calculating satellites
+ * positions relative to earth based sensors and other orbital objects.
  *
- * @license MIT License
- * @Copyright (c) 2020-2024 Theodore Kruczek
+ * @license MIT License @Copyright (c) 2020-2024 Theodore Kruczek
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,8 +15,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,7 +27,7 @@
  * SOFTWARE.
  */
 
-import type { ClassicalElements } from 'src/coordinate';
+import type { ClassicalElements } from '../coordinate';
 import { Geodetic } from '../coordinate/Geodetic';
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
@@ -62,7 +61,8 @@ import { BaseObject } from './BaseObject';
 import { GroundPosition } from './GroundPosition';
 
 /**
- * Represents a satellite object with orbital information and methods for calculating its position and other properties.
+ * Represents a satellite object with orbital information and methods for
+ * calculating its position and other properties.
  */
 export class Satellite extends BaseObject {
   apogee: Kilometers;
@@ -152,9 +152,10 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Checks if the given SatelliteRecord object is valid by checking if its properties are all numbers.
-   * @param satrec - The SatelliteRecord object to check.
-   * @returns True if the SatelliteRecord object is valid, false otherwise.
+   * Checks if the given SatelliteRecord object is valid by checking if its
+   * properties are all numbers.
+   * @param satrec - The SatelliteRecord object to check. @returns True if the
+   * SatelliteRecord object is valid, false otherwise.
    */
   static isValidSatrec(satrec: SatelliteRecord): boolean {
     if (
@@ -173,8 +174,9 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Calculates the azimuth angle of the satellite relative to the given sensor at the specified date.
-   * If no date is provided, the current time of the satellite is used.
+   * Calculates the azimuth angle of the satellite relative to the given sensor
+   * at the specified date. If no date is provided, the current time of the
+   * satellite is used.
    *
    * @optimized
    */
@@ -183,8 +185,8 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Calculates the RAE (Range, Azimuth, Elevation) values for a given sensor and date.
-   * If no date is provided, the current time is used.
+   * Calculates the RAE (Range, Azimuth, Elevation) values for a given sensor
+   * and date. If no date is provided, the current time is used.
    *
    * @expanded
    */
@@ -239,11 +241,11 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Calculates the J2000 coordinates for a given date.
-   * If no date is provided, the current time is used.
+   * Calculates the J2000 coordinates for a given date. If no date is provided,
+   * the current time is used.
    * @param date - The date for which to calculate the J2000 coordinates.
-   * @returns The J2000 coordinates for the specified date.
-   * @throws Error if propagation fails.
+   * @returns The J2000 coordinates for the specified date. @throws Error if
+   * propagation fails.
    */
   getJ2000(date: Date = new Date()): J2000 {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
@@ -268,7 +270,8 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Returns the elevation angle of the satellite as seen by the given sensor at the specified time.
+   * Returns the elevation angle of the satellite as seen by the given sensor at
+   * the specified time.
    *
    * @optimized
    */
@@ -308,7 +311,8 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Calculates the RAE (Range, Azimuth, Elevation) vector for a given sensor and time.
+   * Calculates the RAE (Range, Azimuth, Elevation) vector for a given sensor
+   * and time.
    *
    * @optimized
    */
@@ -321,7 +325,8 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Returns the range of the satellite from the given sensor at the specified time.
+   * Returns the range of the satellite from the given sensor at the specified
+   * time.
    *
    * @optimized
    */
@@ -330,10 +335,11 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Applies the Doppler effect to the given frequency based on the observer's position and the date.
-   * @param freq - The frequency to apply the Doppler effect to.
-   * @param observer - The observer's position on the ground.
-   * @param date - The date at which to calculate the Doppler effect. Optional, defaults to the current date.
+   * Applies the Doppler effect to the given frequency based on the observer's
+   * position and the date.
+   * @param freq - The frequency to apply the Doppler effect to. @param observer
+   * - The observer's position on the ground. @param date - The date at which to
+   * calculate the Doppler effect. Optional, defaults to the current date.
    * @returns The frequency after applying the Doppler effect.
    */
   applyDoppler(freq: number, observer: GroundPosition, date?: Date): number {
@@ -346,8 +352,9 @@ export class Satellite extends BaseObject {
    * Calculates the Doppler factor for the satellite.
    *
    * @param observer The observer's ground position.
-   * @param date The optional date for which to calculate the Doppler factor. If not provided, the current date is used.
-   * @returns The calculated Doppler factor.
+   * @param date The optional date for which to calculate the Doppler factor. If
+   * not provided, the current date is used. @returns The calculated Doppler
+   * factor.
    */
   dopplerFactor(observer: GroundPosition, date?: Date): number {
     const position = this.eci(date);
@@ -357,9 +364,9 @@ export class Satellite extends BaseObject {
 
   /**
    * Calculates the time variables for a given date relative to the TLE epoch.
-   * @param {Date} date Date to calculate
-   * @param {SatelliteRecord} satrec Satellite orbital information
-   * @returns {{m: number, gmst: GreenwichMeanSiderealTime, j: number}} Time variables
+   * @param {Date} date Date to calculate @param {SatelliteRecord} satrec
+   * Satellite orbital information @returns {{m: number, gmst:
+   * GreenwichMeanSiderealTime, j: number}} Time variables
    */
   private static calculateTimeVariables(
     date: Date,

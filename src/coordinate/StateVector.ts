@@ -12,7 +12,11 @@ export type PositionVelocity = {
 
 // / Base class for state vectors.
 export abstract class StateVector {
-  constructor(public epoch: EpochUTC, public position: Vector3D, public velocity: Vector3D) {
+  constructor(
+    public epoch: EpochUTC,
+    public position: Vector3D,
+    public velocity: Vector3D,
+  ) {
     // Nothing to do here.
   }
 

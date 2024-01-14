@@ -1,4 +1,4 @@
-import { Degrees, Kilometers, Radians, Seconds } from 'src/main';
+import { Degrees, Kilometers, Radians, Seconds } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, RAD2DEG, sec2min, secondsPerDay, TAU } from '../utils/constants';
@@ -6,19 +6,11 @@ import { clamp, matchHalfPlane, newtonNu } from '../utils/functions';
 import { EquinoctialElements } from './EquinoctialElements';
 import { OrbitRegime } from './OrbitRegime';
 import { PositionVelocity, StateVector } from './StateVector';
+import { ClassicalElementsParams } from '../interfaces/ClassicalElementsParams';
 
-interface ClassicalElementsParams {
-  epoch: EpochUTC;
-  semimajorAxis: Kilometers;
-  eccentricity: number;
-  inclination: Radians;
-  rightAscension: Radians;
-  argPerigee: Radians;
-  trueAnomaly: Radians;
-  mu?: number;
-}
 /**
- * The ClassicalElements class represents the classical orbital elements of an object.
+ * The ClassicalElements class represents the classical orbital elements of an
+ * object.
  *
  * @example
  * ```ts
@@ -67,10 +59,10 @@ export class ClassicalElements {
 
   /**
    * Creates a new instance of ClassicalElements from a StateVector.
-   * @param state The StateVector to convert.
-   * @param mu The gravitational parameter of the central body. Default value is Earth's gravitational parameter.
-   * @returns A new instance of ClassicalElements.
-   * @throws Error if the StateVector is not in an inertial frame.
+   * @param state The StateVector to convert. @param mu The gravitational
+   * parameter of the central body. Default value is Earth's gravitational
+   * parameter. @returns A new instance of ClassicalElements. @throws Error if
+   * the StateVector is not in an inertial frame.
    */
   static fromStateVector(state: StateVector, mu = earthGravityParam): ClassicalElements {
     if (!state.inertial) {
@@ -155,8 +147,8 @@ export class ClassicalElements {
   }
 
   /**
-   * Gets the perigee of the classical elements.
-   * The perigee is the point in an orbit that is closest to the focus (in this case, the Earth).
+   * Gets the perigee of the classical elements. The perigee is the point in an
+   * orbit that is closest to the focus (in this case, the Earth).
    * @returns The perigee distance in kilometers.
    */
   get perigee(): number {
@@ -181,7 +173,7 @@ export class ClassicalElements {
    * @returns The mean motion in radians.
    */
   get meanMotion(): Radians {
-    return Math.sqrt(this.mu / (this.semimajorAxis * this.semimajorAxis * this.semimajorAxis)) as Radians;
+    return Math.sqrt(this.mu / this.semimajorAxis ** 3) as Radians;
   }
 
   /**
@@ -246,15 +238,16 @@ export class ClassicalElements {
    * @returns {EquinoctialElements} The equinoctial elements.
    */
   toEquinoctialElements(): EquinoctialElements {
-    const fr = Math.abs(this.inclination - Math.PI) < 1e-9 ? -1 : 1;
-    const af = this.eccentricity * Math.cos(this.argPerigee + fr * this.rightAscension);
-    const ag = this.eccentricity * Math.sin(this.argPerigee + fr * this.rightAscension);
-    const l = this.argPerigee + fr * this.rightAscension + newtonNu(this.eccentricity, this.trueAnomaly).m;
-    const n = this.meanMotion;
-    const chi = Math.tan(0.5 * this.inclination) ** fr * Math.sin(this.rightAscension);
-    const psi = Math.tan(0.5 * this.inclination) ** fr * Math.cos(this.rightAscension);
+    const I = this.inclination > Math.PI / 2 ? -1 : 1;
+    const h = this.eccentricity * Math.sin(this.argPerigee + I * this.rightAscension);
+    const k = this.eccentricity * Math.cos(this.argPerigee + I * this.rightAscension);
+    const meanAnomaly = newtonNu(this.eccentricity, this.trueAnomaly).m;
+    const lambda = (meanAnomaly + this.argPerigee + I * this.rightAscension) as Radians;
+    const a = this.semimajorAxis;
+    const p = Math.tan(0.5 * this.inclination) ** I * Math.sin(this.rightAscension);
+    const q = Math.tan(0.5 * this.inclination) ** I * Math.cos(this.rightAscension);
 
-    return new EquinoctialElements(this.epoch, af, ag, l, n, chi, psi, { mu: this.mu, fr });
+    return new EquinoctialElements({ epoch: this.epoch, k, h, lambda, a, p, q, mu: this.mu, I });
   }
 
   /**

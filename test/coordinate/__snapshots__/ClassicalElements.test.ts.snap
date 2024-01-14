@@ -35,17 +35,17 @@ ClassicalElements {
 
 exports[`ClassicalElements should convert ClassicalElements to EquinoctialElements 1`] = `
 EquinoctialElements {
-  "af": -0.0009430897960304828,
-  "ag": 0.0006107793657340771,
-  "chi": 0.01112918196689249,
+  "I": 1,
+  "a": 6943.547853722985,
   "epoch": EpochUTC {
     "posix": 1705243179.914,
   },
-  "fr": 1,
-  "l": 3.15876545174161,
+  "h": 0.0006107793657340771,
+  "k": -0.0009430897960304828,
+  "lambda": 3.15876545174161,
   "mu": 398600.4415,
-  "n": 0.0010911808567933578,
-  "psi": 0.3939942790541112,
+  "p": 0.01112918196689249,
+  "q": 0.3939942790541112,
 }
 `;
 
@@ -87,5 +87,20 @@ ClassicalElements {
   "rightAscension": 0.17555503341584255,
   "semimajorAxis": 6935.754028093152,
   "trueAnomaly": 5.749771010517163,
+}
+`;
+
+exports[`ClassicalElements should propagate ClassicalElements to a new epoch 1`] = `
+ClassicalElements {
+  "argPerigee": 2.5386411901807353,
+  "eccentricity": 0.0011235968124658146,
+  "epoch": EpochUTC {
+    "posix": 1705329579.914,
+  },
+  "inclination": 0.7509087232045765,
+  "mu": 398600.4415,
+  "rightAscension": 0.028239555738616327,
+  "semimajorAxis": 6943.547853722985,
+  "trueAnomaly": 0.6234422142843716,
 }
 `;

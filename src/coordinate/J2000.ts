@@ -30,7 +30,8 @@ export class J2000 extends StateVector {
   }
 
   /**
-   * Converts the coordinates from J2000 to the International Terrestrial Reference Frame (ITRF).
+   * Converts the coordinates from J2000 to the International Terrestrial
+   * Reference Frame (ITRF).
    *
    * This is an ECI to ECF transformation.
    */
