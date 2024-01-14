@@ -11,7 +11,7 @@ import * as fs from 'fs';
 /**
  * sgp4Data is from SGP4Prop 8.3 Build: Apr 27 2022
  */
-import { Sgp4 } from '../../../src/index';
+import { Sgp4 } from '../../../src/main';
 
 const fileName = 'TLE_12';
 const rawData = fs.readFileSync(`test/sgp4/full-catalog/${fileName}.json`, 'utf8');
