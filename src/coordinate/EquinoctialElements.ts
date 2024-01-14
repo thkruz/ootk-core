@@ -18,7 +18,7 @@ import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsPara
  * (equatorial orbits). This makes them more reliable for numerical simulations
  * and analytical studies, especially in these edge cases.
  *
- * Reference: https://faculty.nps.edu/dad/orbital/th0.pdf
+ * @see https://faculty.nps.edu/dad/orbital/th0.pdf
  */
 export class EquinoctialElements {
   epoch: EpochUTC;

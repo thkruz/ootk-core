@@ -15,23 +15,40 @@ import { StateVector } from './StateVector';
  * 1980 to 2014.
  * @see https://en.wikipedia.org/wiki/International_Terrestrial_Reference_Frame
  *
- * This is a geocentric coordinate system, also referenced as ECEF (Earth
+ * This is a geocentric coordinate system, also referenced as ECF/ECEF (Earth
  * Centered Earth Fixed). It is a Cartesian coordinate system with the origin at
  * the center of the Earth. The x-axis intersects the sphere of the Earth at 0°
  * latitude (the equator) and 0° longitude (the Prime Meridian). The z-axis goes
- * through the North Pole. The y-axis goes through 90° East longitude. @see
+ * through the North Pole. The y-axis goes through 90° East longitude.
+ *
+ * @see
  * https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system
  */
 export class ITRF extends StateVector {
+  /**
+   * Gets the name of the ITRF coordinate system.
+   * @returns The name of the coordinate system.
+   */
   get name(): string {
     return 'ITRF';
   }
 
+  /**
+   * Gets a value indicating whether the coordinate system is inertial.
+   * @returns A boolean value indicating whether the coordinate system is
+   * inertial.
+   */
   get inertial(): boolean {
     return false;
   }
 
-  getHeight(): number {
+  /**
+   * Gets the height of the ITRF coordinate above the surface of the Earth in
+   * kilometers.
+   *
+   * @returns The height in kilometers.
+   */
+  get height(): Kilometers {
     const a = Earth.radiusEquator;
     const e2 = Earth.eccentricitySquared;
     const r = this.position.magnitude();
@@ -39,11 +56,23 @@ export class ITRF extends StateVector {
     const cl2 = 1 - sl * sl;
     const coeff = Math.sqrt((1 - e2) / (1 - e2 * cl2));
 
-    return r - a * coeff;
+    return (r - a * coeff) as Kilometers;
   }
 
   /**
-   * Converts the current coordinate to the J2000 coordinate system.
+   * Gets the altitude in kilometers.
+   * @returns The altitude in kilometers.
+   */
+  get alt(): Kilometers {
+    return this.height;
+  }
+
+  /**
+   * Converts the current coordinate to the J2000 coordinate system. This is an
+   * Earth-Centered Inertial (ECI) coordinate system with the origin at the
+   * center of the Earth.
+   *
+   * @see https://en.wikipedia.org/wiki/Epoch_(astronomy)#Julian_years_and_J2000
    * @returns The coordinate in the J2000 coordinate system.
    */
   toJ2000(): J2000 {
@@ -61,15 +90,9 @@ export class ITRF extends StateVector {
   }
 
   /**
-   * Converts the coordinate from ITRF (ECEF) to J2000 (ECI) reference frame.
-   * @returns The coordinate in J2000 (ECI) reference frame.
-   */
-  toEci(): J2000 {
-    return this.toJ2000();
-  }
-
-  /**
-   * Converts the current ITRF coordinate to Geodetic coordinate.
+   * Converts the current ITRF coordinate to Geodetic coordinate. This is a
+   * coordinate system for latitude, longitude, and altitude.
+   *
    * @returns {Geodetic} The converted Geodetic coordinate.
    */
   toGeodetic(): Geodetic {
@@ -82,23 +105,22 @@ export class ITRF extends StateVector {
     const r = Math.sqrt(x * x + y * y);
     const phi = Math.atan(z / r);
     let lat = phi;
+    let alt: Kilometers;
     let c = 0.0;
 
-    for (let i = 0; i < 12; i++) {
-      const slat = Math.sin(lat);
+    if (x === 0 && y === 0) {
+      lat = phi;
+      alt = z > 0 ? ((z - Earth.radiusPolar) as Kilometers) : ((z + Earth.radiusPolar) as Kilometers);
+    } else {
+      for (let i = 0; i < 20; i++) {
+        const slat = Math.sin(lat);
 
-      c = 1 / Math.sqrt(1 - esq * slat * slat);
-      lat = Math.atan((z + sma * c * esq * slat) / r);
+        c = 1 / Math.sqrt(1 - esq * slat * slat);
+        lat = Math.atan((z + sma * c * esq * slat) / r);
+      }
+      alt = (r / Math.cos(lat) - sma * c) as Kilometers;
     }
-    const alt = r / Math.cos(lat) - sma * c;
 
-    return new Geodetic(lat as Radians, lon as Radians, alt as Kilometers);
-  }
-
-  /**
-   * Converts the current ECI coordinate to latitude, longitude, and altitude.
-   */
-  toLla(): Geodetic {
-    return this.toGeodetic();
+    return new Geodetic(lat as Radians, lon as Radians, alt);
   }
 }

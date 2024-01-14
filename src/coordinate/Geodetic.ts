@@ -34,7 +34,7 @@ export class Geodetic {
     }
 
     if (altitude < -Earth.radiusMean) {
-      throw new RangeError('Altitude cannot be less than -6378.137 km.');
+      throw new RangeError(`Altitude must be greater than ${-Earth.radiusMean} km. Got ${altitude} km.`);
     }
 
     this.lat = latitude;
