@@ -2,7 +2,8 @@
 /* eslint-disable func-style */
 import { AngularDiameterMethod } from '../enums/AngularDiameterMethod';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { DifferentiableFunction, EciVec3, Radians, SpaceObjectType } from '../types/types';
+import { DifferentiableFunction, EcfVec3, Kilometers, Radians, SpaceObjectType } from '../types/types';
+import { angularVelocityOfEarth, cKmPerSec } from './constants';
 
 /**
  * Calculates the factorial of a given number.
@@ -630,33 +631,24 @@ export const spaceObjType2Str = (spaceObjType: SpaceObjectType): string =>
  * @param velocity - The velocity vector of the source.
  * @returns The calculated Doppler factor.
  */
-export const dopplerFactor = (location: EciVec3, position: EciVec3, velocity: EciVec3): number => {
-  const mfactor = 7.292115e-5;
-  const c = 299792.458; // Speed of light in km/s
-
-  const range = <EciVec3>{
+export const dopplerFactor = (
+  location: EcfVec3<Kilometers>,
+  position: EcfVec3<Kilometers>,
+  velocity: EcfVec3<Kilometers>,
+): number => {
+  const range = <EcfVec3>{
     x: position.x - location.x,
     y: position.y - location.y,
     z: position.z - location.z,
   };
   const distance = Math.sqrt(range.x ** 2 + range.y ** 2 + range.z ** 2);
-
-  const rangeVel = <EciVec3>{
-    x: velocity.x + mfactor * location.y,
-    y: velocity.y - mfactor * location.x,
+  const rangeVel = <EcfVec3>{
+    x: velocity.x + angularVelocityOfEarth * location.y,
+    y: velocity.y - angularVelocityOfEarth * location.x,
     z: velocity.z,
   };
-
   const rangeRate = (range.x * rangeVel.x + range.y * rangeVel.y + range.z * rangeVel.z) / distance;
-  let dopplerFactor = 0;
-
-  if (rangeRate < 0) {
-    dopplerFactor = 1 + (rangeRate / c) * sign(rangeRate);
-  }
-
-  if (rangeRate >= 0) {
-    dopplerFactor = 1 - (rangeRate / c) * sign(rangeRate);
-  }
+  const dopplerFactor = 1 - rangeRate / cKmPerSec;
 
   return dopplerFactor;
 };

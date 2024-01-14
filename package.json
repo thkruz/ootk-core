@@ -5,7 +5,8 @@
   "module": "dist/main.js",
   "description": "Orbital Object Toolkit. A modern typed replacement for satellite.js including SGP4 propagation, TLE parsing, Sun and Moon calculations, and more.",
   "scripts": {
-    "build": "node ./scripts/cleanup.mjs && npx tsc -p tsconfig.build.json -m esnext",
+    "build": "npm run clean && npx tsc -p tsconfig.build.json -m esnext",
+    "clean": "node ./scripts/cleanup.mjs",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
     "test": "jest",
