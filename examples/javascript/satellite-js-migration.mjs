@@ -3,7 +3,7 @@
 /* eslint-disable multiline-comment-style */
 /* eslint-disable no-console */
 
-const { Satellite, Sgp4, GroundPosition, calcGmst, DEG2RAD } = require('../../commonjs/index.js');
+import { calcGmst, DEG2RAD, GroundPosition, Satellite, Sgp4 } from '../../dist/index.js';
 
 // Example Date
 const exampleDate = new Date(1705109326817);
@@ -43,7 +43,7 @@ const observer = new GroundPosition({
 const { gmst, j } = calcGmst(new Date());
 
 // You can get ECF, Geodetic, Look Angles, and Doppler Factor.
-const positionEcf = satellite.ecf(exampleDate);
+const positionEcf = satellite.ecf();
 const observerEcf = observer.ecf();
 const positionGd = satellite.lla(exampleDate);
 const lookAngles = satellite.rae(observer, exampleDate);

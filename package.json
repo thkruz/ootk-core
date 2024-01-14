@@ -4,9 +4,7 @@
   "type": "module",
   "description": "Orbital Object Toolkit. A modern typed replacement for satellite.js including SGP4 propagation, TLE parsing, Sun and Moon calculations, and more.",
   "scripts": {
-    "js": "npx ttsc -p tsconfig.build.json -m esnext",
-    "cjs": "npx ttsc -p tsconfig.c.json -m commonjs",
-    "build": "node ./scripts/cleanup.mjs && npm run js && npm run cjs && node ./scripts/makeMjs.mjs",
+    "build": "node ./scripts/cleanup.mjs && npx tsc -p tsconfig.build.json -m esnext",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
     "test": "jest",
@@ -52,11 +50,8 @@
     "jest": "^28.1.3",
     "prettier": "^3.2.1",
     "prettier-plugin-organize-imports": "^3.2.3",
-    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.7.0",
-    "ttypescript": "^1.5.15",
-    "typescript": "^4.9.5",
-    "typescript-transform-paths": "^3.4.6"
+    "typescript": "^4.9.5"
   },
   "homepage": "https://github.com/thkruz/ootk"
 }
