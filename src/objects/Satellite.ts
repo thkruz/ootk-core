@@ -28,6 +28,7 @@
  * SOFTWARE.
  */
 
+import type { ClassicalElements } from 'src/coordinate';
 import { Geodetic } from '../coordinate/Geodetic';
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
@@ -296,6 +297,14 @@ export class Satellite extends BaseObject {
 
   getRIC(reference: Satellite, date: Date = new Date()): RIC {
     return RIC.fromJ2000(this.getJ2000(date), reference.getJ2000(date));
+  }
+
+  getTle(): Tle {
+    return new Tle(this.tle1, this.tle2);
+  }
+
+  getClassicalElements(date: Date = new Date()): ClassicalElements {
+    return this.getJ2000(date).toClassicalElements();
   }
 
   /**

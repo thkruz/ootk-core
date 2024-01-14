@@ -251,7 +251,7 @@ export class Tle {
 
     const tles = FormatTle.createTle({
       inc: FormatTle.inclination(elements.inclinationDegrees),
-      meanmo: FormatTle.meanMotion(elements.revsPerDay()),
+      meanmo: FormatTle.meanMotion(elements.revsPerDay),
       ecen: FormatTle.eccentricity(elements.eccentricity.toFixed(7)),
       argPe: FormatTle.argumentOfPerigee(elements.argPerigeeDegrees),
       meana: FormatTle.meanAnomaly(newtonNu(elements.eccentricity, elements.trueAnomaly).m * RAD2DEG),

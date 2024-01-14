@@ -28,6 +28,10 @@ const satellite = new Satellite({
   tle2,
 });
 
+const elements = satellite.getClassicalElements(new Date(1705109326817));
+
+console.warn(elements);
+
 // You can still propagate a satellite using time since epoch (in minutes), but it's not recommended.
 const timeSinceTleEpochMinutes = 10;
 const positionAndVelocity = Sgp4.propagate(satellite.satrec, timeSinceTleEpochMinutes);

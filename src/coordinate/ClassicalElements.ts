@@ -1,3 +1,4 @@
+import { Degrees, Kilometers, Radians, Seconds } from 'src/main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, RAD2DEG, sec2min, secondsPerDay, TAU } from '../utils/constants';
@@ -8,35 +9,42 @@ import { PositionVelocity, StateVector } from './StateVector';
 
 interface ClassicalElementsParams {
   epoch: EpochUTC;
-  semimajorAxis: number;
+  semimajorAxis: Kilometers;
   eccentricity: number;
-  inclination: number;
-  rightAscension: number;
-  argPerigee: number;
-  trueAnomaly: number;
+  inclination: Radians;
+  rightAscension: Radians;
+  argPerigee: Radians;
+  trueAnomaly: Radians;
   mu?: number;
 }
-
-// / Classical orbital elements.
+/**
+ * The ClassicalElements class represents the classical orbital elements of an object.
+ *
+ * @example
+ * ```ts
+ * const epoch = EpochUTC.fromDateTime(new Date('2024-01-14T14:39:39.914Z'));
+ * const elements = new ClassicalElements({
+ *  epoch,
+ *  semimajorAxis: 6943.547853722985 as Kilometers,
+ *  eccentricity: 0.0011235968124658146,
+ *  inclination: 0.7509087232045765 as Radians,
+ *  rightAscension: 0.028239555738616327 as Radians,
+ *  argPerigee: 2.5386411901807353 as Radians,
+ *  trueAnomaly: 0.5931399364974058 as Radians,
+ * });
+ * ```
+ */
 export class ClassicalElements {
-  // / UTC epoch
   epoch: EpochUTC;
-  // / Semimajor-axis _(km)_.
-  semimajorAxis: number;
-  // / Eccentricity _(unitless)_.
+  semimajorAxis: Kilometers;
   eccentricity: number;
-  // / Inclination _(rad)_.
-  inclination: number;
-  // / Right-ascension of the ascending node _(rad)_.
-  rightAscension: number;
-  // / Argument of perigee _(rad)_.
-  argPerigee: number;
-  // / True anomaly _(rad)_.
-  trueAnomaly: number;
-  // / Gravitational parameter _(km³/s²)_.
+  inclination: Radians;
+  rightAscension: Radians;
+  argPerigee: Radians;
+  trueAnomaly: Radians;
+  /** Gravitational parameter in km³/s².  */
   mu: number;
 
-  /** Create a new [ClassicalElements] object from orbital elements. */
   constructor({
     epoch,
     semimajorAxis,
@@ -62,11 +70,11 @@ export class ClassicalElements {
    * @param state The StateVector to convert.
    * @param mu The gravitational parameter of the central body. Default value is Earth's gravitational parameter.
    * @returns A new instance of ClassicalElements.
-   * @throws Error if classical elements are undefined for fixed frames.
+   * @throws Error if the StateVector is not in an inertial frame.
    */
   static fromStateVector(state: StateVector, mu = earthGravityParam): ClassicalElements {
     if (!state.inertial) {
-      throw new Error('Classical elements are undefined for fixed frames.');
+      throw new Error('State vector must be in inertial frame (like J2000).');
     }
     const pos = state.position;
     const vel = state.velocity;
@@ -96,44 +104,63 @@ export class ClassicalElements {
 
     return new ClassicalElements({
       epoch: state.epoch,
-      semimajorAxis: a,
+      semimajorAxis: a as Kilometers,
       eccentricity: e,
-      inclination: i,
-      rightAscension: o,
-      argPerigee: w,
-      trueAnomaly: v,
+      inclination: i as Radians,
+      rightAscension: o as Radians,
+      argPerigee: w as Radians,
+      trueAnomaly: v as Radians,
       mu,
     });
   }
 
-  /** Inclination _(°)_. */
-  get inclinationDegrees(): number {
-    return this.inclination * RAD2DEG;
+  /**
+   * Gets the inclination in degrees.
+   * @returns The inclination in degrees.
+   */
+  get inclinationDegrees(): Degrees {
+    return (this.inclination * RAD2DEG) as Degrees;
   }
 
-  /** Right-ascension of the ascending node _(°)_. */
-  get rightAscensionDegrees(): number {
-    return this.rightAscension * RAD2DEG;
+  /**
+   * Gets the right ascension in degrees.
+   * @returns The right ascension in degrees.
+   */
+  get rightAscensionDegrees(): Degrees {
+    return (this.rightAscension * RAD2DEG) as Degrees;
   }
 
-  /** Argument of perigee _(°)_. */
-  get argPerigeeDegrees(): number {
-    return this.argPerigee * RAD2DEG;
+  /**
+   * Gets the argument of perigee in degrees.
+   * @returns The argument of perigee in degrees.
+   */
+  get argPerigeeDegrees(): Degrees {
+    return (this.argPerigee * RAD2DEG) as Degrees;
   }
 
-  /** True anomaly _(°)_. */
-  get trueAnomalyDegrees(): number {
-    return this.trueAnomaly * RAD2DEG;
+  /**
+   * Gets the true anomaly in degrees.
+   * @returns The true anomaly in degrees.
+   */
+  get trueAnomalyDegrees(): Degrees {
+    return (this.trueAnomaly * RAD2DEG) as Degrees;
   }
 
-  /** Apogee distance from central body _(km)_. */
-  get apogee(): number {
-    return this.semimajorAxis * (1.0 + this.eccentricity);
+  /**
+   * Gets the apogee of the classical elements.
+   * @returns The apogee in kilometers.
+   */
+  get apogee(): Kilometers {
+    return (this.semimajorAxis * (1.0 + this.eccentricity)) as Kilometers;
   }
 
-  /** Perigee distance from central body _(km)_. */
+  /**
+   * Gets the perigee of the classical elements.
+   * The perigee is the point in an orbit that is closest to the focus (in this case, the Earth).
+   * @returns The perigee distance in kilometers.
+   */
   get perigee(): number {
-    return this.semimajorAxis * (1.0 - this.eccentricity);
+    return (this.semimajorAxis * (1.0 - this.eccentricity)) as Kilometers;
   }
 
   toString(): string {
@@ -149,25 +176,37 @@ export class ClassicalElements {
     ].join('\n');
   }
 
-  /** Compute the mean motion _(rad/s)_ of this orbit. */
-  meanMotion(): number {
-    return Math.sqrt(this.mu / (this.semimajorAxis * this.semimajorAxis * this.semimajorAxis));
+  /**
+   * Calculates the mean motion of the celestial object.
+   * @returns The mean motion in radians.
+   */
+  get meanMotion(): Radians {
+    return Math.sqrt(this.mu / (this.semimajorAxis * this.semimajorAxis * this.semimajorAxis)) as Radians;
   }
 
-  /** Compute the period _(seconds)_ of this orbit. */
-  period(): number {
-    return TAU * Math.sqrt(this.semimajorAxis ** 3 / this.mu);
+  /**
+   * Calculates the period of the orbit.
+   * @returns The period in seconds.
+   */
+  get period(): Seconds {
+    return (TAU * Math.sqrt(this.semimajorAxis ** 3 / this.mu)) as Seconds;
   }
 
-  /** Compute the number of revolutions completed per day for this orbit. */
-  revsPerDay(): number {
-    return secondsPerDay / this.period();
+  /**
+   * Compute the number of revolutions completed per day for this orbit.
+   * @returns The number of revolutions per day.
+   */
+  get revsPerDay(): number {
+    return secondsPerDay / this.period;
   }
 
-  // / Return the orbit regime for this orbit.
+  /**
+   * Returns the orbit regime based on the classical elements.
+   * @returns The orbit regime.
+   */
   getOrbitRegime(): OrbitRegime {
-    const n = this.revsPerDay();
-    const p = this.period() * sec2min;
+    const n = this.revsPerDay;
+    const p = this.period * sec2min;
 
     if (n >= 0.99 && n <= 1.01 && this.eccentricity < 0.01) {
       return OrbitRegime.GEO;
@@ -185,7 +224,10 @@ export class ClassicalElements {
     return OrbitRegime.OTHER;
   }
 
-  // Convert this to inertial position and velocity vectors.
+  /**
+   * Converts the classical orbital elements to position and velocity vectors.
+   * @returns An object containing the position and velocity vectors.
+   */
   toPositionVelocity(): PositionVelocity {
     const rVec = new Vector3D(Math.cos(this.trueAnomaly), Math.sin(this.trueAnomaly), 0.0);
     const rPQW = rVec.scale(
@@ -199,23 +241,31 @@ export class ClassicalElements {
     return { position, velocity };
   }
 
-  // Convert this to EquinoctialElements.
+  /**
+   * Converts the classical elements to equinoctial elements.
+   * @returns {EquinoctialElements} The equinoctial elements.
+   */
   toEquinoctialElements(): EquinoctialElements {
     const fr = Math.abs(this.inclination - Math.PI) < 1e-9 ? -1 : 1;
     const af = this.eccentricity * Math.cos(this.argPerigee + fr * this.rightAscension);
     const ag = this.eccentricity * Math.sin(this.argPerigee + fr * this.rightAscension);
     const l = this.argPerigee + fr * this.rightAscension + newtonNu(this.eccentricity, this.trueAnomaly).m;
-    const n = this.meanMotion();
+    const n = this.meanMotion;
     const chi = Math.tan(0.5 * this.inclination) ** fr * Math.sin(this.rightAscension);
     const psi = Math.tan(0.5 * this.inclination) ** fr * Math.cos(this.rightAscension);
 
     return new EquinoctialElements(this.epoch, af, ag, l, n, chi, psi, { mu: this.mu, fr });
   }
 
-  // / Return elements propagated to the provided [propEpoch].
+  /**
+   * Propagates the classical elements to a given epoch.
+   *
+   * @param propEpoch - The epoch to propagate the classical elements to.
+   * @returns The classical elements at the propagated epoch.
+   */
   propagate(propEpoch: EpochUTC): ClassicalElements {
     const t = this.epoch;
-    const n = this.meanMotion();
+    const n = this.meanMotion;
     const delta = propEpoch.difference(t);
     const cosV = Math.cos(this.trueAnomaly);
     let eaInit = Math.acos(clamp((this.eccentricity + cosV) / (1 + this.eccentricity * cosV), -1, 1));
@@ -247,7 +297,7 @@ export class ClassicalElements {
       inclination: this.inclination,
       rightAscension: this.rightAscension,
       argPerigee: this.argPerigee,
-      trueAnomaly: vFinal,
+      trueAnomaly: vFinal as Radians,
       mu: this.mu,
     });
   }

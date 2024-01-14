@@ -1,3 +1,4 @@
+import { Kilometers, Radians } from 'src/main';
 import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, secondsPerDay, TAU } from '../utils/constants';
 import { newtonM } from '../utils/functions';
@@ -70,12 +71,12 @@ export class EquinoctialElements {
 
     return new ClassicalElements({
       epoch: this.epoch,
-      semimajorAxis: a,
+      semimajorAxis: a as Kilometers,
       eccentricity: e,
-      inclination: i,
-      rightAscension: o,
-      argPerigee: w,
-      trueAnomaly: v,
+      inclination: i as Radians,
+      rightAscension: o as Radians,
+      argPerigee: w as Radians,
+      trueAnomaly: v as Radians,
       mu: this.mu,
     });
   }
