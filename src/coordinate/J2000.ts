@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import { Kilometers, Radians, Vector3D } from '../main';
 import { Earth } from '../body/Earth';
 import { ClassicalElements } from './ClassicalElements';
 import { ITRF } from './ITRF';
@@ -57,13 +58,25 @@ export class J2000 extends StateVector {
   toITRF(): ITRF {
     const p = Earth.precession(this.epoch);
     const n = Earth.nutation(this.epoch);
-    const ast = this.epoch.gmstAngle() + n.eqEq;
-    const rMOD = this.position.rotZ(-p.zeta).rotY(p.theta).rotZ(-p.zed);
-    const vMOD = this.velocity.rotZ(-p.zeta).rotY(p.theta).rotZ(-p.zed);
-    const rTOD = rMOD.rotX(n.mEps).rotZ(-n.dPsi).rotX(-n.eps);
-    const vTOD = vMOD.rotX(n.mEps).rotZ(-n.dPsi).rotX(-n.eps);
-    const rPEF = rTOD.rotZ(ast);
-    const vPEF = vTOD.rotZ(ast).add(Earth.rotation.negate().cross(rPEF));
+    const ast = (this.epoch.gmstAngle() + n.eqEq) as Radians;
+    const rMOD = this.position
+      .rotZ(-p.zeta as Radians)
+      .rotY(p.theta)
+      .rotZ(-p.zed as Radians);
+    const vMOD = this.velocity
+      .rotZ(-p.zeta as Radians)
+      .rotY(p.theta)
+      .rotZ(-p.zed as Radians);
+    const rTOD = rMOD
+      .rotX(n.mEps)
+      .rotZ(-n.dPsi as Radians)
+      .rotX(-n.eps);
+    const vTOD = vMOD
+      .rotX(n.mEps)
+      .rotZ(-n.dPsi as Radians)
+      .rotX(-n.eps);
+    const rPEF = rTOD.rotZ(ast) as Vector3D<Kilometers>;
+    const vPEF = vTOD.rotZ(ast).add(Earth.rotation.negate().cross(rPEF)) as Vector3D<Kilometers>;
 
     return new ITRF(this.epoch, rPEF, vPEF);
   }
@@ -77,11 +90,25 @@ export class J2000 extends StateVector {
     const p = Earth.precession(this.epoch);
     const n = Earth.nutation(this.epoch);
     const eps = n.mEps + n.dEps;
-    const dPsiCosEps = n.dPsi * Math.cos(eps);
-    const rMOD = this.position.rotZ(-p.zeta).rotY(p.theta).rotZ(-p.zed);
-    const vMOD = this.velocity.rotZ(-p.zeta).rotY(p.theta).rotZ(-p.zed);
-    const rTEME = rMOD.rotX(n.mEps).rotZ(-n.dPsi).rotX(-eps).rotZ(dPsiCosEps);
-    const vTEME = vMOD.rotX(n.mEps).rotZ(-n.dPsi).rotX(-eps).rotZ(dPsiCosEps);
+    const dPsiCosEps = (n.dPsi * Math.cos(eps)) as Radians;
+    const rMOD = this.position
+      .rotZ(-p.zeta as Radians)
+      .rotY(p.theta)
+      .rotZ(-p.zed as Radians);
+    const vMOD = this.velocity
+      .rotZ(-p.zeta as Radians)
+      .rotY(p.theta)
+      .rotZ(-p.zed as Radians);
+    const rTEME = rMOD
+      .rotX(n.mEps)
+      .rotZ(-n.dPsi as Radians)
+      .rotX(-eps)
+      .rotZ(dPsiCosEps) as Vector3D<Kilometers>;
+    const vTEME = vMOD
+      .rotX(n.mEps)
+      .rotZ(-n.dPsi as Radians)
+      .rotX(-eps)
+      .rotZ(dPsiCosEps) as Vector3D<Kilometers>;
 
     return new TEME(this.epoch, rTEME, vTEME);
   }

@@ -227,10 +227,16 @@ export class ClassicalElements {
     );
     const vVec = new Vector3D(-Math.sin(this.trueAnomaly), this.eccentricity + Math.cos(this.trueAnomaly), 0.0);
     const vPQW = vVec.scale(Math.sqrt(this.mu / (this.semimajorAxis * (1 - this.eccentricity ** 2))));
-    const position = rPQW.rotZ(-this.argPerigee).rotX(-this.inclination).rotZ(-this.rightAscension);
-    const velocity = vPQW.rotZ(-this.argPerigee).rotX(-this.inclination).rotZ(-this.rightAscension);
+    const position = rPQW
+      .rotZ(-this.argPerigee as Radians)
+      .rotX(-this.inclination)
+      .rotZ(-this.rightAscension as Radians);
+    const velocity = vPQW
+      .rotZ(-this.argPerigee as Radians)
+      .rotX(-this.inclination)
+      .rotZ(-this.rightAscension as Radians);
 
-    return { position, velocity };
+    return { position: position as Vector3D<Kilometers>, velocity: velocity as Vector3D<Kilometers> };
   }
 
   /**

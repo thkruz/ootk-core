@@ -192,8 +192,8 @@ export class Matrix {
     return new Vector(result);
   }
 
-  public multiplyVector3D(v: Vector3D): Vector3D {
-    const result: number[] = [];
+  public multiplyVector3D<T extends number>(v: Vector3D<T>): Vector3D<T> {
+    const result: T[] = [];
 
     for (let i = 0; i < this.rows; i++) {
       let total = 0.0;
@@ -213,10 +213,10 @@ export class Matrix {
             break;
         }
       }
-      result[i] = total;
+      result[i] = total as T;
     }
 
-    return new Vector3D(result[0], result[1], result[2]);
+    return new Vector3D<T>(result[0], result[1], result[2]);
   }
 
   public reciprocal(): Matrix {

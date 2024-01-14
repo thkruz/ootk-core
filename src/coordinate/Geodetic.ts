@@ -110,13 +110,13 @@ export class Geodetic {
     const sLat = Math.sin(this.lat);
     const cLat = Math.cos(this.lat);
     const nVal = Earth.radiusEquator / Math.sqrt(1 - Earth.eccentricitySquared * sLat * sLat);
-    const r = new Vector3D(
-      (nVal + this.alt) * cLat * Math.cos(this.lon),
-      (nVal + this.alt) * cLat * Math.sin(this.lon),
-      (nVal * (1 - Earth.eccentricitySquared) + this.alt) * sLat,
+    const r = new Vector3D<Kilometers>(
+      ((nVal + this.alt) * cLat * Math.cos(this.lon)) as Kilometers,
+      ((nVal + this.alt) * cLat * Math.sin(this.lon)) as Kilometers,
+      ((nVal * (1 - Earth.eccentricitySquared) + this.alt) * sLat) as Kilometers,
     );
 
-    return new ITRF(epoch, r, Vector3D.origin);
+    return new ITRF(epoch, r, Vector3D.origin as Vector3D<Kilometers>);
   }
 
   /**

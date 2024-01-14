@@ -2,7 +2,7 @@
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { Radians } from '../main';
+import { Degrees, Kilometers, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, halfPi, RAD2DEG, TAU } from '../utils/constants';
@@ -13,19 +13,22 @@ export class RAE {
   // / Create a new [Razel] object.
   constructor(
     public epoch: EpochUTC,
-    public range: number,
+    public range: Kilometers,
     public azimuth: Radians,
     public elevation: Radians,
     /**
-     * The range rate of the satellite relative to the observer in kilometers per second.
+     * The range rate of the satellite relative to the observer in kilometers
+     * per second.
      */
     public rangeRate?: number,
     /**
-     * The azimuth rate of the satellite relative to the observer in radians per second.
+     * The azimuth rate of the satellite relative to the observer in radians per
+     * second.
      */
     public azimuthRate?: number,
     /**
-     * The elevation rate of the satellite relative to the observer in radians per second.
+     * The elevation rate of the satellite relative to the observer in radians
+     * per second.
      */
     public elevationRate?: number,
   ) {
@@ -35,9 +38,9 @@ export class RAE {
   // / Create a new [Razel] object, using degrees for the angular values.
   static fromDegrees(
     epoch: EpochUTC,
-    range: number,
-    azimuthDegrees: number,
-    elevationDegrees: number,
+    range: Kilometers,
+    azimuthDegrees: Degrees,
+    elevationDegrees: Degrees,
     rangeRate?: number,
     azimuthRateDegrees?: number,
     elevationRateDegrees?: number,
@@ -57,8 +60,7 @@ export class RAE {
   }
 
   /**
-   * Create a [Razel] object from an inertial [state] and
-   * [site] vector.
+   * Create a [Razel] object from an inertial [state] and [site] vector.
    */
   static fromStateVectors(state: J2000, site: J2000): RAE {
     const stateEcef = state.toITRF();
@@ -67,8 +69,8 @@ export class RAE {
     const r = stateEcef.position.subtract(siteEcef.position);
     const rDot = stateEcef.velocity;
     const geo = siteEcef.toGeodetic();
-    const p = r.rotZ(geo.lon).rotY(po2 - geo.lat);
-    const pDot = rDot.rotZ(geo.lon).rotY(po2 - geo.lat);
+    const p = r.rotZ(geo.lon).rotY((po2 - geo.lat) as Radians);
+    const pDot = rDot.rotZ(geo.lon).rotY((po2 - geo.lat) as Radians);
     const pS = p.x;
     const pE = p.y;
     const pZ = p.z;
@@ -135,7 +137,7 @@ export class RAE {
    * An optional azimuth [az] _(rad)_ and elevation [el] _(rad)_ value can be
    * passed to override the values contained in this observation.
    */
-  position(site: J2000, az?: number, el?: number): Vector3D {
+  position(site: J2000, az?: Radians, el?: Radians): Vector3D<Kilometers> {
     const ecef = site.toITRF();
     const geo = ecef.toGeodetic();
     const po2 = halfPi;
@@ -145,13 +147,17 @@ export class RAE {
     const cAz = Math.cos(newAz);
     const sEl = Math.sin(newEl);
     const cEl = Math.cos(newEl);
-    const pSez = new Vector3D(-this.range * cEl * cAz, this.range * cEl * sAz, this.range * sEl);
+    const pSez = new Vector3D<Kilometers>(
+      (-this.range * cEl * cAz) as Kilometers,
+      (this.range * cEl * sAz) as Kilometers,
+      (this.range * sEl) as Kilometers,
+    );
     const rEcef = pSez
-      .rotY(-(po2 - geo.lat))
-      .rotZ(-geo.lon)
+      .rotY(-(po2 - geo.lat) as Radians)
+      .rotZ(-geo.lon as Radians)
       .add(ecef.position);
 
-    return new ITRF(this.epoch, rEcef, Vector3D.origin).toJ2000().position;
+    return new ITRF(this.epoch, rEcef, Vector3D.origin as Vector3D<Kilometers>).toJ2000().position;
   }
 
   /**
@@ -171,34 +177,38 @@ export class RAE {
     const cAz = Math.cos(this.azimuth);
     const sEl = Math.sin(this.elevation);
     const cEl = Math.cos(this.elevation);
-    const pSez = new Vector3D(-this.range * cEl * cAz, this.range * cEl * sAz, this.range * sEl);
-    const pDotSez = new Vector3D(
-      -this.rangeRate * cEl * cAz +
-        this.range * sEl * cAz * this.elevationRate +
-        this.range * cEl * sAz * this.azimuthRate,
-      this.rangeRate * cEl * sAz -
-        this.range * sEl * sAz * this.elevationRate +
-        this.range * cEl * cAz * this.azimuthRate,
-      this.rangeRate * sEl + this.range * cEl * this.elevationRate,
+    const pSez = new Vector3D<Kilometers>(
+      (-this.range * cEl * cAz) as Kilometers,
+      (this.range * cEl * sAz) as Kilometers,
+      (this.range * sEl) as Kilometers,
     );
-    const pEcef = pSez.rotY(-(po2 - geo.lat)).rotZ(-geo.lon);
-    const pDotEcef = pDotSez.rotY(-(po2 - geo.lat)).rotZ(-geo.lon);
+    const pDotSez = new Vector3D<Kilometers>(
+      (-this.rangeRate * cEl * cAz +
+        this.range * sEl * cAz * this.elevationRate +
+        this.range * cEl * sAz * this.azimuthRate) as Kilometers,
+      (this.rangeRate * cEl * sAz -
+        this.range * sEl * sAz * this.elevationRate +
+        this.range * cEl * cAz * this.azimuthRate) as Kilometers,
+      (this.rangeRate * sEl + this.range * cEl * this.elevationRate) as Kilometers,
+    );
+    const pEcef = pSez.rotY(-(po2 - geo.lat) as Radians).rotZ(-geo.lon as Radians);
+    const pDotEcef = pDotSez.rotY(-(po2 - geo.lat) as Radians).rotZ(-geo.lon as Radians);
     const rEcef = pEcef.add(ecef.position);
 
     return new ITRF(this.epoch, rEcef, pDotEcef).toJ2000();
   }
 
   /**
-   * Calculate the angular distance _(rad)_ between this and another
-   * [Razel] object.
+   * Calculate the angular distance _(rad)_ between this and another [Razel]
+   * object.
    */
   angle(razel: RAE, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
     return angularDistance(this.azimuth, this.elevation, razel.azimuth, razel.elevation, method);
   }
 
   /**
-   * Calculate the angular distance _(°)_ between this and another
-   * [Razel] object.
+   * Calculate the angular distance _(°)_ between this and another [Razel]
+   * object.
    */
   angleDegrees(razel: RAE, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
     return this.angle(razel, method) * RAD2DEG;

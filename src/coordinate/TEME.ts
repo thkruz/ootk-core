@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import { Kilometers, Radians, Vector3D } from '../main';
 import { Earth } from '../body/Earth';
 import type { ClassicalElements } from './ClassicalElements';
 import { J2000 } from './J2000';
@@ -38,10 +39,24 @@ export class TEME extends StateVector {
     const n = Earth.nutation(this.epoch);
     const eps = n.mEps + n.dEps;
     const dPsiCosEps = n.dPsi * Math.cos(eps);
-    const rMOD = this.position.rotZ(-dPsiCosEps).rotX(eps).rotZ(n.dPsi).rotX(-n.mEps);
-    const vMOD = this.velocity.rotZ(-dPsiCosEps).rotX(eps).rotZ(n.dPsi).rotX(-n.mEps);
-    const rJ2K = rMOD.rotZ(p.zed).rotY(-p.theta).rotZ(p.zeta);
-    const vJ2K = vMOD.rotZ(p.zed).rotY(-p.theta).rotZ(p.zeta);
+    const rMOD = this.position
+      .rotZ(-dPsiCosEps as Radians)
+      .rotX(eps)
+      .rotZ(n.dPsi)
+      .rotX(-n.mEps);
+    const vMOD = this.velocity
+      .rotZ(-dPsiCosEps as Radians)
+      .rotX(eps)
+      .rotZ(n.dPsi)
+      .rotX(-n.mEps);
+    const rJ2K = rMOD
+      .rotZ(p.zed)
+      .rotY(-p.theta as Radians)
+      .rotZ(p.zeta) as Vector3D<Kilometers>;
+    const vJ2K = vMOD
+      .rotZ(p.zed)
+      .rotY(-p.theta as Radians)
+      .rotZ(p.zeta) as Vector3D<Kilometers>;
 
     return new J2000(this.epoch, rJ2K, vJ2K);
   }

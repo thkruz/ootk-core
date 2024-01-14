@@ -153,8 +153,8 @@ export class Earth {
 
   /**
    * Calculates the diameter of the Earth based on the satellite position.
-   * @param satPos The position of the satellite.
-   * @returns The diameter of the Earth.
+   * @param satPos The position of the satellite. @returns The diameter of the
+   * Earth.
    */
   static diameter(satPos: Vector3D): number {
     return angularDiameter(Earth.radiusEquator * 2, satPos.magnitude(), AngularDiameterMethod.Sphere);

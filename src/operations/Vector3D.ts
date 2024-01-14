@@ -1,4 +1,4 @@
-import { linearDistance } from '../main';
+import { Radians, linearDistance } from '../main';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 
@@ -13,33 +13,33 @@ export class Vector3D<T extends number = number> {
   }
 
   /**
-   * Create a new [Vector3D] object from the first three elements of a
-   * [Vector] object.
+   * Create a new [Vector3D] object from the first three elements of a [Vector]
+   * object.
    */
-  static fromVector(v: Vector): Vector3D {
-    return new Vector3D(v.x, v.y, v.z);
+  static fromVector<U extends number>(v: Vector<U>): Vector3D<U> {
+    return new Vector3D<U>(v.x as U, v.y as U, v.z as U);
   }
 
   // / Origin vector.
-  static origin = new Vector3D(0, 0, 0) as Vector3D<number>;
+  static origin = new Vector3D<number>(0, 0, 0);
 
   // / X-axis unit vector.
-  static xAxis = new Vector3D(1, 0, 0);
+  static xAxis = new Vector3D<number>(1, 0, 0);
 
   // / Y-axis unit vector.
-  static yAxis = new Vector3D(0, 1, 0);
+  static yAxis = new Vector3D<number>(0, 1, 0);
 
   // / Z-axis unit vector.
-  static zAxis = new Vector3D(0, 0, 1);
+  static zAxis = new Vector3D<number>(0, 0, 1);
 
   // / Negative x-axis unit vector.
-  static xAxisNeg = new Vector3D(-1, 0, 0);
+  static xAxisNeg = new Vector3D<number>(-1, 0, 0);
 
   // / Negative y-axis unit vector.
-  static yAxisNeg = new Vector3D(0, -1, 0);
+  static yAxisNeg = new Vector3D<number>(0, -1, 0);
 
   // / Negative z-axis unit vector.
-  static zAxisNeg = new Vector3D(0, 0, -1);
+  static zAxisNeg = new Vector3D<number>(0, 0, -1);
 
   // / Convert this to a [List] of doubles.
   toList() {
@@ -84,18 +84,18 @@ export class Vector3D<T extends number = number> {
   }
 
   // / Return the magnitude of this vector.
-  magnitude(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+  magnitude(): T {
+    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z) as T;
   }
 
   // / Return the result of adding this to another [Vector3D].
-  add(v: Vector3D): Vector3D {
-    return new Vector3D(this.x + v.x, this.y + v.y, this.z + v.z);
+  add(v: Vector3D<T>): Vector3D<T> {
+    return new Vector3D<T>((this.x + v.x) as T, (this.y + v.y) as T, (this.z + v.z) as T);
   }
 
   // / Return the result of subtracting this and another [Vector3D].
-  subtract(v: Vector3D): Vector3D {
-    return new Vector3D(this.x - v.x, this.y - v.y, this.z - v.z);
+  subtract(v: Vector3D<T>): Vector3D<T> {
+    return new Vector3D<T>((this.x - v.x) as T, (this.y - v.y) as T, (this.z - v.z) as T);
   }
 
   // / Return a copy of this [Vector3D] scaled by [n];
@@ -143,8 +143,12 @@ export class Vector3D<T extends number = number> {
   }
 
   // Calculate the cross product of this and another [Vector3D].
-  cross(v: Vector3D): Vector3D {
-    return new Vector3D(this.y * v.z - this.z * v.y, this.z * v.x - this.x * v.z, this.x * v.y - this.y * v.x);
+  cross(v: Vector3D<T>): Vector3D<T> {
+    return new Vector3D<T>(
+      (this.y * v.z - this.z * v.y) as T,
+      (this.z * v.x - this.x * v.z) as T,
+      (this.x * v.y - this.y * v.x) as T,
+    );
   }
 
   // Calculate the skew-symmetric matrix for this [Vector3D].
@@ -156,7 +160,10 @@ export class Vector3D<T extends number = number> {
     ]);
   }
 
-  // Create a copy of this [Vector3D] rotated in the x-axis by angle [theta] _(rad)_.
+  /*
+   * Create a copy of this [Vector3D] rotated in the x-axis by angle [theta]
+   * _(rad)_.
+   */
   rotX(theta: number): Vector3D {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
@@ -164,31 +171,37 @@ export class Vector3D<T extends number = number> {
     return new Vector3D(this.x, cosT * this.y + sinT * this.z, -sinT * this.y + cosT * this.z);
   }
 
-  // Create a copy of this [Vector3D] rotated in the y-axis by angle [theta] _(rad)_.
-  rotY(theta: number): Vector3D {
+  /*
+   * Create a copy of this [Vector3D] rotated in the y-axis by angle [theta]
+   * _(rad)_.
+   */
+  rotY(theta: Radians): Vector3D<T> {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
 
-    return new Vector3D(cosT * this.x + -sinT * this.z, this.y, sinT * this.x + cosT * this.z);
+    return new Vector3D<T>((cosT * this.x + -sinT * this.z) as T, this.y as T, (sinT * this.x + cosT * this.z) as T);
   }
 
-  // Create a copy of this [Vector3D] rotated in the z-axis by angle [theta] _(rad)_.
-  rotZ(theta: number): Vector3D {
+  /*
+   * Create a copy of this [Vector3D] rotated in the z-axis by angle [theta]
+   * _(rad)_.
+   */
+  rotZ(theta: Radians): Vector3D<T> {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
 
-    return new Vector3D(cosT * this.x + sinT * this.y, -sinT * this.x + cosT * this.y, this.z);
+    return new Vector3D((cosT * this.x + sinT * this.y) as T, (-sinT * this.x + cosT * this.y) as T, this.z);
   }
 
   // Calculate the angle _(rad)_ between this and another [Vector3D].
-  angle(v: Vector3D): number {
+  angle(v: Vector3D<T>): number {
     const theta = Math.atan2(this.cross(v).magnitude(), this.dot(v));
 
     return isNaN(theta) ? 0 : theta;
   }
 
   // Calculate the angle _(°)_ between this and another [Vector3D].
-  angleDegrees(v: Vector3D): number {
+  angleDegrees(v: Vector3D<T>): number {
     return this.angle(v) * (180 / Math.PI);
   }
 

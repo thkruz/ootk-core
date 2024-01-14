@@ -36,6 +36,7 @@ import { EpochUTC } from '../time/EpochUTC';
 import {
   Degrees,
   EciVec3,
+  Kilometers,
   Line1Data,
   Line2Data,
   Minutes,
@@ -203,7 +204,11 @@ export class Tle {
 
     Tle.sv2rv_(stateVector, r, v);
 
-    return new TEME(epoch, new Vector3D(r[0], r[1], r[2]), new Vector3D(v[0], v[1], v[2]));
+    return new TEME(
+      epoch,
+      new Vector3D<Kilometers>(<Kilometers>r[0], <Kilometers>r[1], <Kilometers>r[2]),
+      new Vector3D<Kilometers>(<Kilometers>v[0], <Kilometers>v[1], <Kilometers>v[2]),
+    );
   }
 
   private static sv2rv_(stateVector: StateVectorSgp4, r: Float64Array, v: Float64Array) {
@@ -226,7 +231,11 @@ export class Tle {
 
     Tle.sv2rv_(stateVector, r, v);
 
-    return new TEME(this.epoch, new Vector3D(r[0], r[1], r[2]), new Vector3D(v[0], v[1], v[2]));
+    return new TEME(
+      this.epoch,
+      new Vector3D<Kilometers>(<Kilometers>r[0], <Kilometers>r[1], <Kilometers>r[2]),
+      new Vector3D<Kilometers>(<Kilometers>v[0], <Kilometers>v[1], <Kilometers>v[2]),
+    );
   }
 
   get state(): TEME {

@@ -4,16 +4,19 @@ import { J2000 } from './J2000';
 import { RelativeState } from './RelativeState';
 
 /**
- * Represents a Radial-Intrack-Crosstrack (RIC) coordinate.
- *
- * RIC coordinates are created from J2000 state vectors and can be transformed to the J2000 coordinate system.
+ * Represents a Radial-Intrack-Crosstrack (RIC) coordinates.
  */
 export class RIC extends RelativeState {
   /**
-   * Creates a new RIC (Radial-Intrack-Crosstrack) coordinate from the J2000 state vectors.
-   * @param state The J2000 state vector.
-   * @param origin The J2000 state vector of the origin.
-   * @param transform The transformation matrix.
+   * Creates a new RIC (Radial-Intrack-Crosstrack) coordinate from the J2000
+   * state vectors.
+   *
+   * @param state - The J2000 state vector.
+   *
+   * @param origin - The J2000 state vector of the origin.
+   *
+   * @param transform - The transformation matrix.
+   *
    * @returns The RIC coordinate.
    */
   static fromJ2000Matrix(state: J2000, origin: J2000, transform: Matrix): RIC {
@@ -24,9 +27,12 @@ export class RIC extends RelativeState {
   }
 
   /**
-   * Creates a RIC (Radial-Intrack-Crosstrack) coordinate system from a J2000 state and origin.
+   * Creates a RIC (Radial-Intrack-Crosstrack) coordinate system from a J2000
+   * state and origin.
    * @param state The J2000 state.
+   *
    * @param origin The J2000 origin.
+   *
    * @returns The RIC coordinate system.
    */
   static fromJ2000(state: J2000, origin: J2000): RIC {
@@ -42,9 +48,12 @@ export class RIC extends RelativeState {
   }
 
   /**
-   * Transforms the current RIC coordinate to the J2000 coordinate system using the provided origin and transform matrix
+   * Transforms the current RIC coordinate to the J2000 coordinate system using
+   * the provided origin and transform matrix
    * @param origin The origin J2000 coordinate.
+   *
    * @param transform The transformation matrix.
+   *
    * @returns The transformed J2000 coordinate.
    */
   toJ2000Matrix(origin: J2000, transform: Matrix): J2000 {
@@ -56,8 +65,10 @@ export class RIC extends RelativeState {
   }
 
   /**
-   * Transforms the current RIC coordinate to the J2000 coordinate system using the provided origin.
+   * Transforms the current RIC coordinate to the J2000 coordinate system using
+   * the provided origin.
    * @param origin The origin J2000 coordinate.
+   *
    * @returns The transformed J2000 coordinate.
    */
   toJ2000(origin: J2000): J2000 {

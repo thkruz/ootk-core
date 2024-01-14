@@ -1,3 +1,4 @@
+import { Kilometers } from 'src/main';
 import { Earth } from '../body/Earth';
 import type { Vector3D } from '../operations/Vector3D';
 import type { EpochUTC } from '../time/EpochUTC';
@@ -6,16 +7,16 @@ import { ClassicalElements } from './ClassicalElements';
 
 // / Position and velocity [Vector3D] container.
 export type PositionVelocity = {
-  position: Vector3D;
-  velocity: Vector3D;
+  position: Vector3D<Kilometers>;
+  velocity: Vector3D<Kilometers>;
 };
 
 // / Base class for state vectors.
 export abstract class StateVector {
   constructor(
     public epoch: EpochUTC,
-    public position: Vector3D,
-    public velocity: Vector3D,
+    public position: Vector3D<Kilometers>,
+    public velocity: Vector3D<Kilometers>,
   ) {
     // Nothing to do here.
   }

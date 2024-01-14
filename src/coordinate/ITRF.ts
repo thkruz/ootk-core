@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { Kilometers, Radians } from 'src/main';
+import { Kilometers, Radians, Vector3D } from 'src/main';
 import { Earth } from '../body/Earth';
 import { Geodetic } from './Geodetic';
 import { J2000 } from './J2000';
@@ -79,12 +79,18 @@ export class ITRF extends StateVector {
     const p = Earth.precession(this.epoch);
     const n = Earth.nutation(this.epoch);
     const ast = this.epoch.gmstAngle() + n.eqEq;
-    const rTOD = this.position.rotZ(-ast);
-    const vTOD = this.velocity.add(Earth.rotation.cross(this.position)).rotZ(-ast);
+    const rTOD = this.position.rotZ(-ast as Radians);
+    const vTOD = this.velocity.add(Earth.rotation.cross(this.position) as Vector3D<Kilometers>).rotZ(-ast as Radians);
     const rMOD = rTOD.rotX(n.eps).rotZ(n.dPsi).rotX(-n.mEps);
     const vMOD = vTOD.rotX(n.eps).rotZ(n.dPsi).rotX(-n.mEps);
-    const rJ2000 = rMOD.rotZ(p.zed).rotY(-p.theta).rotZ(p.zeta);
-    const vJ2000 = vMOD.rotZ(p.zed).rotY(-p.theta).rotZ(p.zeta);
+    const rJ2000 = rMOD
+      .rotZ(p.zed)
+      .rotY(-p.theta as Radians)
+      .rotZ(p.zeta) as Vector3D<Kilometers>;
+    const vJ2000 = vMOD
+      .rotZ(p.zed)
+      .rotY(-p.theta as Radians)
+      .rotZ(p.zeta) as Vector3D<Kilometers>;
 
     return new J2000(this.epoch, rJ2000, vJ2000);
   }
