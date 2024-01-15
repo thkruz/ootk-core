@@ -69,8 +69,8 @@ export abstract class RelativeState {
    * Calculates the range of the relative state.
    * @returns The range in kilometers.
    */
-  range(): Kilometers {
-    return this.position.magnitude() as Kilometers;
+  get range(): Kilometers {
+    return this.position.magnitude();
   }
 
   /**
@@ -79,7 +79,7 @@ export abstract class RelativeState {
    *
    * @returns The range rate in Kilometers per second.
    */
-  rangeRate(): number {
-    return this.position.dot(this.velocity) / this.range();
+  get rangeRate(): number {
+    return this.position.dot(this.velocity) / this.range;
   }
 }

@@ -32,6 +32,16 @@ RIC {
 
 exports[`RIC should get the name of the RIC coordinate system 1`] = `"RIC"`;
 
+exports[`RIC should return a string representation of the RIC coordinate 1`] = `
+"[RIC]
+  Position: [1538.223336, 5102.261204, 4432.634965] km
+  Velocity: [-7.341518909, 0.651671845, 1.793388250] km/s"
+`;
+
+exports[`RIC should return the range of the RIC coordinate 1`] = `6931.627020979389`;
+
+exports[`RIC should return the range rate of the RIC coordinate 1`] = `-0.002663194316531782`;
+
 exports[`RIC should transform the current RIC coordinate to J2000 using the provided origin and transform matrix 1`] = `
 J2000 {
   "epoch": EpochUTC {

@@ -80,4 +80,28 @@ describe('RIC', () => {
 
     expect(name).toMatchSnapshot();
   });
+
+  // toString
+  it('should return a string representation of the RIC coordinate', () => {
+    const ric = new RIC(stateVector.position, stateVector.velocity);
+    const string = ric.toString();
+
+    expect(string).toMatchSnapshot();
+  });
+
+  // range
+  it('should return the range of the RIC coordinate', () => {
+    const ric = new RIC(stateVector.position, stateVector.velocity);
+    const range = ric.range;
+
+    expect(range).toMatchSnapshot();
+  });
+
+  // rangeRate
+  it('should return the range rate of the RIC coordinate', () => {
+    const ric = new RIC(stateVector.position, stateVector.velocity);
+    const rangeRate = ric.rangeRate;
+
+    expect(rangeRate).toMatchSnapshot();
+  });
 });
