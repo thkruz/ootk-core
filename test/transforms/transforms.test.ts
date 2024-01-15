@@ -1,7 +1,4 @@
 import {
-  RadarSensor,
-  azel2uv,
-  DEG2RAD,
   Degrees,
   ecf2eci,
   ecf2enu,
@@ -17,10 +14,8 @@ import {
   Radians,
   rae2ecf,
   rae2enu,
-  rae2raeOffBoresight,
   rae2sez,
   Sensor,
-  uv2azel,
   eci2rae,
   Vec3,
   lla2eci,
@@ -165,17 +160,6 @@ describe('Rae2Ecf', () => {
     expect(ecfCoordinates.z).toBeCloseTo(ecf.z);
   });
 
-  // azel2uv
-  it('should convert valid azimuth and elevation to unit vector', () => {
-    const az = 0 as Radians;
-    const el = 0 as Radians;
-
-    const uvCoordinates = azel2uv(az, el, (5 * DEG2RAD) as Radians);
-
-    expect(uvCoordinates.u).toMatchSnapshot();
-    expect(uvCoordinates.v).toMatchSnapshot();
-  });
-
   // ecf2enu
   it('should convert valid ECF coordinates to ENU', () => {
     const ecf = {
@@ -255,7 +239,7 @@ describe('Rae2Ecf', () => {
       maxEl: 0 as Degrees,
       minRng: 0 as Kilometers,
       maxRng: 0 as Kilometers,
-    }) as RadarSensor;
+    }) as Sensor;
     const exampleDate = new Date(1705109326817);
     const { gmst } = calcGmst(exampleDate);
 
@@ -276,60 +260,6 @@ describe('Rae2Ecf', () => {
     expect(enuCoordinates).toMatchSnapshot();
   });
 
-  // rae2raeOffBoresight
-  it('should convert valid RAE coordinates to RAE Off Boresight', () => {
-    const rae = {
-      rng: 0 as Kilometers,
-      az: 0 as Degrees,
-      el: 0 as Degrees,
-    };
-
-    const senor = new Sensor({
-      lat: 0 as Degrees,
-      lon: 0 as Degrees,
-      alt: 0 as Kilometers,
-      minAz: 0 as Degrees,
-      maxAz: 0 as Degrees,
-      minEl: 0 as Degrees,
-      maxEl: 0 as Degrees,
-      minRng: 0 as Kilometers,
-      maxRng: 0 as Kilometers,
-    }) as RadarSensor;
-
-    senor.boresight = {
-      az: 0 as Radians,
-      el: 0 as Radians,
-    };
-    senor.coneHalfAngle = 0 as Radians;
-
-    const raeOffBoresightCoordinates = rae2raeOffBoresight(rae, senor, 10 as Degrees);
-
-    expect(raeOffBoresightCoordinates).toMatchSnapshot();
-  });
-
-  // rae2ruv
-  it('should convert valid RAE coordinates to RUV', () => {
-    const rae = {
-      rng: 0 as Kilometers,
-      az: 0 as Degrees,
-      el: 0 as Degrees,
-    };
-    const ruvCoordinates = rae2enu(rae);
-
-    expect(ruvCoordinates).toMatchSnapshot();
-  });
-
-  // uv2azel
-  it('should convert valid unit vector to azimuth and elevation', () => {
-    const u = 0 as Radians;
-    const v = 0 as Radians;
-
-    const azelCoordinates = uv2azel(u, v, (5 * DEG2RAD) as Radians);
-
-    expect(azelCoordinates.az).toMatchSnapshot();
-    expect(azelCoordinates.el).toMatchSnapshot();
-  });
-
   // eci2rae
   it('should convert valid ECI coordinates to RAE', () => {
     const eci = {
@@ -347,7 +277,7 @@ describe('Rae2Ecf', () => {
       maxEl: 0 as Degrees,
       minRng: 0 as Kilometers,
       maxRng: 0 as Kilometers,
-    }) as RadarSensor;
+    }) as Sensor;
 
     const exampleDate = new Date(1705109326817);
     const raeCoordinates = eci2rae(exampleDate, eci, sensor);

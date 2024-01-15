@@ -429,38 +429,6 @@ export type PosVel<T> = {
 };
 
 /**
- * The RUV coordinate system is a spherical coordinate system with the origin at
- * the radar. The RUV coordinate system is defined with respect to the radar
- * boresight. The R-axis points outward along the boresight with the origin at
- * the radar. The U-axis is in the horizontal plane and points to the right of
- * the boresight. The V-axis is in the vertical plane and points down from the
- * boresight.
- * @template DistanceUnit The unit of measure used for the altitude dimension.
- * This is typically a type representing a distance, such as kilometers or
- * meters. The default is Kilometers.
- * @template AngleUnit The unit of measure used for the latitude and longitude
- * dimensions. This is typically a type representing an angle, such as degrees
- * or radians. The default is Radians.
- */
-export type RuvVec3<DistanceUnit = Kilometers, AngleUnit = Radians> = {
-  rng: DistanceUnit;
-  u: AngleUnit;
-  v: AngleUnit;
-};
-
-/**
- * Phased Array Radar Face Cartesian Coordinates The cartesian coordinates (XRF,
- * YRF ZRF) are defined with respect to the phased array radar face. The radar
- * face lies in the XRF-YRF plane, with the XRF-axis horizontal and the YRF-axis
- * pointing upward. The ZRF-axis points outward along the normal to the array
- * face.
- *
- * The orientation of the phased array face is defined by the azimuth and the
- * elevation of the phased array boresight (i.e., the phased array Z-axis).
- */
-export type RfVec3<Units = Kilometers> = Vec3<Units>;
-
-/**
  * A type that represents a three-dimensional vector in a flat array format.
  * This type is used in vector mathematics and physics calculations.
  *

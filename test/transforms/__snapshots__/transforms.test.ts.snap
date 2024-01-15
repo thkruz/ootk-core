@@ -55,26 +55,3 @@ Object {
   "z": 0,
 }
 `;
-
-exports[`Rae2Ecf should convert valid RAE coordinates to RAE Off Boresight 1`] = `
-Object {
-  "az": 0,
-  "el": 0,
-}
-`;
-
-exports[`Rae2Ecf should convert valid RAE coordinates to RUV 1`] = `
-Object {
-  "x": 0,
-  "y": 0,
-  "z": 0,
-}
-`;
-
-exports[`Rae2Ecf should convert valid azimuth and elevation to unit vector 1`] = `0`;
-
-exports[`Rae2Ecf should convert valid azimuth and elevation to unit vector 2`] = `0`;
-
-exports[`Rae2Ecf should convert valid unit vector to azimuth and elevation 1`] = `0`;
-
-exports[`Rae2Ecf should convert valid unit vector to azimuth and elevation 2`] = `0`;
