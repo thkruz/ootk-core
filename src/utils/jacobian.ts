@@ -5,7 +5,6 @@ import { array2d } from './functions';
 
 /**
  * Calculates the Jacobian matrix of a given Jacobian function.
- *
  * @param f The Jacobian function.
  * @param m The number of rows in the Jacobian matrix.
  * @param x0 The initial values of the variables.

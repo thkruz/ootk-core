@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { Degrees, Radians } from 'src/main';
 import { Matrix } from './Matrix';
 import { Vector3D } from './Vector3D';
@@ -58,7 +81,6 @@ export class Vector<T extends number = number> {
   /**
    * Creates a zero vector of the specified length.
    * @param length The length of the vector.
-   *
    * @returns A new Vector object representing the zero vector.
    */
   static zero(length: number): Vector {
@@ -69,9 +91,7 @@ export class Vector<T extends number = number> {
    * Creates a new Vector with the specified length, filled with the specified
    * value.
    * @param length The length of the new Vector.
-   *
    * @param value The value to fill the Vector with.
-   *
    * @returns A new Vector filled with the specified value.
    */
   static filled(length: number, value: number): Vector {
@@ -80,7 +100,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Creates a new Vector instance from an array of elements.
-   *
    * @param elements - The array of elements to create the Vector from.
    * @returns A new Vector instance.
    */
@@ -90,7 +109,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Returns a string representation of the vector.
-   *
    * @param fixed - The number of digits to appear after the decimal point.
    * Defaults to -1.
    * @returns A string representation of the vector.
@@ -106,6 +124,7 @@ export class Vector<T extends number = number> {
 
   /**
    * Returns a string representation of the x value of the vector.
+   * @returns A string representation of the x value of the vector.
    */
   get x(): number {
     return this.elements[0];
@@ -113,6 +132,7 @@ export class Vector<T extends number = number> {
 
   /**
    * Returns a string representation of the y value of the vector.
+   * @returns A string representation of the y value of the vector.
    */
   get y(): number {
     return this.elements[1];
@@ -120,6 +140,7 @@ export class Vector<T extends number = number> {
 
   /**
    * Returns a string representation of the z value of the vector.
+   * @returns A string representation of the z value of the vector.
    */
   get z(): number {
     return this.elements[2];
@@ -127,7 +148,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Converts the vector elements to an array.
-   *
    * @returns An array containing the vector elements.
    */
   toList(): number[] {
@@ -136,7 +156,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Converts the vector to a Float64Array.
-   *
    * @returns The vector as a Float64Array.
    */
   toArray(): Float64Array {
@@ -145,7 +164,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Calculates the magnitude of the vector.
-   *
    * @returns The magnitude of the vector.
    */
   magnitude(): number {
@@ -162,7 +180,6 @@ export class Vector<T extends number = number> {
    * Adds the elements of another vector to this vector and returns a new
    * vector.
    * @param v - The vector to add.
-   *
    * @returns A new vector containing the sum of the elements.
    */
   add(v: Vector): Vector {
@@ -178,7 +195,6 @@ export class Vector<T extends number = number> {
   /**
    * Subtracts a vector from the current vector.
    * @param v The vector to subtract.
-   *
    * @returns A new vector representing the result of the subtraction.
    */
   subtract(v: Vector): Vector {
@@ -194,7 +210,6 @@ export class Vector<T extends number = number> {
   /**
    * Scales the vector by a given factor.
    * @param n The scaling factor.
-   *
    * @returns A new Vector object representing the scaled vector.
    */
   scale(n: number): Vector {
@@ -218,7 +233,6 @@ export class Vector<T extends number = number> {
   /**
    * Return the Euclidean distance between this and another Vector.
    * @param v The vector to calculate the distance to.
-   *
    * @returns The distance between the two vectors.
    */
   distance(v: Vector): number {
@@ -243,7 +257,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Calculates the dot product of this vector and another vector.
-   *
    * @param v - The vector to calculate the dot product with.
    * @returns The dot product of the two vectors.
    */
@@ -260,7 +273,6 @@ export class Vector<T extends number = number> {
   /**
    * Calculates the outer product of this vector with another vector.
    * @param v The vector to calculate the outer product with.
-   *
    * @returns A matrix representing the outer product of the two vectors.
    */
   outer(v: Vector): Matrix {
@@ -279,7 +291,6 @@ export class Vector<T extends number = number> {
   /**
    * Calculates the cross product of this vector and the given vector.
    * @param v - The vector to calculate the cross product with.
-   *
    * @returns The resulting vector.
    */
   cross(v: Vector): Vector {
@@ -296,8 +307,8 @@ export class Vector<T extends number = number> {
 
   /**
    * Calculate the skew-symmetric matrix for this [Vector].
-   *
-   * An error will be thrown if the vector is not length 3.
+   * @returns The skew-symmetric matrix.
+   * @throws [Error] if the vector is not of length 3.
    */
   skewSymmetric(): Matrix {
     if (this.length !== 3) {
@@ -313,7 +324,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Rotates the vector around the X-axis by the specified angle.
-   *
    * @param theta The angle in radians.
    * @returns The rotated vector.
    */
@@ -331,7 +341,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Rotates the vector around the Y-axis by the specified angle.
-   *
    * @param theta The angle of rotation in radians.
    * @returns A new Vector representing the rotated vector.
    */
@@ -349,7 +358,6 @@ export class Vector<T extends number = number> {
 
   /**
    * Rotates the vector around the Z-axis by the specified angle.
-   *
    * @param theta The angle of rotation in radians.
    * @returns A new Vector representing the rotated vector.
    */
@@ -368,7 +376,6 @@ export class Vector<T extends number = number> {
   /**
    * Calculates the angle between this vector and another vector.
    * @param v The other vector.
-   *
    * @returns The angle between the two vectors in radians.
    */
   angle(v: Vector): Radians {
@@ -385,7 +392,6 @@ export class Vector<T extends number = number> {
   /**
    * Calculates the angle between this vector and another vector in degrees.
    * @param v The other vector.
-   *
    * @returns The angle between the two vectors in degrees.
    */
   angleDegrees(v: Vector): Degrees {
@@ -396,9 +402,7 @@ export class Vector<T extends number = number> {
    * Determines if there is line of sight between this vector and another vector
    * within a given radius.
    * @param v - The vector to check line of sight with.
-   *
    * @param radius - The radius within which line of sight is considered.
-   *
    * @returns True if there is line of sight, false otherwise.
    */
   sight(v: Vector, radius: number): boolean {
@@ -428,7 +432,6 @@ export class Vector<T extends number = number> {
    * the given vector's magnitude by this vector's magnitude, and then
    * normalizing the resulting vector.
    * @param v - The vector to calculate the bisect with.
-   *
    * @returns The bisect vector.
    */
   bisect(v: Vector): Vector {
@@ -437,8 +440,8 @@ export class Vector<T extends number = number> {
 
   /**
    * Joins the current vector with another vector.
-   * @param v The vector to join with. @returns A new vector that contains the
-   * elements of both vectors.
+   * @param v The vector to join with.
+   * @returns A new vector that contains the elements of both vectors.
    */
   join(v: Vector): Vector {
     return new Vector(this.toList().concat(v.toList()));
@@ -447,9 +450,9 @@ export class Vector<T extends number = number> {
   /**
    * Returns a new Vector containing a portion of the elements from the
    * specified start index to the specified end index
-   * @param start The start index of the slice (inclusive). @param end The end
-   * index of the slice (exclusive). @returns A new Vector containing the sliced
-   * elements.
+   * @param start The start index of the slice (inclusive).
+   * @param end The end index of the slice (exclusive).
+   * @returns A new Vector containing the sliced elements.
    */
   slice(start: number, end: number): Vector {
     return new Vector(this.elements.slice(start, end));
@@ -457,7 +460,7 @@ export class Vector<T extends number = number> {
 
   /**
    * Returns a new Matrix object representing the row vector.
-   * @returns {Matrix} The row vector as a Matrix object.
+   * @returns The row vector as a Matrix object.
    */
   row(): Matrix {
     return new Matrix([this.toList()]);
@@ -465,7 +468,7 @@ export class Vector<T extends number = number> {
 
   /**
    * Returns a new Matrix object representing the column vector of this Vector.
-   * @returns {Matrix} The column vector as a Matrix object.
+   * @returns The column vector as a Matrix object.
    */
   column(): Matrix {
     return new Matrix(this.toList().map((e) => [e]));
@@ -473,8 +476,8 @@ export class Vector<T extends number = number> {
 
   /**
    * Converts the elements at the specified index to a Vector3D object.
-   * @param index - The index of the elements to convert. @returns A new
-   * Vector3D object containing the converted elements.
+   * @param index - The index of the elements to convert.
+   * @returns A new Vector3D object containing the converted elements.
    */
   toVector3D(index: number): Vector3D {
     return new Vector3D(this.elements[index], this.elements[index + 1], this.elements[index + 2]);

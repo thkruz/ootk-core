@@ -8,11 +8,9 @@ import { Vector3D } from 'src/main';
  * This type is used to create new types based on existing ones, but with a
  * unique identifier. This can be useful for creating types that are
  * semantically different but structurally the same.
- *
  * @template T The base type from which the distinct type is created.
  * @template DistinctName A unique identifier for the distinct type.
- *
- * @property __TYPE__ A property that holds the unique identifier for the
+ * __TYPE__ A property that holds the unique identifier for the
  * distinct type.
  */
 type Distinct<T, DistinctName> = T & { __TYPE__: DistinctName };
@@ -97,14 +95,12 @@ export type Meters = Distinct<number, 'Meters'>;
  * This type is used to represent a point in space in terms of x, y, and z
  * coordinates. It is a generic type that allows for flexibility in the units of
  * measure used for each dimension. The default unit of measure is Kilometers.
- *
  * @template Units The unit of measure used for the dimensions. This is
  * typically a type representing a distance, such as kilometers or meters. The
  * default is Kilometers.
- *
- * @property x The x dimension of the vector, representing the distance from the
+ * x The x dimension of the vector, representing the distance from the
  * origin to the point in the x direction.
- * @property y The y dimension of the vector, representing the distance from the
+ * y The y dimension of the vector, representing the distance from the
  * origin to the point in the y direction. @property z The z dimension of the
  * vector, representing the distance from the origin to the point in the z
  * direction.
@@ -122,10 +118,9 @@ export type Vec3<Units = Kilometers> = {
  * This type is used to represent a point in space in terms of x, y, and z
  * coordinates. It is a generic type that allows for flexibility in the units of
  * measure used for each dimension. The default unit of measure is Kilometers.
- *
- * @property x The x dimension of the vector, representing the distance from the
+ * x The x dimension of the vector, representing the distance from the
  * origin to the point in the x direction.
- * @property y The y dimension of the vector, representing the distance from the
+ * y The y dimension of the vector, representing the distance from the
  * origin to the point in the y direction. @property z The z dimension of the
  * vector, representing the distance from the origin to the point in the z
  * direction.
@@ -149,10 +144,9 @@ export type EciVec3<Units = Kilometers> = Vec3<Units>;
  * This type is used to represent a point in space in terms of x, y, and z
  * coordinates. It is a generic type that allows for flexibility in the units of
  * measure used for each dimension. The default unit of measure is Kilometers.
- *
- * @property x The x dimension of the vector, representing the distance from the
+ * x The x dimension of the vector, representing the distance from the
  * origin to the point in the x direction.
- * @property y The y dimension of the vector, representing the distance from the
+ * y The y dimension of the vector, representing the distance from the
  * origin to the point in the y direction. @property z The z dimension of the
  * vector, representing the distance from the origin to the point in the z
  * direction.
@@ -178,16 +172,13 @@ export type EcefVec3<Units = Kilometers> = EcfVec3<Units>;
  * tangent to the Earth's surface fixed to a specific location and hence it is
  * sometimes known as a "Local Tangent" or "local geodetic" plane. By convention
  * the east axis is labeled x, the north y, and the up z.
- *
  * @see https://en.wikipedia.org/wiki/Local_tangent_plane_coordinates
- *
  * @template Units The unit of measure used for the dimensions. This is
  * typically a type representing a distance, such as kilometers or meters. The
  * default is Kilometers.
- *
- * @property e The east dimension of the vector, representing the distance from
+ * e The east dimension of the vector, representing the distance from
  * the origin to the point in the east direction.
- * @property n The north dimension of the vector, representing the distance from
+ * n The north dimension of the vector, representing the distance from
  * the origin to the point in the north direction. @property u The up dimension
  * of the vector, representing the distance from the origin to the point in the
  * upward direction.
@@ -200,11 +191,9 @@ export type EnuVec3<Units = Kilometers> = Vec3<Units>;
  * This type is used to represent a point in space in terms of latitude,
  * longitude, and altitude. It is a generic type that allows for flexibility in
  * the units of measure used for each dimension.
- *
  * @template A The unit of measure used for the latitude and longitude
  * dimensions. This is typically a type representing an angle, such as degrees
  * or radians. The default is Radians.
- *
  * @template D The unit of measure used for the altitude dimension. This is
  * typically a type representing a distance, such as kilometers or meters. The
  * default is Kilometers.
@@ -222,18 +211,15 @@ export type LlaVec3<A = Degrees, D = Kilometers> = {
  * This type is used to represent a point in space in terms of range, azimuth,
  * and elevation. It is a generic type that allows for flexibility in the units
  * of measure used for each dimension.
- *
  * @template DistanceUnit The unit of measure used for the altitude dimension.
  * This is typically a type representing a distance, such as kilometers or
  * meters. The default is Kilometers.
- *
  * @template AngleUnit The unit of measure used for the latitude and longitude
  * dimensions. This is typically a type representing an angle, such as degrees
  * or radians. The default is Radians.
- *
- * @property rng The range dimension of the vector, representing the distance
+ * rng The range dimension of the vector, representing the distance
  * from the origin to the point.
- * @property az The azimuth dimension of the vector, representing the angle in
+ * az The azimuth dimension of the vector, representing the angle in
  * the horizontal plane from a reference direction. @property el The elevation
  * dimension of the vector, representing the angle from the horizontal plane to
  * the point.
@@ -251,9 +237,8 @@ export type RaeVec3<DistanceUnit = Kilometers, AngleUnit = Degrees> = {
  * This type is used to represent a point in space in terms of south, east, and
  * zenith. It is a generic type that allows for flexibility in the units of
  * measure used for each dimension.
- *
- * @property s The south dimension of the vector
- * @property e The east dimension of the vector @property z The zenith dimension
+ * s The south dimension of the vector
+ * e The east dimension of the vector @property z The zenith dimension
  * of the vector
  */
 export type SezVec3<D = Kilometers> = {
@@ -263,9 +248,7 @@ export type SezVec3<D = Kilometers> = {
 };
 
 /**
- * @interface SatelliteRecord contains all of the orbital parameters necessary
- * for running SGP4. It is generated by Sgp4.createSatrec.
- *
+ * SatelliteRecord contains all of the orbital parameters necessary for running SGP4. It is generated by Sgp4.
  */
 export interface SatelliteRecord {
   Om: number;
@@ -429,12 +412,10 @@ export type PosVel<T> = {
  * the radar. The U-axis is in the horizontal plane and points to the right of
  * the boresight. The V-axis is in the vertical plane and points down from the
  * boresight.
- *
  * @template DistanceUnit The unit of measure used for the altitude dimension.
  * This is typically a type representing a distance, such as kilometers or
  * meters. The default is Kilometers.
- *
- * * @template AngleUnit The unit of measure used for the latitude and longitude
+ * @template AngleUnit The unit of measure used for the latitude and longitude
  * dimensions. This is typically a type representing an angle, such as degrees
  * or radians. The default is Radians.
  */
@@ -500,12 +481,12 @@ export type TleLine2 = Distinct<string, 'TLE Line 2'>;
  * - satNum: The satellite number.
  * - satNumRaw: The raw string representation of the satellite number.
  * - classification: The classification of the satellite (e.g., "U" for
- *   unclassified).
+ * unclassified).
  * - intlDes: The international designator for the satellite.
  * - intlDesYear: The year of the international designator.
  * - intlDesLaunchNum: The launch number of the international designator.
  * - intlDesLaunchPiece: The piece of the launch of the international
- *   designator.
+ * designator.
  * - epochYear: The last two digits of the year of the epoch.
  * - epochYearFull: The full four-digit year of the epoch.
  * - epochDay: The day of the year of the epoch.
@@ -515,7 +496,6 @@ export type TleLine2 = Distinct<string, 'TLE Line 2'>;
  * - ephemerisType: The type of ephemeris used.
  * - elsetNum: The element set number.
  * - checksum1: The checksum of the first line of the TLE.
- *
  * @see https://en.wikipedia.org/wiki/Two-line_element_set
  */
 export type Line1Data = {
@@ -556,7 +536,6 @@ export type Line1Data = {
  * - revNum: The revolution number at epoch.
  * - checksum2: The checksum of the second line of the TLE.
  * - period: The period of the satellite's orbit, derived from the mean motion.
- *
  * @see https://en.wikipedia.org/wiki/Two-line_element_set
  */
 export type Line2Data = {
@@ -624,14 +603,12 @@ export type GreenwichMeanSiderealTime = Distinct<number, 'Greenwich Mean Siderea
  * elevation are the two coordinates that define the position of a celestial
  * body (sun, moon, planet, star, etc.) in the sky as observed from a specific
  * location on the Earth's surface.
- *
  * @template Units The units in which the azimuth and elevation are expressed.
  * By default, this is radians.
- *
- * @property az The azimuth of the object. This is the angle between the
+ * az The azimuth of the object. This is the angle between the
  * observer's north vector and the perpendicular projection of the object onto
  * the observer's local horizon.
- * @property el The elevation of the object. This is the angle between the
+ * el The elevation of the object. This is the angle between the
  * object and the observer's local horizon.
  */
 export type AzEl<Units = Radians> = {
@@ -651,10 +628,9 @@ export type RaDec = {
 
 /**
  * Represents the solar noon and nadir times.
- *
- * @property solarNoon The time at which the sun is at its highest point in the
+ * solarNoon The time at which the sun is at its highest point in the
  * sky (directly above the observer's head). This is the midpoint of the day.
- * @property nadir The time at which the sun is at its lowest point, directly
+ * nadir The time at which the sun is at its lowest point, directly
  * below the observer. This is the midpoint of the night.
  */
 export type SunTime = {

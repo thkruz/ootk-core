@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 /* eslint-disable no-undefined */
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
@@ -25,6 +48,14 @@ export class RadecGeocentric {
   /**
    * Create a new [RadecGeocentric] object, using degrees for the
    * angular values.
+   * @param epoch UTC epoch.
+   * @param rightAscensionDegrees Right-ascension _(°)_.
+   * @param declinationDegrees Declination _(°)_.
+   * @param range Range _(km)_.
+   * @param rightAscensionRateDegrees Right-ascension rate _(°/s)_.
+   * @param declinationRateDegrees Declination rate _(°/s)_.
+   * @param rangeRate Range rate _(km/s)_.
+   * @returns A new [RadecGeocentric] object.
    */
   static fromDegrees(
     epoch: EpochUTC,
@@ -107,6 +138,8 @@ export class RadecGeocentric {
    *
    * An optional [range] _(km)_ value can be passed to override the value
    * contained in this observation.
+   * @param range Range _(km)_.
+   * @returns A [Vector3D] object.
    */
   position(range?: number): Vector3D {
     const r = range ?? this.range ?? 1.0;
@@ -119,6 +152,9 @@ export class RadecGeocentric {
    *
    * An optional [range] _(km)_ and [rangeRate] _(km/s)_ value can be passed
    * to override the value contained in this observation.
+   * @param range Range _(km)_.
+   * @param rangeRate Range rate _(km/s)_.
+   * @returns A [Vector3D] object.
    */
   velocity(range?: number, rangeRate?: number): Vector3D {
     if (!this.rightAscensionRate || !this.declinationRate) {
@@ -133,6 +169,9 @@ export class RadecGeocentric {
   /**
    * Calculate the angular distance _(rad)_ between this and another
    * [RadecGeocentric] object.
+   * @param radec - The other [RadecGeocentric] object.
+   * @param method - The angular distance method to use.
+   * @returns The angular distance _(rad)_.
    */
   angle(radec: RadecGeocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
     return angularDistance(this.rightAscension, this.declination, radec.rightAscension, radec.declination, method);
@@ -141,6 +180,9 @@ export class RadecGeocentric {
   /**
    * Calculate the angular distance _(°)_ between this and another
    * [RadecGeocentric] object.
+   * @param radec - The other [RadecGeocentric] object.
+   * @param method - The angular distance method to use.
+   * @returns The angular distance _(°)_.
    */
   angleDegrees(radec: RadecGeocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
     return this.angle(radec, method) * RAD2DEG;

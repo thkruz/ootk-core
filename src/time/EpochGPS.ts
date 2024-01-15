@@ -6,6 +6,9 @@ export class EpochGPS {
   /**
    * Create a new GPS epoch given the [week] since reference epoch, and number
    * of [seconds] into the [week].
+   * @param week Number of weeks since the GPS reference epoch.
+   * @param seconds Number of seconds into the week.
+   * @param reference Reference epoch.
    */
   constructor(public week: number, public seconds: number, reference: EpochUTC) {
     if (week < 0) {

@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { Radians } from 'src/main';
 import { Vector } from './Vector';
 import { Vector3D } from './Vector3D';
@@ -19,10 +42,9 @@ export class Matrix {
 
   /**
    * Creates a matrix with all elements set to zero.
-   *
    * @param rows - The number of rows in the matrix.
-   * @param columns - The number of columns in the matrix. @returns A matrix
-   * with all elements set to zero.
+   * @param columns - The number of columns in the matrix.
+   * @returns A matrix with all elements set to zero.
    */
   static allZeros(rows: number, columns: number): Matrix {
     return this.fill(rows, columns, 0.0);
@@ -31,13 +53,9 @@ export class Matrix {
   /**
    * Creates a new Matrix with the specified number of rows and columns, filled
    * with the specified value.
-   *
    * @param rows The number of rows in the matrix.
-   *
    * @param columns The number of columns in the matrix.
-   *
    * @param value The value to fill the matrix with. Default is 0.0.
-   *
    * @returns A new Matrix filled with the specified value.
    */
   static fill(rows: number, columns: number, value = 0.0): Matrix {
@@ -56,7 +74,6 @@ export class Matrix {
   /**
    * Creates a rotation matrix around the X-axis.
    * @param theta - The angle of rotation in radians.
-   *
    * @returns The rotation matrix.
    */
   static rotX(theta: Radians): Matrix {
@@ -76,7 +93,6 @@ export class Matrix {
   /**
    * Creates a rotation matrix around the y-axis.
    * @param theta - The angle of rotation in radians.
-   *
    * @returns The rotation matrix.
    */
   static rotY(theta: Radians): Matrix {
@@ -95,7 +111,6 @@ export class Matrix {
 
   /**
    * Creates a rotation matrix around the Z-axis.
-   *
    * @param theta The angle of rotation in radians.
    * @returns The rotation matrix.
    */
@@ -116,9 +131,7 @@ export class Matrix {
   /**
    * Creates a zero matrix with the specified number of rows and columns.
    * @param rows The number of rows in the matrix.
-   *
    * @param columns The number of columns in the matrix.
-   *
    * @returns A new Matrix object representing the zero matrix.
    */
   static zero(rows: number, columns: number): Matrix {
@@ -137,7 +150,6 @@ export class Matrix {
   /**
    * Creates an identity matrix of the specified dimension.
    * @param dimension The dimension of the identity matrix.
-   *
    * @returns The identity matrix.
    */
   static identity(dimension: number): Matrix {
@@ -155,9 +167,7 @@ export class Matrix {
 
   /**
    * Creates a diagonal matrix with the given diagonal elements.
-   *
    * @param d - An array of diagonal elements.
-   *
    * @returns A new Matrix object representing the diagonal matrix.
    */
   static diagonal(d: number[]): Matrix {
@@ -177,7 +187,6 @@ export class Matrix {
   /**
    * Adds the elements of another matrix to this matrix and returns the result.
    * @param m - The matrix to be added.
-   *
    * @returns The resulting matrix after addition.
    */
   add(m: Matrix): Matrix {
@@ -194,9 +203,7 @@ export class Matrix {
 
   /**
    * Subtracts the elements of another matrix from this matrix.
-   *
    * @param m - The matrix to subtract.
-   *
    * @returns A new matrix containing the result of the subtraction.
    */
   subtract(m: Matrix): Matrix {
@@ -214,7 +221,6 @@ export class Matrix {
   /**
    * Scales the matrix by multiplying each element by a scalar value.
    * @param n - The scalar value to multiply each element by.
-   *
    * @returns A new Matrix object representing the scaled matrix.
    */
   scale(n: number): Matrix {
@@ -240,7 +246,6 @@ export class Matrix {
   /**
    * Multiplies this matrix with another matrix.
    * @param m The matrix to multiply with.
-   *
    * @returns The resulting matrix.
    */
   multiply(m: Matrix): Matrix {
@@ -259,9 +264,7 @@ export class Matrix {
 
   /**
    * Computes the outer product of this matrix with another matrix.
-   *
    * @param m - The matrix to compute the outer product with.
-   *
    * @returns The resulting matrix.
    */
   outerProduct(m: Matrix): Matrix {
@@ -279,7 +282,6 @@ export class Matrix {
   /**
    * Multiplies the matrix by a vector.
    * @param v The vector to multiply by.
-   *
    * @returns A new vector representing the result of the multiplication.
    */
   multiplyVector(v: Vector): Vector {
@@ -299,11 +301,8 @@ export class Matrix {
 
   /**
    * Multiplies a 3D vector by the matrix.
-   *
    * @template T - The type of the vector elements.
-   *
    * @param v - The 3D vector to multiply.
-   *
    * @returns The resulting 3D vector after multiplication.
    */
   multiplyVector3D<T extends number>(v: Vector3D<T>): Vector3D<T> {
@@ -373,7 +372,6 @@ export class Matrix {
 
   /**
    * Performs the Cholesky decomposition on the matrix.
-   *
    * @returns A new Matrix object representing the Cholesky decomposition of the
    * original matrix.
    */
@@ -399,7 +397,6 @@ export class Matrix {
 
   /**
    * Swaps two rows in the matrix.
-   *
    * @param i - The index of the first row.
    * @param j - The index of the second row.
    */
@@ -452,7 +449,6 @@ export class Matrix {
 
   /**
    * Calculates the inverse of the matrix.
-   *
    * @returns The inverse of the matrix.
    */
   inverse(): Matrix {

@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 /* eslint-disable no-undefined */
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
@@ -61,6 +84,9 @@ export class RAE {
 
   /**
    * Create a [Razel] object from an inertial [state] and [site] vector.
+   * @param state The inertial [state] vector.
+   * @param site The observer [site] vector.
+   * @returns A new [Razel] object.
    */
   static fromStateVectors(state: J2000, site: J2000): RAE {
     const stateEcef = state.toITRF();
@@ -136,6 +162,10 @@ export class RAE {
    *
    * An optional azimuth [az] _(rad)_ and elevation [el] _(rad)_ value can be
    * passed to override the values contained in this observation.
+   * @param site The observer [site].
+   * @param az Azimuth _(rad)_.
+   * @param el Elevation _(rad)_.
+   * @returns A [Vector3D] object.
    */
   position(site: J2000, az?: Radians, el?: Radians): Vector3D<Kilometers> {
     const ecef = site.toITRF();
@@ -165,6 +195,8 @@ export class RAE {
    *
    * This will throw an error if the [rangeRate], [elevationRate], or
    * [azimuthRate] are not defined.
+   * @param site The observer [site].
+   * @returns A [J2000] state vector.
    */
   toStateVector(site: J2000): J2000 {
     if (!this.rangeRate || !this.elevationRate || !this.azimuthRate) {
@@ -201,6 +233,9 @@ export class RAE {
   /**
    * Calculate the angular distance _(rad)_ between this and another [Razel]
    * object.
+   * @param razel The other [Razel] object.
+   * @param method The angular distance method to use.
+   * @returns The angular distance _(rad)_.
    */
   angle(razel: RAE, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
     return angularDistance(this.azimuth, this.elevation, razel.azimuth, razel.elevation, method);
@@ -209,6 +244,9 @@ export class RAE {
   /**
    * Calculate the angular distance _(°)_ between this and another [Razel]
    * object.
+   * @param razel The other [Razel] object.
+   * @param method The angular distance method to use.
+   * @returns The angular distance _(°)_.
    */
   angleDegrees(razel: RAE, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
     return this.angle(razel, method) * RAD2DEG;

@@ -1,26 +1,16 @@
 /**
- * @author @thkruz Theodore Kruczek
- * @description Orbital Object ToolKit Core (ootk-Core) is a base collection
- * of tools for working with satellites and other orbital objects. This core
- * library is provided under the MIT license and is free to use in any project.
- * For additional features, see the full library at:
- * https://github.com/thkruz/ootk.
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
- * @license MIT License
- * @Copyright (c) 2020-2024 Theodore Kruczek
- *
- * Many of the classes are based off of the work of @david-rc-dayton and his
- * Pious Squid library (https://github.com/david-rc-dayton/pious_squid).
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -29,6 +19,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ * @copyright Copyright (c) 2023 David RC Dayton
+ *
+ * Many of the classes are based off of the work of @david-rc-dayton and his
+ * Pious Squid library
+ * @see https://github.com/david-rc-dayton/pious_squid
  */
 
 export * from './enums';

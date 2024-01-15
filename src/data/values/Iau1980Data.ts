@@ -15,6 +15,8 @@ export class Iau1980Data {
   /**
    * Create a new [Iau1980Data] container object from an array of IAU-1980
    * coefficient tuples [coeffs].
+   * @param coeffs IAU-1980 coefficients.
+   * @returns A new [Iau1980Data] object.
    */
   static fromCoeffs(coeffs: Array<Iau1980Entry>): Iau1980Data {
     const output: Iau1980Entry[] = [];

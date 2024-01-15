@@ -12,7 +12,7 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "jsdoc"],
-  "rules": {    
+  "rules": {
     "accessor-pairs": "error",
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
@@ -209,7 +209,7 @@
     "prefer-spread": "error",
     "prefer-template": "error",
     "quote-props": "off",
-    "quotes": ["off", "single"],
+    "quotes": ["error", "single"],
     "radix": "off",
     "require-atomic-updates": "error",
     "require-await": "error",

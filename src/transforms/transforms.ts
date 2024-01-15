@@ -1,31 +1,24 @@
-/* eslint-disable init-declarations */
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
- * with satellites and other orbital objects.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
- * @file The Transforms module contains a collection of conversions not contained
- * in the original SGP4 library such as ECI to ECF and ECF to RAE. This was based
- * on some of the functions in satellite.js.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * @license MIT License
- *
- * @Copyright (c) 2024 Theodore Kruczek
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
- * to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 import {
@@ -59,6 +52,10 @@ import { TransformCache } from './TransformCache';
  * Azimuth is the angle off of boresight in the horizontal plane.
  * Elevation is the angle off of boresight in the vertical plane.
  * Cone half angle is the angle of the cone of the radar max field of view.
+ * @param az - Azimuth in radians
+ * @param el - Elevation in radians
+ * @param coneHalfAngle - Cone half angle in radians
+ * @returns U and V in radians
  */
 export function azel2uv(az: Radians, el: Radians, coneHalfAngle: Radians): { u: Radians; v: Radians } {
   if (az > coneHalfAngle && az < coneHalfAngle) {
@@ -86,7 +83,9 @@ export function azel2uv(az: Radians, el: Radians, coneHalfAngle: Radians): { u: 
  * [X]     [C -S  0][X]
  * [Y]  =  [S  C  0][Y]
  * [Z]eci  [0  0  1][Z]ecf
- *
+ * @param ecf takes xyz coordinates
+ * @param gmst takes a number in gmst time
+ * @returns array containing eci coordinates
  */
 export function ecf2eci<T extends number>(ecf: EcfVec3<T>, gmst: number): EciVec3<T> {
   const X = (ecf.x * Math.cos(gmst) - ecf.y * Math.sin(gmst)) as T;
@@ -123,6 +122,9 @@ export function ecf2enu<T extends number>(ecf: EcefVec3<T>, lla: LlaVec3): EnuVe
  * [X]     [C  S  0][X]
  * [Y]  =  [-S C  0][Y]
  * [Z]ecf  [0  0  1][Z]eci
+ * @param eci takes xyz coordinates
+ * @param gmst takes a number in gmst time
+ * @returns array containing ecf coordinates
  */
 export function eci2ecf<T extends number>(eci: EciVec3<T>, gmst: number): EcfVec3<T> {
   const x = <T>(eci.x * Math.cos(gmst) + eci.y * Math.sin(gmst));
@@ -138,12 +140,10 @@ export function eci2ecf<T extends number>(eci: EciVec3<T>, gmst: number): EcfVec
 
 /**
  * EciToGeodetic converts eci coordinates to lla coordinates
- *
- * @cached
- *
- * @param {vec3} eci takes xyz coordinates
- * @param {number} gmst takes a number in gmst time
- * @returns {array} array containing lla coordinates
+ * @variation cached - results are cached
+ * @param eci takes xyz coordinates
+ * @param gmst takes a number in gmst time
+ * @returns array containing lla coordinates
  */
 export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers> {
   // Check cache
@@ -194,10 +194,13 @@ export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers
 
 /**
  * Converts coordinates from East-North-Up (ENU) to Right-Front-Up (RF) coordinate system.
- * @param {EnuVec3<D>} enu - The ENU coordinates to be converted.
- * @param {A} az - The azimuth angle in radians.
- * @param {A} el - The elevation angle in radians.
- * @returns {RfVec3} The converted RF coordinates.
+ * @param enu - The ENU coordinates to be converted.
+ * @param enu.x - The east coordinate.
+ * @param enu.y - The north coordinate.
+ * @param enu.z - The up coordinate.
+ * @param az - The azimuth angle in radians.
+ * @param el - The elevation angle in radians.
+ * @returns The converted RF coordinates.
  */
 export function enu2rf<D extends number, A extends number = Radians>({ x, y, z }: EnuVec3<D>, az: A, el: A): RfVec3<D> {
   const xrf = Math.cos(el) * Math.cos(az) * x - Math.sin(az) * y + Math.sin(el) * Math.cos(az) * z;
@@ -213,6 +216,8 @@ export function enu2rf<D extends number, A extends number = Radians>({ x, y, z }
 
 /**
  * Converts geodetic coordinates (longitude, latitude, altitude) to Earth-Centered Earth-Fixed (ECF) coordinates.
+ * @param lla The geodetic coordinates in radians and meters.
+ * @returns The ECF coordinates in meters.
  */
 export function llaRad2ecf<AltitudeUnits extends number>(lla: LlaVec3<Radians, AltitudeUnits>): EcfVec3<AltitudeUnits> {
   const { lon, lat, alt } = lla;
@@ -236,6 +241,8 @@ export function llaRad2ecf<AltitudeUnits extends number>(lla: LlaVec3<Radians, A
 
 /**
  * Converts geodetic coordinates (longitude, latitude, altitude) to Earth-Centered Earth-Fixed (ECF) coordinates.
+ * @param lla The geodetic coordinates in degrees and meters.
+ * @returns The ECF coordinates in meters.
  */
 export function lla2ecf<AltitudeUnits extends number>(lla: LlaVec3<Degrees, AltitudeUnits>): EcfVec3<AltitudeUnits> {
   const { lon, lat, alt } = lla;
@@ -252,9 +259,7 @@ export function lla2ecf<AltitudeUnits extends number>(lla: LlaVec3<Degrees, Alti
 
 /**
  * Converts geodetic coordinates (latitude, longitude, altitude) to Earth-centered inertial (ECI) coordinates.
- *
- * @cached
- *
+ * @variation cached - results are cached
  * @param lla The geodetic coordinates in radians and meters.
  * @param gmst The Greenwich Mean Sidereal Time in seconds.
  * @returns The ECI coordinates in meters.
@@ -287,8 +292,9 @@ export function lla2eci(lla: LlaVec3<Radians, Kilometers>, gmst: GreenwichMeanSi
 
 /**
  * Calculates Geodetic Lat Lon Alt to ECEF coordinates.
- *
  * @deprecated This needs to be validated.
+ * @param lla The geodetic coordinates in degrees and meters.
+ * @returns The ECEF coordinates in meters.
  */
 export function lla2ecef<D extends number>(lla: LlaVec3<Degrees, D>): EcefVec3<D> {
   const { lat, lon, alt } = lla;
@@ -306,6 +312,9 @@ export function lla2ecef<D extends number>(lla: LlaVec3<Degrees, D>): EcefVec3<D
 /**
  * Converts LLA to SEZ coordinates.
  * @see http://www.celestrak.com/columns/v02n02/
+ * @param lla The LLA coordinates.
+ * @param ecf The ECF coordinates.
+ * @returns The SEZ coordinates.
  */
 export function lla2sez<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfVec3<D>): SezVec3<D> {
   const lon = lla.lon;
@@ -334,7 +343,6 @@ export function lla2sez<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfVec3
 /**
  * Converts a vector in Right Ascension, Elevation, and Range (RAE) coordinate system
  * to a vector in South, East, and Zenith (SEZ) coordinate system.
- *
  * @param rae The vector in RAE coordinate system.
  * @returns The vector in SEZ coordinate system.
  */
@@ -353,7 +361,6 @@ export function rae2sez<D extends number>(rae: RaeVec3<D, Radians>): SezVec3<D> 
 /**
  * Converts a vector in Right Ascension, Elevation, and Range (RAE) coordinate system
  * to Earth-Centered Fixed (ECF) coordinate system.
- *
  * @template D - The dimension of the RAE vector.
  * @template A - The dimension of the LLA vector.
  * @param rae - The vector in RAE coordinate system.
@@ -390,9 +397,7 @@ export function rae2ecf<D extends number>(rae: RaeVec3<D, Degrees>, lla: LlaVec3
 
 /**
  * Converts a vector from RAE (Range, Azimuth, Elevation) coordinates to ECI (Earth-Centered Inertial) coordinates.
- *
- * @cached
- *
+ * @variation cached - results are cached
  * @param rae The vector in RAE coordinates.
  * @param lla The vector in LLA (Latitude, Longitude, Altitude) coordinates.
  * @param gmst The Greenwich Mean Sidereal Time.
@@ -434,10 +439,10 @@ export function rae2enu(rae: RaeVec3): EnuVec3<Kilometers> {
 
 /**
  * Determine azimuth and elevation off of boresight based on sensor orientation and RAE.
- *
- * @param {rae} rae Range, Azimuth, Elevation
- * @param {RadarSensor} sensor Radar sensor object
- * @returns {az, el} Azimuth and Elevation off of boresight
+ * @param rae Range, Azimuth, Elevation
+ * @param sensor Radar sensor object
+ * @param maxSensorAz Maximum sensor azimuth
+ * @returns Azimuth and Elevation off of boresight
  */
 export function rae2raeOffBoresight(
   rae: RaeVec3,
@@ -458,6 +463,10 @@ export function rae2raeOffBoresight(
 
 /**
  * Converts Range Az El to Range U V.
+ * @param rae Range, Azimuth, Elevation
+ * @param sensor Radar sensor object
+ * @param maxSensorAz Maximum sensor azimuth
+ * @returns Range, U, V
  */
 export function rae2ruv(rae: RaeVec3, sensor: RadarSensor, maxSensorAz: Degrees): RuvVec3 {
   const { az, el } = rae2raeOffBoresight(rae, sensor, maxSensorAz);
@@ -469,7 +478,7 @@ export function rae2ruv(rae: RaeVec3, sensor: RadarSensor, maxSensorAz: Degrees)
 /**
  * Converts South, East, and Zenith (SEZ) coordinates to Right Ascension, Elevation, and Range (RAE) coordinates.
  * @param sez The SEZ coordinates.
- * @returns {RaeVec3} Rng, Az, El array
+ * @returns Rng, Az, El array
  */
 export function sez2rae<D extends number>(sez: SezVec3<D>): RaeVec3<D, Radians> {
   const rng = <D>Math.sqrt(sez.s * sez.s + sez.e * sez.e + sez.z * sez.z);
@@ -481,10 +490,10 @@ export function sez2rae<D extends number>(sez: SezVec3<D>): RaeVec3<D, Radians> 
 
 /**
  * Converts U and V to Azimuth and Elevation off of boresight.
- *
  * @param u The U coordinate.
  * @param v The V coordinate.
  * @param coneHalfAngle The cone half angle of the radar.
+ * @returns Azimuth and Elevation off of boresight.
  */
 export function uv2azel(u: Radians, v: Radians, coneHalfAngle: Radians): { az: Radians; el: Radians } {
   if (u > 1 || u < -1) {
@@ -506,7 +515,6 @@ export function uv2azel(u: Radians, v: Radians, coneHalfAngle: Radians): { az: R
 /**
  * Converts Earth-Centered Fixed (ECF) coordinates to Right Ascension (RA),
  * Elevation (E), and Azimuth (A) coordinates.
- *
  * @param lla The Latitude, Longitude, and Altitude (LLA) coordinates.
  * @param ecf The Earth-Centered Fixed (ECF) coordinates.
  * @returns The Right Ascension (RA), Elevation (E), and Azimuth (A) coordinates.
@@ -521,9 +529,7 @@ export function ecfRad2rae<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfV
 /**
  * Converts Earth-Centered Fixed (ECF) coordinates to Right Ascension (RA),
  * Elevation (E), and Azimuth (A) coordinates.
- *
- * @cached
- *
+ * @variation cached - results are cached
  * @param lla The Latitude, Longitude, and Altitude (LLA) coordinates.
  * @param ecf The Earth-Centered Fixed (ECF) coordinates.
  * @returns The Right Ascension (RA), Elevation (E), and Azimuth (A) coordinates.
@@ -578,7 +584,6 @@ export const jday = (year?: number, mon?: number, day?: number, hr?: number, min
 
 /**
  * Calculates the Greenwich Mean Sidereal Time (GMST) for a given date.
- *
  * @param date - The date for which to calculate the GMST.
  * @returns An object containing the GMST value and the Julian date.
  */
@@ -601,13 +606,11 @@ export function calcGmst(date: Date): { gmst: GreenwichMeanSiderealTime; j: numb
 
 /**
  * Converts ECI coordinates to RAE (Right Ascension, Azimuth, Elevation) coordinates.
- *
- * @cached
- *
- * @param {Date} now - Current date and time.
- * @param {EciArr3} eci - ECI coordinates of the satellite.
- * @param {SensorObject} sensor - Sensor object containing observer's geodetic coordinates.
- * @returns {Object} Object containing azimuth, elevation and range in degrees and kilometers respectively.
+ * @variation cached - results are cached
+ * @param now - Current date and time.
+ * @param eci - ECI coordinates of the satellite.
+ * @param sensor - Sensor object containing observer's geodetic coordinates.
+ * @returns Object containing azimuth, elevation and range in degrees and kilometers respectively.
  */
 export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): RaeVec3<Kilometers, Degrees> {
   now = new Date(now);

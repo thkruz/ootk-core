@@ -16,6 +16,8 @@ export class Egm96Data {
   /**
    * Create a new [Egm96Data] container given a list of EGM-96
    * coefficient tuples [vals].
+   * @param vals List of EGM-96 coefficient tuples.
+   * @returns A new [Egm96Data] object.
    */
   static fromVals(vals: Egm96Entry[]): Egm96Data {
     const output: Egm96Entry[] = [];
