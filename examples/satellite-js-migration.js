@@ -71,9 +71,9 @@ const rangeRate = lookAngles.rngRate; // Kilometers/Second
 
 // There is a built in cache to allow fast retrieval of repeated calculations.
 // This means you can make repeat calls to `.rae()` for minimal performance hit.
-const rangeCache = satellite.rae(observer, exampleDate).range;
-const azimuthCached = satellite.rae(observer, exampleDate).azimuth;
-const elevationCached = satellite.rae(observer, exampleDate).elevation;
+const rangeCache = satellite.rae(observer, exampleDate).rng;
+const azimuthCached = satellite.rae(observer, exampleDate).az;
+const elevationCached = satellite.rae(observer, exampleDate).el;
 const latitudeCached = satellite.lla(exampleDate).lat;
 const longitudeCached = satellite.lla(exampleDate).lon;
 const heightCached = satellite.lla(exampleDate).alt;

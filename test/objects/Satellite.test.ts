@@ -145,7 +145,7 @@ describe('Satellite', () => {
 
   // can calculate and return range to an observer
   it('should calculate and return range to an observer', () => {
-    const range = satellite.range(observer, exampleDate);
+    const range = satellite.rng(observer, exampleDate);
 
     expect(range).toMatchSnapshot();
   });

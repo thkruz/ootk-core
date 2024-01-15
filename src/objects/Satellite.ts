@@ -361,7 +361,7 @@ export class Satellite extends BaseObject {
    * @param date - The date at which to calculate the range. Optional, defaults to the current date.
    * @returns The range of the satellite from the given sensor at the specified time.
    */
-  range(observer: GroundObject, date: Date = new Date()): Kilometers {
+  rng(observer: GroundObject, date: Date = new Date()): Kilometers {
     return this.rae(observer, date).rng;
   }
 
