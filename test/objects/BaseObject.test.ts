@@ -1,4 +1,4 @@
-import { BaseObject, BaseObjectParams, EciVec3, SpaceObjectType } from '../../src/main';
+import { BaseObject, BaseObjectParams, EciVec3, Kilometers, SpaceObjectType } from '../../src/main';
 const mockVelocity = {
   x: 8000,
   y: 0,
@@ -18,7 +18,7 @@ describe('BaseObject', () => {
       name: 'Satellite',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
+
       active: true,
     };
 
@@ -69,7 +69,6 @@ describe('BaseObject', () => {
       name: 'Satellite',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -87,7 +86,6 @@ describe('BaseObject', () => {
       name: 'Rocket',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -105,7 +103,6 @@ describe('BaseObject', () => {
       name: 'Debris',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -123,7 +120,6 @@ describe('BaseObject', () => {
       name: 'Star Object',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -141,7 +137,6 @@ describe('BaseObject', () => {
       name: 'Missile',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -157,7 +152,6 @@ describe('BaseObject', () => {
       name: 'Notional Object',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -173,7 +167,6 @@ describe('BaseObject', () => {
       name: 'Satellite',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -191,7 +184,6 @@ describe('BaseObject', () => {
       name: 'Satellite',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -209,7 +201,6 @@ describe('BaseObject', () => {
       name: 'Satellite',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
@@ -221,21 +212,28 @@ describe('BaseObject', () => {
   });
 
   // check if BaseObject is static
-  it('should return true when calling isStatic() method', () => {
-    const info: BaseObjectParams = {
+  it('should return coorect value when calling isStatic() method', () => {
+    const movingObject = new BaseObject({
       type: SpaceObjectType.PAYLOAD,
       name: 'Satellite',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
-    };
+    });
+    const staticObject = new BaseObject({
+      type: SpaceObjectType.PAYLOAD,
+      name: 'Satellite',
+      position: mockPosition,
+      velocity: {
+        x: 0 as Kilometers,
+        y: 0 as Kilometers,
+        z: 0 as Kilometers,
+      },
+      active: true,
+    });
 
-    const baseObject = new BaseObject(info);
-
-    const result = baseObject.isStatic();
-
-    expect(result).toBe(true);
+    expect(movingObject.isStatic()).toBe(false);
+    expect(staticObject.isStatic()).toBe(true);
   });
 
   // check if BaseObject is a land object
@@ -245,13 +243,12 @@ describe('BaseObject', () => {
       name: 'Ground Sensor Station',
       position: mockPosition,
       velocity: mockVelocity,
-      time: new Date(),
       active: true,
     };
 
     const baseObject = new BaseObject(info);
 
-    const result = baseObject.isLandObject();
+    const result = baseObject.isGroundObject();
 
     expect(result).toBe(false);
   });

@@ -39,17 +39,19 @@ export class BaseObject {
     this.id = info.id;
     this.active = info.active ?? true;
 
+    // Default to the center of the earth until position is calculated
     this.position = info.position ?? {
       x: <Kilometers>0,
       y: <Kilometers>0,
       z: <Kilometers>0,
-    }; // Default to the center of the earth until position is calculated
+    };
 
+    // Default to 0 velocity until velocity is calculated
     this.velocity = info.velocity ?? {
       x: <Kilometers>0,
       y: <Kilometers>0,
       z: <Kilometers>0,
-    }; // Default to 0 velocity until velocity is calculated
+    };
     this.totalVelocity = Math.sqrt(this.velocity.x ** 2 + this.velocity.y ** 2 + this.velocity.z ** 2);
   }
 
@@ -62,25 +64,11 @@ export class BaseObject {
   }
 
   /**
-   * Checks if the object is a land object.
-   * @returns True if the object is a land object, false otherwise.
+   * Checks if the object is a ground object.
+   * @returns True if the object is a ground object, false otherwise.
    */
-  isLandObject(): boolean {
-    switch (this.type) {
-      case SpaceObjectType.INTERGOVERNMENTAL_ORGANIZATION:
-      case SpaceObjectType.SUBORBITAL_PAYLOAD_OPERATOR:
-      case SpaceObjectType.PAYLOAD_OWNER:
-      case SpaceObjectType.METEOROLOGICAL_ROCKET_LAUNCH_AGENCY_OR_MANUFACTURER:
-      case SpaceObjectType.PAYLOAD_MANUFACTURER:
-      case SpaceObjectType.LAUNCH_VEHICLE_MANUFACTURER:
-      case SpaceObjectType.ENGINE_MANUFACTURER:
-      case SpaceObjectType.LAUNCH_AGENCY:
-      case SpaceObjectType.LAUNCH_SITE:
-      case SpaceObjectType.LAUNCH_POSITION:
-        return true;
-      default:
-        return false;
-    }
+  isGroundObject(): boolean {
+    return false;
   }
 
   /**
@@ -104,7 +92,7 @@ export class BaseObject {
    * @returns True if the object is static, false otherwise.
    */
   isStatic(): boolean {
-    return true;
+    return this.velocity.x === 0 && this.velocity.y === 0 && this.velocity.z === 0;
   }
 
   isPayload(): boolean {

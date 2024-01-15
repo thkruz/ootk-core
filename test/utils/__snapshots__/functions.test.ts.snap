@@ -44,6 +44,8 @@ Array [
 
 exports[`functions should be calculate csch 1`] = `0.8509181282393216`;
 
+exports[`functions should be calculate deg2rad 1`] = `0.017453292519943295`;
+
 exports[`functions should be calculate derivative 1`] = `[Function]`;
 
 exports[`functions should be calculate gamma 1`] = `1`;
@@ -67,6 +69,8 @@ exports[`functions should be calculate linearInterpolate 1`] = `0.75`;
 exports[`functions should be calculate log10 1`] = `2`;
 
 exports[`functions should be calculate mean 1`] = `2`;
+
+exports[`functions should be calculate rad2deg 1`] = `57.29577951308232`;
 
 exports[`functions should be calculate sech 1`] = `0.6480542736638855`;
 
