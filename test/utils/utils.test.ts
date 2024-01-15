@@ -1,101 +1,116 @@
-/**
- * @file   Tests from Utils Module to ensure compatibility
- * @since  1.0.0-alpha3
- */
+import { EcfVec3, Kilometers, linearDistance, RADIUS_OF_EARTH, Vec3 } from '../../src/main';
+import { dopplerFactor, getDayOfYear } from '../../src/utils/functions';
 
-import { EciVec3, Kilometers, linearDistance, Vec3 } from '../../lib/index'; // eslint-disable-line
-import { dopplerFactor, getDayOfYear } from '../../lib/utils/functions';
-
-const numDigits = 8;
-
-const earthRadius = 6378.137;
 const sincos45deg = Math.sqrt(2) / 2;
 
 describe('Doppler factor', () => {
-  it('without observer movement', () => {
+  it('works without observer movement and object moving away', () => {
     // North Pole
-    const observerEci = {
+    const observerEcf = {
       x: 0,
       y: 0,
-      z: earthRadius,
-    } as EciVec3;
-    const positionEci = {
+      z: RADIUS_OF_EARTH,
+    } as EcfVec3;
+    const positionEcf = {
       x: 0,
       y: 0,
-      z: earthRadius + 500,
-    } as EciVec3;
-    // Escape velocity
-    const velocityEci = {
-      x: 7.91,
-      y: 0,
-      z: 0,
-    } as EciVec3;
-    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
-
-    expect(dopFactor).toBeCloseTo(1, numDigits);
-  });
-
-  it('movement of observer is not affected', () => {
-    const observerEci = {
-      x: earthRadius,
-      y: 0,
-      z: 0,
-    } as EciVec3;
-    const positionEci = {
-      x: earthRadius + 500,
-      y: 0,
-      z: 0,
-    } as EciVec3;
-    const velocityEci = {
+      z: RADIUS_OF_EARTH + 500,
+    } as EcfVec3;
+    const velocityEcf = {
       x: 0,
-      y: 7.91,
-      z: 0,
-    } as EciVec3;
-    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
+      y: 0,
+      z: 1,
+    } as EcfVec3;
+    const dopFactor = dopplerFactor(observerEcf, positionEcf, velocityEcf);
 
-    expect(dopFactor).toBeCloseTo(1, numDigits);
+    expect(dopFactor).toBeLessThan(1);
   });
 
-  it('special case', () => {
-    const observerEci = {
-      x: earthRadius,
+  it('works without observer movement and object moving towards', () => {
+    // North Pole
+    const observerEcf = {
+      x: 0,
       y: 0,
-      z: 0,
-    } as EciVec3;
-    const positionEci = {
-      x: (earthRadius + 500) * sincos45deg, // z*sin(45)
-      y: (earthRadius + 500) * sincos45deg, // z*cos(45)
-      z: 0,
-    } as EciVec3;
-    const velocityEci = {
-      x: 7.91 * sincos45deg,
-      y: 7.91 * sincos45deg,
-      z: 0,
-    } as EciVec3;
-    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
+      z: RADIUS_OF_EARTH,
+    } as EcfVec3;
+    const positionEcf = {
+      x: 0,
+      y: 0,
+      z: RADIUS_OF_EARTH + 500,
+    } as EcfVec3;
+    const velocityEcf = {
+      x: 0,
+      y: 0,
+      z: -1,
+    } as EcfVec3;
+    const dopFactor = dopplerFactor(observerEcf, positionEcf, velocityEcf);
 
-    expect(dopFactor).toBeCloseTo(0.9999892152210788, numDigits);
+    expect(dopFactor).toBeGreaterThan(1);
   });
 
-  test('if negative range rate works', () => {
-    const observerEci = {
-      x: earthRadius,
+  it('calculates earth rotation the same as before #1', () => {
+    const observerEcf = {
+      x: RADIUS_OF_EARTH,
       y: 0,
       z: 0,
-    } as EciVec3;
-    const positionEci = {
-      x: (earthRadius + 500) * sincos45deg, // z*sin(45)
-      y: (earthRadius + 500) * sincos45deg, // z*cos(45)
+    } as EcfVec3;
+    const positionEcf = {
+      x: (RADIUS_OF_EARTH + 500) * sincos45deg, // z*sin(45)
+      y: (RADIUS_OF_EARTH + 500) * sincos45deg, // z*cos(45)
       z: 0,
-    } as EciVec3;
-    const velocityEci = {
-      x: -7.91 * sincos45deg,
-      y: -7.91 * sincos45deg,
+    } as EcfVec3;
+    const velocityEcf = {
+      x: 0,
+      y: 0,
       z: 0,
-    } as EciVec3;
-    const dopFactor = dopplerFactor(observerEci, positionEci, velocityEci);
+    } as EcfVec3;
+    const dopFactor = dopplerFactor(observerEcf, positionEcf, velocityEcf);
 
-    expect(dopFactor).toBeCloseTo(1.000013747277977, numDigits);
+    expect(dopFactor).toMatchSnapshot();
+  });
+
+  it('works without observer movement and a stationary object', () => {
+    // North Pole
+    const observerEcf = {
+      x: 0,
+      y: 0,
+      z: RADIUS_OF_EARTH,
+    } as EcfVec3;
+    const positionEcf = {
+      x: 0,
+      y: 0,
+      z: RADIUS_OF_EARTH + 500,
+    } as EcfVec3;
+    const velocityEcf = {
+      x: 0,
+      y: 0,
+      z: 0,
+    } as EcfVec3;
+    const dopFactor = dopplerFactor(observerEcf, positionEcf, velocityEcf);
+
+    expect(dopFactor).toEqual(1);
+  });
+
+  it('calculates earth rotation the same as before #2', () => {
+    // North Pole
+    const observerEcf = {
+      x: RADIUS_OF_EARTH,
+      y: 0,
+      z: 0,
+    } as EcfVec3;
+    const positionEcf = {
+      x: RADIUS_OF_EARTH + 500,
+      y: 0,
+      z: 0,
+    } as EcfVec3;
+    const velocityEcf = {
+      x: 0,
+      y: 0,
+      z: 1,
+    } as EcfVec3;
+    const dopFactor = dopplerFactor(observerEcf, positionEcf, velocityEcf);
+
+    expect(dopFactor).toMatchSnapshot();
   });
 });
 

@@ -9,8 +9,8 @@
 > An Orbital Object Toolkit in Your Web Browser
 
 **ootk-core** is the core libraries of [ootk](https://github.com/thkruz/ootk) for doing math related to orbital objects
-written in TypeScript and built for both CommonJS and ES6 JavaScript or TypeScript. **ootk-core** was developed to
-simplify the math and let you focus on using the results. It is the culmination of years of fixes and improvements to
+written in TypeScript and built for JavaScript or TypeScript. **ootk-core** was developed to simplify the math and let
+you focus on using the results. It is the culmination of years of fixes and improvements to
 other libraries.
 
 If you would like more functionality the expanded **ootk** library is available free under the AGPL license
@@ -22,16 +22,22 @@ later refactored into this library for others to use.
 
 ## :blue_book: Table of Contents
 
-- [Installation](#Installation)
-- [Usage](#Usage)
-  - [Loading the Library](#Loading-the-Library)
-  - [Propagating a TLE](#Propagating-a-TLE)
-  - [Creating a Satellite](#Creating-a-Satellite)
-  - [Creating a Sensor](#Creating-a-Sensor)
-- [Contributing](#Contributing)
-- [Building](#Building)
-- [Contributors](#Contributors)
-- [License](#License)
+- [ootk-core](#ootk-core)
+  - [:blue\_book: Table of Contents](#blue_book-table-of-contents)
+  - [:wrench: Installation](#wrench-installation)
+    - [Loading the Library](#loading-the-library)
+  - [:satellite: Usage](#satellite-usage)
+    - [Common Patterns](#common-patterns)
+    - [Propagating a TLE](#propagating-a-tle)
+    - [Creating a Satellite](#creating-a-satellite)
+    - [Creating a Sensor](#creating-a-sensor)
+    - [More Examples](#more-examples)
+  - [Changelog](#changelog)
+  - [:desktop\_computer: Building](#desktop_computer-building)
+  - [:gem: NPM Scripts](#gem-npm-scripts)
+  - [:man\_teacher: Contributing](#man_teacher-contributing)
+  - [:man\_scientist: Contributors](#man_scientist-contributors)
+  - [:balance\_scale: License](#balance_scale-license)
 
 ## :wrench: Installation
 
@@ -53,6 +59,16 @@ const satellite = new Satellite({
 ```
 
 ## :satellite: Usage
+
+### Common Patterns
+
+- If you don't specify a date, the method will assume you want to use the current date/time.
+- Many parameters are in shorthand - Ex: `sensor.rng`.
+- Changing a variable requires you to cast its units before using it as a parameters - Ex: `(3.14 * -1) as Radians`
+- Methods starting with 'to' change the class - Ex: `satellite.toGeodetic()` or `satellite.toITRF()`
+  - Methods that are optimized for loops are marked as `@variation optimized`
+  - Methods that are slower with expanded capabilities are marked as `@variation expanded`
+- Class parameters assume degrees and specify radians - Ex: `sensor.az` is in `degrees` and `sensor.azRad` is in `radians`.
 
 ### Propagating a TLE
 
@@ -109,11 +125,21 @@ sat.rae(sensor, time); // Get position in range, aziimuth, elevation relative to
 ### Creating a Sensor
 
 ```js
-const sensor = new Ootk.Sensor({ name: 'Test', lat: lat, lon: lon, alt: alt });
+import { GroundPosition } from 'ootk-core';
+
+const sensor = new GroundPosition({ name: 'Test', lat: lat, lon: lon, alt: alt });
 sensor.rae(sat); // Get satellite position in range, aziimuth, elevation at the sensor's current time
 sensor.rae(sat, time); // Get position in range, aziimuth, elevation relative to a satellite object at the given time
 sensor.eci() // Get the sensor's position in ECI coordinates
 ```
+
+### More Examples
+
+More examples can be found in the `examples` folder of the code.
+
+## Changelog
+
+You can find a [list of changes here](https://github.com/thkruz/ootk-core/blob/main/CHANGELOG.md).
 
 ## :desktop_computer: Building
 
@@ -133,9 +159,9 @@ sensor.eci() // Get the sensor's position in ECI coordinates
 
 ## :gem: NPM Scripts
 
-- `build` compiles TypeScript into ES6 Modules in `lib` directory and CommonJs in `commonjs` directory
+- `build` compiles TypeScript into ES6 Modules in `dist` directory
 - `lint` lints source code located in `src` directory with [ESLint](http://eslint.org/)
-- `test` builds the software and then runs jest to verify the final library remains functional
+- `test` runs jest to verify the final library remains functional
 
 ## :man_teacher: Contributing
 

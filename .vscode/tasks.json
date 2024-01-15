@@ -14,39 +14,49 @@
       }
     },
     {
-      "label": "Test with Jest",
-      "command": "npm test",
+      "label": "Clean Dist Folder",
+      "command": "npm run clean",
       "type": "shell",
       "args": [],
       "isBackground": true,
       "problemMatcher": [],
       "icon": {
-        "id": "go-to-file",
-        "color": "terminal.ansiGreen"
-      }
-    },
-    {
-      "label": "Test without Building",
-      "command": "npm run test:nobuild",
-      "type": "shell",
-      "args": [],
-      "isBackground": true,
-      "problemMatcher": [],
-      "icon": {
-        "id": "go-to-file",
-        "color": "terminal.ansiGreen"
-      }
-    },
-    {
-      "label": "Open Test Coverage",
-      "command": "npm run lcov",
-      "type": "shell",
-      "args": [],
-      "isBackground": true,
-      "problemMatcher": [],
-      "icon": {
-        "id": "file-code",
+        "id": "trash",
         "color": "terminal.ansiYellow"
+      }
+    },
+    {
+      "label": "Test for Coverage",
+      "command": "npm run test:coverage",
+      "type": "shell",
+      "args": [],
+      "isBackground": true,
+      "problemMatcher": [],
+      "icon": {
+        "id": "go-to-file",
+        "color": "terminal.ansiGreen"
+      }
+    },
+    {
+      "label": "Open Coverage in Brave",
+      "type": "process",
+      "command": "",
+      "windows": {
+        "command": "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
+        "args": ["${workspaceFolder}/coverage/lcov-report/index.html"]
+      },
+      "icon": {
+        "id": "browser",
+        "color": "terminal.ansiCyan"
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": true,
+        "close": true
       }
     }
   ],

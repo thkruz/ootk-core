@@ -48,6 +48,11 @@ export const ttasec2rad = (asec2rad / 10000.0) as Radians;
 export const masec2rad = (asec2rad / 1000.0) as Radians;
 
 /**
+ * The angular velocity of the Earth in radians per second.
+ */
+export const angularVelocityOfEarth = 7.292115e-5;
+
+/**
  * Astronomical unit in kilometers.
  */
 export const astronomicalUnit = 149597870.0;
@@ -104,3 +109,5 @@ export const MILLISECONDS_PER_DAY = <Days>1000 * 60 * 60 * 24;
 export const MILLISECONDS_PER_SECOND = <Milliseconds>1000;
 
 export const RADIUS_OF_EARTH = 6371; // Radius of Earth in kilometers
+
+export const earthGravityParam = 398600.4415;

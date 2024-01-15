@@ -3,7 +3,7 @@
  * @since  0.2.0
  */
 
-import { Sgp4 } from '../../../lib/index'; // eslint-disable-line
+import { Sgp4 } from '../../../src/main'; // eslint-disable-line
 
 // wgs84 constants
 const mu = 398600.8; // in km3 / s2

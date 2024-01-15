@@ -1,9 +1,44 @@
-import { AngularDiameterMethod, Kilometers, Radians } from '..';
-import { DataHandler } from '../data/DataHandler';
-import { Vector3D } from '../operations/Vector3D';
-import { EpochUTC } from '../time/EpochUTC';
-import { asec2rad, DEG2RAD, RAD2DEG, secondsPerDay, secondsPerSiderealDay, TAU, ttasec2rad } from '../utils/constants';
-import { angularDiameter, evalPoly } from '../utils/functions';
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+import {
+  angularDiameter,
+  AngularDiameterMethod,
+  asec2rad,
+  DataHandler,
+  DEG2RAD,
+  earthGravityParam,
+  EpochUTC,
+  evalPoly,
+  Kilometers,
+  RAD2DEG,
+  Radians,
+  secondsPerDay,
+  secondsPerSiderealDay,
+  TAU,
+  ttasec2rad,
+  Vector3D,
+} from '../main';
 import { NutationAngles } from './NutationAngles';
 import { PrecessionAngles } from './PrecessionAngles';
 
@@ -14,7 +49,7 @@ export class Earth {
   }
 
   // / Earth gravitational parameter _(km²/s³)_.
-  static readonly mu: number = 398600.4415;
+  static readonly mu: number = earthGravityParam;
 
   // / Earth equatorial radius.
   static readonly radiusEquator = 6378.1363 as Kilometers;
@@ -56,7 +91,6 @@ export class Earth {
 
   /**
    * Converts revolutions per day to semi-major axis.
-   *
    * @param rpd - The number of revolutions per day.
    * @returns The semi-major axis value.
    */

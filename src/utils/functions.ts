@@ -1,10 +1,8 @@
 /* eslint-disable require-jsdoc */
-/* eslint-disable func-style */
 import { AngularDiameterMethod } from '../enums/AngularDiameterMethod';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { Matrix } from '../operations/Matrix';
-import { Vector } from '../operations/Vector';
-import { DifferentiableFunction, EciVec3, JacobianFunction, Radians, SpaceObjectType, Vec3 } from '../types/types';
+import { DifferentiableFunction, EcfVec3, Kilometers, Radians, SpaceObjectType } from '../types/types';
+import { angularVelocityOfEarth, cKmPerSec } from './constants';
 
 /**
  * Calculates the factorial of a given number.
@@ -32,107 +30,25 @@ export function log10(x: number): number {
 }
 
 /**
- * Calculates the cube root of a number.
- *
- * @param n - The number to calculate the cube root of.
- * @returns The cube root of the given number.
- */
-export function cbrt(n: number): number {
-  return n ** (1 / 3);
-}
-
-/**
- * Calculates the hyperbolic sine of a number.
- * @param x - The number to calculate the hyperbolic sine of.
- * @returns The hyperbolic sine of the given number.
- */
-export function sinh(x: number): number {
-  return 0.5 * (Math.exp(x) - Math.exp(-x));
-}
-
-/**
- * Calculates the hyperbolic cosine of a number.
- *
- * @param x - The number for which to calculate the hyperbolic cosine.
- * @returns The hyperbolic cosine of the given number.
- */
-export function cosh(x: number): number {
-  return 0.5 * (Math.exp(x) + Math.exp(-x));
-}
-
-/**
- * Calculates the hyperbolic tangent of a number.
- *
- * @param x - The number to calculate the hyperbolic tangent of.
- * @returns The hyperbolic tangent of the given number.
- */
-export function tanh(x: number): number {
-  return sinh(x) / cosh(x);
-}
-
-/**
- * Calculates the hyperbolic cotangent of a number.
- *
- * @param x - The number for which to calculate the hyperbolic cotangent.
- * @returns The hyperbolic cotangent of the given number.
- */
-export function coth(x: number): number {
-  return cosh(x) / sinh(x);
-}
-
-/**
  * Calculates the hyperbolic secant of a number.
- *
  * @param x - The number to calculate the hyperbolic secant of.
  * @returns The hyperbolic secant of the given number.
  */
 export function sech(x: number): number {
-  return 1 / cosh(x);
+  return 1 / Math.cosh(x);
 }
 
 /**
  * Calculates the hyperbolic cosecant of a number.
- *
  * @param x - The number for which to calculate the hyperbolic cosecant.
  * @returns The hyperbolic cosecant of the given number.
  */
 export function csch(x: number): number {
-  return 1 / sinh(x);
-}
-
-/**
- * Calculates the inverse hyperbolic sine of a number.
- *
- * @param x - The number to calculate the inverse hyperbolic sine of.
- * @returns The inverse hyperbolic sine of the given number.
- */
-export function asinh(x: number): number {
-  return Math.log(x + Math.sqrt(x * x + 1));
-}
-
-/**
- * Calculates the inverse hyperbolic cosine (acosh) of a number.
- *
- * @param x - The number to calculate the acosh for.
- * @returns The acosh value of the given number.
- */
-export function acosh(x: number): number {
-  return Math.log(x + Math.sqrt(x * x - 1));
-}
-
-/**
- * Calculates the inverse hyperbolic tangent of a number.
- *
- * @param x - The number to calculate the inverse hyperbolic tangent of.
- * @returns The inverse hyperbolic tangent of the given number.
- */
-export function atanh(x: number): number {
-  return 0.5 * Math.log((1 + x) / (1 - x));
+  return 1 / Math.sinh(x);
 }
 
 /**
  * Returns the inverse hyperbolic cosecant of a number.
- *
  * @param x - The number to calculate the inverse hyperbolic cosecant of.
  * @returns The inverse hyperbolic cosecant of the given number.
  */
@@ -142,7 +58,6 @@ export function acsch(x: number): number {
 
 /**
  * Calculates the inverse hyperbolic secant (asech) of a number.
- *
  * @param x - The number to calculate the inverse hyperbolic secant of.
  * @returns The inverse hyperbolic secant of the given number.
  */
@@ -152,7 +67,6 @@ export function asech(x: number): number {
 
 /**
  * Calculates the inverse hyperbolic cotangent (acoth) of a number.
- *
  * @param x - The number to calculate the acoth of.
  * @returns The inverse hyperbolic cotangent of the given number.
  */
@@ -172,7 +86,6 @@ export function copySign(mag: number, sgn: number): number {
 
 /**
  * Evaluates a polynomial function at a given value.
- *
  * @param x - The value at which to evaluate the polynomial.
  * @param coeffs - The coefficients of the polynomial.
  * @returns The result of evaluating the polynomial at the given value.
@@ -189,7 +102,6 @@ export function evalPoly(x: number, coeffs: Float64Array): number {
 
 /**
  * Concatenates two Float64Arrays into a new Float64Array.
- *
  * @param a - The first Float64Array.
  * @param b - The second Float64Array.
  * @returns A new Float64Array containing the concatenated values of `a` and `b`.
@@ -223,19 +135,18 @@ export function matchHalfPlane(angle: number, match: number): number {
  * @param theta - The angle to wrap.
  * @returns The wrapped angle.
  */
-export function wrapAngle(theta: number): number {
+export function wrapAngle(theta: Radians): Radians {
   const result = ((theta + Math.PI) % (2 * Math.PI)) - Math.PI;
 
   if (result === -Math.PI) {
-    return Math.PI;
+    return Math.PI as Radians;
   }
 
-  return result;
+  return result as Radians;
 }
 
 /**
  * Calculates the angular distance between two points on a sphere using the cosine formula.
- *
  * @param lam1 - The longitude of the first point in radians.
  * @param phi1 - The latitude of the first point in radians.
  * @param lam2 - The longitude of the second point in radians.
@@ -251,7 +162,6 @@ function angularDistanceCosine_(lam1: number, phi1: number, lam2: number, phi2: 
 
 /**
  * Calculates the angular distance between two points on a sphere using the Haversine formula.
- *
  * @param lam1 - The longitude of the first point in radians.
  * @param phi1 - The latitude of the first point in radians.
  * @param lam2 - The longitude of the second point in radians.
@@ -270,7 +180,6 @@ function angularDistanceHaversine_(lam1: number, phi1: number, lam2: number, phi
 
 /**
  * Calculates the angular distance between two points on a sphere.
- *
  * @param lam1 The longitude of the first point.
  * @param phi1 The latitude of the first point.
  * @param lam2 The longitude of the second point.
@@ -297,18 +206,7 @@ export function angularDistance(
 }
 
 /**
- * Calculates the linear distance between two points in three-dimensional space.
- * @param pos1 The first position.
- * @param pos2 The second position.
- * @returns The linear distance between the two positions in kilometers.
- */
-export function linearDistance<D extends number>(pos1: Vec3<D>, pos2: Vec3<D>): D {
-  return <D>Math.sqrt((pos1.x - pos2.x) ** 2 + (pos1.y - pos2.y) ** 2 + (pos1.z - pos2.z) ** 2);
-}
-
-/**
  * Calculates the angular diameter of an object.
- *
  * @param diameter - The diameter of the object.
  * @param distance - The distance to the object.
  * @param method - The method used to calculate the angular diameter. Defaults to AngularDiameterMethod.Sphere.
@@ -345,7 +243,6 @@ export function linearInterpolate(x: number, x0: number, y0: number, x1: number,
 
 /**
  * Calculates the mean value of an array of numbers.
- *
  * @param values - The array of numbers.
  * @returns The mean value of the numbers.
  */
@@ -362,7 +259,6 @@ export function mean(values: number[]): number {
 
 /**
  * Calculates the standard deviation of an array of numbers.
- *
  * @param values - The array of numbers.
  * @param isSample - Optional. Specifies whether the array represents a sample. Default is false.
  * @returns The standard deviation of the array.
@@ -384,7 +280,6 @@ export function std(values: number[], isSample = false): number {
 
 /**
  * Calculates the covariance between two arrays.
- *
  * @param a - The first array.
  * @param b - The second array.
  * @param isSample - Optional. Specifies whether the arrays represent a sample. Default is false.
@@ -411,6 +306,10 @@ export function covariance(a: number[], b: number[], isSample = false): number {
  * @returns The derivative function.
  */
 export function derivative(f: DifferentiableFunction, h = 1e-3): DifferentiableFunction {
+  /**
+   * @param x The value at which to calculate the derivative.
+   * @returns The derivative of the function at the given value.
+   */
   function df(x: number): number {
     const hh = h * 0.5;
 
@@ -432,7 +331,6 @@ export function gamma(n: number): number {
 /**
  * Calculates the eccentric anomaly (e0) and true anomaly (nu) using Newton's method
  * for a given eccentricity (ecc) and mean anomaly (m).
- *
  * @param ecc - The eccentricity of the orbit.
  * @param m - The mean anomaly.
  * @returns An object containing the eccentric anomaly (e0) and true anomaly (nu).
@@ -472,7 +370,6 @@ export function newtonM(ecc: number, m: number): { e0: number; nu: number } {
 /**
  * Calculates the eccentric anomaly (e0) and mean anomaly (m) using Newton's method
  * for a given eccentricity (ecc) and true anomaly (nu).
- *
  * @param ecc - The eccentricity of the orbit.
  * @param nu - The true anomaly.
  * @returns An object containing the calculated eccentric anomaly (e0) and mean anomaly (m).
@@ -505,12 +402,11 @@ export function newtonNu(ecc: number, nu: number): { e0: number; m: Radians } {
 
 /**
  * Creates a 2D array with the specified number of rows and columns, filled with the same given value.
- *
  * @template T The type of elements in the array.
- * @param {number} rows The number of rows in the 2D array.
- * @param {number} columns The number of columns in the 2D array.
- * @param {T} value The value to fill the array with.
- * @returns {T[][]} The 2D array with the specified number of rows and columns, filled with the given value.
+ * @param rows The number of rows in the 2D array.
+ * @param columns The number of columns in the 2D array.
+ * @param value The value to fill the array with.
+ * @returns The 2D array with the specified number of rows and columns, filled with the given value.
  */
 export function array2d<T>(rows: number, columns: number, value: T): T[][] {
   const output: T[][] = [];
@@ -520,41 +416,6 @@ export function array2d<T>(rows: number, columns: number, value: T): T[][] {
   }
 
   return output;
-}
-
-/**
- * Calculates the Jacobian matrix of a given Jacobian function.
- *
- * @param f The Jacobian function.
- * @param m The number of rows in the Jacobian matrix.
- * @param x0 The initial values of the variables.
- * @param step The step size for numerical differentiation (default: 1e-5).
- * @returns The Jacobian matrix.
- */
-export function jacobian(f: JacobianFunction, m: number, x0: Float64Array, step = 1e-5): Matrix {
-  const n = x0.length;
-  const j = array2d(m, n, 0.0);
-  const h = 0.5 * step;
-
-  for (let k = 0; k < n; k++) {
-    const xp = x0.slice();
-
-    xp[k] += h;
-    const fp = new Vector(f(xp));
-
-    const xm = x0.slice();
-
-    xm[k] -= h;
-    const fm = new Vector(f(xm));
-
-    const cd = fp.subtract(fm).scale(1.0 / step);
-
-    for (let i = 0; i < m; i++) {
-      j[i][k] = cd.elements[i];
-    }
-  }
-
-  return new Matrix(j);
 }
 
 /**
@@ -589,7 +450,6 @@ export function isLeapYear(dateIn: Date): boolean {
  *
  * This is sometimes referred to as the Jday, but is
  * very different from the Julian day used in astronomy.
- *
  * @param date - The date for which to calculate the day of the year.
  * @returns The day of the year as a number.
  */
@@ -671,46 +531,35 @@ export const spaceObjType2Str = (spaceObjType: SpaceObjectType): string =>
  * Calculates the Doppler factor for a given location, position, and velocity.
  * The Doppler factor is a measure of the change in frequency or wavelength of a wave
  * as observed by an observer moving relative to the source of the wave.
- *
  * @param location - The location vector of the observer.
  * @param position - The position vector of the source.
  * @param velocity - The velocity vector of the source.
  * @returns The calculated Doppler factor.
  */
-export const dopplerFactor = (location: EciVec3, position: EciVec3, velocity: EciVec3): number => {
-  const mfactor = 7.292115e-5;
-  const c = 299792.458; // Speed of light in km/s
-
-  const range = <EciVec3>{
+export const dopplerFactor = (
+  location: EcfVec3<Kilometers>,
+  position: EcfVec3<Kilometers>,
+  velocity: EcfVec3<Kilometers>,
+): number => {
+  const range = <EcfVec3>{
     x: position.x - location.x,
     y: position.y - location.y,
     z: position.z - location.z,
   };
   const distance = Math.sqrt(range.x ** 2 + range.y ** 2 + range.z ** 2);
-
-  const rangeVel = <EciVec3>{
-    x: velocity.x + mfactor * location.y,
-    y: velocity.y - mfactor * location.x,
+  const rangeVel = <EcfVec3>{
+    x: velocity.x + angularVelocityOfEarth * location.y,
+    y: velocity.y - angularVelocityOfEarth * location.x,
     z: velocity.z,
   };
-
   const rangeRate = (range.x * rangeVel.x + range.y * rangeVel.y + range.z * rangeVel.z) / distance;
-  let dopplerFactor = 0;
-
-  if (rangeRate < 0) {
-    dopplerFactor = 1 + (rangeRate / c) * sign(rangeRate);
-  }
-
-  if (rangeRate >= 0) {
-    dopplerFactor = 1 - (rangeRate / c) * sign(rangeRate);
-  }
+  const dopplerFactor = 1 - rangeRate / cKmPerSec;
 
   return dopplerFactor;
 };
 
 /**
  * Creates an array of numbers from start to stop (inclusive) with the specified step.
- *
  * @param start The starting number.
  * @param stop The ending number.
  * @param step The step value.

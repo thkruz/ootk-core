@@ -1,17 +1,53 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+import { Kilometers } from 'src/main';
 import { Matrix } from '../operations/Matrix';
 import { Vector3D } from '../operations/Vector3D';
 import { J2000 } from './J2000';
 
-// / Base class for relative states.
+/**
+ * Represents the relative state of an object in 3D space.
+ */
 export abstract class RelativeState {
-  // / Create a new [RelativeState] object.
-  constructor(public position: Vector3D, public velocity: Vector3D) {
-    // Nothing to do here.
+  position: Vector3D<Kilometers>;
+  velocity: Vector3D<Kilometers>;
+  constructor(position: Vector3D<Kilometers>, velocity: Vector3D<Kilometers>) {
+    this.position = position;
+    this.velocity = velocity;
   }
 
-  // / Return the name of this coordinate frame.
+  /**
+   * Gets the name of the coordinate system.
+   * @returns The name of the coordinate system.
+   */
   abstract get name(): string;
 
+  /**
+   * Returns a string representation of the RelativeState object. The string includes the name, position, and velocity
+   * of the object.
+   * @returns A string representation of the RelativeState object.
+   */
   toString(): string {
     return [
       `[${this.name}]`,
@@ -20,13 +56,16 @@ export abstract class RelativeState {
     ].join('\n');
   }
 
-  // / Convert this to a [J2000] state vector object.
+  /**
+   * Transforms the current RelativeState coordinate to the J2000 coordinate
+   * @param origin The origin J2000 coordinate.
+   * @returns The transformed J2000 coordinate.
+   */
   abstract toJ2000(origin: J2000): J2000;
 
   /**
-   * Creates a matrix based on the given position and velocity vectors.
-   * The matrix represents the relative state of an object in 3D space.
-   *
+   * Creates a matrix based on the given position and velocity vectors. The matrix represents the relative state of an
+   * object in 3D space.
    * @param position - The position vector.
    * @param velocity - The velocity vector.
    * @returns The matrix representing the relative state.
@@ -43,13 +82,20 @@ export abstract class RelativeState {
     ]);
   }
 
-  // / Return the relative range _(km)_.
-  range(): number {
+  /**
+   * Calculates the range of the relative state.
+   * @returns The range in kilometers.
+   */
+  get range(): Kilometers {
     return this.position.magnitude();
   }
 
-  // / Return the relative range rate _(km/s)_.
-  rangeRate(): number {
-    return this.position.dot(this.velocity) / this.range();
+  /**
+   * Calculates the range rate of the relative state. Range rate is the dot product of the position and velocity divided
+   * by the range.
+   * @returns The range rate in Kilometers per second.
+   */
+  get rangeRate(): number {
+    return this.position.dot(this.velocity) / this.range;
   }
 }

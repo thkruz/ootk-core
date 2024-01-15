@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { DEG2RAD, MS_PER_DAY, RAD2DEG, secondsPerWeek, TAU } from '../utils/constants';
 import { evalPoly } from '../utils/functions';
 import { DataHandler } from './../data/DataHandler';
@@ -96,13 +119,14 @@ export class EpochUTC extends Epoch {
   }
 
   toGPS(): EpochGPS {
+    const referenceTime = EpochUTC.fromDateTimeString('1980-01-06T00:00:00.000Z');
     const ls = DataHandler.getInstance().getLeapSeconds(this.toJulianDate());
-    const delta = this.roll(ls - EpochGPS.offset).difference(EpochGPS.reference);
+    const delta = this.roll(ls - EpochGPS.offset).difference(referenceTime);
     const week = delta / secondsPerWeek;
     const weekFloor = Math.floor(week);
     const seconds = (week - weekFloor) * secondsPerWeek;
 
-    return new EpochGPS(weekFloor, seconds, EpochUTC.fromDateTimeString('1980-01-06T00:00:00.000Z'));
+    return new EpochGPS(weekFloor, seconds, referenceTime);
   }
 
   gmstAngle(): number {

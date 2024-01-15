@@ -1,8 +1,31 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+import { Seconds } from 'src/main';
 import { secondsPerDay } from '../utils/constants';
-import { Comparable } from './Comparable';
 
 // / Base class for [Epoch] data.
-export class Epoch implements Comparable {
+export class Epoch {
   /*
    * Create a new [Epoch] object given the number of seconds elapsed since the
    * [posix] epoch _(`1970-01-01T00:00:00.000`)_ in the [Epoch] time scale.
@@ -23,8 +46,8 @@ export class Epoch implements Comparable {
   }
 
   // / Return the difference _(s)_ between this and another [epoch]/
-  difference(epoch: Epoch): number {
-    return this.posix - epoch.posix;
+  difference(epoch: Epoch): Seconds {
+    return this.posix - epoch.posix as Seconds;
   }
 
   // / Check if this has the same timestamp as the provided [epoch].
@@ -81,10 +104,6 @@ export class Epoch implements Comparable {
   // / Convert to Julian centuries.
   toJulianCenturies(): number {
     return (this.toJulianDate() - 2451545) / 36525;
-  }
-
-  compareTo(other: Epoch): number {
-    return this.posix - other.posix;
   }
 
   // / Check if this is later than the [other] epoch.

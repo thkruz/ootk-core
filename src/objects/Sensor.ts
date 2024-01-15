@@ -1,10 +1,33 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { PassType } from '../enums/PassType';
 import { SensorParams } from '../interfaces/SensorParams';
 import { Degrees, Kilometers, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
-import { GroundPosition } from './GroundPosition';
+import { GroundObject } from './GroundObject';
 import { Satellite } from './Satellite';
 
-export class Sensor extends GroundPosition {
+export class Sensor extends GroundObject {
   minRng: Kilometers;
   minAz: Degrees;
   minEl: Degrees;
@@ -18,20 +41,6 @@ export class Sensor extends GroundPosition {
   maxAz2?: Degrees;
   maxEl2?: Degrees;
 
-  /**
-   * * name: Name as a string - OPTIONAL
-   * * type: SpaceObjectType - OPTIONAL
-   * * lat: Latitude in Radians
-   * * lon: Longitude in Radians
-   * * alt: Altitude in Kilometers
-   * * minAz: Minimum Azimuth in Degrees
-   * * maxAz: Maximum Azimuth in Degrees
-   * * minEl: Minimum Elevation in Degrees
-   * * maxEl: Maximum Elevation in Degrees
-   * * minRng: Minimum Range in Kilometers
-   * * maxRng: Maximum Range in Kilometers
-   * @param {SensorParams} info SensorParams object containing the object's information
-   */
   constructor(info: SensorParams) {
     // If there is a sensor type verify it is valid
     if (info.type) {
@@ -50,7 +59,7 @@ export class Sensor extends GroundPosition {
 
     super(info);
 
-    this.validateInputData(info);
+    this.validateSensorInputData_(info);
 
     this.minRng = info.minRng;
     this.minAz = info.minAz;
@@ -66,11 +75,15 @@ export class Sensor extends GroundPosition {
     this.maxEl2 = info.maxEl2;
   }
 
+  /**
+   * Checks if the object is a sensor.
+   * @returns True if the object is a sensor, false otherwise.
+   */
   isSensor(): boolean {
     return true;
   }
 
-  calculatePasses(planningInterval: number, sat: Satellite, date: Date = this.time) {
+  calculatePasses(planningInterval: number, sat: Satellite, date: Date = new Date()) {
     let isInViewLast = false;
     let maxElThisPass = <Degrees>0;
     const msnPlanPasses: Lookangle[] = [];
@@ -117,6 +130,12 @@ export class Sensor extends GroundPosition {
     return msnPlanPasses;
   }
 
+  /**
+   * Checks if the given RAE vector is within the field of view of the sensor.
+   * TODO: #8 This doesn't account for secondary sensor FOV
+   * @param rae - The RAE vector to check.
+   * @returns True if the RAE vector is within the field of view, false otherwise.
+   */
   isRaeInFov(rae: RaeVec3<Kilometers, Degrees>): boolean {
     if (rae.el < this.minEl || rae.el > this.maxEl) {
       return false;
@@ -139,24 +158,38 @@ export class Sensor extends GroundPosition {
     return true;
   }
 
-  isSatInFov(sat: Satellite, date: Date = this.time): boolean {
+  /**
+   * Checks if a satellite is in the field of view (FOV) of the sensor.
+   * @param sat - The satellite to check.
+   * @param date - The date to use for the calculation. Defaults to the current date.
+   * @returns A boolean indicating whether the satellite is in the FOV.
+   */
+  isSatInFov(sat: Satellite, date: Date = new Date()): boolean {
     return this.isRaeInFov(this.rae(sat, date));
   }
 
-  setTime(date: Date): this {
-    this.time = date;
-
-    return this;
-  }
-
+  /**
+   * Checks if the sensor is in deep space.
+   * @returns True if the sensor is in deep space, false otherwise.
+   */
   isDeepSpace(): boolean {
     return this.maxRng > 6000;
   }
 
+  /**
+   * Checks if the sensor is near Earth.
+   * @returns True if the sensor is near Earth, false otherwise.
+   */
   isNearEarth(): boolean {
     return this.maxRng <= 6000;
   }
 
+  /**
+   * Returns the pass type based on the current and previous visibility states.
+   * @param isInView - Indicates if the object is currently in view.
+   * @param isInViewLast - Indicates if the object was in view in the previous state.
+   * @returns The pass type.
+   */
   private static getPassType_(isInView: boolean, isInViewLast: boolean) {
     let type = PassType.OUT_OF_VIEW;
 
@@ -171,7 +204,11 @@ export class Sensor extends GroundPosition {
     return type;
   }
 
-  private validateFov(info: SensorParams) {
+  /**
+   * Validates the field of view (FOV) parameters of the sensor.
+   * @param info - The sensor parameters.
+   */
+  private validateFov_(info: SensorParams) {
     this.validateParameter(info.maxAz, 0, 360, 'Invalid maximum azimuth - must be between 0 and 360');
     this.validateParameter(info.minAz, 0, 360, 'Invalid maximum azimuth - must be between 0 and 360');
     this.validateParameter(info.maxEl, -15, 180, 'Invalid maximum elevation - must be between 0 and 180');
@@ -180,7 +217,11 @@ export class Sensor extends GroundPosition {
     this.validateParameter(info.minRng, 0, null, 'Invalid minimum range - must be greater than 0');
   }
 
-  private validateFov2(info: SensorParams) {
+  /**
+   * Validates the field of view parameters for the sensor.
+   * @param info - The sensor parameters.
+   */
+  private validateFov2_(info: SensorParams) {
     this.validateParameter(info.maxAz2, 0, 360, 'Invalid maximum azimuth2 - must be between 0 and 360');
     this.validateParameter(info.minAz2, 0, 360, 'Invalid maximum azimuth2 - must be between 0 and 360');
     this.validateParameter(info.maxEl2, -15, 180, 'Invalid maximum elevation2 - must be between 0 and 180');
@@ -189,26 +230,25 @@ export class Sensor extends GroundPosition {
     this.validateParameter(info.minRng2, 0, null, 'Invalid minimum range2 - must be greater than 0');
   }
 
-  private validateInputData(info: SensorParams) {
-    this.validateLla(info);
-    this.validateFov(info);
+  /**
+   * Validates the input data for the sensor.
+   * @param info - The sensor parameters.
+   */
+  private validateSensorInputData_(info: SensorParams) {
+    this.validateLla_(info);
+    this.validateFov_(info);
     if (info.minAz2 || info.maxAz2 || info.minEl2 || info.maxEl2 || info.minRng2 || info.maxRng2) {
-      this.validateFov2(info);
+      this.validateFov2_(info);
     }
   }
 
-  private validateLla(info: SensorParams) {
+  /**
+   * Validates the latitude, longitude, and altitude of a sensor.
+   * @param info - The sensor parameters containing the latitude, longitude, and altitude.
+   */
+  private validateLla_(info: SensorParams) {
     this.validateParameter(info.lat, -90, 90, 'Invalid latitude - must be between -90 and 90');
     this.validateParameter(info.lon, -180, 180, 'Invalid longitude - must be between -180 and 180');
     this.validateParameter(info.alt, 0, null, 'Invalid altitude - must be greater than 0');
-  }
-
-  private validateParameter<T>(value: T, minValue: T, maxValue: T, errorMessage: string): void {
-    if (typeof minValue !== 'undefined' && minValue !== null && (value as number) < (minValue as number)) {
-      throw new Error(errorMessage);
-    }
-    if (typeof maxValue !== 'undefined' && maxValue !== null && (value as number) > (maxValue as number)) {
-      throw new Error(errorMessage);
-    }
   }
 }

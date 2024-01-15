@@ -1,44 +1,42 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit (ootk) is a collection of tools for working
- * with satellites and other orbital objects.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @copyright (c) 2011-2015, Vladimir Agafonkin
+ * @copyright (c) 2022 Robert Gester https://github.com/hypnos3/suncalc3
+ * @see suncalc.LICENSE.md
  * Some of the math in this file was originally created by Vladimir Agafonkin.
- * Robert Gester's update was referenced for documentation. There were a couple of
- * bugs in both versions so there will be some differences if you are migrating from
- * either to this library.
+ * Robert Gester's update was referenced for documentation. There were a couple
+ * of bugs in both versions so there will be some differences if you are
+ * migrating from either to this library.
  *
- * @Copyright (c) 2011-2015, Vladimir Agafonkin
- * SunCalc is a JavaScript library for calculating sun/moon position and light phases.
- * https://github.com/mourner/suncalc
+ * suncalc is a JavaScript library for calculating sun/moon position and light
+ * phases. https://github.com/mourner/suncalc
+ * It was reworked and enhanced by Robert Gester.
  *
- * Reworked and enhanced by Robert Gester
- * @Copyright (c) 2022 Robert Gester
- * https://github.com/hypnos3/suncalc3
- *
- * moon calculations, based on http://aa.quae.nl/en/reken/hemelpositie.html formulas
- *
- * @license MIT License
- *
- * @Copyright (c) 2022-2024 Theodore Kruczek
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
- * to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * The original suncalc is released under the terms of the BSD 2-Clause License.
+ * @see http://aa.quae.nl/en/reken/hemelpositie.html
+ * moon calculations are based on formulas from this website
  */
 
-import { AngularDiameterMethod, Celestial, Degrees, Kilometers, RaDec, Radians } from '..';
+import { AngularDiameterMethod, Celestial, Degrees, Kilometers, RaDec, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, MS_PER_DAY } from '../utils/constants';
@@ -96,7 +94,7 @@ export class Moon {
   static radiusEquator = 1738.0;
 
   // / Calculate the Moon's ECI position _(km)_ for a given UTC [epoch].
-  static eci(epoch: EpochUTC): Vector3D {
+  static eci(epoch: EpochUTC = EpochUTC.fromDateTime(new Date())): Vector3D<Kilometers> {
     const jc = epoch.toJulianCenturies();
     const dtr = DEG2RAD;
     const lamEcl =
@@ -133,18 +131,20 @@ export class Moon {
     const rMOD = r.scale(Earth.radiusEquator);
     const p = Earth.precession(epoch);
 
-    return rMOD.rotZ(p.zed).rotY(-p.theta).rotZ(p.zeta);
+    return rMOD
+      .rotZ(p.zed)
+      .rotY(-p.theta as Radians)
+      .rotZ(p.zeta) as Vector3D<Kilometers>;
   }
 
   /**
    * Calculates the illumination of the Moon at a given epoch.
-   *
    * @param epoch - The epoch in UTC.
    * @param origin - The origin vector. Defaults to the origin vector if not provided.
    * @returns The illumination of the Moon, ranging from 0 to 1.
    */
-  static illumination(epoch: EpochUTC, origin?: Vector3D): number {
-    const orig = origin ?? Vector3D.origin;
+  static illumination(epoch: EpochUTC, origin?: Vector3D<Kilometers>): number {
+    const orig = origin ?? (Vector3D.origin as Vector3D<Kilometers>);
     const sunPos = Sun.position(epoch).subtract(orig);
     const moonPos = this.eci(epoch).subtract(orig);
     const phaseAngle = sunPos.angle(moonPos);
@@ -154,7 +154,6 @@ export class Moon {
 
   /**
    * Calculates the diameter of the Moon.
-   *
    * @param obsPos - The position of the observer.
    * @param moonPos - The position of the Moon.
    * @returns The diameter of the Moon.
@@ -164,11 +163,11 @@ export class Moon {
   }
 
   /**
-   * calculations for illumination parameters of the moon,
-   * based on http://idlastro.gsfc.nasa.gov/ftp/pro/astro/mphase.pro formulas and
-   * Chapter 48 of "Astronomical Algorithms" 2nd edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
-   * @param {number | Date} date Date object or timestamp for calculating moon-illumination
-   * @return {MoonIlluminationData} result object of moon-illumination
+   * calculations for illumination parameters of the moon, based on
+   * http://idlastro.gsfc.nasa.gov/ftp/pro/astro/mphase.pro formulas and Chapter 48 of "Astronomical Algorithms" 2nd
+   * edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
+   * @param date Date object or timestamp for calculating moon-illumination
+   * @returns result object of moon-illumination
    */
   // eslint-disable-next-line max-statements
   static getMoonIllumination(date: number | Date): MoonIlluminationData {
@@ -191,7 +190,10 @@ export class Moon {
     );
     const phaseValue = 0.5 + (0.5 * inc * (angle < 0 ? -1 : 1)) / Math.PI;
 
-    // calculates the difference in ms between the sirst fullMoon 2000 and given Date
+    /*
+     * calculates the difference in ms between the sirst fullMoon 2000 and given
+     * Date
+     */
     const diffBase = dateValue - firstNewMoon2000;
     // Calculate modulus to drop completed cycles
     let cycleModMs = diffBase % lunarDaysMs;
@@ -218,8 +220,8 @@ export class Moon {
       nextThirdQuarter += lunarDaysMs;
     }
     /*
-     * Calculate the fraction of the moon cycle
-     * const currentfrac = cycleModMs / lunarDaysMs;
+     * Calculate the fraction of the moon cycle const currentfrac = cycleModMs /
+     * lunarDaysMs;
      */
     const next = Math.min(nextNewMoon, nextFirstQuarter, nextFullMoon, nextThirdQuarter);
     // eslint-disable-next-line init-declarations
@@ -293,10 +295,13 @@ export class Moon {
     const c = Moon.moonCoords(d);
     const H = Sun.siderealTime(d, lw) - c.ra;
     let h = Celestial.elevation(H, phi, c.dec);
-    // formula 14.1 of "Astronomical Algorithms" 2nd edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
+    /*
+     * formula 14.1 of "Astronomical Algorithms" 2nd edition by Jean Meeus
+     * (Willmann-Bell, Richmond) 1998.
+     */
     const pa = Math.atan2(Math.sin(H), Math.tan(phi) * Math.cos(c.dec) - Math.sin(c.dec) * Math.cos(H));
 
-    h = <Radians>(h + Celestial.astroRefraction(h)); // altitude correction for refraction
+    h = <Radians>(h + Celestial.atmosphericRefraction(h)); // altitude correction for refraction
 
     return {
       az: Celestial.azimuth(H, phi, c.dec),
@@ -308,6 +313,11 @@ export class Moon {
 
   /**
    * calculations for moon rise/set times are based on http://www.stargazing.net/kepler/moonrise.html article
+   * @param date Date object or timestamp for calculating moon rise/set
+   * @param lat Latitude of observer in degrees
+   * @param lon Longitude of observer in degrees
+   * @param isUtc If true, date will be interpreted as UTC
+   * @returns result object of moon rise/set
    */
   static getMoonTimes(date: Date, lat: Degrees, lon: Degrees, isUtc = false) {
     // Clone the date so we don't change the original
@@ -364,9 +374,9 @@ export class Moon {
 
   /**
    * Calculates the geocentric ecliptic coordinates of the moon.
-   *
    * @param d - The number of days since year 2000.
-   * @returns An object containing the right ascension, declination, and distance to the moon.
+   * @returns An object containing the right ascension, declination, and
+   * distance to the moon.
    */
   static moonCoords(d: number): RaDec {
     const L = DEG2RAD * (218.316 + 13.176396 * d); // ecliptic longitude
@@ -400,7 +410,10 @@ export class Moon {
     let x2 = 0;
     let dx = 0;
 
-    // go in 2-hour chunks, each time seeing if a 3-point quadratic curve crosses zero (which means rise or set)
+    /*
+     * go in 2-hour chunks, each time seeing if a 3-point quadratic curve
+     * crosses zero (which means rise or set)
+     */
     for (let i = 1; i <= 24; i += 2) {
       h1 = Moon.rae(Moon.hoursLater_(t, i), lat, lon).el - hc;
       h2 = Moon.rae(Moon.hoursLater_(t, i + 1), lat, lon).el - hc;

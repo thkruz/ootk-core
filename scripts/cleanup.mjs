@@ -1,15 +1,9 @@
+/* eslint-disable no-console */
 import { rmSync } from 'fs';
 
-console.log('Removing ./lib...');
+console.log('Removing ./dist...');
 try {
-  rmSync('./lib', { recursive: true });
-} catch (error) {
-  // Intentionally left blank
-}
-
-console.log('Removing ./commonjs...');
-try {
-  rmSync('./commonjs', { recursive: true });
+  rmSync('./dist', { recursive: true });
 } catch (error) {
   // Intentionally left blank
 }
