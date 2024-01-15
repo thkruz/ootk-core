@@ -222,7 +222,7 @@ export class Tle {
     }
     const days = parseFloat(epochStr.substring(2, 14)) - 1;
 
-    return EpochUTC.fromDateTimeString(`${year}-01-01T00:00:00.000Z`).roll(days * secondsPerDay);
+    return EpochUTC.fromDateTimeString(`${year}-01-01T00:00:00.000Z`).roll(days * secondsPerDay as Seconds);
   }
 
   /**
