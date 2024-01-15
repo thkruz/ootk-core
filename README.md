@@ -3,7 +3,7 @@
 <!-- [![Release](https://img.shields.io/github/v/release/thkruz/ootk-core?style=flat-square)](https://www.npmjs.com/package/ootk-core) -->
 
 ![Size](https://img.shields.io/github/languages/code-size/thkruz/ootk-core?style=flat-square)
-[![Issues](https://img.shields.io/github/issues/thkruz/ootk-core?style=flat-square)](https://github.com/thkruz/ootk/issues)
+[![Issues](https://img.shields.io/github/issues/thkruz/ootk-core?style=flat-square)](https://github.com/thkruz/ootk-core/issues)
 [![License](https://img.shields.io/github/license/thkruz/ootk-core?style=flat-square)](LICENSE.md)
 
 > An Orbital Object Toolkit in Your Web Browser
@@ -167,7 +167,7 @@ You can find a [list of changes here](https://github.com/thkruz/ootk-core/blob/m
 
 This repo follows [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
 
-Before starting a work on new [pull request](https://github.com/thkruz/ootk/compare), please, checkout your feature or
+Before starting a work on new [pull request](https://github.com/thkruz/ootk-core/compare), please, checkout your feature or
 bugfix branch from `develop` branch:
 
 ```bash
