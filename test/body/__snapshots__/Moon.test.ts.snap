@@ -70,10 +70,10 @@ Object {
 
 exports[`Moon should return an object with 'az', 'el', 'rng', and 'parallacticAngle' properties 2`] = `
 Object {
-  "az": 5.9437396940767915,
-  "el": -0.7211759674013636,
-  "parallacticAngle": 0.26932786334872394,
-  "rng": 379969.4077607909,
+  "az": 4.034314328077605,
+  "el": 0.19547892013212267,
+  "parallacticAngle": 0.7236664732665937,
+  "rng": 366252.754397278,
 }
 `;
 
@@ -92,9 +92,9 @@ exports[`Moon should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alw
 Object {
   "alwaysDown": false,
   "alwaysUp": false,
-  "highest": 2021-11-01T17:18:20.884Z,
-  "rise": 2021-11-01T10:48:42.354Z,
-  "set": 2021-11-01T23:47:59.413Z,
+  "highest": 2024-01-12T21:42:31.618Z,
+  "rise": 2024-01-12T16:43:59.167Z,
+  "set": 2024-01-13T02:41:04.069Z,
   "ye": null,
 }
 `;

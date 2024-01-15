@@ -282,7 +282,7 @@ export class Sun {
     }
 
     // Ensure date is a Date object
-    const date = new Date(dateVal);
+    const date = dateVal instanceof Date ? dateVal : new Date(dateVal);
 
     if (isUtc) {
       date.setUTCHours(12, 0, 0, 0);

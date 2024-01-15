@@ -3,7 +3,10 @@ import { Moon } from '../../src/body/Moon';
 import { Sun } from '../../src/body/Sun';
 import { Degrees, Meters } from '../../src/main';
 
-// Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
+/*
+ * Use number of milliseconds since epoch instead of local year, month, day, etc
+ * for consistency across machines
+ */
 const dateObj = new Date(1661406000000);
 
 describe('Sun and Moon', () => {
@@ -16,7 +19,10 @@ describe('Sun and Moon', () => {
   });
 
   test('Local Solar Time', () => {
-    // Use number of milliseconds since epoch instead of local year, month, day, etc for consistency across machines
+    /*
+     * Use number of milliseconds since epoch instead of local year, month, day,
+     * etc for consistency across machines
+     */
     const lst = Sun.getSolarTime(new Date(1658807880000), -5, -71 as Degrees);
 
     expect(lst.toUTCString()).toEqual('Tue, 26 Jul 2022 04:07:49 GMT');
@@ -45,8 +51,7 @@ describe('Sun and Moon', () => {
 });
 
 /**
- * @author Robert Myers @xqjibz
- * See: https://github.com/mourner/suncalc/pull/35
+ * @author Robert Myers @xqjibz See: https://github.com/mourner/suncalc/pull/35
  */
 describe('Test for #6 fix', () => {
   test('Test for #6 fix', () => {
@@ -149,24 +154,19 @@ describe('Suncalc.js tests', () => {
   test('getSunAzEl returns azimuth and altitude for the given time and location', () => {
     const sunPos = Sun.azEl(date, lat as Degrees, lon as Degrees);
 
-    expect(sunPos.az).toBeCloseTo(0.6412750628729547);
-    expect(sunPos.el).toBeCloseTo(-0.7000406838781611);
+    expect(sunPos).toMatchSnapshot();
   });
 
   test('getMoonIllumination returns fraction and angle of moons illuminated limb and phase', () => {
     const moonIllum = Moon.getMoonIllumination(date);
 
-    expect(moonIllum.fraction).toBeCloseTo(0.4848068202456373);
-    expect(moonIllum.phaseValue).toBeCloseTo(0.7548368838538762);
-    expect(moonIllum.angle).toBeCloseTo(1.6732942678578346);
+    expect(moonIllum).toMatchSnapshot();
   });
 
   test('getMoonPosition returns moon position data given time and location', () => {
     const moonPos = Moon.rae(date, lat as Degrees, lon as Degrees);
 
-    expect(moonPos.az).toBeCloseTo(2.1631927013459706);
-    expect(moonPos.el).toBeCloseTo(0.014551482243892251);
-    expect(moonPos.rng).toBeCloseTo(364121.37256256194);
+    expect(moonPos).toMatchSnapshot();
   });
 
   test('getMoonTimes returns moon rise and set times', () => {
@@ -222,6 +222,6 @@ describe('Tests from Hypnos3', () => {
   test('getSolarTime returns the solar time', () => {
     const solarTime = Sun.getSolarTime(date, -5, -71 as Degrees);
 
-    expect(solarTime.toUTCString()).toEqual('Tue, 05 Mar 2013 00:03:33 GMT');
+    expect(solarTime.toUTCString()).toMatchSnapshot();
   });
 });
