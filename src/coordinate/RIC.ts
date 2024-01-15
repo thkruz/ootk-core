@@ -8,6 +8,14 @@ import { RelativeState } from './RelativeState';
  */
 export class RIC extends RelativeState {
   /**
+   * Gets the name of the RIC coordinate system.
+   * @returns The name of the RIC coordinate system.
+   */
+  get name(): string {
+    return 'RIC';
+  }
+
+  /**
    * Creates a new RIC (Radial-Intrack-Crosstrack) coordinate from the J2000
    * state vectors.
    *
@@ -37,14 +45,6 @@ export class RIC extends RelativeState {
    */
   static fromJ2000(state: J2000, origin: J2000): RIC {
     return RIC.fromJ2000Matrix(state, origin, RelativeState.createMatrix(origin.position, origin.velocity));
-  }
-
-  /**
-   * Gets the name of the RIC coordinate system.
-   * @returns The name of the RIC coordinate system.
-   */
-  get name(): string {
-    return 'RIC';
   }
 
   /**

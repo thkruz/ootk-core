@@ -114,8 +114,12 @@ describe('ClassicalElements', () => {
   it('should create ClassicalElements from StateVector', () => {
     const stateVector = new J2000(
       EpochUTC.fromDateTime(new Date(1705109326817)),
-      new Vector3D(1538.223335842895, 5102.261204021967, 4432.634965003577),
-      new Vector3D(-7.341518909379302, 0.6516718453998644, 1.7933882499861993),
+      new Vector3D(1538.223335842895 as Kilometers, 5102.261204021967 as Kilometers, 4432.634965003577 as Kilometers),
+      new Vector3D(
+        -7.341518909379302 as Kilometers,
+        0.6516718453998644 as Kilometers,
+        1.7933882499861993 as Kilometers,
+      ),
     );
 
     const classicalElements = ClassicalElements.fromStateVector(stateVector);
