@@ -240,7 +240,7 @@ export class Sun {
     if (isDegrees) {
       az = <Radians>(az * DEG2RAD);
     }
-    const date = new Date(dateValue);
+    const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
     const lw = <Radians>(DEG2RAD * -lon);
     const phi = <Radians>(DEG2RAD * lat);
 
