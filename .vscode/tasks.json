@@ -26,18 +26,6 @@
       }
     },
     {
-      "label": "Test with Jest",
-      "command": "npm test",
-      "type": "shell",
-      "args": [],
-      "isBackground": true,
-      "problemMatcher": [],
-      "icon": {
-        "id": "go-to-file",
-        "color": "terminal.ansiGreen"
-      }
-    },
-    {
       "label": "Test for Coverage",
       "command": "npm run test:coverage",
       "type": "shell",
