@@ -27,11 +27,6 @@ export class TransformCache {
   static get(key: string): unknown {
     const value = this.cache_.get(key);
 
-    if (value) {
-      // eslint-disable-next-line no-console
-      console.log(`Cache hit for ${key}`);
-    }
-
     return value;
   }
   static add(key: string, value: unknown) {
