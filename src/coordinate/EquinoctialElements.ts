@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { Kilometers, Radians, Seconds } from '../main';
 import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, MINUTES_PER_DAY, TAU } from '../utils/constants';
@@ -17,42 +40,25 @@ import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsPara
  * singularities at zero eccentricity (circular orbits) or zero inclination
  * (equatorial orbits). This makes them more reliable for numerical simulations
  * and analytical studies, especially in these edge cases.
- *
  * @see https://faculty.nps.edu/dad/orbital/th0.pdf
  */
 export class EquinoctialElements {
   epoch: EpochUTC;
-  /**
-   * The semi-major axis of the orbit in kilometers.
-   */
+  /** The semi-major axis of the orbit in kilometers. */
   a: Kilometers;
-  /**
-   * The h component of the eccentricity vector.
-   */
+  /** The h component of the eccentricity vector. */
   h: number;
-  /**
-   * The k component of the eccentricity vector.
-   */
+  /** The k component of the eccentricity vector. */
   k: number;
-  /**
-   * The p component of the ascending node vector.
-   */
+  /** The p component of the ascending node vector. */
   p: number;
-  /**
-   * The q component of the ascending node vector.
-   */
+  /** The q component of the ascending node vector. */
   q: number;
-  /**
-   * The mean longitude of the orbit in radians.
-   */
+  /** The mean longitude of the orbit in radians. */
   lambda: Radians;
-  /**
-   * The gravitational parameter of the central body in km³/s².
-   */
+  /** The gravitational parameter of the central body in km³/s². */
   mu: number;
-  /**
-   * The retrograde factor. 1 for prograde orbits, -1 for retrograde orbits.
-   */
+  /** The retrograde factor. 1 for prograde orbits, -1 for retrograde orbits. */
   I: 1 | -1;
   constructor({ epoch, h, k, lambda, a, p, q, mu, I }: EquinoctialElementsParams) {
     this.epoch = epoch;
@@ -101,7 +107,6 @@ export class EquinoctialElements {
 
   /**
    * Calculates the mean motion of the celestial object.
-   *
    * @returns The mean motion in units of radians per second.
    */
   get meanMotion(): number {
@@ -110,7 +115,6 @@ export class EquinoctialElements {
 
   /**
    * Gets the retrograde factor.
-   *
    * @returns The retrograde factor.
    */
   get retrogradeFactor(): number {
@@ -119,7 +123,7 @@ export class EquinoctialElements {
 
   /**
    * Checks if the orbit is prograde.
-   * @returns {boolean} True if the orbit is prograde, false otherwise.
+   * @returns True if the orbit is prograde, false otherwise.
    */
   isPrograde(): boolean {
     return this.I === 1;
@@ -127,7 +131,7 @@ export class EquinoctialElements {
 
   /**
    * Checks if the orbit is retrograde.
-   * @returns {boolean} True if the orbit is retrograde, false otherwise.
+   * @returns True if the orbit is retrograde, false otherwise.
    */
   isRetrograde(): boolean {
     return this.I === -1;
@@ -145,7 +149,6 @@ export class EquinoctialElements {
 
   /**
    * Gets the number of revolutions per day.
-   *
    * @returns The number of revolutions per day.
    */
   get revsPerDay(): number {

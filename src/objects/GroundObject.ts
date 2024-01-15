@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import {
   GroundPositionParams,
   Degrees,
@@ -26,18 +49,17 @@ export class GroundObject extends BaseObject {
   constructor(info: GroundPositionParams) {
     super(info);
 
-    this.validateInputData_(info);
+    this.validateGroundObjectInputData_(info);
     this.lat = info.lat;
     this.lon = info.lon;
     this.alt = info.alt;
   }
 
   /**
-   * Calculates the relative azimuth, elevation, and range between this
-   * GroundObject and a Satellite.
-   * @param satellite The Satellite object. @param date The date for which to
-   * calculate the RAE values. Defaults to the current date. @returns The
-   * relative azimuth, elevation, and range values in kilometers and degrees.
+   * Calculates the relative azimuth, elevation, and range between this GroundObject and a Satellite.
+   * @param satellite The Satellite object.
+   * @param date The date for which to calculate the RAE values. Defaults to the current date.
+   * @returns The relative azimuth, elevation, and range values in kilometers and degrees.
    */
   rae(satellite: Satellite, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
     return satellite.rae(this, date);
@@ -45,22 +67,17 @@ export class GroundObject extends BaseObject {
 
   /**
    * Calculates ECF position at a given time.
-   *
-   * @optimized version of this.toGeodetic().toITRF().position;
+   * @variation optimized version of this.toGeodetic().toITRF().position;
+   * @returns The ECF position vector of the ground object.
    */
   ecf(): EcfVec3<Kilometers> {
     return llaRad2ecf(this.toGeodetic());
   }
 
   /**
-   * Calculates the Earth-Centered Inertial (ECI) position vector of the ground
-   * object at a given date.
-   *
-   * @optimzed version of this.toGeodetic().toITRF().toJ2000().position;
-   *
-   * @param date The date for which to calculate the ECI position vector.
-   * Defaults to the current date.
-   *
+   * Calculates the Earth-Centered Inertial (ECI) position vector of the ground object at a given date.
+   * @variation optimzed version of this.toGeodetic().toITRF().toJ2000().position;
+   * @param date The date for which to calculate the ECI position vector. Defaults to the current date.
    * @returns The ECI position vector of the ground object.
    */
   eci(date: Date = new Date()): EciVec3<Kilometers> {
@@ -70,12 +87,9 @@ export class GroundObject extends BaseObject {
   }
 
   /**
-   * Converts the latitude, longitude, and altitude of the GroundObject to
-   * radians and kilometers.
-   *
-   * @optimized version of this.toGeodetic() without class instantiation for
-   * better performance and serialization.
-   *
+   * Converts the latitude, longitude, and altitude of the GroundObject to radians and kilometers.
+   * @variation optimized version of this.toGeodetic() without class instantiation for better performance and
+   * serialization.
    * @returns An object containing the latitude, longitude, and altitude in
    * radians and kilometers.
    */
@@ -89,7 +103,6 @@ export class GroundObject extends BaseObject {
 
   /**
    * Creates a GroundObject object from a Geodetic position.
-   *
    * @param geodetic The geodetic coordinates.
    * @returns A new GroundObject object.
    */
@@ -114,28 +127,9 @@ export class GroundObject extends BaseObject {
    * @param info - The GroundPositionParams object containing the latitude,
    * longitude, and altitude. @returns void
    */
-  private validateInputData_(info: GroundPositionParams) {
-    this.validateParameter_(info.lat, -90, 90, 'Invalid latitude - must be between -90 and 90');
-    this.validateParameter_(info.lon, -180, 180, 'Invalid longitude - must be between -180 and 180');
-    this.validateParameter_(info.alt, 0, null, 'Invalid altitude - must be greater than 0');
-  }
-
-  /**
-   * Validates a parameter value against a minimum and maximum value.
-   * @template T - The type of the parameter value. @param value - The parameter
-   * value to validate. @param minValue - The minimum allowed value. If not
-   * provided, no minimum value check will be performed. @param maxValue - The
-   * maximum allowed value. If not provided, no maximum value check will be
-   * performed. @param errorMessage - The error message to throw if the value is
-   * outside the allowed range. @throws {Error} - Throws an error with the
-   * specified error message if the value is outside the allowed range.
-   */
-  private validateParameter_<T>(value: T, minValue: T, maxValue: T, errorMessage: string): void {
-    if (minValue && value < minValue) {
-      throw new Error(errorMessage);
-    }
-    if (maxValue && value > maxValue) {
-      throw new Error(errorMessage);
-    }
+  private validateGroundObjectInputData_(info: GroundPositionParams) {
+    this.validateParameter(info.lat, -90, 90, 'Invalid latitude - must be between -90 and 90');
+    this.validateParameter(info.lon, -180, 180, 'Invalid longitude - must be between -180 and 180');
+    this.validateParameter(info.alt, 0, null, 'Invalid altitude - must be greater than 0');
   }
 }

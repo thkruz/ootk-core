@@ -59,8 +59,6 @@ exports[`Sun should return the same shadow result given the same time and positi
 
 exports[`Sun should return the same sunlight result given the same positions 1`] = `1`;
 
-exports[`Sun should return the solar time for a given date, UTC offset, and longitude 1`] = `2024-01-13T01:20:30.888Z`;
-
 exports[`Sun should return the sunrise, sunset, and other event times when given a date, latitude, and longitude 1`] = `
 Object {
   "amateurDawn": 2024-01-12T14:08:48.295Z,

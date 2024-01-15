@@ -18,16 +18,6 @@ describe('Sun and Moon', () => {
     Sun.azEl(dateObj, 0 as Degrees, 0 as Degrees);
   });
 
-  test('Local Solar Time', () => {
-    /*
-     * Use number of milliseconds since epoch instead of local year, month, day,
-     * etc for consistency across machines
-     */
-    const lst = Sun.getSolarTime(new Date(1658807880000), -5, -71 as Degrees);
-
-    expect(lst.toUTCString()).toEqual('Tue, 26 Jul 2022 04:07:49 GMT');
-  });
-
   test('Moon Unit Tests', () => {
     expect(Moon.getMoonIllumination(dateObj)).toMatchSnapshot();
 
@@ -217,11 +207,5 @@ describe('Tests from Hypnos3', () => {
 
       expect(times[i].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
     }
-  });
-
-  test('getSolarTime returns the solar time', () => {
-    const solarTime = Sun.getSolarTime(date, -5, -71 as Degrees);
-
-    expect(solarTime.toUTCString()).toMatchSnapshot();
   });
 });

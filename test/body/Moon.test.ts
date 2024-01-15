@@ -114,7 +114,7 @@ describe('Moon', () => {
    * 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties.
    */
   it("should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties", () => {
-    const date = new Date(1635724800000); // November 1, 2021
+    const date = exampleDate;
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
     const isUtc = false;
@@ -143,7 +143,7 @@ describe('Moon', () => {
    * 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties.
    */
   it("should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties", () => {
-    const date = new Date(exampleDate); // November 1, 2021
+    const date = exampleDate;
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
     const isUtc = false;

@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { StringifiedNumber, TleParams } from 'src/types/types';
 import { Tle } from './Tle';
 
@@ -12,7 +35,6 @@ export abstract class FormatTle {
   /**
    * Creates a TLE (Two-Line Element) string based on the provided TleParams.
    * @param tleParams - The parameters used to generate the TLE.
-   *
    * @returns An object containing the TLE strings tle1 and tle2.
    */
   static createTle(tleParams: TleParams): { tle1: string; tle2: string } {
@@ -45,11 +67,8 @@ export abstract class FormatTle {
 
   /**
    * Converts the argument of perigee to a stringified number.
-   *
-   * @param argPe - The argument of perigee to be converted. Can be either a
-   * number or a string.
+   * @param argPe - The argument of perigee to be converted. Can be either a number or a string.
    * @returns The argument of perigee as a stringified number.
-   *
    * @throws Error if the length of the argument of perigee is not 8.
    */
   static argumentOfPerigee(argPe: number | string): StringifiedNumber {
@@ -69,10 +88,8 @@ export abstract class FormatTle {
 
   /**
    * Returns the eccentricity value of a given string.
-   *
    * @param ecen - The string representing the eccentricity.
    * @returns The eccentricity value.
-   *
    * @throws Error if the length of the eccentricity string is not 7.
    */
   static eccentricity(ecen: string): string {
@@ -92,10 +109,8 @@ export abstract class FormatTle {
 
   /**
    * Converts the inclination value to a string representation.
-   *
    * @param inc - The inclination value to be converted.
    * @returns The string representation of the inclination value.
-   *
    * @throws Error if the length of the converted value is not 8.
    */
   static inclination(inc: number | string): StringifiedNumber {
@@ -114,14 +129,9 @@ export abstract class FormatTle {
   }
 
   /**
-   * Converts the mean anomaly to a string representation with 8 digits, padded
-   * with leading zeros.
-   * @param meana - The mean anomaly to be converted. Can be either a number or
-   * a string.
-   *
-   * @returns The mean anomaly as a string with 8 digits, padded with leading
-   * zeros.
-   *
+   * Converts the mean anomaly to a string representation with 8 digits, padded with leading zeros.
+   * @param meana - The mean anomaly to be converted. Can be either a number or a string.
+   * @returns The mean anomaly as a string with 8 digits, padded with leading zeros.
    * @throws Error if the length of the mean anomaly is not 8.
    */
   static meanAnomaly(meana: number | string): StringifiedNumber {
@@ -146,11 +156,9 @@ export abstract class FormatTle {
    * with 8 decimal places. The resulting string is padded with leading zeros to
    * ensure a length of 11 characters. Throws an error if the resulting string
    * does not have a length of 11 characters.
-   *
    * @param meanmo - The mean motion value to be converted.
    * @returns The string representation of the mean motion value with 8 decimal
    * places and padded with leading zeros.
-   *
    * @throws Error if the resulting string does not have a length of 11
    * characters.
    */
@@ -171,7 +179,6 @@ export abstract class FormatTle {
 
   /**
    * Converts the right ascension value to a stringified number.
-   *
    * @param rasc - The right ascension value to convert.
    * @returns The stringified number representation of the right ascension.
    * @throws Error if the length of the converted right ascension is not 8.
@@ -192,14 +199,11 @@ export abstract class FormatTle {
   }
 
   /**
-   * Sets a character at a specific index in a string. If the index is out of
-   * range, the original string is returned.
+   * Sets a character at a specific index in a string. If the index is out of range, the original string is returned.
    * @param str - The input string.
-   *
    * @param index - The index at which to set the character.
-   *
-   * @param chr - The character to set at the specified index. @returns The
-   * modified string with the character set at the specified index.
+   * @param chr - The character to set at the specified index.
+   * @returns The modified string with the character set at the specified index.
    */
   static setCharAt(str: string, index: number, chr: string): string {
     if (index > str.length - 1) {

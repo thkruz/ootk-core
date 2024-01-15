@@ -81,9 +81,9 @@ exports[`Moon should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alw
 Object {
   "alwaysDown": false,
   "alwaysUp": false,
-  "highest": 2021-10-31T16:31:15.245Z,
-  "rise": 2021-10-31T09:42:19.184Z,
-  "set": 2021-10-31T23:20:11.307Z,
+  "highest": 2024-01-12T21:42:31.618Z,
+  "rise": 2024-01-12T16:43:59.167Z,
+  "set": 2024-01-13T02:41:04.069Z,
   "ye": null,
 }
 `;

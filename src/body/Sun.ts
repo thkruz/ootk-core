@@ -1,3 +1,39 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @copyright (c) 2011-2015, Vladimir Agafonkin
+ * @copyright (c) 2022 Robert Gester https://github.com/hypnos3/suncalc3
+ * @see suncalc.LICENSE.md
+ * Some of the math in this file was originally created by Vladimir Agafonkin.
+ * Robert Gester's update was referenced for documentation. There were a couple
+ * of bugs in both versions so there will be some differences if you are
+ * migrating from either to this library.
+ *
+ * suncalc is a JavaScript library for calculating sun/moon position and light
+ * phases. https://github.com/mourner/suncalc
+ * It was reworked and enhanced by Robert Gester.
+ *
+ * The original suncalc is released under the terms of the BSD 2-Clause License.
+ */
+
 import {
   angularDiameter,
   AngularDiameterMethod,
@@ -83,10 +119,12 @@ export class Sun {
    * Calculates the azimuth and elevation of the Sun for a given date, latitude,
    * and longitude.
    * @param date - The date for which to calculate the azimuth and elevation.
-   * @param lat - The latitude in degrees. @param lon - The longitude in
-   * degrees. @param c - The right ascension and declination of the target.
-   * Defaults to the Sun's right ascension and declination @returns An object
-   * containing the azimuth and elevation of the Sun in radians.
+   * @param lat - The latitude in degrees.
+   * @param lon - The longitude in degrees.
+   * @param c - The right ascension and declination of the target. Defaults to
+   * the Sun's right ascension and declination
+   * @returns An object containing the azimuth and elevation of the Sun in
+   * radians.
    */
   static azEl(date: Date, lat: Degrees, lon: Degrees, c?: RaDec): AzEl<Radians> {
     const lw = <Radians>(-lon * DEG2RAD);
@@ -104,44 +142,47 @@ export class Sun {
 
   /**
    * get number of days for a dateValue since 2000
-   *
    * See: https://en.wikipedia.org/wiki/Epoch_(astronomy)
-   *
-   * @param {number} date date as timestamp to get days
-   * @return {number} count of days
+   * @param date date as timestamp to get days
+   * @returns count of days
    */
   static date2jSince2000(date: Date): number {
     return date.getTime() / MS_PER_DAY + Sun.J1970_ - Sun.J2000_;
   }
 
   /**
-   * Calculate the Sun's angular diameter _(rad)_ from an ECI observer position
-   * [obsPos] and Sun position [sunPos] _(km)_.
+   * Calculates the angular diameter of the Sun given the observer's position
+   * and the Sun's position.
+   * @param obsPos The observer's position in kilometers.
+   * @param sunPos The Sun's position in kilometers.
+   * @returns The angular diameter of the Sun in radians.
    */
-  static diameter(obsPos: Vector3D, sunPos: Vector3D): number {
-    return angularDiameter(this.radius * 2, obsPos.subtract(sunPos).magnitude(), AngularDiameterMethod.Sphere);
+  static diameter(obsPos: Vector3D<Kilometers>, sunPos: Vector3D<Kilometers>): Radians {
+    return angularDiameter(
+      this.radius * 2,
+      obsPos.subtract(sunPos).magnitude(),
+      AngularDiameterMethod.Sphere,
+    ) as Radians;
   }
 
   /**
-   * Calculate eclipse angles given a satellite ECI position [satPos] _(km)_ and
-   * Sun ECI position [sunPos] _(km)_.
-   *
-   * Returns a tuple containing the following three values:
-   *   - central body angle _(rad)_
-   *   - central body apparant radius _(rad)_
-   *   - sun apparant radius _(rad)_
+   * Calculate eclipse angles given a satellite ECI position and Sun ECI
+   * position.
+   * @param satPos the satellite position
+   * @param sunPos the sun position
+   * @returns [central body angle, central body apparent radius, sun apparent]
    */
-  static eclipseAngles(satPos: Vector3D, sunPos: Vector3D): [number, number, number] {
+  static eclipseAngles(satPos: Vector3D<Kilometers>, sunPos: Vector3D<Kilometers>): [Radians, Radians, Radians] {
     const satSun = sunPos.subtract(satPos);
     const r = satPos.magnitude();
 
     return [
       // central body angle
-      satSun.angle(satPos.negate()),
+      satSun.angle(satPos.negate()) as Radians,
       // central body apparent radius
-      Math.asin(Earth.radiusEquator / r),
+      Math.asin(Earth.radiusEquator / r) as Radians,
       // sun apparent radius
-      Math.asin(this.radius / satSun.magnitude()),
+      Math.asin(this.radius / satSun.magnitude()) as Radians,
     ];
   }
 
@@ -149,9 +190,8 @@ export class Sun {
    * Ecliptic latitude measures the distance north or south of the ecliptic,
    * attaining +90° at the north ecliptic pole (NEP) and -90° at the south
    * ecliptic pole (SEP). The ecliptic itself is 0° latitude.
-   *
-   * @param {number} B - ?
-   * @returns {number} ecliptic latitude
+   * @param B - ?
+   * @returns ecliptic latitude
    */
   static eclipticLatitude(B: number): number {
     const C = TAU / 360;
@@ -168,7 +208,8 @@ export class Sun {
    * Earth towards the Sun at the vernal equinox of the Northern Hemisphere. Due
    * to axial precession, the ecliptic longitude of most "fixed stars" increases
    * by about 50.3 arcseconds per year, or 83.8 arcminutes per century.
-   * @param {number} M - solar mean anomaly @returns {number} ecliptic longitude
+   * @param M - solar mean anomaly
+   * @returns ecliptic longitude
    */
   static eclipticLongitude(M: number): Radians {
     const C = DEG2RAD * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
@@ -179,10 +220,14 @@ export class Sun {
 
   /**
    * returns set time for the given sun altitude
-   * @param {number} h - height at 0 @param {number} lw - rad * -lng @param
-   * {number} phi -  rad * lat; @param {number} dec - declination @param
-   * {number} n - Julian cycle @param {number} M - solar mean anomal @param
-   * {number} L - ecliptic longitude @returns {number} set time
+   * @param h - height at 0
+   * @param lw - rad * -lng
+   * @param phi -  rad * lat;
+   * @param dec - declination
+   * @param n - Julian cycle
+   * @param M - solar mean anomal
+   * @param L - ecliptic longitude
+   * @returns set time
    */
   static getSetJulian(h: Meters, lw: number, phi: number, dec: number, n: number, M: number, L: number): number {
     const w = Sun.hourAngle(h, phi, dec);
@@ -192,33 +237,14 @@ export class Sun {
   }
 
   /**
-   * Convert Date to Solar Date/Time
-   *
-   * Based on
-   * https://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-time
-   *
-   * See: https://github.com/mourner/suncalc/pull/156
-   */
-  static getSolarTime(date: Date, utcOffset: number, lon: Degrees) {
-    // calculate the day of year
-    const start = new Date();
-
-    start.setUTCFullYear(date.getUTCFullYear(), 0, 1);
-    start.setUTCHours(0, 0, 0, 0);
-    const diff = date.getTime() - start.getTime();
-    const dayOfYear = Math.floor(diff / MS_PER_DAY);
-
-    const b = (360 / 365) * (dayOfYear - 81) * DEG2RAD;
-    const equationOfTime = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
-    const localSolarTimeMeridian = 15 * utcOffset;
-    const timeCorrection = equationOfTime + 4 * (lon - localSolarTimeMeridian);
-
-    return new Date(date.getTime() + timeCorrection * 60 * 1000);
-  }
-
-  /**
-   * Calculates time for a given azimuth angle for a given date and
-   * latitude/longitude
+   * Calculates the time of the sun based on the given azimuth.
+   * @param dateValue - The date value or Date object.
+   * @param lat - The latitude in degrees.
+   * @param lon - The longitude in degrees.
+   * @param az - The azimuth in radians or degrees.
+   * @param isDegrees - Indicates if the azimuth is in degrees. Default is false.
+   * @returns The calculated time of the sun.
+   * @throws Error if the azimuth, latitude, or longitude is missing.
    */
   static getSunTimeByAz(
     dateValue: number | Date,
@@ -272,6 +298,13 @@ export class Sun {
    *
    * Default altitude is 0 meters. If `isUtc` is `true`, the times are returned
    * as UTC, otherwise in local time.
+   * @param dateVal - The date value or Date object.
+   * @param lat - The latitude in degrees.
+   * @param lon - The longitude in degrees.
+   * @param alt - The altitude in meters. Default is 0.
+   * @param isUtc - Indicates if the times should be returned as UTC. Default is
+   * false.
+   * @returns An object containing the times of the sun.
    */
   static getTimes(dateVal: Date | number, lat: Degrees, lon: Degrees, alt: Meters = <Meters>0, isUtc = false): SunTime {
     if (isNaN(lat)) {
@@ -322,8 +355,10 @@ export class Sun {
 
   /**
    * hour angle
-   * @param {number} h - heigh at 0 @param {number} phi -  rad * lat; @param
-   * {number} dec - declination @returns {number} hour angle
+   * @param h - heigh at 0
+   * @param phi -  rad * lat;
+   * @param dec - declination
+   * @returns hour angle
    */
   static hourAngle(h: number, phi: number, dec: number): number {
     return Math.acos((Math.sin(h) - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec)));
@@ -331,8 +366,8 @@ export class Sun {
 
   /**
    * convert Julian calendar to date object
-   * @param {number} julian day number in Julian calendar to convert @return
-   * {number} result date as timestamp
+   * @param julian day number in Julian calendar to convert
+   * @returns result date as timestamp
    */
   static julian2date(julian: number): Date {
     return new Date((julian - Sun.J1970_) * MS_PER_DAY);
@@ -356,9 +391,9 @@ export class Sun {
    * cycle of 28 years and the Roman Indiction repeats every 15 years. Thus the
    * Julian Period is calculated to be 7980 years long or 2,914,695 days because
    * 19*28*15 = 7980.
-   *
-   * @param {Date} date - Date object for calculating julian cycle
-   * @param {Degrees} lon - Degrees longitude @returns {number} julian cycle
+   * @param date - Date object for calculating julian cycle
+   * @param lon - Degrees longitude
+   * @returns julian cycle
    */
   static julianCycle(date: Date, lon: Degrees): number {
     const lw = <Radians>(-lon * DEG2RAD);
@@ -373,8 +408,11 @@ export class Sun {
    *
    * Returns `1.0` if the satellite is fully illuminated and `0.0` when fully
    * eclipsed.
+   * @param satPos - The position of the satellite.
+   * @param sunPos - The position of the sun.
+   * @returns The lighting ratio.
    */
-  static lightingRatio(satPos: Vector3D, sunPos: Vector3D): number {
+  static lightingRatio(satPos: Vector3D<Kilometers>, sunPos: Vector3D<Kilometers>): number {
     const [sunSatAngle, aCent, aSun] = Sun.eclipseAngles(satPos, sunPos);
 
     if (sunSatAngle - aCent + aSun <= 1e-10) {
@@ -401,15 +439,12 @@ export class Sun {
   }
 
   /**
-   * Calculates the lighting factor based on the position of the satellite and
-   * the sun.
-   *
-   * @deprecated
-   * This method was previously used. It is now deprecated and will be removed
+   * Calculates the lighting factor based on the position of the satellite and the sun.
+   * @deprecated This method was previously used. It is now deprecated and will be removed
    * in a future release.
-   *
    * @param satPos The position of the satellite.
-   * @param sunPos The position of the sun. @returns The lighting factor.
+   * @param sunPos The position of the sun.
+   * @returns The lighting factor.
    */
   static sunlightLegacy(satPos: Vector3D, sunPos: Vector3D): number {
     let lighting = 1.0;
@@ -426,8 +461,8 @@ export class Sun {
     const theta =
       Math.acos(
         satPos.negate().dot(sunPos.negate()) /
-          (Math.sqrt((-satPos.x) ** 2 + (-satPos.y) ** 2 + (-satPos.z) ** 2) *
-            Math.sqrt((-satPos.x + sunPos.x) ** 2 + (-satPos.y + sunPos.y) ** 2 + (-satPos.z + sunPos.z) ** 2)),
+        (Math.sqrt((-satPos.x) ** 2 + (-satPos.y) ** 2 + (-satPos.z) ** 2) *
+          Math.sqrt((-satPos.x + sunPos.x) ** 2 + (-satPos.y + sunPos.y) ** 2 + (-satPos.z + sunPos.z) ** 2)),
       ) * RAD2DEG;
 
     if (semiDiamEarth > semiDiamSun && theta < semiDiamEarth - semiDiamSun) {
@@ -452,8 +487,8 @@ export class Sun {
   /**
    * Calculates the position vector of the Sun at a given epoch in the
    * Earth-centered inertial (ECI) coordinate system.
-   * @param epoch - The epoch in UTC. @returns The position vector of the Sun in
-   * Kilometers.
+   * @param epoch - The epoch in UTC.
+   * @returns The position vector of the Sun in Kilometers.
    */
   static position(epoch: EpochUTC): Vector3D<Kilometers> {
     const jc = epoch.toJulianCenturies();
@@ -480,8 +515,10 @@ export class Sun {
   /**
    * Calculate the Sun's apparent ECI position _(km)_ from Earth for a given UTC
    * [epoch].
+   * @param epoch - The epoch in UTC.
+   * @returns The Sun's apparent ECI position in kilometers.
    */
-  static positionApparent(epoch: EpochUTC): Vector3D {
+  static positionApparent(epoch: EpochUTC): Vector3D<Kilometers> {
     const distance = Sun.position(epoch).magnitude();
     const dSec = distance / cKmPerSec;
 
@@ -490,11 +527,8 @@ export class Sun {
 
   /**
    * Calculates the right ascension and declination of the Sun for a given date.
-   *
-   * @param date - The date for which to calculate the right ascension and
-   * declination.
-   * @returns An object containing the declination and right ascension of the
-   * Sun.
+   * @param date - The date for which to calculate the right ascension and declination.
+   * @returns An object containing the declination and right ascension of the Sun.
    */
   static raDec(date: Date): RaDec {
     const d = Sun.date2jSince2000(date);
@@ -511,8 +545,11 @@ export class Sun {
   /**
    * Return `true` if the ECI satellite position [posSat] is in eclipse at the
    * given UTC [epoch].
+   * @param epoch - The epoch in UTC.
+   * @param posSat - The ECI position of the satellite in kilometers.
+   * @returns `true` if the satellite is in eclipse.
    */
-  static shadow(epoch: EpochUTC, posSat: Vector3D): boolean {
+  static shadow(epoch: EpochUTC, posSat: Vector3D<Kilometers>): boolean {
     const posSun = Sun.positionApparent(epoch);
     let shadow = false;
 
@@ -533,8 +570,9 @@ export class Sun {
 
   /**
    * side real time
-   * @param {number} d - julian day @param {Radians} lw - longitude of the
-   * observer @returns {number} sidereal time
+   * @param d - julian day
+   * @param lw - longitude of the observer
+   * @returns sidereal time
    */
   static siderealTime(d: number, lw: Radians): number {
     return DEG2RAD * (280.16 + 360.9856235 * d) - lw;
@@ -542,9 +580,10 @@ export class Sun {
 
   /**
    * solar transit in Julian
-   * @param {number} ds - approxTransit @param {number} M - solar mean anomal
-   * @param {number} L - ecliptic longitude @returns {number} solar transit in
-   * Julian
+   * @param ds approxTransit
+   * @param M solar mean anomal
+   * @param L ecliptic longitude
+   * @returns solar transit in Julian
    */
   static solarTransitJulian(ds: number, M: number, L: number): number {
     return Sun.J2000_ + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
@@ -552,8 +591,10 @@ export class Sun {
 
   /**
    * The approximate transit time
-   * @param {number} Ht - hourAngle @param {number} lw - rad * -lng @param
-   * {number} n - Julian cycle @returns {number} approx transit
+   * @param Ht hourAngle
+   * @param lw rad * -lng
+   * @param n Julian cycle
+   * @returns approx transit
    */
   private static approxTransit_(Ht: number, lw: number, n: number): number {
     return Sun.J0_ + (Ht + lw) / TAU + n;
@@ -577,10 +618,14 @@ export class Sun {
 
   /**
    * returns set time for the given sun altitude
-   * @param {Meters} alt - altitude at 0 @param {Radians} lw - -lng @param
-   * {Radians} phi - lat; @param {Radians} dec - declination @param {number} n -
-   * Julian cycle @param {number} M - solar mean anomal @param {number} L -
-   * ecliptic longitude @return {number} sunset time in days since 2000
+   * @param alt altitude at 0
+   * @param lw lng
+   * @param phi lat
+   * @param dec declination
+   * @param n Julian cycle
+   * @param M solar mean anomal
+   * @param L ecliptic longitude
+   * @returns sunset time in days since 2000
    */
   private static getSetJ_(
     alt: Meters,
@@ -605,8 +650,8 @@ export class Sun {
 
   /**
    * calculates the obderver angle
-   * @param {number} alt  the observer altitude (in meters) relative to the
-   * horizon @returns {Degrees} height for further calculations
+   * @param alt the observer altitude (in meters) relative to the horizon
+   * @returns height for further calculations
    */
   private static observerAngle_(alt: Meters): Degrees {
     return <Degrees>((-2.076 * Math.sqrt(alt)) / 60);
@@ -614,7 +659,8 @@ export class Sun {
 
   /**
    * get solar mean anomaly
-   * @param {number} d - julian day @returns {number} solar mean anomaly
+   * @param d julian day
+   * @returns solar mean anomaly
    */
   private static solarMeanAnomaly_(d: number): number {
     return DEG2RAD * (357.5291 + 0.98560028 * d);

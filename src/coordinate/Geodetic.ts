@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { Earth } from '../body/Earth';
 import { AngularDistanceMethod, Degrees, GroundObject, Kilometers, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
@@ -46,11 +69,8 @@ export class Geodetic {
    * Creates a Geodetic object from latitude, longitude, and altitude values in
    * degrees.
    * @param latitude The latitude value in degrees.
-   *
    * @param longitude The longitude value in degrees.
-   *
    * @param altitude The altitude value in kilometers.
-   *
    * @returns A Geodetic object representing the specified latitude, longitude,
    * and altitude.
    */
@@ -60,9 +80,7 @@ export class Geodetic {
 
   /**
    * Returns a string representation of the Geodetic object.
-   *
-   * @returns A string containing the latitude, longitude, and altitude of the
-   * Geodetic object.
+   * @returns A string containing the latitude, longitude, and altitude of the Geodetic object.
    */
   toString(): string {
     return [
@@ -104,7 +122,8 @@ export class Geodetic {
   /**
    * Converts the geodetic coordinates to the International Terrestrial
    * Reference Frame (ITRF) coordinates.
-   * @param epoch The epoch in UTC. @returns The ITRF coordinates.
+   * @param epoch The epoch in UTC.
+   * @returns The ITRF coordinates.
    */
   toITRF(epoch: EpochUTC): ITRF {
     const sLat = Math.sin(this.lat);
@@ -121,10 +140,9 @@ export class Geodetic {
 
   /**
    * Calculates the angle between two geodetic coordinates.
-   * @param g The geodetic coordinate to calculate the angle to. @param method
-   * The method to use for calculating the angular distance (optional, default
-   * is Haversine). @returns The angle between the two geodetic coordinates in
-   * radians.
+   * @param g The geodetic coordinate to calculate the angle to.
+   * @param method The method to use for calculating the angular distance (optional, default is Haversine).
+   * @returns The angle between the two geodetic coordinates in radians.
    */
   angle(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Radians {
     return angularDistance(this.lon, this.lat, g.lon, g.lat, method) as Radians;
@@ -132,9 +150,9 @@ export class Geodetic {
 
   /**
    * Calculates the angle in degrees between two Geodetic coordinates.
-   * @param g The Geodetic coordinate to calculate the angle with. @param method
-   * The method to use for calculating the angular distance (optional, default
-   * is Haversine). @returns The angle in degrees.
+   * @param g The Geodetic coordinate to calculate the angle with.
+   * @param method The method to use for calculating the angular distance (optional, default is Haversine).
+   * @returns The angle in degrees.
    */
   angleDeg(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Degrees {
     return (this.angle(g, method) * RAD2DEG) as Degrees;
@@ -142,10 +160,9 @@ export class Geodetic {
 
   /**
    * Calculates the distance between two geodetic coordinates.
-   * @param g The geodetic coordinates to calculate the distance to. @param
-   * method The method to use for calculating the angular distance. Default is
-   * Haversine. @returns The distance between the two geodetic coordinates in
-   * kilometers.
+   * @param g The geodetic coordinates to calculate the distance to.
+   * @param method The method to use for calculating the angular distance. Default is Haversine.
+   * @returns The distance between the two geodetic coordinates in kilometers.
    */
   distance(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Kilometers {
     return (this.angle(g, method) * Earth.radiusMean) as Kilometers;
@@ -160,12 +177,10 @@ export class Geodetic {
   }
 
   /**
-   * Determines if the current geodetic coordinate can see another geodetic
-   * coordinate.
-   * @param g The geodetic coordinate to check for visibility. @param method The
-   * method to use for calculating the angular distance (optional, default is
-   * Haversine). @returns A boolean indicating if the current coordinate can see
-   * the other coordinate.
+   * Determines if the current geodetic coordinate can see another geodetic coordinate.
+   * @param g The geodetic coordinate to check for visibility.
+   * @param method The method to use for calculating the angular distance (optional, default is Haversine).
+   * @returns A boolean indicating if the current coordinate can see the other coordinate.
    */
   isInView(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): boolean {
     const fov = Math.max(this.fieldOfView(), g.fieldOfView());

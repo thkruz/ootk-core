@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { Minutes, PositionVelocity, Degrees, Kilometers, Radians, Seconds } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
@@ -9,9 +32,7 @@ import { StateVector } from './StateVector';
 import { ClassicalElementsParams } from '../interfaces/ClassicalElementsParams';
 
 /**
- * The ClassicalElements class represents the classical orbital elements of an
- * object.
- *
+ * The ClassicalElements class represents the classical orbital elements of an object.
  * @example
  * ```ts
  * const epoch = EpochUTC.fromDateTime(new Date('2024-01-14T14:39:39.914Z'));
@@ -59,10 +80,10 @@ export class ClassicalElements {
 
   /**
    * Creates a new instance of ClassicalElements from a StateVector.
-   * @param state The StateVector to convert. @param mu The gravitational
-   * parameter of the central body. Default value is Earth's gravitational
-   * parameter. @returns A new instance of ClassicalElements. @throws Error if
-   * the StateVector is not in an inertial frame.
+   * @param state The StateVector to convert.
+   * @param mu The gravitational parameter of the central body. Default value is Earth's gravitational parameter.
+   * @returns A new instance of ClassicalElements.
+   * @throws Error if the StateVector is not in an inertial frame.
    */
   static fromStateVector(state: StateVector, mu = earthGravityParam): ClassicalElements {
     if (!state.inertial) {
@@ -243,7 +264,7 @@ export class ClassicalElements {
 
   /**
    * Converts the classical elements to equinoctial elements.
-   * @returns {EquinoctialElements} The equinoctial elements.
+   * @returns The equinoctial elements.
    */
   toEquinoctialElements(): EquinoctialElements {
     const I = this.inclination > Math.PI / 2 ? -1 : 1;
@@ -260,7 +281,6 @@ export class ClassicalElements {
 
   /**
    * Propagates the classical elements to a given epoch.
-   *
    * @param propEpoch - The epoch to propagate the classical elements to.
    * @returns The classical elements at the propagated epoch.
    */

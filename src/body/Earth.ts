@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import {
   angularDiameter,
   AngularDiameterMethod,
@@ -68,7 +91,6 @@ export class Earth {
 
   /**
    * Converts revolutions per day to semi-major axis.
-   *
    * @param rpd - The number of revolutions per day.
    * @returns The semi-major axis value.
    */
@@ -153,8 +175,8 @@ export class Earth {
 
   /**
    * Calculates the diameter of the Earth based on the satellite position.
-   * @param satPos The position of the satellite. @returns The diameter of the
-   * Earth.
+   * @param satPos The position of the satellite.
+   * @returns The diameter of the Earth.
    */
   static diameter(satPos: Vector3D): number {
     return angularDiameter(Earth.radiusEquator * 2, satPos.magnitude(), AngularDiameterMethod.Sphere);

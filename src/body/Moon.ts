@@ -1,32 +1,13 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools
- * for working with satellites and other orbital objects.
- *
- * Some of the math in this file was originally created by Vladimir Agafonkin.
- * Robert Gester's update was referenced for documentation. There were a couple
- * of bugs in both versions so there will be some differences if you are
- * migrating from either to this library.
- *
- * @Copyright (c) 2011-2015, Vladimir Agafonkin SunCalc is a JavaScript library
- * for calculating sun/moon position and light phases.
- * https://github.com/mourner/suncalc
- *
- * Reworked and enhanced by Robert Gester @Copyright (c) 2022 Robert Gester
- * https://github.com/hypnos3/suncalc3
- *
- * moon calculations, based on http://aa.quae.nl/en/reken/hemelpositie.html
- * formulas
- *
- * @license MIT License
- *
- * @Copyright (c) 2022-2024 Theodore Kruczek Permission is hereby granted, free
- * of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
@@ -38,6 +19,21 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ * @copyright (c) 2011-2015, Vladimir Agafonkin
+ * @copyright (c) 2022 Robert Gester https://github.com/hypnos3/suncalc3
+ * @see suncalc.LICENSE.md
+ * Some of the math in this file was originally created by Vladimir Agafonkin.
+ * Robert Gester's update was referenced for documentation. There were a couple
+ * of bugs in both versions so there will be some differences if you are
+ * migrating from either to this library.
+ *
+ * suncalc is a JavaScript library for calculating sun/moon position and light
+ * phases. https://github.com/mourner/suncalc
+ * It was reworked and enhanced by Robert Gester.
+ *
+ * The original suncalc is released under the terms of the BSD 2-Clause License.
+ * @see http://aa.quae.nl/en/reken/hemelpositie.html
+ * moon calculations are based on formulas from this website
  */
 
 import { AngularDiameterMethod, Celestial, Degrees, Kilometers, RaDec, Radians } from '../main';
@@ -143,10 +139,9 @@ export class Moon {
 
   /**
    * Calculates the illumination of the Moon at a given epoch.
-   *
    * @param epoch - The epoch in UTC.
-   * @param origin - The origin vector. Defaults to the origin vector if not
-   * provided. @returns The illumination of the Moon, ranging from 0 to 1.
+   * @param origin - The origin vector. Defaults to the origin vector if not provided.
+   * @returns The illumination of the Moon, ranging from 0 to 1.
    */
   static illumination(epoch: EpochUTC, origin?: Vector3D<Kilometers>): number {
     const orig = origin ?? (Vector3D.origin as Vector3D<Kilometers>);
@@ -159,10 +154,9 @@ export class Moon {
 
   /**
    * Calculates the diameter of the Moon.
-   *
    * @param obsPos - The position of the observer.
-   * @param moonPos - The position of the Moon. @returns The diameter of the
-   * Moon.
+   * @param moonPos - The position of the Moon.
+   * @returns The diameter of the Moon.
    */
   static diameter(obsPos: Vector3D, moonPos: Vector3D): number {
     return angularDiameter(this.radiusEquator * 2, obsPos.subtract(moonPos).magnitude(), AngularDiameterMethod.Sphere);
@@ -170,12 +164,10 @@ export class Moon {
 
   /**
    * calculations for illumination parameters of the moon, based on
-   * http://idlastro.gsfc.nasa.gov/ftp/pro/astro/mphase.pro formulas and Chapter
-   * 48 of "Astronomical Algorithms" 2nd edition by Jean Meeus (Willmann-Bell,
-   * Richmond) 1998.
-   * @param {number | Date} date Date object or timestamp for calculating
-   * moon-illumination @return {MoonIlluminationData} result object of
-   * moon-illumination
+   * http://idlastro.gsfc.nasa.gov/ftp/pro/astro/mphase.pro formulas and Chapter 48 of "Astronomical Algorithms" 2nd
+   * edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
+   * @param date Date object or timestamp for calculating moon-illumination
+   * @returns result object of moon-illumination
    */
   // eslint-disable-next-line max-statements
   static getMoonIllumination(date: number | Date): MoonIlluminationData {
@@ -320,8 +312,12 @@ export class Moon {
   }
 
   /**
-   * calculations for moon rise/set times are based on
-   * http://www.stargazing.net/kepler/moonrise.html article
+   * calculations for moon rise/set times are based on http://www.stargazing.net/kepler/moonrise.html article
+   * @param date Date object or timestamp for calculating moon rise/set
+   * @param lat Latitude of observer in degrees
+   * @param lon Longitude of observer in degrees
+   * @param isUtc If true, date will be interpreted as UTC
+   * @returns result object of moon rise/set
    */
   static getMoonTimes(date: Date, lat: Degrees, lon: Degrees, isUtc = false) {
     // Clone the date so we don't change the original
@@ -378,7 +374,6 @@ export class Moon {
 
   /**
    * Calculates the geocentric ecliptic coordinates of the moon.
-   *
    * @param d - The number of days since year 2000.
    * @returns An object containing the right ascension, declination, and
    * distance to the moon.

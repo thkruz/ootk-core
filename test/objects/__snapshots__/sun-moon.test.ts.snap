@@ -132,5 +132,3 @@ Object {
   "el": 0.5021704545690489,
 }
 `;
-
-exports[`Tests from Hypnos3 getSolarTime returns the solar time 1`] = `"Mon, 04 Mar 2013 17:03:20 GMT"`;

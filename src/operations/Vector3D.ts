@@ -1,4 +1,4 @@
-import { Radians, linearDistance } from '../main';
+import { Kilometers, Radians, linearDistance } from '../main';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 
@@ -13,8 +13,10 @@ export class Vector3D<T extends number = number> {
   }
 
   /**
-   * Create a new [Vector3D] object from the first three elements of a [Vector]
+   * Create a new Vector3D object from the first three elements of a Vector
    * object.
+   * @param v The Vector object to convert.
+   * @returns A new Vector3D object.
    */
   static fromVector<U extends number>(v: Vector<U>): Vector3D<U> {
     return new Vector3D<U>(v.x as U, v.y as U, v.z as U);
@@ -52,9 +54,10 @@ export class Vector3D<T extends number = number> {
   }
 
   /**
-   * Return the [Vector3D] element at the provided [index].
-   *
-   * @deprecated don't do
+   * Return the Vector3D element at the provided index.
+   * @deprecated don't do this
+   * @param index The index of the element to return.
+   * @returns The element at the provided index.
    */
   public getElement(index: number): number {
     switch (index) {
@@ -104,19 +107,22 @@ export class Vector3D<T extends number = number> {
   }
 
   // / Return a copy of this [Vector3D] with the elements negated.
-  negate(): Vector3D {
-    return this.scale(-1);
+  negate(): Vector3D<Kilometers> {
+    return this.scale(-1) as Vector3D<Kilometers>;
   }
 
   /**
-   * Return the Euclidean distance between this and another [Vector3D].
+   * Return the Euclidean distance between this and another Vector3D.
+   * @param v The other Vector3D.
+   * @returns The distance between this and the other Vector3D.
    */
   distance(v: Vector3D): number {
     return linearDistance(this, v);
   }
 
   /**
-   * Convert this to a unit [Vector3D].
+   * Convert this to a unit Vector3D.
+   * @returns A unit Vector3D.
    */
   normalize(): Vector3D {
     const m = this.magnitude();
@@ -179,7 +185,7 @@ export class Vector3D<T extends number = number> {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
 
-    return new Vector3D<T>((cosT * this.x + -sinT * this.z) as T, this.y as T, (sinT * this.x + cosT * this.z) as T);
+    return new Vector3D<T>((cosT * this.x + -sinT * this.z) as T, this.y, (sinT * this.x + cosT * this.z) as T);
   }
 
   /*

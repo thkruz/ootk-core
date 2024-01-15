@@ -1,29 +1,24 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools for working
- * with satellites and other orbital objects.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
- * @file The BaseObject class is used for creating core properties and methods applicable
- * to ground and space based objects.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * @license MIT License
- *
- * @Copyright (c) 2024 Theodore Kruczek
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
- * to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 import { BaseObjectParams } from '../interfaces/BaseObjectParams';
@@ -60,7 +55,7 @@ export class BaseObject {
 
   /**
    * Checks if the object is a satellite.
-   * @returns {boolean} True if the object is a satellite, false otherwise.
+   * @returns True if the object is a satellite, false otherwise.
    */
   isSatellite(): boolean {
     return false;
@@ -68,7 +63,7 @@ export class BaseObject {
 
   /**
    * Checks if the object is a land object.
-   * @returns {boolean} True if the object is a land object, false otherwise.
+   * @returns True if the object is a land object, false otherwise.
    */
   isLandObject(): boolean {
     switch (this.type) {
@@ -90,7 +85,7 @@ export class BaseObject {
 
   /**
    * Returns whether the object is a sensor.
-   * @returns {boolean} True if the object is a sensor, false otherwise.
+   * @returns True if the object is a sensor, false otherwise.
    */
   isSensor(): boolean {
     return false;
@@ -98,7 +93,7 @@ export class BaseObject {
 
   /**
    * Checks if the object is a marker.
-   * @returns {boolean} True if the object is a marker, false otherwise.
+   * @returns True if the object is a marker, false otherwise.
    */
   isMarker(): boolean {
     return false;
@@ -106,7 +101,7 @@ export class BaseObject {
 
   /**
    * Returns whether the object's position is static.
-   * @returns {boolean} True if the object is static, false otherwise.
+   * @returns True if the object is static, false otherwise.
    */
   isStatic(): boolean {
     return true;
@@ -168,5 +163,21 @@ export class BaseObject {
     };
 
     return typeToStringMap[this.type] ?? 'Unknown';
+  }
+
+  /**
+   * Validates a parameter value against a minimum and maximum value.
+   * @param value - The value to be validated.
+   * @param minValue - The minimum allowed value.
+   * @param maxValue - The maximum allowed value.
+   * @param errorMessage - The error message to be thrown if the value is invalid.
+   */
+  validateParameter<T>(value: T, minValue: T, maxValue: T, errorMessage: string): void {
+    if (typeof minValue !== 'undefined' && minValue !== null && (value as number) < (minValue as number)) {
+      throw new Error(errorMessage);
+    }
+    if (typeof maxValue !== 'undefined' && maxValue !== null && (value as number) > (maxValue as number)) {
+      throw new Error(errorMessage);
+    }
   }
 }

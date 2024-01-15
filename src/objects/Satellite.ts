@@ -1,19 +1,13 @@
 /**
  * @author Theodore Kruczek.
- * @description Orbital Object ToolKit Core (ootk-core) is a collection of tools
- * for working with satellites and other orbital objects.
- *
- * @file The Satellite class provides functions for calculating satellites
- * positions relative to earth based sensors and other orbital objects.
- *
- * @license MIT License @Copyright (c) 2020-2024 Theodore Kruczek
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
@@ -44,7 +38,6 @@ import {
   Degrees,
   EcfVec3,
   EciVec3,
-  GreenwichMeanSiderealTime,
   Kilometers,
   LlaVec3,
   Minutes,
@@ -59,6 +52,7 @@ import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../util
 import { dopplerFactor } from './../utils/functions';
 import { BaseObject } from './BaseObject';
 import { GroundObject } from './GroundObject';
+import { TimeVariables } from '../interfaces/TimeVariables';
 
 /**
  * Represents a satellite object with orbital information and methods for
@@ -77,33 +71,22 @@ export class Satellite extends BaseObject {
   meanMoDev1: number;
   meanMoDev2: number;
   meanMotion: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: OptionsParams;
   perigee: Kilometers;
   period: Minutes;
   rightAscension: Degrees;
   satrec: SatelliteRecord;
-  /**
-   * The satellite catalog number as listed in the TLE.
-   */
+  /** The satellite catalog number as listed in the TLE. */
   sccNum: string;
-  /**
-   * The 5 digit alpha-numeric satellite catalog number.
-   */
+  /** The 5 digit alpha-numeric satellite catalog number. */
   sccNum5: string;
-  /**
-   * The 6 digit numeric satellite catalog number.
-   */
+  /** The 6 digit numeric satellite catalog number. */
   sccNum6: string;
   tle1: TleLine1;
   tle2: TleLine2;
-  /**
-   * The semi-major axis of the satellite's orbit.
-   */
+  /** The semi-major axis of the satellite's orbit. */
   semiMajorAxis: Kilometers;
-  /**
-   * The semi-minor axis of the satellite's orbit.
-   */
+  /** The semi-minor axis of the satellite's orbit. */
   semiMinorAxis: Kilometers;
 
   constructor(info: SatelliteParams, options?: OptionsParams) {
@@ -143,19 +126,26 @@ export class Satellite extends BaseObject {
     };
   }
 
+  /**
+   * Checks if the object is a satellite.
+   * @returns True if the object is a satellite, false otherwise.
+   */
   isSatellite(): boolean {
     return true;
   }
 
+  /**
+   * Returns whether the satellite is static or not.
+   * @returns True if the satellite is static, false otherwise.
+   */
   isStatic(): boolean {
     return false;
   }
 
   /**
-   * Checks if the given SatelliteRecord object is valid by checking if its
-   * properties are all numbers.
-   * @param satrec - The SatelliteRecord object to check. @returns True if the
-   * SatelliteRecord object is valid, false otherwise.
+   * Checks if the given SatelliteRecord object is valid by checking if its properties are all numbers.
+   * @param satrec - The SatelliteRecord object to check.
+   * @returns True if the SatelliteRecord object is valid, false otherwise.
    */
   static isValidSatrec(satrec: SatelliteRecord): boolean {
     if (
@@ -174,21 +164,24 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Calculates the azimuth angle of the satellite relative to the given sensor
-   * at the specified date. If no date is provided, the current time of the
-   * satellite is used.
-   *
-   * @optimized
+   * Calculates the azimuth angle of the satellite relative to the given sensor at the specified date. If no date is
+   * provided, the current time of the satellite is used.
+   * @variation optimized
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the azimuth angle. Optional, defaults to the current date.
+   * @returns The azimuth angle of the satellite relative to the given sensor at the specified date.
    */
   az(observer: GroundObject, date: Date = new Date()): Degrees {
     return (this.rae(observer, date).az * RAD2DEG) as Degrees;
   }
 
   /**
-   * Calculates the RAE (Range, Azimuth, Elevation) values for a given sensor
-   * and date. If no date is provided, the current time is used.
-   *
-   * @expanded
+   * Calculates the RAE (Range, Azimuth, Elevation) values for a given sensor and date. If no date is provided, the
+   * current time is used.
+   * @variation expanded
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the RAE values. Optional, defaults to the current date.
+   * @returns The RAE values for the given sensor and date.
    */
   toRae(observer: GroundObject, date: Date = new Date()): RAE {
     const rae = this.rae(observer, date);
@@ -211,8 +204,9 @@ export class Satellite extends BaseObject {
 
   /**
    * Calculates ECF position at a given time.
-   *
-   * @optimized
+   * @variation optimized
+   * @param date - The date at which to calculate the ECF position. Optional, defaults to the current date.
+   * @returns The ECF position at the specified date.
    */
   ecf(date: Date = new Date()): EcfVec3<Kilometers> {
     const { gmst } = Satellite.calculateTimeVariables(date);
@@ -222,8 +216,9 @@ export class Satellite extends BaseObject {
 
   /**
    * Calculates ECI position at a given time.
-   *
-   * @optimized
+   * @variation optimized
+   * @param date - The date at which to calculate the ECI position. Optional, defaults to the current date.
+   * @returns The ECI position at the specified date.
    */
   eci(date: Date = new Date()): PosVel<Kilometers> {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
@@ -241,11 +236,11 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Calculates the J2000 coordinates for a given date. If no date is provided,
-   * the current time is used.
-   * @param date - The date for which to calculate the J2000 coordinates.
-   * @returns The J2000 coordinates for the specified date. @throws Error if
-   * propagation fails.
+   * Calculates the J2000 coordinates for a given date. If no date is provided, the current time is used.
+   * @variation expanded
+   * @param date - The date for which to calculate the J2000 coordinates, defaults to the current date.
+   * @returns The J2000 coordinates for the specified date.
+   * @throws Error if propagation fails.
    */
   toJ2000(date: Date = new Date()): J2000 {
     const { m } = Satellite.calculateTimeVariables(date, this.satrec);
@@ -270,10 +265,11 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Returns the elevation angle of the satellite as seen by the given sensor at
-   * the specified time.
-   *
-   * @optimized
+   * Returns the elevation angle of the satellite as seen by the given sensor at the specified time.
+   * @variation optimized
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the elevation angle. Optional, defaults to the current date.
+   * @returns The elevation angle of the satellite as seen by the given sensor at the specified time.
    */
   el(observer: GroundObject, date: Date = new Date()): Degrees {
     return (this.rae(observer, date).el * RAD2DEG) as Degrees;
@@ -281,6 +277,9 @@ export class Satellite extends BaseObject {
 
   /**
    * Calculates LLA position at a given time.
+   * @variation optimized
+   * @param date - The date at which to calculate the LLA position. Optional, defaults to the current date.
+   * @returns The LLA position at the specified date.
    */
   lla(date: Date = new Date()): LlaVec3<Degrees, Kilometers> {
     const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
@@ -290,31 +289,62 @@ export class Satellite extends BaseObject {
     return lla;
   }
 
+  /**
+   * Converts the satellite's position to geodetic coordinates.
+   * @variation expanded
+   * @param date The date for which to calculate the geodetic coordinates. Defaults to the current date.
+   * @returns The geodetic coordinates of the satellite.
+   */
   toGeodetic(date: Date = new Date()): Geodetic {
     return this.toJ2000(date).toITRF().toGeodetic();
   }
 
+  /**
+   * Converts the satellite's position to the International Terrestrial Reference Frame (ITRF) at the specified date.
+   * If no date is provided, the current date is used.
+   * @variation expanded
+   * @param date The date for which to convert the position. Defaults to the current date.
+   * @returns The satellite's position in the ITRF at the specified date.
+   */
   toITRF(date: Date = new Date()): ITRF {
     return this.toJ2000(date).toITRF();
   }
 
+  /**
+   * Converts the current satellite's position to the Reference-Inertial-Celestial (RIC) frame
+   * relative to the specified reference satellite at the given date.
+   * @variation expanded
+   * @param reference The reference satellite.
+   * @param date The date for which to calculate the RIC frame. Defaults to the current date.
+   * @returns The RIC frame representing the current satellite's position relative to the reference satellite.
+   */
   toRIC(reference: Satellite, date: Date = new Date()): RIC {
     return RIC.fromJ2000(this.toJ2000(date), reference.toJ2000(date));
   }
 
+  /**
+   * Converts the satellite object to a TLE (Two-Line Element) object.
+   * @returns The TLE object representing the satellite.
+   */
   toTle(): Tle {
     return new Tle(this.tle1, this.tle2);
   }
 
+  /**
+   * Converts the satellite's position to classical orbital elements.
+   * @param date The date for which to calculate the classical elements. Defaults to the current date.
+   * @returns The classical orbital elements of the satellite.
+   */
   toClassicalElements(date: Date = new Date()): ClassicalElements {
     return this.toJ2000(date).toClassicalElements();
   }
 
   /**
-   * Calculates the RAE (Range, Azimuth, Elevation) vector for a given sensor
-   * and time.
-   *
-   * @optimized
+   * Calculates the RAE (Range, Azimuth, Elevation) vector for a given sensor and time.
+   * @variation optimized
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the RAE vector. Optional, defaults to the current date.
+   * @returns The RAE vector for the given sensor and time.
    */
   rae(observer: GroundObject, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
     const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
@@ -325,21 +355,21 @@ export class Satellite extends BaseObject {
   }
 
   /**
-   * Returns the range of the satellite from the given sensor at the specified
-   * time.
-   *
-   * @optimized
+   * Returns the range of the satellite from the given sensor at the specified time.
+   * @variation optimized
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the range. Optional, defaults to the current date.
+   * @returns The range of the satellite from the given sensor at the specified time.
    */
   range(observer: GroundObject, date: Date = new Date()): Kilometers {
     return this.rae(observer, date).rng;
   }
 
   /**
-   * Applies the Doppler effect to the given frequency based on the observer's
-   * position and the date.
-   * @param freq - The frequency to apply the Doppler effect to. @param observer
-   * - The observer's position on the ground. @param date - The date at which to
-   * calculate the Doppler effect. Optional, defaults to the current date.
+   * Applies the Doppler effect to the given frequency based on the observer's position and the date.
+   * @param freq - The frequency to apply the Doppler effect to.
+   * @param observer - The observer's position on the ground.
+   * @param date - The date at which to calculate the Doppler effect. Optional, defaults to the current date.
    * @returns The frequency after applying the Doppler effect.
    */
   applyDoppler(freq: number, observer: GroundObject, date?: Date): number {
@@ -350,11 +380,9 @@ export class Satellite extends BaseObject {
 
   /**
    * Calculates the Doppler factor for the satellite.
-   *
    * @param observer The observer's ground position.
-   * @param date The optional date for which to calculate the Doppler factor. If
-   * not provided, the current date is used. @returns The calculated Doppler
-   * factor.
+   * @param date The optional date for which to calculate the Doppler factor. If not provided, the current date is used.
+   * @returns The calculated Doppler factor.
    */
   dopplerFactor(observer: GroundObject, date?: Date): number {
     const position = this.eci(date);
@@ -364,26 +392,20 @@ export class Satellite extends BaseObject {
 
   /**
    * Calculates the time variables for a given date relative to the TLE epoch.
-   * @param {Date} date Date to calculate @param {SatelliteRecord} satrec
-   * Satellite orbital information @returns {{m: number, gmst:
-   * GreenwichMeanSiderealTime, j: number}} Time variables
+   * @param date Date to calculate
+   * @param satrec Satellite orbital information
+   * @returns Time variables
    */
-  private static calculateTimeVariables(
-    date: Date,
-    satrec?: SatelliteRecord,
-  ): { gmst: GreenwichMeanSiderealTime; m: number | null; j: number } {
-    const j =
-      jday(
-        date.getUTCFullYear(),
-        date.getUTCMonth() + 1,
-        date.getUTCDate(),
-        date.getUTCHours(),
-        date.getUTCMinutes(),
-        date.getUTCSeconds(),
-      ) +
-      date.getUTCMilliseconds() * MILLISECONDS_TO_DAYS;
+  private static calculateTimeVariables(date: Date, satrec?: SatelliteRecord): TimeVariables {
+    const j = jday(
+      date.getUTCFullYear(),
+      date.getUTCMonth() + 1,
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds(),
+    ) + date.getUTCMilliseconds() * MILLISECONDS_TO_DAYS;
     const gmst = Sgp4.gstime(j);
-
     const m = satrec ? (j - satrec.jdsatepoch) * MINUTES_PER_DAY : null;
 
     return { gmst, m, j };

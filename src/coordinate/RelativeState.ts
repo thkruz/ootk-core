@@ -1,3 +1,26 @@
+/**
+ * @author Theodore Kruczek.
+ * @license MIT
+ * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import { Kilometers } from 'src/main';
 import { Matrix } from '../operations/Matrix';
 import { Vector3D } from '../operations/Vector3D';
@@ -16,15 +39,13 @@ export abstract class RelativeState {
 
   /**
    * Gets the name of the coordinate system.
-   *
    * @returns The name of the coordinate system.
    */
   abstract get name(): string;
 
   /**
-   * Returns a string representation of the RelativeState object. The string
-   * includes the name, position, and velocity of the object.
-   *
+   * Returns a string representation of the RelativeState object. The string includes the name, position, and velocity
+   * of the object.
    * @returns A string representation of the RelativeState object.
    */
   toString(): string {
@@ -38,19 +59,15 @@ export abstract class RelativeState {
   /**
    * Transforms the current RelativeState coordinate to the J2000 coordinate
    * @param origin The origin J2000 coordinate.
-   *
    * @returns The transformed J2000 coordinate.
    */
   abstract toJ2000(origin: J2000): J2000;
 
   /**
-   * Creates a matrix based on the given position and velocity vectors. The
-   * matrix represents the relative state of an object in 3D space.
-   *
+   * Creates a matrix based on the given position and velocity vectors. The matrix represents the relative state of an
+   * object in 3D space.
    * @param position - The position vector.
-   *
    * @param velocity - The velocity vector.
-   *
    * @returns The matrix representing the relative state.
    */
   static createMatrix(position: Vector3D, velocity: Vector3D): Matrix {
@@ -74,9 +91,8 @@ export abstract class RelativeState {
   }
 
   /**
-   * Calculates the range rate of the relative state. Range rate is the dot
-   * product of the position and velocity divided by the range.
-   *
+   * Calculates the range rate of the relative state. Range rate is the dot product of the position and velocity divided
+   * by the range.
    * @returns The range rate in Kilometers per second.
    */
   get rangeRate(): number {

@@ -2,7 +2,10 @@ import { Degrees, EpochUTC, Meters, Sun, Vector3D } from '../../src/main';
 import { exampleDate } from '../lib/mockData';
 
 describe('Sun', () => {
-  // The 'azEl' method should return the azimuth and elevation of the sun given a date, latitude, and longitude.
+  /*
+   * The 'azEl' method should return the azimuth and elevation of the sun given
+   * a date, latitude, and longitude.
+   */
   it('should return the azimuth and elevation of the sun given a date, latitude, and longitude', () => {
     const lat = 37.7749 as Degrees;
     const lon = -122.4194 as Degrees;
@@ -11,7 +14,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'date2jSince2000' method should return the number of days since January 1, 2000, for a given date.
+  /*
+   * The 'date2jSince2000' method should return the number of days since January
+   * 1, 2000, for a given date.
+   */
   it('should return the number of days since January 1, 2000, for a given date', () => {
     const result = Sun.date2jSince2000(exampleDate);
 
@@ -19,8 +25,8 @@ describe('Sun', () => {
   });
 
   /*
-   * The 'diameter' method should return the angular diameter of the sun given the observer's position
-   * and the sun's position.
+   * The 'diameter' method should return the angular diameter of the sun given
+   * the observer's position and the sun's position.
    */
   it('should return the angular diameter of the sun given the observers position and the suns position', () => {
     const obsPos = new Vector3D(0, 0, 0);
@@ -31,8 +37,8 @@ describe('Sun', () => {
   });
 
   /*
-   * The 'eclipseAngles' method should return the angles necessary to determine if a satellite is in
-   * the shadow of the earth.
+   * The 'eclipseAngles' method should return the angles necessary to determine
+   * if a satellite is in the shadow of the earth.
    */
   it('should return the angles necessary to determine if a satellite is in the shadow of the earth', () => {
     const satPos = new Vector3D(0, 0, 0);
@@ -42,7 +48,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'eclipticLatitude' method should return the ecliptic latitude of the sun given the solar latitude.
+  /*
+   * The 'eclipticLatitude' method should return the ecliptic latitude of the
+   * sun given the solar latitude.
+   */
   it('should return the ecliptic latitude of the sun given the solar latitude', () => {
     const B = 23.4397;
     const result = Sun.eclipticLatitude(B);
@@ -50,7 +59,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'eclipticLongitude' method should return the ecliptic longitude of the sun given the solar mean anomaly.
+  /*
+   * The 'eclipticLongitude' method should return the ecliptic longitude of the
+   * sun given the solar mean anomaly.
+   */
   it('should return the ecliptic longitude of the sun given the solar mean anomaly', () => {
     const M = 0;
     const result = Sun.eclipticLongitude(M);
@@ -66,7 +78,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'diameter' method should handle cases where the observer's position is the same as the sun's position.
+  /*
+   * The 'diameter' method should handle cases where the observer's position is
+   * the same as the sun's position.
+   */
   it('should handle cases where the observers position is the same as the suns position', () => {
     const obsPos = new Vector3D(1, 1, 1);
     const sunPos = new Vector3D(1, 1, 1);
@@ -75,7 +90,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'eclipseAngles' method should handle cases where the satellite is directly above or below the earth.
+  /*
+   * The 'eclipseAngles' method should handle cases where the satellite is
+   * directly above or below the earth.
+   */
   it('should handle cases where the satellite is directly above or below the earth', () => {
     const satPos = new Vector3D(0, 0, 0);
     const sunPos = new Vector3D(0, 0, 1);
@@ -84,7 +102,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'eclipticLatitude' method should handle extreme values of solar latitude.
+  /*
+   * The 'eclipticLatitude' method should handle extreme values of solar
+   * latitude.
+   */
   it('should handle extreme values of solar latitude', () => {
     const B = 90;
     const result = Sun.eclipticLatitude(B);
@@ -92,7 +113,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'eclipticLongitude' method should handle extreme values of solar mean anomaly.
+  /*
+   * The 'eclipticLongitude' method should handle extreme values of solar mean
+   * anomaly.
+   */
   it('should handle extreme values of solar mean anomaly', () => {
     const M = 360;
     const result = Sun.eclipticLongitude(M);
@@ -100,19 +124,9 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'getSolarTime' method should return the solar time for a given date, UTC offset, and longitude.
-  it('should return the solar time for a given date, UTC offset, and longitude', () => {
-    const utcOffset = -5;
-    const lon = -75 as Degrees;
-
-    const result = Sun.getSolarTime(exampleDate, utcOffset, lon);
-
-    expect(result).toMatchSnapshot();
-  });
-
   /*
-   * The 'getSetJulian' method should return the Julian date of the sunrise, sunset, or other solar event
-   * given the observer's position, date, and time.
+   * The 'getSetJulian' method should return the Julian date of the sunrise,
+   * sunset, or other solar event given the observer's position, date, and time.
    */
   it('should return the Julian date of the sunrise when the observers position, date, and time are provided', () => {
     // Mock input values
@@ -127,7 +141,10 @@ describe('Sun', () => {
     expect(result).toMatchSnapshot();
   });
 
-  // The 'getSunTimeByAz' method should return the date and time of the sun's position given a specific azimuth.
+  /*
+   * The 'getSunTimeByAz' method should return the date and time of the sun's
+   * position given a specific azimuth.
+   */
   it('should return the date and time of the suns position given a specific azimuth', () => {
     const lat = 37.7749 as Degrees;
     const lon = -122.4194 as Degrees;
@@ -138,8 +155,8 @@ describe('Sun', () => {
   });
 
   /*
-   * The 'getTimes' method should return the sunrise, sunset, and other solar event times for a given
-   * date, latitude, and longitude.
+   * The 'getTimes' method should return the sunrise, sunset, and other solar
+   * event times for a given date, latitude, and longitude.
    */
   it('should return the sunrise, sunset, and other event times when given a date, latitude, and longitude', () => {
     // Mock input values
