@@ -1,6 +1,11 @@
+import { exampleDate } from '../lib/mockData';
 import {
+  RadarSensor,
+  azel2uv,
+  DEG2RAD,
   Degrees,
   ecf2eci,
+  ecf2enu,
   ecf2rae,
   eci2ecf,
   eci2lla,
@@ -10,8 +15,19 @@ import {
   getRadLon,
   Kilometers,
   lla2ecf,
+  Radians,
   rae2ecf,
+  rae2enu,
+  rae2raeOffBoresight,
   rae2sez,
+  Sensor,
+  uv2azel,
+  eci2rae,
+  Vec3,
+  lla2eci,
+  calcGmst,
+  lla2ecef,
+  rae2eci,
 } from '../../src/main';
 import { transformsData } from './transformsData';
 
@@ -148,5 +164,192 @@ describe('Rae2Ecf', () => {
     expect(ecfCoordinates.x).toBeCloseTo(ecf.x);
     expect(ecfCoordinates.y).toBeCloseTo(ecf.y);
     expect(ecfCoordinates.z).toBeCloseTo(ecf.z);
+  });
+
+  // azel2uv
+  it('should convert valid azimuth and elevation to unit vector', () => {
+    const az = 0 as Radians;
+    const el = 0 as Radians;
+
+    const uvCoordinates = azel2uv(az, el, (5 * DEG2RAD) as Radians);
+
+    expect(uvCoordinates.u).toMatchSnapshot();
+    expect(uvCoordinates.v).toMatchSnapshot();
+  });
+
+  // ecf2enu
+  it('should convert valid ECF coordinates to ENU', () => {
+    const ecf = {
+      x: 4000,
+      y: 4000,
+      z: 4000,
+    };
+    const lla = {
+      lon: 0 as Degrees,
+      lat: 0 as Degrees,
+      alt: 0 as Kilometers,
+    };
+
+    const enuCoordinates = ecf2enu(ecf, lla);
+
+    expect(enuCoordinates).toMatchSnapshot();
+  });
+
+  // enu2rf
+  it('should convert valid ENU coordinates to RF', () => {
+    const ecf = {
+      x: 4000,
+      y: 4000,
+      z: 4000,
+    };
+    const lla = {
+      lon: 0 as Degrees,
+      lat: 0 as Degrees,
+      alt: 0 as Kilometers,
+    };
+
+    const enuCoordinates = ecf2enu(ecf, lla);
+
+    expect(enuCoordinates).toMatchSnapshot();
+  });
+
+  // lla2eci
+  it('should convert valid LLA coordinates to ECI', () => {
+    const lla = {
+      lon: 0 as Radians,
+      lat: 0 as Radians,
+      alt: 0 as Kilometers,
+    };
+    const { gmst } = calcGmst(exampleDate);
+    const eciCoordinates = lla2eci(lla, gmst);
+
+    expect(eciCoordinates).toMatchSnapshot();
+  });
+
+  // lla2ecef
+  it('should convert valid LLA coordinates to ECF', () => {
+    const lla = {
+      lon: 0 as Degrees,
+      lat: 0 as Degrees,
+      alt: 0 as Kilometers,
+    };
+    const ecfCoordinates = lla2ecef(lla);
+
+    expect(ecfCoordinates).toMatchSnapshot();
+  });
+
+  // rae2eci
+  it('should convert valid RAE coordinates to ECI', () => {
+    const rae = {
+      rng: 0 as Kilometers,
+      az: 0 as Degrees,
+      el: 0 as Degrees,
+    };
+    const sensor = new Sensor({
+      lat: 0 as Degrees,
+      lon: 0 as Degrees,
+      alt: 0 as Kilometers,
+      minAz: 0 as Degrees,
+      maxAz: 0 as Degrees,
+      minEl: 0 as Degrees,
+      maxEl: 0 as Degrees,
+      minRng: 0 as Kilometers,
+      maxRng: 0 as Kilometers,
+    }) as RadarSensor;
+    const { gmst } = calcGmst(exampleDate);
+
+    const eciCoordinates = rae2eci(rae, sensor, gmst);
+
+    expect(eciCoordinates).toMatchSnapshot();
+  });
+
+  // rae2enu
+  it('should convert valid RAE coordinates to ENU', () => {
+    const rae = {
+      rng: 0 as Kilometers,
+      az: 0 as Degrees,
+      el: 0 as Degrees,
+    };
+    const enuCoordinates = rae2enu(rae);
+
+    expect(enuCoordinates).toMatchSnapshot();
+  });
+
+  // rae2raeOffBoresight
+  it('should convert valid RAE coordinates to RAE Off Boresight', () => {
+    const rae = {
+      rng: 0 as Kilometers,
+      az: 0 as Degrees,
+      el: 0 as Degrees,
+    };
+
+    const senor = new Sensor({
+      lat: 0 as Degrees,
+      lon: 0 as Degrees,
+      alt: 0 as Kilometers,
+      minAz: 0 as Degrees,
+      maxAz: 0 as Degrees,
+      minEl: 0 as Degrees,
+      maxEl: 0 as Degrees,
+      minRng: 0 as Kilometers,
+      maxRng: 0 as Kilometers,
+    }) as RadarSensor;
+
+    senor.boresight = {
+      az: 0 as Radians,
+      el: 0 as Radians,
+    };
+    senor.coneHalfAngle = 0 as Radians;
+
+    const raeOffBoresightCoordinates = rae2raeOffBoresight(rae, senor, 10 as Degrees);
+
+    expect(raeOffBoresightCoordinates).toMatchSnapshot();
+  });
+
+  // rae2ruv
+  it('should convert valid RAE coordinates to RUV', () => {
+    const rae = {
+      rng: 0 as Kilometers,
+      az: 0 as Degrees,
+      el: 0 as Degrees,
+    };
+    const ruvCoordinates = rae2enu(rae);
+
+    expect(ruvCoordinates).toMatchSnapshot();
+  });
+
+  // uv2azel
+  it('should convert valid unit vector to azimuth and elevation', () => {
+    const u = 0 as Radians;
+    const v = 0 as Radians;
+
+    const azelCoordinates = uv2azel(u, v, (5 * DEG2RAD) as Radians);
+
+    expect(azelCoordinates.az).toMatchSnapshot();
+    expect(azelCoordinates.el).toMatchSnapshot();
+  });
+
+  // eci2rae
+  it('should convert valid ECI coordinates to RAE', () => {
+    const eci = {
+      x: 4000,
+      y: 4000,
+      z: 4000,
+    } as Vec3<Kilometers>;
+    const sensor = new Sensor({
+      lat: 0 as Degrees,
+      lon: 0 as Degrees,
+      alt: 0 as Kilometers,
+      minAz: 0 as Degrees,
+      maxAz: 0 as Degrees,
+      minEl: 0 as Degrees,
+      maxEl: 0 as Degrees,
+      minRng: 0 as Kilometers,
+      maxRng: 0 as Kilometers,
+    }) as RadarSensor;
+
+    const raeCoordinates = eci2rae(exampleDate, eci, sensor);
+
+    expect(raeCoordinates).toMatchSnapshot();
   });
 });
