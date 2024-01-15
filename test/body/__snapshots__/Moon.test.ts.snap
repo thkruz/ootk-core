@@ -77,28 +77,6 @@ Object {
 }
 `;
 
-exports[`Moon should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties 1`] = `
-Object {
-  "alwaysDown": false,
-  "alwaysUp": false,
-  "highest": 2024-01-12T21:42:31.618Z,
-  "rise": 2024-01-12T16:43:59.167Z,
-  "set": 2024-01-13T02:41:04.069Z,
-  "ye": null,
-}
-`;
-
-exports[`Moon should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties 2`] = `
-Object {
-  "alwaysDown": false,
-  "alwaysUp": false,
-  "highest": 2024-01-12T21:42:31.618Z,
-  "rise": 2024-01-12T16:43:59.167Z,
-  "set": 2024-01-13T02:41:04.069Z,
-  "ye": null,
-}
-`;
-
 exports[`Moon should return with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', 'highest' properties 1`] = `
 Object {
   "alwaysDown": false,

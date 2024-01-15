@@ -1,10 +1,11 @@
 import { Degrees, EpochUTC, Moon, Vector3D } from '../../src/main';
-import { mockExampleDate } from '../lib/mockData';
 
 describe('Moon', () => {
   let exampleDate: Date;
 
   beforeEach(() => {
+    const mockExampleDate = new Date(1705109326817);
+
     exampleDate = new Date(mockExampleDate.getTime());
   });
 

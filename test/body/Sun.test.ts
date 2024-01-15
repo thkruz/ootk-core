@@ -1,10 +1,11 @@
 import { Degrees, EpochUTC, Kilometers, Meters, Sun, Vector3D } from '../../src/main';
-import { mockExampleDate } from '../lib/mockData';
 
 describe('Sun', () => {
   let exampleDate: Date;
 
   beforeEach(() => {
+    const mockExampleDate = new Date(1705109326817);
+
     exampleDate = new Date(mockExampleDate.getTime());
   });
 

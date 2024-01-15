@@ -1,4 +1,3 @@
-import { mockExampleDate } from '../lib/mockData';
 import {
   RadarSensor,
   azel2uv,
@@ -220,7 +219,8 @@ describe('Rae2Ecf', () => {
       lat: 0 as Radians,
       alt: 0 as Kilometers,
     };
-    const { gmst } = calcGmst(mockExampleDate);
+    const exampleDate = new Date(1705109326817);
+    const { gmst } = calcGmst(exampleDate);
     const eciCoordinates = lla2eci(lla, gmst);
 
     expect(eciCoordinates).toMatchSnapshot();
@@ -256,7 +256,8 @@ describe('Rae2Ecf', () => {
       minRng: 0 as Kilometers,
       maxRng: 0 as Kilometers,
     }) as RadarSensor;
-    const { gmst } = calcGmst(mockExampleDate);
+    const exampleDate = new Date(1705109326817);
+    const { gmst } = calcGmst(exampleDate);
 
     const eciCoordinates = rae2eci(rae, sensor, gmst);
 
@@ -348,7 +349,8 @@ describe('Rae2Ecf', () => {
       maxRng: 0 as Kilometers,
     }) as RadarSensor;
 
-    const raeCoordinates = eci2rae(mockExampleDate, eci, sensor);
+    const exampleDate = new Date(1705109326817);
+    const raeCoordinates = eci2rae(exampleDate, eci, sensor);
 
     expect(raeCoordinates).toMatchSnapshot();
   });

@@ -8,7 +8,6 @@ import {
   TleLine1,
   TleLine2,
 } from '../../src/main';
-import { mockExampleDate } from '../lib/mockData';
 
 const dateObj = new Date(1661400000000);
 
@@ -71,6 +70,7 @@ describe('Basic Satellite functionality', () => {
 describe('Satellite', () => {
   let satellite: Satellite;
   let observer: GroundObject;
+  let exampleDate: Date;
 
   beforeEach(() => {
     const satelliteParams: SatelliteParams = {
@@ -78,6 +78,9 @@ describe('Satellite', () => {
       tle2,
     };
 
+    const mockExampleDate = new Date(1705109326817);
+
+    exampleDate = new Date(mockExampleDate.getTime());
     satellite = new Satellite(satelliteParams);
     observer = new GroundObject(llaObserver);
   });
@@ -88,42 +91,42 @@ describe('Satellite', () => {
 
   // can calculate and return RAE coordinates
   it('should calculate and return RAE coordinates', () => {
-    const rae = satellite.toRae(observer, mockExampleDate);
+    const rae = satellite.toRae(observer, exampleDate);
 
     expect(rae).toMatchSnapshot();
   });
 
   // can calculate and return ECI coordinates
   it('should calculate and return ECI coordinates', () => {
-    const eci = satellite.eci(mockExampleDate);
+    const eci = satellite.eci(exampleDate);
 
     expect(eci).toMatchSnapshot();
   });
 
   // can calculate and return ECF coordinates
   it('should calculate and return ECF coordinates correctly', () => {
-    const ecfCoordinates = satellite.ecf(mockExampleDate);
+    const ecfCoordinates = satellite.ecf(exampleDate);
 
     expect(ecfCoordinates).toMatchSnapshot();
   });
 
   // can calculate and return LLA coordinates
   it('should calculate and return LLA coordinates when given a date', () => {
-    const lla = satellite.lla(mockExampleDate);
+    const lla = satellite.lla(exampleDate);
 
     expect(lla).toMatchSnapshot();
   });
 
   // can calculate and return Geodetic coordinates
   it('should calculate and return Geodetic coordinates when given a date', () => {
-    const geodetic = satellite.toGeodetic(mockExampleDate);
+    const geodetic = satellite.toGeodetic(exampleDate);
 
     expect(geodetic).toMatchSnapshot();
   });
 
   // can calculate and return ITRF coordinates
   it('should calculate and return ITRF coordinates when called', () => {
-    const itrfCoordinates = satellite.toITRF(mockExampleDate);
+    const itrfCoordinates = satellite.toITRF(exampleDate);
 
     expect(itrfCoordinates).toMatchSnapshot();
   });
@@ -135,22 +138,22 @@ describe('Satellite', () => {
       tle2: '2 25544  51.6442  13.1247 0008036  23.6079 336.5377 15.48861704303602' as TleLine2,
     });
 
-    const ric = satellite.toRIC(referenceSatellite, mockExampleDate);
+    const ric = satellite.toRIC(referenceSatellite, exampleDate);
 
     expect(ric).toMatchSnapshot();
   });
 
   // can calculate and return range to an observer
   it('should calculate and return range to an observer', () => {
-    const range = satellite.range(observer, mockExampleDate);
+    const range = satellite.range(observer, exampleDate);
 
     expect(range).toMatchSnapshot();
   });
 
   // can calculate and return azimuth and elevation angles
   it('should calculate and return azimuth and elevation angles correctly', () => {
-    const azimuth = satellite.az(observer, mockExampleDate);
-    const elevation = satellite.el(observer, mockExampleDate);
+    const azimuth = satellite.az(observer, exampleDate);
+    const elevation = satellite.el(observer, exampleDate);
 
     expect(azimuth).toMatchSnapshot();
     expect(elevation).toMatchSnapshot();

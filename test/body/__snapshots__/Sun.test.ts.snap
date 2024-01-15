@@ -45,9 +45,9 @@ exports[`Sun should return the number of days since January 1, 2000, for a given
 
 exports[`Sun should return the same apparent position result given the same time and position 1`] = `
 Vector3D {
-  "x": 54242939.78872876,
-  "y": -125479049.84825934,
-  "z": -54393990.21165644,
+  "x": 55101974.26909711,
+  "y": -125165869.77224815,
+  "z": -54258234.63367154,
 }
 `;
 

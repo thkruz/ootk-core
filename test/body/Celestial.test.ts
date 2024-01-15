@@ -1,6 +1,5 @@
 import { Degrees, Radians } from './../../src/types/types';
 import { Celestial } from './../../src/body/Celestial';
-import { mockExampleDate } from '../lib/mockData';
 
 describe('Celestial', () => {
   /*
@@ -8,6 +7,7 @@ describe('Celestial', () => {
    * latitude, longitude, right ascension, and declination.
    */
   it('should calculate the azimuth and elevation when given valid inputs', () => {
+    const mockExampleDate = new Date(1705109326817);
     const lat = 37.7749 as Degrees; // latitude of San Francisco
     const lon = -122.4194 as Degrees; // longitude of San Francisco
     const ra = 1.3963 as Radians; // right ascension of a celestial object

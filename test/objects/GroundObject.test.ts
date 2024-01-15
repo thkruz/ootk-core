@@ -1,11 +1,14 @@
-import { mockExampleDate } from '../lib/mockData';
 import { Degrees, Geodetic, GroundObject, Kilometers, Radians } from '../../src/main';
 
 describe('GroundObject', () => {
   let groundObject: GroundObject;
   let geodetic: Geodetic;
+  let exampleDate: Date;
 
   beforeEach(() => {
+    const mockExampleDate = new Date(1705109326817);
+
+    exampleDate = new Date(mockExampleDate.getTime());
     groundObject = new GroundObject({
       lat: 0 as Degrees,
       lon: 0 as Degrees,
@@ -40,7 +43,7 @@ describe('GroundObject', () => {
   });
 
   it('should calculate eci', () => {
-    expect(groundObject.eci(mockExampleDate)).toMatchSnapshot();
+    expect(groundObject.eci(exampleDate)).toMatchSnapshot();
   });
 
   it('should calculate llaRad', () => {
