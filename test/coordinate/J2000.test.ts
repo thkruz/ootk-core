@@ -67,4 +67,66 @@ describe('J2000', () => {
     expect(j200FromTeme.position.y).toBeCloseTo(j2000.position.y, 8);
     expect(j200FromTeme.position.z).toBeCloseTo(j2000.position.z, 8);
   });
+
+  // toString
+  it('should return a string', () => {
+    const j2000 = new J2000(
+      epoch,
+      new Vector3D<Kilometers>(5000 as Kilometers, 10000 as Kilometers, 2100 as Kilometers),
+      new Vector3D<Kilometers>(7 as Kilometers, 4 as Kilometers, 2 as Kilometers),
+    );
+
+    expect(j2000.toString()).toMatchSnapshot();
+  });
+
+  // mechanical energy
+  it('should calculate the mechanical energy', () => {
+    const j2000 = new J2000(
+      epoch,
+      new Vector3D<Kilometers>(5000 as Kilometers, 10000 as Kilometers, 2100 as Kilometers),
+      new Vector3D<Kilometers>(7 as Kilometers, 4 as Kilometers, 2 as Kilometers),
+    );
+
+    expect(j2000.mechanicalEnergy).toMatchSnapshot();
+  });
+
+  // period
+  it('should calculate the period', () => {
+    const j2000 = new J2000(
+      epoch,
+      new Vector3D<Kilometers>(5000 as Kilometers, 10000 as Kilometers, 2100 as Kilometers),
+      new Vector3D<Kilometers>(7 as Kilometers, 4 as Kilometers, 2 as Kilometers),
+    );
+
+    expect(j2000.period).toMatchSnapshot();
+  });
+
+  // angular rate
+  it('should calculate the angular rate', () => {
+    const j2000 = new J2000(
+      epoch,
+      new Vector3D<Kilometers>(5000 as Kilometers, 10000 as Kilometers, 2100 as Kilometers),
+      new Vector3D<Kilometers>(7 as Kilometers, 4 as Kilometers, 2 as Kilometers),
+    );
+
+    expect(j2000.angularRate).toMatchSnapshot();
+  });
+
+  // toClassicalElements
+  it('should convert to classical elements', () => {
+    const j2000 = new J2000(
+      epoch,
+      new Vector3D<Kilometers>(5000 as Kilometers, 10000 as Kilometers, 2100 as Kilometers),
+      new Vector3D<Kilometers>(7 as Kilometers, 4 as Kilometers, 2 as Kilometers),
+    );
+    const elements = j2000.toClassicalElements();
+
+    expect(elements.epoch).toEqual(epoch);
+    expect(elements.semimajorAxis).toMatchSnapshot();
+    expect(elements.eccentricity).toMatchSnapshot();
+    expect(elements.inclination).toMatchSnapshot();
+    expect(elements.rightAscension).toMatchSnapshot();
+    expect(elements.argPerigee).toMatchSnapshot();
+    expect(elements.trueAnomaly).toMatchSnapshot();
+  });
 });

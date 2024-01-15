@@ -5,7 +5,7 @@ import {
   calcGmst,
   DEG2RAD,
   Degrees,
-  GroundPosition,
+  GroundObject,
   Kilometers,
   lla2eci,
   Radians,
@@ -28,9 +28,9 @@ const satellite = new Satellite({
   tle2,
 });
 
-const elements = satellite.getClassicalElements(new Date(1705109326817)).toEquinoctialElements();
+const period = satellite.toJ2000(new Date(1705109326817)).period;
 
-console.warn(elements);
+console.warn(period);
 
 /*
  * You can still propagate a satellite using time since epoch (in minutes), but
@@ -62,7 +62,7 @@ const positionEci2 = satellite.eci().position; // This is correctly typed
  * Set the Observer at 71°W, 41°N, 0.37 km altitude using DEGREES because who
  * likes using Radians?
  */
-const observer = new GroundPosition({
+const observer = new GroundObject({
   lon: -71.0308 as Degrees,
   lat: 41.9613422 as Degrees,
   alt: 0.37 as Kilometers,
@@ -78,7 +78,7 @@ const { gmst, j } = calcGmst(new Date());
 const positionEcf = satellite.ecf(exampleDate);
 const observerEcf = observer.ecf();
 const positionGd = satellite.lla(exampleDate);
-const lookAngles = satellite.rae(observer, exampleDate);
+const lookAngles = satellite.toRae(observer, exampleDate);
 // This never worked in satellite.js, but it does now!
 const uplinkFreq = 420e6;
 const dopplerFactor = satellite.dopplerFactor(observer, exampleDate);
@@ -110,9 +110,9 @@ const rangeRate = lookAngles.rangeRate; // Kilometers/Second
  * There is a built in cache to allow fast retrieval of repeated calculations.
  * This means you can make repeat calls to `.rae()` for minimal performance hit.
  */
-const rangeCache = satellite.rae(observer, exampleDate).range;
-const azimuthCached = satellite.rae(observer, exampleDate).azimuth;
-const elevationCached = satellite.rae(observer, exampleDate).elevation;
+const rangeCache = satellite.rae(observer, exampleDate).rng;
+const azimuthCached = satellite.rae(observer, exampleDate).az;
+const elevationCached = satellite.rae(observer, exampleDate).el;
 const latitudeCached = satellite.lla(exampleDate).lat;
 const longitudeCached = satellite.lla(exampleDate).lon;
 const heightCached = satellite.lla(exampleDate).alt;

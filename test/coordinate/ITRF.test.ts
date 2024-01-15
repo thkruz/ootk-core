@@ -8,7 +8,11 @@ describe('ITRF', () => {
 
   beforeEach(() => {
     epochUtc = EpochUTC.fromDateTime(exampleDate);
-    itrf = new ITRF(epochUtc, new Vector3D(1000, 2000, 3000), new Vector3D(10, 20, 30));
+    itrf = new ITRF(
+      epochUtc,
+      new Vector3D<Kilometers>(1000 as Kilometers, 2000 as Kilometers, 3000 as Kilometers),
+      new Vector3D(10 as Kilometers, 20 as Kilometers, 30 as Kilometers),
+    );
   });
 
   // can get the name of the ITRF coordinate system
@@ -46,7 +50,11 @@ describe('ITRF', () => {
 
   // can handle position at the center of the Earth
   it('should handle position at the center of the Earth', () => {
-    itrf = new ITRF(epochUtc, new Vector3D(0, 0, 0), new Vector3D(0, 0, 0));
+    itrf = new ITRF(
+      epochUtc,
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+    );
     expect(itrf.toJ2000()).toMatchSnapshot();
   });
 
@@ -55,7 +63,7 @@ describe('ITRF', () => {
     const itrf = new ITRF(
       epochUtc,
       new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, Earth.radiusPolar),
-      new Vector3D(0, 0, 0),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
     );
 
     expect(itrf.toJ2000()).toMatchSnapshot();
@@ -65,9 +73,13 @@ describe('ITRF', () => {
 
   // can handle position at the South Pole
   it('should handle position at the South Pole', () => {
-    const itrf = new ITRF(epochUtc, new Vector3D(0, 0, -Earth.radiusPolar), new Vector3D(0, 0, 0));
+    const itrf = new ITRF(
+      epochUtc,
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, -Earth.radiusPolar as Kilometers),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+    );
 
-    itrf.position = new Vector3D(0, 0, -Earth.radiusPolar);
+    itrf.position = new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, -Earth.radiusPolar as Kilometers);
     expect(itrf.toJ2000()).toMatchSnapshot();
     // Test the toGeodetic method
     expect(itrf.toGeodetic()).toMatchSnapshot();
@@ -78,7 +90,7 @@ describe('ITRF', () => {
     const itrf = new ITRF(
       epochUtc,
       new Vector3D<Kilometers>(Earth.radiusEquator, 0 as Kilometers, 0 as Kilometers),
-      new Vector3D(0, 0, 0),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
     );
 
     // Test height
@@ -99,7 +111,7 @@ describe('ITRF', () => {
     const itrf = new ITRF(
       epochUtc,
       new Vector3D<Kilometers>(0 as Kilometers, Earth.radiusEquator, 0 as Kilometers),
-      new Vector3D(0, 0, 0),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
     );
 
     expect(itrf.name).toMatchSnapshot();
@@ -115,7 +127,7 @@ describe('ITRF', () => {
     const itrf = new ITRF(
       epochUtc,
       new Vector3D<Kilometers>(0 as Kilometers, (Earth.radiusEquator + 1000) as Kilometers, 0 as Kilometers),
-      new Vector3D(0, 0, 0),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
     );
 
     expect(itrf.height).toMatchSnapshot();
@@ -129,7 +141,7 @@ describe('ITRF', () => {
     const itrf = new ITRF(
       epochUtc,
       new Vector3D<Kilometers>(0 as Kilometers, (Earth.radiusEquator - 10) as Kilometers, 0 as Kilometers),
-      new Vector3D(0, 0, 0),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
     );
 
     expect(itrf.height).toMatchSnapshot();
@@ -143,7 +155,7 @@ describe('ITRF', () => {
     const itrf = new ITRF(
       epochUtc,
       new Vector3D(0 as Kilometers, 0 as Kilometers, Earth.radiusEquator),
-      new Vector3D(0, 0, 0),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
     );
 
     // Test the height property
@@ -161,7 +173,11 @@ describe('ITRF', () => {
 
   // can handle position at the equator
   it('should handle position at the equator with negative y-coordinate', () => {
-    const itrf = new ITRF(epochUtc, new Vector3D(0, -Earth.radiusEquator, 0), new Vector3D(0, 0, 0));
+    const itrf = new ITRF(
+      epochUtc,
+      new Vector3D<Kilometers>(0 as Kilometers, -Earth.radiusEquator as Kilometers, 0 as Kilometers),
+      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+    );
 
     expect(itrf.name).toMatchSnapshot();
     expect(itrf.inertial).toMatchSnapshot();
@@ -173,8 +189,8 @@ describe('ITRF', () => {
 
   // can handle position at different epochs
   it('should handle position at different epochs', () => {
-    const position = new Vector3D(1000, 2000, 3000);
-    const velocity = new Vector3D(10, 20, 30);
+    const position = new Vector3D<Kilometers>(1000 as Kilometers, 2000 as Kilometers, 3000 as Kilometers);
+    const velocity = new Vector3D<Kilometers>(10 as Kilometers, 20 as Kilometers, 30 as Kilometers);
     const epoch1 = EpochUTC.fromDateTime(exampleDate);
     const epoch2 = EpochUTC.fromDateTime(new Date(exampleDate.getTime() + 1000));
     const itrf1 = new ITRF(epoch1, position, velocity);
@@ -197,5 +213,16 @@ describe('ITRF', () => {
     const geodetic = itrf1.toGeodetic();
 
     expect(geodetic).toMatchSnapshot();
+  });
+
+  // toClassicalElements
+  it('should return classical elements', () => {
+    const itrf = new ITRF(
+      epochUtc,
+      new Vector3D<Kilometers>(1000 as Kilometers, 2000 as Kilometers, 3000 as Kilometers),
+      new Vector3D<Kilometers>(10 as Kilometers, 20 as Kilometers, 30 as Kilometers),
+    );
+
+    expect(() => itrf.toClassicalElements()).toThrow();
   });
 });

@@ -5,7 +5,8 @@ import { earthGravityParam, RAD2DEG, sec2min, secondsPerDay, TAU } from '../util
 import { clamp, matchHalfPlane, newtonNu } from '../utils/functions';
 import { EquinoctialElements } from './EquinoctialElements';
 import { OrbitRegime } from '../enums/OrbitRegime';
-import { PositionVelocity, StateVector } from './StateVector';
+import { StateVector } from './StateVector';
+import { PositionVelocity } from 'src/types/types';
 import { ClassicalElementsParams } from '../interfaces/ClassicalElementsParams';
 
 /**
@@ -70,7 +71,7 @@ export class ClassicalElements {
     }
     const pos = state.position;
     const vel = state.velocity;
-    const a = state.semimajorAxis();
+    const a = state.semimajorAxis;
     const eVecA = pos.scale(vel.magnitude() ** 2 - mu / pos.magnitude());
     const eVecB = vel.scale(pos.dot(vel));
     const eVec = eVecA.subtract(eVecB).scale(1 / mu);

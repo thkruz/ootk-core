@@ -3,7 +3,7 @@ import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, secondsPerDay, TAU } from '../utils/constants';
 import { newtonM } from '../utils/functions';
 import { ClassicalElements } from './ClassicalElements';
-import { PositionVelocity } from './StateVector';
+import { PositionVelocity } from 'src/types/types';
 import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsParams';
 
 /**
