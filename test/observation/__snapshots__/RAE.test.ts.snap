@@ -2,43 +2,43 @@
 
 exports[`RAE should be constructable 1`] = `
 RAE {
-  "azimuth": 0.17453292519943295,
-  "azimuthRate": undefined,
-  "elevation": 0.3490658503988659,
-  "elevationRate": undefined,
+  "azRad": 0.17453292519943295,
+  "azRateRad": undefined,
+  "elRad": 0.3490658503988659,
+  "elRateRad": undefined,
   "epoch": EpochUTC {
     "posix": 1705109326.817,
   },
-  "range": 1000,
-  "rangeRate": undefined,
+  "rng": 1000,
+  "rngRate": undefined,
 }
 `;
 
 exports[`RAE should be constructable from degrees 1`] = `
 RAE {
-  "azimuth": 0.17453292519943295,
-  "azimuthRate": undefined,
-  "elevation": 0.3490658503988659,
-  "elevationRate": undefined,
+  "azRad": 0.17453292519943295,
+  "azRateRad": undefined,
+  "elRad": 0.3490658503988659,
+  "elRateRad": undefined,
   "epoch": EpochUTC {
     "posix": 1705109326.817,
   },
-  "range": 1000,
-  "rangeRate": undefined,
+  "rng": 1000,
+  "rngRate": undefined,
 }
 `;
 
 exports[`RAE should return a RAE object from a state vector 1`] = `
 RAE {
-  "azimuth": 4.202021284209623,
-  "azimuthRate": 0.00043952100964508644,
-  "elevation": 0.5130090849662382,
-  "elevationRate": -0.0003354532635408476,
+  "azRad": 4.202021284209623,
+  "azRateRad": 0.00043952100964508644,
+  "elRad": 0.5130090849662382,
+  "elRateRad": -0.0003354532635408476,
   "epoch": EpochUTC {
     "posix": 1705109326.817,
   },
-  "range": 999.9999999999991,
-  "rangeRate": 0.5104272486229879,
+  "rng": 999.9999999999991,
+  "rngRate": 0.5104272486229879,
 }
 `;
 

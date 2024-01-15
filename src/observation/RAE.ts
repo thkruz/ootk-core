@@ -35,24 +35,15 @@ import { angularDistance } from '../utils/functions';
 export class RAE {
   constructor(
     public epoch: EpochUTC,
-    public range: Kilometers,
-    public azimuth: Radians,
-    public elevation: Radians,
-    /**
-     * The range rate of the satellite relative to the observer in kilometers
-     * per second.
-     */
-    public rangeRate?: number,
-    /**
-     * The azimuth rate of the satellite relative to the observer in radians per
-     * second.
-     */
-    public azimuthRate?: number,
-    /**
-     * The elevation rate of the satellite relative to the observer in radians
-     * per second.
-     */
-    public elevationRate?: number,
+    public rng: Kilometers,
+    public azRad: Radians,
+    public elRad: Radians,
+    /** The range rate of the satellite relative to the observer in kilometers per second. */
+    public rngRate?: number,
+    /** The azimuth rate of the satellite relative to the observer in radians per second. */
+    public azRateRad?: number,
+    /** The elevation rate of the satellite relative to the observer in radians per second. */
+    public elRateRad?: number,
   ) {
     // Do nothing
   }
@@ -61,23 +52,23 @@ export class RAE {
   static fromDegrees(
     epoch: EpochUTC,
     range: Kilometers,
-    azimuthDegrees: Degrees,
-    elevationDegrees: Degrees,
+    azimuth: Degrees,
+    elevation: Degrees,
     rangeRate?: number,
-    azimuthRateDegrees?: number,
-    elevationRateDegrees?: number,
+    azimuthRate?: number,
+    elevationRate?: number,
   ): RAE {
-    const azimuthRate = azimuthRateDegrees ? azimuthRateDegrees * DEG2RAD : undefined;
-    const elevationRate = elevationRateDegrees ? elevationRateDegrees * DEG2RAD : undefined;
+    const azimuthRateRad = azimuthRate ? azimuthRate * DEG2RAD : undefined;
+    const elevationRateRad = elevationRate ? elevationRate * DEG2RAD : undefined;
 
     return new RAE(
       epoch,
       range,
-      (azimuthDegrees * DEG2RAD) as Radians,
-      (elevationDegrees * DEG2RAD) as Radians,
+      (azimuth * DEG2RAD) as Radians,
+      (elevation * DEG2RAD) as Radians,
       rangeRate,
-      azimuthRate,
-      elevationRate,
+      azimuthRateRad,
+      elevationRateRad,
     );
   }
 
@@ -126,33 +117,46 @@ export class RAE {
       elevationRate,
     );
   }
-  // / Azimuth _(°)_.
-  get azimuthDegrees(): number {
-    return this.azimuth * RAD2DEG;
+
+  /**
+   * Gets the azimuth in degrees.
+   * @returns The azimuth in degrees.
+   */
+  get az(): Degrees {
+    return this.azRad * RAD2DEG as Degrees;
   }
 
-  // / Elevation _(°)_.
-  get elevationDegrees(): number {
-    return this.elevation * RAD2DEG;
+  /**
+   * Gets the elevation angle in degrees.
+   * @returns The elevation angle in degrees.
+   */
+  get el(): Degrees {
+    return this.elRad * RAD2DEG as Degrees;
   }
 
-  // / Azimuth rate _(°/s)_.
-  get azimuthRateDegrees(): number | undefined {
-    return this.azimuthRate ? this.azimuthRate * RAD2DEG : undefined;
+  /**
+   * Gets the azimuth rate in degrees per second.
+   * @returns The azimuth rate in degrees per second, or undefined if it is not available.
+   */
+  get azRate(): number | undefined {
+    return this.azRateRad ? this.azRateRad * RAD2DEG : undefined;
   }
 
-  // / Elevation rate _(°/s)_.
-  get elevationRateDegrees(): number | undefined {
-    return this.elevationRate ? this.elevationRate * RAD2DEG : undefined;
+  /**
+   * Gets the elevation rate in degrees per second.
+   * @returns The elevation rate in degrees per second, or undefined if the elevation rate is not set.
+   */
+  get elRate(): number | undefined {
+    return this.elRateRad ? this.elRateRad * RAD2DEG : undefined;
   }
 
   toString(): string {
     return [
       '[RazEl]',
       `  Epoch:     ${this.epoch}`,
-      `  Azimuth:   ${this.azimuthDegrees.toFixed(4)}°`,
-      `  Elevation: ${this.elevationDegrees.toFixed(4)}°`,
-      `  Range:     ${this.range.toFixed(3)} km`,
+      `  Azimuth:   ${this.az.toFixed(4)}°`,
+      `  Elevation: ${this.el.toFixed(4)}°`,
+      `  Range:     ${this.rng.toFixed(3)} km`,
     ].join('\n');
   }
 
@@ -162,24 +166,24 @@ export class RAE {
    * An optional azimuth [az] _(rad)_ and elevation [el] _(rad)_ value can be
    * passed to override the values contained in this observation.
    * @param site The observer [site].
-   * @param az Azimuth _(rad)_.
-   * @param el Elevation _(rad)_.
+   * @param azRad Azimuth _(rad)_.
+   * @param elRad Elevation _(rad)_.
    * @returns A [Vector3D] object.
    */
-  position(site: J2000, az?: Radians, el?: Radians): Vector3D<Kilometers> {
+  position(site: J2000, azRad?: Radians, elRad?: Radians): Vector3D<Kilometers> {
     const ecef = site.toITRF();
     const geo = ecef.toGeodetic();
     const po2 = halfPi;
-    const newAz = az ?? this.azimuth;
-    const newEl = el ?? this.elevation;
+    const newAz = azRad ?? this.azRad;
+    const newEl = elRad ?? this.elRad;
     const sAz = Math.sin(newAz);
     const cAz = Math.cos(newAz);
     const sEl = Math.sin(newEl);
     const cEl = Math.cos(newEl);
     const pSez = new Vector3D<Kilometers>(
-      (-this.range * cEl * cAz) as Kilometers,
-      (this.range * cEl * sAz) as Kilometers,
-      (this.range * sEl) as Kilometers,
+      (-this.rng * cEl * cAz) as Kilometers,
+      (this.rng * cEl * sAz) as Kilometers,
+      (this.rng * sEl) as Kilometers,
     );
     const rEcef = pSez
       .rotY(-(po2 - geo.lat) as Radians)
@@ -199,30 +203,30 @@ export class RAE {
    */
   toStateVector(site: J2000): J2000 {
     // If the rates are not defined then assume stationary
-    this.rangeRate ??= 0;
-    this.elevationRate ??= 0;
-    this.azimuthRate ??= 0;
+    this.rngRate ??= 0;
+    this.elRateRad ??= 0;
+    this.azRateRad ??= 0;
 
     const ecef = site.toITRF();
     const geo = ecef.toGeodetic();
     const po2 = halfPi;
-    const sAz = Math.sin(this.azimuth);
-    const cAz = Math.cos(this.azimuth);
-    const sEl = Math.sin(this.elevation);
-    const cEl = Math.cos(this.elevation);
+    const sAz = Math.sin(this.azRad);
+    const cAz = Math.cos(this.azRad);
+    const sEl = Math.sin(this.elRad);
+    const cEl = Math.cos(this.elRad);
     const pSez = new Vector3D<Kilometers>(
-      (-this.range * cEl * cAz) as Kilometers,
-      (this.range * cEl * sAz) as Kilometers,
-      (this.range * sEl) as Kilometers,
+      (-this.rng * cEl * cAz) as Kilometers,
+      (this.rng * cEl * sAz) as Kilometers,
+      (this.rng * sEl) as Kilometers,
     );
     const pDotSez = new Vector3D<Kilometers>(
-      (-this.rangeRate * cEl * cAz +
-        this.range * sEl * cAz * this.elevationRate +
-        this.range * cEl * sAz * this.azimuthRate) as Kilometers,
-      (this.rangeRate * cEl * sAz -
-        this.range * sEl * sAz * this.elevationRate +
-        this.range * cEl * cAz * this.azimuthRate) as Kilometers,
-      (this.rangeRate * sEl + this.range * cEl * this.elevationRate) as Kilometers,
+      (-this.rngRate * cEl * cAz +
+        this.rng * sEl * cAz * this.elRateRad +
+        this.rng * cEl * sAz * this.azRateRad) as Kilometers,
+      (this.rngRate * cEl * sAz -
+        this.rng * sEl * sAz * this.elRateRad +
+        this.rng * cEl * cAz * this.azRateRad) as Kilometers,
+      (this.rngRate * sEl + this.rng * cEl * this.elRateRad) as Kilometers,
     );
     const pEcef = pSez.rotY(-(po2 - geo.lat) as Radians).rotZ(-geo.lon as Radians);
     const pDotEcef = pDotSez.rotY(-(po2 - geo.lat) as Radians).rotZ(-geo.lon as Radians);
@@ -239,7 +243,7 @@ export class RAE {
    * @returns The angular distance _(rad)_.
    */
   angle(razel: RAE, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
-    return angularDistance(this.azimuth, this.elevation, razel.azimuth, razel.elevation, method);
+    return angularDistance(this.azRad, this.elRad, razel.azRad, razel.elRad, method);
   }
 
   /**

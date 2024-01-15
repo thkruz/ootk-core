@@ -42,22 +42,22 @@ describe('RAE', () => {
 
   // azimuthDegrees
   it('should return the azimuth in degrees', () => {
-    expect(rae.azimuthDegrees).toMatchSnapshot();
+    expect(rae.az).toMatchSnapshot();
   });
 
   // elevationDegrees
   it('should return the elevation in degrees', () => {
-    expect(rae.elevationDegrees).toMatchSnapshot();
+    expect(rae.el).toMatchSnapshot();
   });
 
   // azimuthRateDegrees
   it('should return the azimuth rate in degrees', () => {
-    expect(rae.azimuthRateDegrees).toMatchSnapshot();
+    expect(rae.azRate).toMatchSnapshot();
   });
 
   // elevationRateDegrees
   it('should return the elevation rate in degrees', () => {
-    expect(rae.elevationRateDegrees).toMatchSnapshot();
+    expect(rae.elRate).toMatchSnapshot();
   });
 
   // toString

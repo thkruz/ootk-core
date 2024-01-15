@@ -59,15 +59,15 @@ Object {
 
 exports[`Satellite should calculate and return RAE coordinates 1`] = `
 RAE {
-  "azimuth": 1.3489093210949852,
-  "azimuthRate": 0.031044709157512784,
-  "elevation": -1.2837885129141846,
-  "elevationRate": -0.03103994353789119,
+  "azRad": 1.3489093210949852,
+  "azRateRad": 0.031044709157512784,
+  "elRad": -1.2837885129141846,
+  "elRateRad": -0.03103994353789119,
   "epoch": EpochUTC {
     "posix": 1705109326817,
   },
-  "range": 12650.301530537545,
-  "rangeRate": 1.8799097918581538,
+  "rng": 12650.301530537545,
+  "rngRate": 1.8799097918581538,
 }
 `;
 
