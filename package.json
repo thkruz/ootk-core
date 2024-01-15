@@ -14,7 +14,7 @@
     "version": "auto-changelog -p && git add CHANGELOG.md"
   },
   "main": "dist/main.js",
-  "typings": "dist/index.d.ts",
+  "typings": "dist/main.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/thkruz/ootk-core"
