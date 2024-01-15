@@ -1,60 +1,100 @@
+import { Degrees, Radians } from 'src/main';
 import { Matrix } from './Matrix';
 import { Vector3D } from './Vector3D';
 
-// / Vector operations.
+/**
+ * A Vector is a mathematical object that has both magnitude and direction.
+ */
 export class Vector<T extends number = number> {
-  // / Create a new [Vector] object from an array of [_elements].
+  /**
+   * The length of the vector.
+   */
+  readonly length: number;
+
+  /**
+   * Represents a 3-dimensional vector.
+   */
+  static readonly origin3 = new Vector([0, 0, 0]);
+
+  /**
+   * Represents a vector with all elements set to zero.
+   */
+  static readonly origin6 = new Vector([0, 0, 0, 0, 0, 0]);
+
+  /**
+   * Represents the x-axis vector.
+   */
+  static readonly xAxis = new Vector([1, 0, 0]);
+
+  /**
+   * Represents the y-axis vector.
+   */
+  static readonly yAxis = new Vector([0, 1, 0]);
+
+  /**
+   * Represents the z-axis vector.
+   */
+  static readonly zAxis = new Vector([0, 0, 1]);
+
+  /**
+   * Represents a vector pointing along the negative x-axis.
+   */
+  static readonly xAxisNeg = new Vector([-1, 0, 0]);
+
+  /**
+   * Represents a vector pointing along the negative y-axis.
+   */
+  static readonly yAxisNeg = new Vector([0, -1, 0]);
+
+  /**
+   * Represents a vector pointing along the negative z-axis.
+   */
+  static readonly zAxisNeg = new Vector([0, 0, -1]);
+
   constructor(public elements: T[] | Float64Array) {
     this.length = elements.length;
   }
 
-  // / Create a zero-filled [Vector] of the provided [length];
+  /**
+   * Creates a zero vector of the specified length.
+   * @param length The length of the vector.
+   *
+   * @returns A new Vector object representing the zero vector.
+   */
   static zero(length: number): Vector {
     return new Vector(new Array(length).fill(0));
   }
 
   /**
-   * Create a [Vector] of the provided [length], filled with the
-   * provided [value].
+   * Creates a new Vector with the specified length, filled with the specified
+   * value.
+   * @param length The length of the new Vector.
+   *
+   * @param value The value to fill the Vector with.
+   *
+   * @returns A new Vector filled with the specified value.
    */
   static filled(length: number, value: number): Vector {
     return new Vector(new Array(length).fill(value));
   }
 
   /**
-   * Create a [Vector] from the provided [elements] list.
+   * Creates a new Vector instance from an array of elements.
+   *
+   * @param elements - The array of elements to create the Vector from.
+   * @returns A new Vector instance.
    */
   static fromList(elements: number[]): Vector {
     return new Vector(elements);
   }
 
-  // / Vector length.
-  readonly length: number;
-
-  // / 3-dimensional origin.
-  static readonly origin3 = new Vector([0, 0, 0]);
-
-  // / 6-dimensional origin.
-  static readonly origin6 = new Vector([0, 0, 0, 0, 0, 0]);
-
-  // / X-axis unit vector.
-  static readonly xAxis = new Vector([1, 0, 0]);
-
-  // / Y-axis unit vector.
-  static readonly yAxis = new Vector([0, 1, 0]);
-
-  // / Z-axis unit vector.
-  static readonly zAxis = new Vector([0, 0, 1]);
-
-  // / Negative x-axis unit vector.
-  static readonly xAxisNeg = new Vector([-1, 0, 0]);
-
-  // / Negative y-axis unit vector.
-  static readonly yAxisNeg = new Vector([0, -1, 0]);
-
-  // / Negative z-axis unit vector.
-  static readonly zAxisNeg = new Vector([0, 0, -1]);
-
+  /**
+   * Returns a string representation of the vector.
+   *
+   * @param fixed - The number of digits to appear after the decimal point.
+   * Defaults to -1.
+   * @returns A string representation of the vector.
+   */
   toString(fixed = -1): string {
     if (fixed < 0) {
       return `[${this.elements.join(', ')}]`;
@@ -64,32 +104,50 @@ export class Vector<T extends number = number> {
     return `[${output.join(', ')}]`;
   }
 
-  // / X-axis component.
+  /**
+   * Returns a string representation of the x value of the vector.
+   */
   get x(): number {
     return this.elements[0];
   }
 
-  // / Y-axis component.
+  /**
+   * Returns a string representation of the y value of the vector.
+   */
   get y(): number {
     return this.elements[1];
   }
 
-  // / Z-axis component.
+  /**
+   * Returns a string representation of the z value of the vector.
+   */
   get z(): number {
     return this.elements[2];
   }
 
-  // / Convert the elements of this [Vector] to a list object.
+  /**
+   * Converts the vector elements to an array.
+   *
+   * @returns An array containing the vector elements.
+   */
   toList(): number[] {
     return Array.from(this.elements);
   }
 
-  // / Copy the elements of this [Vector] to a new array.
+  /**
+   * Converts the vector to a Float64Array.
+   *
+   * @returns The vector as a Float64Array.
+   */
   toArray(): Float64Array {
     return new Float64Array(this.elements);
   }
 
-  // / Return the magnitude of this vector.
+  /**
+   * Calculates the magnitude of the vector.
+   *
+   * @returns The magnitude of the vector.
+   */
   magnitude(): number {
     let total = 0;
 
@@ -100,7 +158,13 @@ export class Vector<T extends number = number> {
     return Math.sqrt(total);
   }
 
-  // / Return the result of adding this to another [Vector].
+  /**
+   * Adds the elements of another vector to this vector and returns a new
+   * vector.
+   * @param v - The vector to add.
+   *
+   * @returns A new vector containing the sum of the elements.
+   */
   add(v: Vector): Vector {
     const output = new Array(this.length);
 
@@ -111,7 +175,12 @@ export class Vector<T extends number = number> {
     return new Vector(output);
   }
 
-  // / Return the result of subtracting this and another [Vector].
+  /**
+   * Subtracts a vector from the current vector.
+   * @param v The vector to subtract.
+   *
+   * @returns A new vector representing the result of the subtraction.
+   */
   subtract(v: Vector): Vector {
     const output = new Array(this.length);
 
@@ -122,7 +191,12 @@ export class Vector<T extends number = number> {
     return new Vector(output);
   }
 
-  // / Return a copy of this [Vector] scaled by [n];
+  /**
+   * Scales the vector by a given factor.
+   * @param n The scaling factor.
+   *
+   * @returns A new Vector object representing the scaled vector.
+   */
   scale(n: number): Vector {
     const output = new Array(this.length);
 
@@ -133,17 +207,30 @@ export class Vector<T extends number = number> {
     return new Vector(output);
   }
 
-  // / Return a copy of this [Vector] with the elements negated.
+  /**
+   * Negates the vector by scaling it by -1.
+   * @returns A new Vector object representing the negated vector.
+   */
   negate(): Vector {
     return this.scale(-1);
   }
 
-  // / Return the Euclidean distance between this and another [Vector].
+  /**
+   * Return the Euclidean distance between this and another Vector.
+   * @param v The vector to calculate the distance to.
+   *
+   * @returns The distance between the two vectors.
+   */
   distance(v: Vector): number {
     return this.subtract(v).magnitude();
   }
 
-  // / Convert this to a unit [Vector].
+  /**
+   * Normalizes the vector, making it a unit vector with the same direction but
+   * a magnitude of 1. If the vector has a magnitude of 0, it returns a zero
+   * vector of the same length.
+   * @returns The normalized vector.
+   */
   normalize(): Vector {
     const m = this.magnitude();
 
@@ -154,7 +241,12 @@ export class Vector<T extends number = number> {
     return this.scale(1.0 / m);
   }
 
-  // / Calculate the dot product of this and another [Vector];
+  /**
+   * Calculates the dot product of this vector and another vector.
+   *
+   * @param v - The vector to calculate the dot product with.
+   * @returns The dot product of the two vectors.
+   */
   dot(v: Vector): number {
     let total = 0;
 
@@ -165,7 +257,12 @@ export class Vector<T extends number = number> {
     return total;
   }
 
-  // / Calculate the outer product between this and another [Vector].
+  /**
+   * Calculates the outer product of this vector with another vector.
+   * @param v The vector to calculate the outer product with.
+   *
+   * @returns A matrix representing the outer product of the two vectors.
+   */
   outer(v: Vector): Matrix {
     const result: number[][] = [];
 
@@ -179,7 +276,12 @@ export class Vector<T extends number = number> {
     return new Matrix(result);
   }
 
-  // / Calculate the cross product of this and another [Vector];
+  /**
+   * Calculates the cross product of this vector and the given vector.
+   * @param v - The vector to calculate the cross product with.
+   *
+   * @returns The resulting vector.
+   */
   cross(v: Vector): Vector {
     const output = new Array(this.length);
 
@@ -210,10 +312,12 @@ export class Vector<T extends number = number> {
   }
 
   /**
-   * Create a copy of this [Vector] rotated in the x-axis by angle
-   * [theta] _(rad)_.
+   * Rotates the vector around the X-axis by the specified angle.
+   *
+   * @param theta The angle in radians.
+   * @returns The rotated vector.
    */
-  rotX(theta: number): Vector {
+  rotX(theta: Radians): Vector {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
     const output = new Array(3);
@@ -226,10 +330,12 @@ export class Vector<T extends number = number> {
   }
 
   /**
-   * Create a copy of this [Vector] rotated in the y-axis by angle
-   * [theta] _(rad)_.
+   * Rotates the vector around the Y-axis by the specified angle.
+   *
+   * @param theta The angle of rotation in radians.
+   * @returns A new Vector representing the rotated vector.
    */
-  rotY(theta: number): Vector {
+  rotY(theta: Radians): Vector {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
     const output = new Array(3);
@@ -242,10 +348,12 @@ export class Vector<T extends number = number> {
   }
 
   /**
-   * Create a copy of this [Vector] rotated in the z-axis by angle
-   * [theta] _(rad)_.
+   * Rotates the vector around the Z-axis by the specified angle.
+   *
+   * @param theta The angle of rotation in radians.
+   * @returns A new Vector representing the rotated vector.
    */
-  rotZ(theta: number): Vector {
+  rotZ(theta: Radians): Vector {
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
     const output = new Array(3);
@@ -257,26 +365,41 @@ export class Vector<T extends number = number> {
     return new Vector(output);
   }
 
-  // / Calculate the angle _(rad)_ between this and another [Vector].
-  angle(v: Vector): number {
+  /**
+   * Calculates the angle between this vector and another vector.
+   * @param v The other vector.
+   *
+   * @returns The angle between the two vectors in radians.
+   */
+  angle(v: Vector): Radians {
     // better than acos for small angles
     const theta = Math.atan2(this.cross(v).magnitude(), this.dot(v));
 
     if (isNaN(theta)) {
-      return 0.0;
+      return 0.0 as Radians;
     }
 
-    return theta;
-  }
-
-  // / Calculate the angle _(°)_ between this and another [Vector].
-  angleDegrees(v: Vector): number {
-    return this.angle(v) * (180 / Math.PI);
+    return theta as Radians;
   }
 
   /**
-   * Return `true` if line-of-sight exists between this and another [Vector]
-   * with a central body of the given [radius].
+   * Calculates the angle between this vector and another vector in degrees.
+   * @param v The other vector.
+   *
+   * @returns The angle between the two vectors in degrees.
+   */
+  angleDegrees(v: Vector): Degrees {
+    return (this.angle(v) * (180 / Math.PI)) as Degrees;
+  }
+
+  /**
+   * Determines if there is line of sight between this vector and another vector
+   * within a given radius.
+   * @param v - The vector to check line of sight with.
+   *
+   * @param radius - The radius within which line of sight is considered.
+   *
+   * @returns True if there is line of sight, false otherwise.
    */
   sight(v: Vector, radius: number): boolean {
     const r1Mag2 = this.magnitude() ** 2;
@@ -298,44 +421,60 @@ export class Vector<T extends number = number> {
     return los;
   }
 
-  // / Return the unit vector that bisects this and another [Vector].
+  /**
+   * Returns the bisect vector between this vector and the given vector. The
+   * bisect vector is calculated by scaling this vector's magnitude by the
+   * magnitude of the given vector, adding the result to the product of scaling
+   * the given vector's magnitude by this vector's magnitude, and then
+   * normalizing the resulting vector.
+   * @param v - The vector to calculate the bisect with.
+   *
+   * @returns The bisect vector.
+   */
   bisect(v: Vector): Vector {
     return this.scale(v.magnitude()).add(v.scale(this.magnitude())).normalize();
   }
 
   /**
    * Joins the current vector with another vector.
-   * @param v The vector to join with.
-   * @returns A new vector that contains the elements of both vectors.
+   * @param v The vector to join with. @returns A new vector that contains the
+   * elements of both vectors.
    */
   join(v: Vector): Vector {
     return new Vector(this.toList().concat(v.toList()));
   }
 
   /**
-   * Returns a new Vector containing a portion of the elements from the specified start index to the specified end index
-   * @param start The start index of the slice (inclusive).
-   * @param end The end index of the slice (exclusive).
-   * @returns A new Vector containing the sliced elements.
+   * Returns a new Vector containing a portion of the elements from the
+   * specified start index to the specified end index
+   * @param start The start index of the slice (inclusive). @param end The end
+   * index of the slice (exclusive). @returns A new Vector containing the sliced
+   * elements.
    */
   slice(start: number, end: number): Vector {
     return new Vector(this.elements.slice(start, end));
   }
 
-  // / Convert this [Vector] into a row [Matrix].
+  /**
+   * Returns a new Matrix object representing the row vector.
+   * @returns {Matrix} The row vector as a Matrix object.
+   */
   row(): Matrix {
     return new Matrix([this.toList()]);
   }
 
-  // / Convert this [Vector] into a column [Matrix].
+  /**
+   * Returns a new Matrix object representing the column vector of this Vector.
+   * @returns {Matrix} The column vector as a Matrix object.
+   */
   column(): Matrix {
     return new Matrix(this.toList().map((e) => [e]));
   }
 
   /**
    * Converts the elements at the specified index to a Vector3D object.
-   * @param index - The index of the elements to convert.
-   * @returns A new Vector3D object containing the converted elements.
+   * @param index - The index of the elements to convert. @returns A new
+   * Vector3D object containing the converted elements.
    */
   toVector3D(index: number): Vector3D {
     return new Vector3D(this.elements[index], this.elements[index + 1], this.elements[index + 2]);
