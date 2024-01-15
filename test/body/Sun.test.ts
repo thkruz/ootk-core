@@ -1,7 +1,13 @@
-import { Degrees, EpochUTC, Meters, Sun, Vector3D } from '../../src/main';
-import { exampleDate } from '../lib/mockData';
+import { Degrees, EpochUTC, Kilometers, Meters, Sun, Vector3D } from '../../src/main';
+import { mockExampleDate } from '../lib/mockData';
 
 describe('Sun', () => {
+  let exampleDate: Date;
+
+  beforeEach(() => {
+    exampleDate = new Date(mockExampleDate.getTime());
+  });
+
   /*
    * The 'azEl' method should return the azimuth and elevation of the sun given
    * a date, latitude, and longitude.
@@ -29,8 +35,8 @@ describe('Sun', () => {
    * the observer's position and the sun's position.
    */
   it('should return the angular diameter of the sun given the observers position and the suns position', () => {
-    const obsPos = new Vector3D(0, 0, 0);
-    const sunPos = new Vector3D(1, 1, 1);
+    const obsPos = new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers);
+    const sunPos = new Vector3D<Kilometers>(1 as Kilometers, 1 as Kilometers, 1 as Kilometers);
     const result = Sun.diameter(obsPos, sunPos);
 
     expect(result).toMatchSnapshot();
@@ -41,8 +47,8 @@ describe('Sun', () => {
    * if a satellite is in the shadow of the earth.
    */
   it('should return the angles necessary to determine if a satellite is in the shadow of the earth', () => {
-    const satPos = new Vector3D(0, 0, 0);
-    const sunPos = new Vector3D(1, 1, 1);
+    const satPos = new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers);
+    const sunPos = new Vector3D<Kilometers>(1 as Kilometers, 1 as Kilometers, 1 as Kilometers);
     const result = Sun.eclipseAngles(satPos, sunPos);
 
     expect(result).toMatchSnapshot();
@@ -83,8 +89,8 @@ describe('Sun', () => {
    * the same as the sun's position.
    */
   it('should handle cases where the observers position is the same as the suns position', () => {
-    const obsPos = new Vector3D(1, 1, 1);
-    const sunPos = new Vector3D(1, 1, 1);
+    const obsPos = new Vector3D<Kilometers>(1 as Kilometers, 1 as Kilometers, 1 as Kilometers);
+    const sunPos = new Vector3D<Kilometers>(1 as Kilometers, 1 as Kilometers, 1 as Kilometers);
     const result = Sun.diameter(obsPos, sunPos);
 
     expect(result).toMatchSnapshot();
@@ -95,8 +101,8 @@ describe('Sun', () => {
    * directly above or below the earth.
    */
   it('should handle cases where the satellite is directly above or below the earth', () => {
-    const satPos = new Vector3D(0, 0, 0);
-    const sunPos = new Vector3D(0, 0, 1);
+    const satPos = new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers);
+    const sunPos = new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 1 as Kilometers);
     const result = Sun.eclipseAngles(satPos, sunPos);
 
     expect(result).toMatchSnapshot();
@@ -171,7 +177,10 @@ describe('Sun', () => {
   });
 
   it('should return the same shadow result given the same time and position', () => {
-    const result = Sun.shadow(EpochUTC.fromDateTime(exampleDate), new Vector3D(8000, 0, 0));
+    const result = Sun.shadow(
+      EpochUTC.fromDateTime(exampleDate),
+      new Vector3D<Kilometers>(8000 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+    );
 
     expect(result).toMatchSnapshot();
   });
@@ -192,7 +201,10 @@ describe('Sun', () => {
 
   // lightingRatio
   it('should return the same lighting ratio result given the same positions', () => {
-    const result = Sun.lightingRatio(new Vector3D(8000, 0, 0), new Vector3D(1000000, 0, 0));
+    const result = Sun.lightingRatio(
+      new Vector3D<Kilometers>(8000 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<Kilometers>(1000000 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+    );
 
     expect(result).toMatchSnapshot();
   });

@@ -1,5 +1,5 @@
 import { Earth, EpochUTC, Vector3D } from '../../src/main';
-import { exampleDate } from '../lib/mockData';
+import { mockExampleDate } from '../lib/mockData';
 
 describe('Earth', () => {
   // can calculate mean motion from semimajor axis
@@ -12,7 +12,7 @@ describe('Earth', () => {
 
   // can calculate precession angles from epoch
   it('should calculate precession angles when given an epoch', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const precessionAngles = Earth.precession(epoch);
 
     expect(precessionAngles.zeta).toMatchSnapshot();
@@ -22,7 +22,7 @@ describe('Earth', () => {
 
   // can calculate nutation angles from epoch
   it('should calculate nutation angles when given an epoch', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const nutationAngles = Earth.nutation(epoch);
 
     expect(nutationAngles.dPsi).toMatchSnapshot();
@@ -75,7 +75,7 @@ describe('Earth', () => {
 
   // can handle epoch before 1900 when calculating precession angles
   it('should handle epoch before 1900 when calculating precession angles', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const precessionAngles = Earth.precession(epoch);
 
     expect(precessionAngles.zeta).toMatchSnapshot();
@@ -83,7 +83,7 @@ describe('Earth', () => {
 
   // can handle epoch after 2150 when calculating precession angles
   it('should handle epoch after 2150 when calculating precession angles', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const precessionAngles = Earth.precession(epoch);
 
     expect(precessionAngles.zeta).not.toBeNaN();
@@ -92,7 +92,7 @@ describe('Earth', () => {
 
   // can handle epoch before 1900 when calculating nutation angles
   it('should handle epoch before 1900 when calculating nutation angles', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const nutationAngles = Earth.nutation(epoch);
 
     expect(nutationAngles.dPsi).not.toBeNaN();
@@ -101,7 +101,7 @@ describe('Earth', () => {
 
   // can handle epoch after 2150 when calculating nutation angles
   it('should handle epoch after 2150 when calculating nutation angles', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const nutationAngles = Earth.nutation(epoch);
 
     expect(nutationAngles.dPsi).not.toBeNaN();

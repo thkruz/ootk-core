@@ -45,14 +45,10 @@ export class Geodetic {
 
   constructor(latitude: Radians, longitude: Radians, altitude: Kilometers) {
     if (Math.abs(latitude) > Math.PI / 2) {
-      // eslint-disable-next-line no-console
-      console.warn(longitude * RAD2DEG);
       throw new RangeError('Latitude must be between -90° and 90° in Radians.');
     }
 
     if (Math.abs(longitude) > Math.PI) {
-      // eslint-disable-next-line no-console
-      console.warn(longitude * RAD2DEG);
       throw new RangeError('Longitude must be between -180° and 180° in Radians.');
     }
 

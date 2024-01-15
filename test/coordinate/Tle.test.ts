@@ -1,4 +1,4 @@
-import { exampleDate } from '../lib/mockData';
+import { mockExampleDate } from '../lib/mockData';
 import { ClassicalElements, EpochUTC, Kilometers, Radians, Tle, TleLine1, TleLine2 } from '../../src/main';
 
 describe('Tle', () => {
@@ -54,7 +54,7 @@ describe('Tle', () => {
 
   // propagate
   it('should propagate the TLE', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const propagated = tle.propagate(epoch);
 
     expect(propagated).toMatchSnapshot();
@@ -67,7 +67,7 @@ describe('Tle', () => {
 
   // fromClassicalElements
   it('should create a TLE from classical orbital elements', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const elements = new ClassicalElements({
       epoch,
       semimajorAxis: 6943.547853722985 as Kilometers,

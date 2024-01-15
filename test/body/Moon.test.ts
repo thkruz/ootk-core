@@ -1,7 +1,13 @@
 import { Degrees, EpochUTC, Moon, Vector3D } from '../../src/main';
-import { exampleDate } from '../lib/mockData';
+import { mockExampleDate } from '../lib/mockData';
 
 describe('Moon', () => {
+  let exampleDate: Date;
+
+  beforeEach(() => {
+    exampleDate = new Date(mockExampleDate.getTime());
+  });
+
   // The static property 'mu' should be accessible and have a value of 4902.799.
   it('should have a static property "mu" with value 4902.799', () => {
     expect(Moon.mu).toBe(4902.799);
@@ -99,7 +105,7 @@ describe('Moon', () => {
    * 'Degrees' parameters and return an object with 'az', 'el', 'rng', and
    * 'parallacticAngle' properties.
    */
-  it("should return an object with 'az', 'el', 'rng', and 'parallacticAngle' properties", () => {
+  it('should return an object with \'az\', \'el\', \'rng\', and \'parallacticAngle\' properties', () => {
     const date = new Date(1635724800000); // November 1, 2021
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
@@ -113,7 +119,7 @@ describe('Moon', () => {
    * 'Degrees', 'Degrees', and 'boolean' parameters and return an object with
    * 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties.
    */
-  it("should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties", () => {
+  it('should return with \'rise\', \'set\', \'ye\', \'alwaysUp\', \'alwaysDown\', \'highest\' properties', () => {
     const date = exampleDate;
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
@@ -128,7 +134,7 @@ describe('Moon', () => {
    * 'Degrees' parameters and return an object with 'az', 'el', 'rng', and
    * 'parallacticAngle' properties.
    */
-  it("should return an object with 'az', 'el', 'rng', and 'parallacticAngle' properties", () => {
+  it('should return an object with \'az\', \'el\', \'rng\', and \'parallacticAngle\' properties', () => {
     const date = new Date(exampleDate); // November 1, 2021
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
@@ -142,7 +148,7 @@ describe('Moon', () => {
    * 'Degrees', 'Degrees', and 'boolean' parameters and return an object with
    * 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties.
    */
-  it("should return an object with 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties", () => {
+  it('should return with \'rise\', \'set\', \'ye\', \'alwaysUp\', \'alwaysDown\', and \'highest\' properties', () => {
     const date = exampleDate;
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
@@ -156,7 +162,7 @@ describe('Moon', () => {
    * The private method 'moonCoords' should be callable with a 'number'
    * parameter and return a 'RaDec' object.
    */
-  it("should call the private method 'moonCoords' with a number parameter and return a RaDec object", () => {
+  it('should call the private method \'moonCoords\' with a number parameter and return a RaDec object', () => {
     const d = 123456789;
     const result = Moon.moonCoords(d);
 

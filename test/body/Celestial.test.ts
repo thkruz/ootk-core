@@ -1,6 +1,6 @@
 import { Degrees, Radians } from './../../src/types/types';
 import { Celestial } from './../../src/body/Celestial';
-import { exampleDate } from '../lib/mockData';
+import { mockExampleDate } from '../lib/mockData';
 
 describe('Celestial', () => {
   /*
@@ -13,7 +13,7 @@ describe('Celestial', () => {
     const ra = 1.3963 as Radians; // right ascension of a celestial object
     const dec = 0.7854 as Radians; // declination of a celestial object
 
-    const azEl = Celestial.azEl(exampleDate, lat, lon, ra, dec);
+    const azEl = Celestial.azEl(mockExampleDate, lat, lon, ra, dec);
 
     expect(azEl).toMatchSnapshot();
   });

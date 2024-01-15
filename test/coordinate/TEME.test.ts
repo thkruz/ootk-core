@@ -1,4 +1,4 @@
-import { exampleDate } from '../lib/mockData';
+import { mockExampleDate } from '../lib/mockData';
 import { ClassicalElements, EpochUTC, J2000, Kilometers, Radians, TEME, Vector3D } from './../../src/main';
 describe('TEME', () => {
   let stateVector: TEME;
@@ -27,7 +27,7 @@ describe('TEME', () => {
 
   // fromClassicalElements
   it('should create a TEME coordinate from classical orbital elements', () => {
-    const epoch = EpochUTC.fromDateTime(exampleDate);
+    const epoch = EpochUTC.fromDateTime(mockExampleDate);
     const elements = new ClassicalElements({
       epoch,
       semimajorAxis: 6943.547853722985 as Kilometers,

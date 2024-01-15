@@ -1,1 +1,1 @@
-export const exampleDate = new Date(1705109326817);
+export const mockExampleDate = new Date(1705109326817);
