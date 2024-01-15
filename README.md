@@ -9,8 +9,8 @@
 > An Orbital Object Toolkit in Your Web Browser
 
 **ootk-core** is the core libraries of [ootk](https://github.com/thkruz/ootk) for doing math related to orbital objects
-written in TypeScript and built for both CommonJS and ES6 JavaScript or TypeScript. **ootk-core** was developed to
-simplify the math and let you focus on using the results. It is the culmination of years of fixes and improvements to
+written in TypeScript and built for JavaScript or TypeScript. **ootk-core** was developed to simplify the math and let
+you focus on using the results. It is the culmination of years of fixes and improvements to
 other libraries.
 
 If you would like more functionality the expanded **ootk** library is available free under the AGPL license
@@ -22,16 +22,19 @@ later refactored into this library for others to use.
 
 ## :blue_book: Table of Contents
 
-- [Installation](#Installation)
-- [Usage](#Usage)
-  - [Loading the Library](#Loading-the-Library)
-  - [Propagating a TLE](#Propagating-a-TLE)
-  - [Creating a Satellite](#Creating-a-Satellite)
-  - [Creating a Sensor](#Creating-a-Sensor)
-- [Contributing](#Contributing)
-- [Building](#Building)
-- [Contributors](#Contributors)
-- [License](#License)
+- [ootk-core](#ootk-core)
+  - [:blue\_book: Table of Contents](#blue_book-table-of-contents)
+  - [:wrench: Installation](#wrench-installation)
+    - [Loading the Library](#loading-the-library)
+  - [:satellite: Usage](#satellite-usage)
+    - [Propagating a TLE](#propagating-a-tle)
+    - [Creating a Satellite](#creating-a-satellite)
+    - [Creating a Sensor](#creating-a-sensor)
+  - [:desktop\_computer: Building](#desktop_computer-building)
+  - [:gem: NPM Scripts](#gem-npm-scripts)
+  - [:man\_teacher: Contributing](#man_teacher-contributing)
+  - [:man\_scientist: Contributors](#man_scientist-contributors)
+  - [:balance\_scale: License](#balance_scale-license)
 
 ## :wrench: Installation
 
@@ -133,9 +136,9 @@ sensor.eci() // Get the sensor's position in ECI coordinates
 
 ## :gem: NPM Scripts
 
-- `build` compiles TypeScript into ES6 Modules in `lib` directory and CommonJs in `commonjs` directory
+- `build` compiles TypeScript into ES6 Modules in `dist` directory
 - `lint` lints source code located in `src` directory with [ESLint](http://eslint.org/)
-- `test` builds the software and then runs jest to verify the final library remains functional
+- `test` runs jest to verify the final library remains functional
 
 ## :man_teacher: Contributing
 
