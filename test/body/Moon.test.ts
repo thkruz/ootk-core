@@ -150,7 +150,7 @@ describe('Moon', () => {
    * 'rise', 'set', 'ye', 'alwaysUp', 'alwaysDown', and 'highest' properties.
    */
   it('should return with \'rise\', \'set\', \'ye\', \'alwaysUp\', \'alwaysDown\', and \'highest\' properties', () => {
-    const date = exampleDate;
+    const date = new Date(exampleDate.getTime() - exampleDate.getTimezoneOffset() * 60000);
     const lat = 37.7749 as Degrees; // San Francisco latitude
     const lon = -122.4194 as Degrees; // San Francisco longitude
     const isUtc = false;
