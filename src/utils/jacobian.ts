@@ -3,6 +3,8 @@ import { Vector } from '../operations/Vector';
 import { JacobianFunction } from '../types/types';
 import { array2d } from './functions';
 
+// TODO: #11 Expand documentation of Jacobian function.
+
 /**
  * Calculates the Jacobian matrix of a given Jacobian function.
  * @param f The Jacobian function.

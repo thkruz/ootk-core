@@ -1,5 +1,5 @@
 import { Sgp4OpsMode } from '../../src/enums/Sgp4OpsMode';
-import { EciVec3, Sgp4 } from '../../src/main';
+import { EciVec3, Sgp4, Vec3Flat } from '../../src/main';
 import { Sgp4GravConstants } from '../../src/sgp4/sgp4';
 import { sgp4FullCov } from './sgp4-full-cov';
 import { sgp4FullCovFail } from './sgp4-full-cov-fail';
@@ -137,5 +137,12 @@ describe('Ensure bstar and ndot account for leading zeros', () => {
     const satrec = Sgp4.createSatrec(line1, line2, Sgp4GravConstants.wgs72, Sgp4OpsMode.IMPROVED);
 
     expect(satrec.nddot).toEqual(-0.00023);
+  });
+
+  test('rv2coe', () => {
+    const r = [6524.834, 6862.875, 6448.296] as Vec3Flat;
+    const v = [4.901327, 5.533756, -1.976341] as Vec3Flat;
+
+    expect(Sgp4.rv2coe(r, v, 398600.8)).toMatchSnapshot();
   });
 });

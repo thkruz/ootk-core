@@ -1488,7 +1488,7 @@ export class Sgp4 {
    *    vallado       2013, 113, alg 9, ex 2-5
    * ---------------------------------------------------------------------------
    */
-  static rv2coe_(
+  static rv2coe(
     r: Vec3Flat,
     v: Vec3Flat,
     mus: number,

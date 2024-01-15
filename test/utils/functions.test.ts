@@ -1,4 +1,27 @@
-import { Radians, acoth, acsch, asech, concat, copySign, csch, log10, sech, wrapAngle } from '../../src/main';
+import {
+  Radians,
+  SpaceObjectType,
+  acoth,
+  acsch,
+  array2d,
+  asech,
+  concat,
+  copySign,
+  covariance,
+  createVec,
+  csch,
+  derivative,
+  gamma,
+  jacobian,
+  linearInterpolate,
+  log10,
+  mean,
+  sech,
+  sign,
+  spaceObjType2Str,
+  std,
+  wrapAngle,
+} from '../../src/main';
 
 describe('functions', () => {
   it('should be calculate log10', () => {
@@ -50,4 +73,61 @@ describe('functions', () => {
     expect(wrapAngle(-5 as Radians)).toMatchSnapshot();
   });
 
+  // createVec
+  it('should be calculate createVec', () => {
+    const vec = createVec(1, 2, 3);
+
+    expect(vec).toMatchSnapshot();
+  });
+
+  // spaceObjType2Str
+  it('should be calculate spaceObjType2Str', () => {
+    expect(spaceObjType2Str(SpaceObjectType.DEBRIS)).toMatchSnapshot();
+  });
+
+  // sign
+  it('should be calculate sign', () => {
+    expect(sign(1)).toMatchSnapshot();
+    expect(sign(-1)).toMatchSnapshot();
+  });
+
+  // array2d
+  it('should be calculate array2d', () => {
+    expect(array2d(1, 2, 3)).toMatchSnapshot();
+  });
+
+  // gamma
+  it('should be calculate gamma', () => {
+    expect(gamma(1)).toMatchSnapshot();
+  });
+
+  // derivative
+  it('should be calculate derivative', () => {
+    expect(derivative((x: number) => x * x, 1)).toMatchSnapshot();
+  });
+
+  // covariance
+  it('should be calculate covariance', () => {
+    expect(covariance([1, 2, 3], [1, 2, 3])).toMatchSnapshot();
+  });
+
+  // std
+  it('should be calculate std', () => {
+    expect(std([1, 2, 3])).toMatchSnapshot();
+  });
+
+  // mean
+  it('should be calculate mean', () => {
+    expect(mean([1, 2, 3])).toMatchSnapshot();
+  });
+
+  // linearInterpolate
+  it('should be calculate linearInterpolate', () => {
+    expect(linearInterpolate(1, 2, 0.5, 0, 1)).toMatchSnapshot();
+  });
+
+  // jacobian
+  it('should be calculate jacobian', () => {
+    expect(jacobian((xs: Float64Array) => xs, 1, new Float64Array([1, 2, 3]))).toMatchSnapshot();
+  });
 });
