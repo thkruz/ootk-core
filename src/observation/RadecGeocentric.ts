@@ -22,6 +22,7 @@
  */
 
 /* eslint-disable no-undefined */
+import { Degrees, Kilometers, Radians } from 'src/main';
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
 import { Vector3D } from '../operations/Vector3D';
@@ -35,11 +36,11 @@ export class RadecGeocentric {
   // / Create a new [RadecGeocentric] object.
   constructor(
     public epoch: EpochUTC,
-    public rightAscension: number,
-    public declination: number,
-    public range?: number,
-    public rightAscensionRate?: number,
-    public declinationRate?: number,
+    public rightAscension: Radians,
+    public declination: Radians,
+    public range?: Kilometers,
+    public rightAscensionRate?: Radians,
+    public declinationRate?: Radians,
     public rangeRate?: number,
   ) {
     // Nothing to do here.
@@ -49,21 +50,21 @@ export class RadecGeocentric {
    * Create a new [RadecGeocentric] object, using degrees for the
    * angular values.
    * @param epoch UTC epoch.
-   * @param rightAscensionDegrees Right-ascension _(°)_.
-   * @param declinationDegrees Declination _(°)_.
-   * @param range Range _(km)_.
-   * @param rightAscensionRateDegrees Right-ascension rate _(°/s)_.
-   * @param declinationRateDegrees Declination rate _(°/s)_.
-   * @param rangeRate Range rate _(km/s)_.
+   * @param rightAscensionDegrees Right-ascension
+   * @param declinationDegrees Declination
+   * @param range Range
+   * @param rightAscensionRateDegrees Right-ascension rate (°/s).
+   * @param declinationRateDegrees Declination rate (°/s).
+   * @param rangeRate Range rate (km/s).
    * @returns A new [RadecGeocentric] object.
    */
   static fromDegrees(
     epoch: EpochUTC,
-    rightAscensionDegrees: number,
-    declinationDegrees: number,
-    range?: number,
-    rightAscensionRateDegrees?: number,
-    declinationRateDegrees?: number,
+    rightAscensionDegrees: Degrees,
+    declinationDegrees: Degrees,
+    range?: Kilometers,
+    rightAscensionRateDegrees?: Degrees,
+    declinationRateDegrees?: Degrees,
     rangeRate?: number,
   ): RadecGeocentric {
     const rightAscensionRate = rightAscensionRateDegrees && rightAscensionRateDegrees * DEG2RAD;
@@ -71,11 +72,11 @@ export class RadecGeocentric {
 
     return new RadecGeocentric(
       epoch,
-      rightAscensionDegrees * DEG2RAD,
-      declinationDegrees * DEG2RAD,
+      rightAscensionDegrees * DEG2RAD as Radians,
+      declinationDegrees * DEG2RAD as Radians,
       range,
-      rightAscensionRate,
-      declinationRate,
+      rightAscensionRate as Radians,
+      declinationRate as Radians,
       rangeRate,
     );
   }
@@ -104,11 +105,11 @@ export class RadecGeocentric {
 
     return new RadecGeocentric(
       state.epoch,
-      rightAscension % TAU,
-      declination,
+      rightAscension % TAU as Radians,
+      declination as Radians,
       rMag,
-      rightAscensionRate,
-      declinationRate,
+      rightAscensionRate as Radians,
+      declinationRate as Radians,
       rangeRate,
     );
   }

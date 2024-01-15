@@ -8,7 +8,7 @@ export class EpochGPS {
    * of [seconds] into the [week].
    * @param week Number of weeks since the GPS reference epoch.
    * @param seconds Number of seconds into the week.
-   * @param reference Reference epoch.
+   * @param reference Reference should always be EpochUTC.fromDateTimeString('1980-01-06T00:00:00.000Z').
    */
   constructor(public week: number, public seconds: number, reference: EpochUTC) {
     if (week < 0) {
@@ -18,6 +18,7 @@ export class EpochGPS {
       throw new Error('GPS seconds must be within a week.');
     }
 
+    // TODO: #9 Set EpochGPS.reference statically without circular dependency.
     EpochGPS.reference = reference;
   }
 

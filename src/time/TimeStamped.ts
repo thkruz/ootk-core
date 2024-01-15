@@ -2,6 +2,7 @@ import type { EpochUTC } from './EpochUTC';
 
 /**
  * Time stamped value container.
+ * TODO: #10 Is TimeStamped class needed?
  */
 export class TimeStamped<T> {
   /**

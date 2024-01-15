@@ -87,7 +87,7 @@ export class RadecTopocentric {
    * @param site Site vector.
    * @returns A new [RadecTopocentric] object.
    */
-  static fromStateVectors(state: J2000, site: J2000): RadecTopocentric {
+  static fromStateVector(state: J2000, site: J2000): RadecTopocentric {
     const p = state.position.subtract(site.position);
     const pI = p.x;
     const pJ = p.y;

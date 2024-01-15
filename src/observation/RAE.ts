@@ -33,7 +33,6 @@ import { angularDistance } from '../utils/functions';
 
 // / Range, azimuth, and elevation.
 export class RAE {
-  // / Create a new [Razel] object.
   constructor(
     public epoch: EpochUTC,
     public range: Kilometers,
@@ -88,7 +87,7 @@ export class RAE {
    * @param site The observer [site] vector.
    * @returns A new [Razel] object.
    */
-  static fromStateVectors(state: J2000, site: J2000): RAE {
+  static fromStateVector(state: J2000, site: J2000): RAE {
     const stateEcef = state.toITRF();
     const siteEcef = site.toITRF();
     const po2 = halfPi;
@@ -199,9 +198,11 @@ export class RAE {
    * @returns A [J2000] state vector.
    */
   toStateVector(site: J2000): J2000 {
-    if (!this.rangeRate || !this.elevationRate || !this.azimuthRate) {
-      throw new Error('Cannot create state, required values are undefined.');
-    }
+    // If the rates are not defined then assume stationary
+    this.rangeRate ??= 0;
+    this.elevationRate ??= 0;
+    this.azimuthRate ??= 0;
+
     const ecef = site.toITRF();
     const geo = ecef.toGeodetic();
     const po2 = halfPi;

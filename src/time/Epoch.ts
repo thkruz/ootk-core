@@ -1,8 +1,8 @@
+import { Seconds } from 'src/main';
 import { secondsPerDay } from '../utils/constants';
-import { Comparable } from './Comparable';
 
 // / Base class for [Epoch] data.
-export class Epoch implements Comparable {
+export class Epoch {
   /*
    * Create a new [Epoch] object given the number of seconds elapsed since the
    * [posix] epoch _(`1970-01-01T00:00:00.000`)_ in the [Epoch] time scale.
@@ -23,8 +23,8 @@ export class Epoch implements Comparable {
   }
 
   // / Return the difference _(s)_ between this and another [epoch]/
-  difference(epoch: Epoch): number {
-    return this.posix - epoch.posix;
+  difference(epoch: Epoch): Seconds {
+    return this.posix - epoch.posix as Seconds;
   }
 
   // / Check if this has the same timestamp as the provided [epoch].
@@ -81,10 +81,6 @@ export class Epoch implements Comparable {
   // / Convert to Julian centuries.
   toJulianCenturies(): number {
     return (this.toJulianDate() - 2451545) / 36525;
-  }
-
-  compareTo(other: Epoch): number {
-    return this.posix - other.posix;
   }
 
   // / Check if this is later than the [other] epoch.
