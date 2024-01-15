@@ -1,9 +1,9 @@
 import { Kilometers, Radians, Seconds } from '../main';
 import { EpochUTC } from '../time/EpochUTC';
-import { earthGravityParam, secondsPerDay, TAU } from '../utils/constants';
+import { earthGravityParam, MINUTES_PER_DAY, TAU } from '../utils/constants';
 import { newtonM } from '../utils/functions';
 import { ClassicalElements } from './ClassicalElements';
-import { PositionVelocity } from 'src/types/types';
+import { Minutes, PositionVelocity } from 'src/types/types';
 import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsParams';
 
 /**
@@ -135,10 +135,12 @@ export class EquinoctialElements {
 
   /**
    * Gets the period of the orbit.
-   * @returns The period in seconds.
+   * @returns The period in minutes.
    */
-  get period(): Seconds {
-    return (TAU * Math.sqrt(this.semimajorAxis ** 3 / this.mu)) as Seconds;
+  get period(): Minutes {
+    const periodSec = (TAU * Math.sqrt(this.semimajorAxis ** 3 / this.mu)) as Seconds;
+
+    return (periodSec / 60) as Minutes;
   }
 
   /**
@@ -147,7 +149,7 @@ export class EquinoctialElements {
    * @returns The number of revolutions per day.
    */
   get revsPerDay(): number {
-    return secondsPerDay / this.period;
+    return MINUTES_PER_DAY / this.period;
   }
 
   /**

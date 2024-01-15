@@ -18,22 +18,40 @@ import { StateVector } from './StateVector';
  * communication, navigation, and remote sensing.
  */
 export class TEME extends StateVector {
-  // / Create a new [TEME] object from a [ClassicalElements] object.
+  /**
+   * Gets the name of the coordinate system.
+   * @returns The name of the coordinate system.
+   */
+  get name(): string {
+    return 'TEME';
+  }
+
+  /**
+   * Gets a value indicating whether the coordinate is inertial.
+   * @returns A boolean value indicating whether the coordinate is inertial.
+   */
+  get inertial(): boolean {
+    return true;
+  }
+
+  /**
+   * Creates a TEME (True Equator Mean Equinox) object from classical orbital
+   * elements.
+   *
+   * @param elements - The classical orbital elements.
+   * @returns A new TEME object.
+   */
   static fromClassicalElements(elements: ClassicalElements): TEME {
     const rv = elements.toPositionVelocity();
 
     return new TEME(elements.epoch, rv.position, rv.velocity);
   }
 
-  get name(): string {
-    return 'TEME';
-  }
-
-  get inertial(): boolean {
-    return true;
-  }
-
-  // / Convert this to a [J2000] state vector object.
+  /**
+   * Converts the TEME (True Equator Mean Equinox) coordinates to J2000
+   * coordinates.
+   * @returns The J2000 coordinates.
+   */
   toJ2000(): J2000 {
     const p = Earth.precession(this.epoch);
     const n = Earth.nutation(this.epoch);

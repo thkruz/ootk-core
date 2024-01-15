@@ -41,6 +41,7 @@ import {
   Line2Data,
   Minutes,
   SatelliteRecord,
+  Seconds,
   StateVectorSgp4,
   TleData,
   TleDataFull,
@@ -175,8 +176,10 @@ export class Tle {
     return this.semimajorAxis * (1 - this.eccentricity);
   }
 
-  get period(): number {
-    return TAU * Math.sqrt(this.semimajorAxis ** 3 / earthGravityParam);
+  get period(): Minutes {
+    const periodSec = (TAU * Math.sqrt(this.semimajorAxis ** 3 / earthGravityParam)) as Seconds;
+
+    return (periodSec / 60) as Minutes;
   }
 
   private static parseEpoch_(epochStr: string): EpochUTC {

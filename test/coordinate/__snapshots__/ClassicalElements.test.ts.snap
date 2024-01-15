@@ -14,7 +14,7 @@ exports[`ClassicalElements should calculate the orbit regime of ClassicalElement
 
 exports[`ClassicalElements should calculate the perigee of ClassicalElements 1`] = `6935.746105487338`;
 
-exports[`ClassicalElements should calculate the period of ClassicalElements 1`] = `5758.152068066809`;
+exports[`ClassicalElements should calculate the period of ClassicalElements 1`] = `95.96920113444682`;
 
 exports[`ClassicalElements should calculate true anomaly in degrees 1`] = `33.984415021959016`;
 

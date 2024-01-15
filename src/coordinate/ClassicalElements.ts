@@ -1,12 +1,11 @@
-import { Degrees, Kilometers, Radians, Seconds } from '../main';
+import { Minutes, PositionVelocity, Degrees, Kilometers, Radians, Seconds } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
-import { earthGravityParam, RAD2DEG, sec2min, secondsPerDay, TAU } from '../utils/constants';
+import { earthGravityParam, MINUTES_PER_DAY, RAD2DEG, sec2min, TAU } from '../utils/constants';
 import { clamp, matchHalfPlane, newtonNu } from '../utils/functions';
 import { EquinoctialElements } from './EquinoctialElements';
 import { OrbitRegime } from '../enums/OrbitRegime';
 import { StateVector } from './StateVector';
-import { PositionVelocity } from 'src/types/types';
 import { ClassicalElementsParams } from '../interfaces/ClassicalElementsParams';
 
 /**
@@ -97,7 +96,7 @@ export class ClassicalElements {
 
     return new ClassicalElements({
       epoch: state.epoch,
-      semimajorAxis: a as Kilometers,
+      semimajorAxis: a,
       eccentricity: e,
       inclination: i as Radians,
       rightAscension: o as Radians,
@@ -181,8 +180,10 @@ export class ClassicalElements {
    * Calculates the period of the orbit.
    * @returns The period in seconds.
    */
-  get period(): Seconds {
-    return (TAU * Math.sqrt(this.semimajorAxis ** 3 / this.mu)) as Seconds;
+  get period(): Minutes {
+    const periodSec = (TAU * Math.sqrt(this.semimajorAxis ** 3 / this.mu)) as Seconds;
+
+    return (periodSec / 60) as Minutes;
   }
 
   /**
@@ -190,7 +191,7 @@ export class ClassicalElements {
    * @returns The number of revolutions per day.
    */
   get revsPerDay(): number {
-    return secondsPerDay / this.period;
+    return MINUTES_PER_DAY / this.period;
   }
 
   /**

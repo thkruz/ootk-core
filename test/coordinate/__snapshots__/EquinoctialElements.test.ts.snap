@@ -68,9 +68,9 @@ exports[`ClassicalElements should return the mean motion 1`] = `0.00109302064133
 
 exports[`ClassicalElements should return the mean motion 2`] = `0.0010926340790517568`;
 
-exports[`ClassicalElements should return the period 1`] = `5748.459882237341`;
+exports[`ClassicalElements should return the period 1`] = `95.80766470395568`;
 
-exports[`ClassicalElements should return the period 2`] = `5750.493626038512`;
+exports[`ClassicalElements should return the period 2`] = `95.8415604339752`;
 
 exports[`ClassicalElements should return the retrograde factor 1`] = `1`;
 
