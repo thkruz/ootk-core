@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Tle, TleLine1, TleLine2 } from '../../lib/index';
+import { Tle, TleLine1, TleLine2 } from '../dist/main';
 
 // Sample TLE
 const tle1 = '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992' as TleLine1;
@@ -85,3 +85,6 @@ const tleAll = Tle.parseAll(tle1, tle2);
 //   checksum2: 2,
 //   period: 92.83287537651032
 // }
+
+console.log('TLE 1: ', tle1);
+console.log('TLE 2: ', tle2);

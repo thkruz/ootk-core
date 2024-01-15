@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import { Degrees, ecf2rae, EcfVec3, GroundPosition, Kilometers, lla2ecf, lla2sez, RAD2DEG } from '../../src/ootk-core';
+import { Degrees, ecf2rae, EcfVec3, GroundObject, Kilometers, lla2ecf, lla2sez, RAD2DEG } from '../dist/main';
 
-const observer = new GroundPosition({
-  name: 'ground-position',
+const observer = new GroundObject({
+  name: 'ground-object',
   lat: (0.7287584767123405 * RAD2DEG) as Degrees,
   lon: (-1.2311404365114507 * RAD2DEG) as Degrees,
   alt: 0.060966 as Kilometers,

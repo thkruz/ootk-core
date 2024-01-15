@@ -3,7 +3,7 @@
 /* eslint-disable multiline-comment-style */
 /* eslint-disable no-console */
 
-import { calcGmst, DEG2RAD, GroundPosition, Satellite, Sgp4 } from '../dist/main.js';
+import { calcGmst, DEG2RAD, GroundObject, Satellite, Sgp4 } from '../dist/main.js';
 
 // Example Date
 const exampleDate = new Date(1705109326817);
@@ -33,7 +33,7 @@ const positionEci = positionAndVelocity.position;
 const velocityEci = positionAndVelocity.velocity;
 
 // Set the Observer at 71°W, 41°N, 0.37 km altitude using DEGREES because who likes using Radians?
-const observer = new GroundPosition({
+const observer = new GroundObject({
   lon: -71.0308,
   lat: 41.9613422,
   alt: 0.37,
@@ -43,10 +43,10 @@ const observer = new GroundPosition({
 const { gmst, j } = calcGmst(new Date());
 
 // You can get ECF, Geodetic, Look Angles, and Doppler Factor.
-const positionEcf = satellite.ecf();
+const positionEcf = satellite.ecf(exampleDate);
 const observerEcf = observer.ecf();
 const positionGd = satellite.lla(exampleDate);
-const lookAngles = satellite.rae(observer, exampleDate);
+const lookAngles = satellite.toRae(observer, exampleDate);
 // This never worked in satellite.js, but it does now!
 const uplinkFreq = 420e6;
 const dopplerFactor = satellite.dopplerFactor(observer, exampleDate);
@@ -62,12 +62,12 @@ const satelliteY = position.y;
 const satelliteZ = position.z;
 
 // Look Angles may be accessed by `azimuth`, `elevation`, `range` properties.
-const azimuth = lookAngles.azimuth; // Radians
-const azimuthDegrees = lookAngles.azimuthDegrees; // Degrees
-const elevation = lookAngles.elevation; // Radians
-const elevationDegrees = lookAngles.elevationDegrees; // Degrees
-const rangeSat = lookAngles.range; // Kilometers
-const rangeRate = lookAngles.rangeRate; // Kilometers/Second
+const azimuth = lookAngles.azRad; // Radians
+const azimuthDegrees = lookAngles.az; // Degrees
+const elevation = lookAngles.elRad; // Radains
+const elevationDegrees = lookAngles.el; // Degrees
+const rangeSat = lookAngles.rng; // Kilometers
+const rangeRate = lookAngles.rngRate; // Kilometers/Second
 
 // There is a built in cache to allow fast retrieval of repeated calculations.
 // This means you can make repeat calls to `.rae()` for minimal performance hit.

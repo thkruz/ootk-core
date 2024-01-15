@@ -20,7 +20,7 @@ const exampleDate = new Date(1705109326817);
 
 // Sample TLE
 const tle1 = '1 56006U 23042W   24012.45049317  .00000296  00000-0  36967-4 0  9992' as TleLine1;
-const tle2 = '2 56006 143.0043  13.3620 0001137 267.5965  92.4747 15.02542972 44491' as TleLine2;
+const tle2 = '2 56006  43.0043  13.3620 0001137 267.5965  92.4747 15.02542972 44491' as TleLine2;
 
 // Initialize a Satellite Object
 const satellite = new Satellite({
@@ -48,7 +48,7 @@ const positionAndVelocity3 = satellite.eci();
  * The position_velocity result is a key-value pair of ECI coordinates. These
  * are the base results from which all other coordinates are derived.
  */
-const positionEci = positionAndVelocity.position; // positionAndVelocity might be false
+const positionEci = positionAndVelocity.position; // positionAndVelocity might fail, but
 const velocityEci = positionAndVelocity.velocity; // typescript will error on this code
 
 /*
@@ -99,12 +99,12 @@ const satelliteY = position.y; // to prevent you from accidentally
 const satelliteZ = position.z; // mixing Meters with Kilometers.
 
 // Look Angles may be accessed by `azimuth`, `elevation`, `range` properties.
-const azimuth = lookAngles.azimuth; // Typed as Radians
-const azimuthDegrees = lookAngles.azimuthDegrees; // Typed as Degrees
-const elevation = lookAngles.elevation; // Typed as Radains
-const elevationDegrees = lookAngles.elevationDegrees; // Typed as Degrees
-const rangeSat = lookAngles.range; // Typed as Kilometers
-const rangeRate = lookAngles.rangeRate; // Kilometers/Second
+const azimuth = lookAngles.azRad; // Typed as Radians
+const azimuthDegrees = lookAngles.az; // Typed as Degrees
+const elevation = lookAngles.elRad; // Typed as Radains
+const elevationDegrees = lookAngles.el; // Typed as Degrees
+const rangeSat = lookAngles.rng; // Typed as Kilometers
+const rangeRate = lookAngles.rngRate; // Kilometers/Second
 
 /*
  * There is a built in cache to allow fast retrieval of repeated calculations.
