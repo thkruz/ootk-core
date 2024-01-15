@@ -1,6 +1,6 @@
 {
   "name": "ootk-core",
-  "version": "1.0.0-4",
+  "version": "1.0.0-5",
   "type": "module",
   "module": "dist/main.js",
   "description": "Orbital Object Toolkit. A modern typed replacement for satellite.js including SGP4 propagation, TLE parsing, Sun and Moon calculations, and more.",
