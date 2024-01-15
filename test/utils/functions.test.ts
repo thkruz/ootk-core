@@ -1,4 +1,5 @@
 import {
+  Degrees,
   Radians,
   SpaceObjectType,
   acoth,
@@ -10,12 +11,14 @@ import {
   covariance,
   createVec,
   csch,
+  deg2rad,
   derivative,
   gamma,
   jacobian,
   linearInterpolate,
   log10,
   mean,
+  rad2deg,
   sech,
   sign,
   spaceObjType2Str,
@@ -129,5 +132,15 @@ describe('functions', () => {
   // jacobian
   it('should be calculate jacobian', () => {
     expect(jacobian((xs: Float64Array) => xs, 1, new Float64Array([1, 2, 3]))).toMatchSnapshot();
+  });
+
+  // rad2deg
+  it('should be calculate rad2deg', () => {
+    expect(rad2deg(1 as Radians)).toMatchSnapshot();
+  });
+
+  // deg2rad
+  it('should be calculate deg2rad', () => {
+    expect(deg2rad(1 as Degrees)).toMatchSnapshot();
   });
 });

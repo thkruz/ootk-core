@@ -19,6 +19,8 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ * @copyright © 2012–2016 Brandon Rhodes
+ * This was ported from the python-sgp4 library by Brandon Rhodes.
  */
 
 // NOTE: This file is meant to maintain as much of the original format as possible.

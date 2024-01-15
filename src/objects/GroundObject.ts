@@ -35,6 +35,7 @@ import {
   llaRad2ecf,
   DEG2RAD,
   Geodetic,
+  BaseObjectParams,
 } from '../main';
 
 import { BaseObject } from './BaseObject';
@@ -46,7 +47,7 @@ export class GroundObject extends BaseObject {
   lon: Degrees;
   alt: Kilometers;
 
-  constructor(info: GroundPositionParams) {
+  constructor(info: GroundPositionParams & BaseObjectParams) {
     super(info);
 
     this.validateGroundObjectInputData_(info);

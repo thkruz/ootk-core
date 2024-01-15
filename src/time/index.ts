@@ -21,16 +21,11 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians } from 'src/main';
-import { EpochUTC } from '../time/EpochUTC';
-
-export interface ClassicalElementsParams {
-  epoch: EpochUTC;
-  semimajorAxis: Kilometers;
-  eccentricity: number;
-  inclination: Radians;
-  rightAscension: Radians;
-  argPerigee: Radians;
-  trueAnomaly: Radians;
-  mu?: number;
-}
+export { Epoch } from './Epoch';
+export { EpochGPS } from './EpochGPS';
+export { EpochTAI } from './EpochTAI';
+export { EpochTDB } from './EpochTDB';
+export { EpochTT } from './EpochTT';
+export { EpochUTC } from './EpochUTC';
+export { EpochWindow } from './EpochWindow';
+export { TimeStamped } from './TimeStamped';
