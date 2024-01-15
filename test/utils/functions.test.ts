@@ -14,7 +14,6 @@ import {
   deg2rad,
   derivative,
   gamma,
-  jacobian,
   linearInterpolate,
   log10,
   mean,
@@ -127,11 +126,6 @@ describe('functions', () => {
   // linearInterpolate
   it('should be calculate linearInterpolate', () => {
     expect(linearInterpolate(1, 2, 0.5, 0, 1)).toMatchSnapshot();
-  });
-
-  // jacobian
-  it('should be calculate jacobian', () => {
-    expect(jacobian((xs: Float64Array) => xs, 1, new Float64Array([1, 2, 3]))).toMatchSnapshot();
   });
 
   // rad2deg

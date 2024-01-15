@@ -50,20 +50,6 @@ exports[`functions should be calculate derivative 1`] = `[Function]`;
 
 exports[`functions should be calculate gamma 1`] = `1`;
 
-exports[`functions should be calculate jacobian 1`] = `
-Matrix {
-  "columns": 3,
-  "elements": Array [
-    Array [
-      1.000000000006551,
-      0,
-      0,
-    ],
-  ],
-  "rows": 1,
-}
-`;
-
 exports[`functions should be calculate linearInterpolate 1`] = `0.75`;
 
 exports[`functions should be calculate log10 1`] = `2`;

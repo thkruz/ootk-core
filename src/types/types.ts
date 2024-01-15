@@ -659,12 +659,6 @@ export type OperationsDetails = {
   country?: string;
 };
 /**
- * Represents a function that calculates the Jacobian matrix.
- * @param xs - The input values as a Float64Array. @returns The Jacobian matrix
- * as a Float64Array.
- */
-export type JacobianFunction = (xs: Float64Array) => Float64Array;
-/**
  * Represents a differentiable function.
  * @param x The input value. @returns The output value.
  */
