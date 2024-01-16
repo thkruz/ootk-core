@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Seconds } from 'src/main';
+import { Seconds } from '../main';
 import { secondsPerDay } from '../utils/constants';
 
 // / Base class for [Epoch] data.
@@ -30,7 +30,7 @@ export class Epoch {
    * Create a new [Epoch] object given the number of seconds elapsed since the
    * [posix] epoch _(`1970-01-01T00:00:00.000`)_ in the [Epoch] time scale.
    */
-  constructor(public posix: number) {
+  constructor(public posix: Seconds) {
     if (posix < 0) {
       throw new Error('Epoch cannot be negative');
     }
