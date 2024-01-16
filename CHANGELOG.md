@@ -3,7 +3,11 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.3...1.0.4)
+#### [1.0.5](https://github.com/thkruz/ootk-core/compare/v1.0.4...1.0.5)
+
+#### [v1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.3...v1.0.4)
+
+> 16 January 2024 
 
 - refactor: :label: improve type support for radec observations [`942f204`](https://github.com/thkruz/ootk-core/commit/942f204784419bd78fd3a4e803040df4ab79bd8c)
 - build: :arrow_up: update auto-changelog [`be7dc99`](https://github.com/thkruz/ootk-core/commit/be7dc99b371528ba0a8970ae9e58059f35343218)
