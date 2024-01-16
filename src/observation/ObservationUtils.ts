@@ -21,33 +21,34 @@
  * SOFTWARE.
  */
 
+import { Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 
-export const radecToPosition = (ra: number, dec: number, r: number): Vector3D => {
+export const radecToPosition = (ra: Radians, dec: Radians, r: Kilometers): Vector3D<Kilometers> => {
   const ca = Math.cos(ra);
   const sa = Math.sin(ra);
   const cd = Math.cos(dec);
   const sd = Math.sin(dec);
 
-  return new Vector3D(r * cd * ca, r * cd * sa, r * sd);
+  return new Vector3D(r * cd * ca as Kilometers, r * cd * sa as Kilometers, r * sd as Kilometers);
 };
 
 export const radecToVelocity = (
-  ra: number,
-  dec: number,
-  r: number,
-  raDot: number,
-  decDot: number,
-  rDot: number,
-): Vector3D => {
+  ra: Radians,
+  dec: Radians,
+  r: Kilometers,
+  raDot: RadiansPerSecond,
+  decDot: RadiansPerSecond,
+  rDot: KilometersPerSecond,
+): Vector3D<KilometersPerSecond> => {
   const ca = Math.cos(ra);
   const sa = Math.sin(ra);
   const cd = Math.cos(dec);
   const sd = Math.sin(dec);
 
   return new Vector3D(
-    rDot * cd * ca - r * sd * ca * decDot - r * cd * sa * raDot,
-    rDot * cd * sa - r * sd * sa * decDot + r * cd * ca * raDot,
-    rDot * sd + r * cd * decDot,
+    rDot * cd * ca - r * sd * ca * decDot - r * cd * sa * raDot as KilometersPerSecond,
+    rDot * cd * sa - r * sd * sa * decDot + r * cd * ca * raDot as KilometersPerSecond,
+    rDot * sd + r * cd * decDot as KilometersPerSecond,
   );
 };
