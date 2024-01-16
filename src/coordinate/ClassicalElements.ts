@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Minutes, PositionVelocity, Degrees, Kilometers, Radians, Seconds } from '../main';
+import { Minutes, PositionVelocity, Degrees, Kilometers, Radians, Seconds, KilometersPerSecond } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, MINUTES_PER_DAY, RAD2DEG, sec2min, TAU } from '../utils/constants';
@@ -92,37 +92,37 @@ export class ClassicalElements {
     const pos = state.position;
     const vel = state.velocity;
     const a = state.semimajorAxis;
-    const eVecA = pos.scale(vel.magnitude() ** 2 - mu / pos.magnitude());
+    const eVecA = pos.scale(vel.magnitude() ** 2 - mu / pos.magnitude() as KilometersPerSecond);
     const eVecB = vel.scale(pos.dot(vel));
     const eVec = eVecA.subtract(eVecB).scale(1 / mu);
     const e = eVec.magnitude();
     const h = pos.cross(vel);
-    const i = Math.acos(clamp(h.z / h.magnitude(), -1.0, 1.0));
+    const i = Math.acos(clamp(h.z / h.magnitude(), -1.0, 1.0)) as Radians;
     const n = Vector3D.zAxis.cross(h);
-    let o = Math.acos(clamp(n.x / n.magnitude(), -1.0, 1.0));
+    let o = Math.acos(clamp(n.x / n.magnitude(), -1.0, 1.0)) as Radians;
 
     if (n.y < 0) {
-      o = TAU - o;
+      o = TAU - o as Radians;
     }
     let w = n.angle(eVec);
 
     if (eVec.z < 0) {
-      w = TAU - w;
+      w = TAU - w as Radians;
     }
     let v = eVec.angle(pos);
 
     if (pos.dot(vel) < 0) {
-      v = TAU - v;
+      v = TAU - v as Radians;
     }
 
     return new ClassicalElements({
       epoch: state.epoch,
       semimajorAxis: a,
       eccentricity: e,
-      inclination: i as Radians,
-      rightAscension: o as Radians,
-      argPerigee: w as Radians,
-      trueAnomaly: v as Radians,
+      inclination: i,
+      rightAscension: o,
+      argPerigee: w,
+      trueAnomaly: v,
       mu,
     });
   }
@@ -253,13 +253,13 @@ export class ClassicalElements {
     const position = rPQW
       .rotZ(-this.argPerigee as Radians)
       .rotX(-this.inclination)
-      .rotZ(-this.rightAscension as Radians);
+      .rotZ(-this.rightAscension as Radians) as Vector3D<Kilometers>;
     const velocity = vPQW
       .rotZ(-this.argPerigee as Radians)
       .rotX(-this.inclination)
-      .rotZ(-this.rightAscension as Radians);
+      .rotZ(-this.rightAscension as Radians) as Vector3D<KilometersPerSecond>;
 
-    return { position: position as Vector3D<Kilometers>, velocity: velocity as Vector3D<Kilometers> };
+    return { position, velocity };
   }
 
   /**

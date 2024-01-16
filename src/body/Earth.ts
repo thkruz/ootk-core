@@ -33,6 +33,7 @@ import {
   Kilometers,
   RAD2DEG,
   Radians,
+  RadiansPerSecond,
   secondsPerDay,
   secondsPerSiderealDay,
   TAU,
@@ -82,7 +83,11 @@ export class Earth {
   static readonly j6: number = 5.40681239107085e-7;
 
   // / Earth rotation vector _(rad/s)_.
-  static readonly rotation: Vector3D = new Vector3D(0, 0, 7.292115146706979e-5);
+  static readonly rotation = new Vector3D<RadiansPerSecond>(
+    0 as RadiansPerSecond,
+    0 as RadiansPerSecond,
+    7.292115146706979e-5 as RadiansPerSecond,
+  );
 
   // / Calculate mean motion _(rad/s)_ from a given [semimajorAxis] _(km)_.
   static smaToMeanMotion(semimajorAxis: number): number {

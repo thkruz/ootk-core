@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians, Vector3D } from '../main';
+import { Kilometers, KilometersPerSecond, Radians, Vector3D } from '../main';
 import { Earth } from '../body/Earth';
 import { ClassicalElements } from './ClassicalElements';
 import { ITRF } from './ITRF';
@@ -92,7 +92,7 @@ export class J2000 extends StateVector {
       .rotZ(-n.dPsi as Radians)
       .rotX(-n.eps);
     const rPEF = rTOD.rotZ(ast) as Vector3D<Kilometers>;
-    const vPEF = vTOD.rotZ(ast).add(Earth.rotation.negate().cross(rPEF)) as Vector3D<Kilometers>;
+    const vPEF = vTOD.rotZ(ast).add(Earth.rotation.negate().cross(rPEF)) as Vector3D<KilometersPerSecond>;
 
     return new ITRF(this.epoch, rPEF, vPEF);
   }
@@ -123,7 +123,7 @@ export class J2000 extends StateVector {
       .rotX(n.mEps)
       .rotZ(-n.dPsi as Radians)
       .rotX(-eps)
-      .rotZ(dPsiCosEps) as Vector3D<Kilometers>;
+      .rotZ(dPsiCosEps) as Vector3D<KilometersPerSecond>;
 
     return new TEME(this.epoch, rTEME, vTEME);
   }

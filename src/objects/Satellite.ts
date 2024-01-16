@@ -39,6 +39,7 @@ import {
   EcfVec3,
   EciVec3,
   Kilometers,
+  KilometersPerSecond,
   LlaVec3,
   Minutes,
   PosVel,
@@ -254,7 +255,7 @@ export class Satellite extends BaseObject {
       throw new Error('Propagation failed!');
     } else {
       const p = pv.position as EciVec3;
-      const v = pv.velocity as EciVec3;
+      const v = pv.velocity as EciVec3<KilometersPerSecond>;
 
       const epoch = new EpochUTC(date.getTime());
       const pos = new Vector3D(p.x, p.y, p.z);

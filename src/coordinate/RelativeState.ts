@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Kilometers } from 'src/main';
+import { Kilometers, KilometersPerSecond } from '../main';
 import { Matrix } from '../operations/Matrix';
 import { Vector3D } from '../operations/Vector3D';
 import { J2000 } from './J2000';
@@ -31,8 +31,8 @@ import { J2000 } from './J2000';
  */
 export abstract class RelativeState {
   position: Vector3D<Kilometers>;
-  velocity: Vector3D<Kilometers>;
-  constructor(position: Vector3D<Kilometers>, velocity: Vector3D<Kilometers>) {
+  velocity: Vector3D<KilometersPerSecond>;
+  constructor(position: Vector3D<Kilometers>, velocity: Vector3D<KilometersPerSecond>) {
     this.position = position;
     this.velocity = velocity;
   }

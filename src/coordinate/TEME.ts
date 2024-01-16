@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians, Vector3D } from '../main';
+import { Kilometers, KilometersPerSecond, Radians, Vector3D } from '../main';
 import { Earth } from '../body/Earth';
 import type { ClassicalElements } from './ClassicalElements';
 import { J2000 } from './J2000';
@@ -90,7 +90,7 @@ export class TEME extends StateVector {
     const vJ2K = vMOD
       .rotZ(p.zed)
       .rotY(-p.theta as Radians)
-      .rotZ(p.zeta) as Vector3D<Kilometers>;
+      .rotZ(p.zeta) as Vector3D<KilometersPerSecond>;
 
     return new J2000(this.epoch, rJ2K, vJ2K);
   }
