@@ -51,7 +51,7 @@ type DateToPosixParams = {
 
 export class EpochUTC extends Epoch {
   static now() {
-    return new EpochUTC(new Date().getTime() / 1000);
+    return new EpochUTC(new Date().getTime() / 1000 as Seconds);
   }
 
   static fromDate({ year, month, day, hour = 0, minute = 0, second = 0 }: FromDateParams) {
@@ -59,17 +59,17 @@ export class EpochUTC extends Epoch {
   }
 
   static fromDateTime(dt: Date) {
-    return new EpochUTC(dt.getTime() / 1000);
+    return new EpochUTC(dt.getTime() / 1000 as Seconds);
   }
 
   static fromDateTimeString(dateTimeString: string): EpochUTC {
     const dts = dateTimeString.trim().toUpperCase().endsWith('Z') ? dateTimeString : `${dateTimeString}Z`;
 
-    return new EpochUTC(new Date(dts).getTime() / 1000);
+    return new EpochUTC(new Date(dts).getTime() / 1000 as Seconds);
   }
 
   static fromJ2000TTSeconds(seconds: Seconds): EpochUTC {
-    const tInit = new EpochUTC(seconds + 946728000);
+    const tInit = new EpochUTC(seconds + 946728000 as Seconds);
     const ls = DataHandler.getInstance().getLeapSeconds(tInit.toJulianDate());
 
     return tInit.roll(-32.184 - ls as Seconds);
@@ -85,11 +85,11 @@ export class EpochUTC extends Epoch {
     // Add day - 1 days in milliseconds to the epoch.
     const dts = new Date(`${year}-01-01T${timeField}Z`).getTime() + (day - 1) * MS_PER_DAY;
 
-    return new EpochUTC(dts / 1000);
+    return new EpochUTC(dts / 1000 as Seconds);
   }
 
   roll(seconds: Seconds): EpochUTC {
-    return new EpochUTC(this.posix + seconds);
+    return new EpochUTC(this.posix + seconds as Seconds);
   }
 
   toMjd(): number {
@@ -103,20 +103,20 @@ export class EpochUTC extends Epoch {
   toTAI(): EpochTAI {
     const ls = DataHandler.getInstance().getLeapSeconds(this.toJulianDate());
 
-    return new EpochTAI(this.posix + ls);
+    return new EpochTAI(this.posix + ls as Seconds);
   }
 
   toTT(): EpochTT {
-    return new EpochTT(this.toTAI().posix + 32.184);
+    return new EpochTT(this.toTAI().posix + 32.184 as Seconds);
   }
 
   toTDB(): EpochTDB {
     const tt = this.toTT();
     const tTT = tt.toJulianCenturies();
     const mEarth = (357.5277233 + 35999.05034 * tTT) * DEG2RAD;
-    const seconds = 0.001658 * Math.sin(mEarth) + 0.00001385 * Math.sin(2 * mEarth);
+    const seconds = 0.001658 * Math.sin(mEarth) + 0.00001385 * Math.sin(2 * mEarth) as Seconds;
 
-    return new EpochTDB(tt.posix + seconds);
+    return new EpochTDB(tt.posix + seconds as Seconds);
   }
 
   toGPS(): EpochGPS {
@@ -168,7 +168,7 @@ export class EpochUTC extends Epoch {
     return EpochUTC.dayOfYearLookup_[dex][month - 1] + day - 1;
   }
 
-  private static dateToPosix_({ year, month, day, hour, minute, second }: DateToPosixParams): number {
+  private static dateToPosix_({ year, month, day, hour, minute, second }: DateToPosixParams): Seconds {
     const days = EpochUTC.dayOfYear_(year, month, day);
     const yearMod = year - 1900;
 
@@ -181,6 +181,6 @@ export class EpochUTC extends Epoch {
       Math.floor((yearMod - 1) / 100) * 86400 +
       Math.floor((yearMod + 299) / 400) * 86400 +
       second
-    );
+    ) as Seconds;
   }
 }

@@ -25,26 +25,26 @@ Object {
 
 exports[`Satellite should calculate and return Geodetic coordinates when given a date 1`] = `
 Geodetic {
-  "alt": 405.17244322847,
-  "lat": 0.1099327125671112,
-  "lon": 0.2809557331563047,
+  "alt": 409.48725329355693,
+  "lat": -0.48221646502840027,
+  "lon": 1.2198848056557416,
 }
 `;
 
 exports[`Satellite should calculate and return ITRF coordinates when called 1`] = `
 ITRF {
   "epoch": EpochUTC {
-    "posix": 1705109326817,
+    "posix": 1705109326.817,
   },
   "position": Vector3D {
-    "x": 6478.244529235784,
-    "y": 1869.552512878403,
-    "z": 739.5500168212324,
+    "x": 2068.607191044621,
+    "y": 5650.9777806539605,
+    "z": -3130.036328555523,
   },
   "velocity": Vector3D {
-    "x": 2.366559347644857,
-    "y": -7.704390508005883,
-    "z": -1.227328372730736,
+    "x": -5.491548321368525,
+    "y": -0.6798748760128108,
+    "z": -4.863052489363518,
   },
 }
 `;
@@ -64,7 +64,7 @@ RAE {
   "elRad": -1.2837885129141846,
   "elRateRad": -0.03103994353789119,
   "epoch": EpochUTC {
-    "posix": 1705109326817,
+    "posix": 1705109326.817,
   },
   "rng": 12650.301530537545,
   "rngRate": 1.8799097918581538,

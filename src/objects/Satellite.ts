@@ -46,6 +46,7 @@ import {
   Radians,
   RaeVec3,
   SatelliteRecord,
+  Seconds,
   TleLine1,
   TleLine2,
 } from '../types/types';
@@ -187,7 +188,7 @@ export class Satellite extends BaseObject {
   toRae(observer: GroundObject, date: Date = new Date()): RAE {
     const rae = this.rae(observer, date);
     const rae2 = this.rae(observer, new Date(date.getTime() + 1000));
-    const epoch = new EpochUTC(date.getTime());
+    const epoch = new EpochUTC(date.getTime() / 1000 as Seconds);
     const rangeRate = rae2.rng - rae.rng;
     const azimuthRate = rae2.az - rae.az;
     const elevationRate = rae2.el - rae.el;
@@ -257,7 +258,7 @@ export class Satellite extends BaseObject {
       const p = pv.position as EciVec3;
       const v = pv.velocity as EciVec3<KilometersPerSecond>;
 
-      const epoch = new EpochUTC(date.getTime());
+      const epoch = new EpochUTC(date.getTime() / 1000 as Seconds);
       const pos = new Vector3D(p.x, p.y, p.z);
       const vel = new Vector3D(v.x, v.y, v.z);
 

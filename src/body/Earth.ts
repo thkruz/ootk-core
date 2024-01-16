@@ -90,8 +90,8 @@ export class Earth {
   );
 
   // / Calculate mean motion _(rad/s)_ from a given [semimajorAxis] _(km)_.
-  static smaToMeanMotion(semimajorAxis: number): number {
-    return Math.sqrt(Earth.mu / (semimajorAxis * semimajorAxis * semimajorAxis));
+  static smaToMeanMotion(semimajorAxis: Kilometers): RadiansPerSecond {
+    return Math.sqrt(Earth.mu / (semimajorAxis * semimajorAxis * semimajorAxis)) as RadiansPerSecond;
   }
 
   /**
