@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians, linearDistance } from '../main';
+import { Radians, linearDistance } from '../main';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 
@@ -125,13 +125,13 @@ export class Vector3D<T extends number = number> {
   }
 
   // / Return a copy of this [Vector3D] scaled by [n];
-  scale(n: number): Vector3D {
-    return new Vector3D(this.x * n, this.y * n, this.z * n);
+  scale(n: number): Vector3D<T> {
+    return new Vector3D<T>(this.x * n as T, this.y * n as T, this.z * n as T);
   }
 
   // / Return a copy of this [Vector3D] with the elements negated.
-  negate(): Vector3D<Kilometers> {
-    return this.scale(-1) as Vector3D<Kilometers>;
+  negate(): Vector3D<T> {
+    return this.scale(-1);
   }
 
   /**
@@ -139,7 +139,7 @@ export class Vector3D<T extends number = number> {
    * @param v The other Vector3D.
    * @returns The distance between this and the other Vector3D.
    */
-  distance(v: Vector3D): number {
+  distance(v: Vector3D<T>): T {
     return linearDistance(this, v);
   }
 
@@ -147,14 +147,14 @@ export class Vector3D<T extends number = number> {
    * Convert this to a unit Vector3D.
    * @returns A unit Vector3D.
    */
-  normalize(): Vector3D {
+  normalize(): Vector3D<T> {
     const m = this.magnitude();
 
     if (m === 0) {
-      return Vector3D.origin;
+      return Vector3D.origin as Vector3D<T>;
     }
 
-    return new Vector3D(this.x / m, this.y / m, this.z / m);
+    return new Vector3D<T>(this.x / m as T, this.y / m as T, this.z / m as T);
   }
 
   // Calculate the dot product of this and another [Vector3D].
@@ -259,7 +259,7 @@ export class Vector3D<T extends number = number> {
   }
 
   // / Return the unit vector that bisects this and another [Vector3D].
-  bisect(v: Vector3D): Vector3D {
+  bisect(v: Vector3D<T>): Vector3D<T> {
     return this.scale(v.magnitude()).add(v.scale(this.magnitude())).normalize();
   }
 
