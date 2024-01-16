@@ -8,14 +8,15 @@ scripts
 test
 
 # Files
+.auto-changelog
 .eslintignore
-.eslintrc
+.eslintrc.json
 .gitattributes
 .gitignore
 .npmignore
-.prettierrc
-babel.config.js
-jest.config.js
+babel.config.cjs
+changelog.hbs
+jest.config.ts
 package-lock.json
 tsconfig.*
 
