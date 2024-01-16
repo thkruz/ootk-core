@@ -6,13 +6,12 @@
   "description": "Orbital Object Toolkit. A modern typed replacement for satellite.js including SGP4 propagation, TLE parsing, Sun and Moon calculations, and more.",
   "scripts": {
     "build": "npm run clean && npx tsc -p tsconfig.build.json -m esnext",
-    "changelog": "auto-changelog --tag-prefix v --commit-limit false -t ./changelog.hbs -o ./CHANGELOG.md",
     "clean": "node ./scripts/cleanup.mjs",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "version": "auto-changelog -p && git add CHANGELOG.md"
+    "version": "auto-changelog && git add CHANGELOG.md"
   },
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",

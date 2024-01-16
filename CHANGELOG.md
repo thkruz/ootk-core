@@ -1,6 +1,11 @@
 ### Changelog
 
-All notable changes to this project will be documented in this file. Dates are displayed in UTC.
+This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
+messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
+
+#### [1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.4...1.0.4)
+
+- build: :arrow_up: update auto-changelog [`be7dc99`](https://github.com/thkruz/ootk-core/commit/be7dc99b371528ba0a8970ae9e58059f35343218)
 
 #### [v1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.3...v1.0.4)
 
