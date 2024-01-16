@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+import { Seconds } from '../main';
 import { DEG2RAD, MS_PER_DAY, RAD2DEG, secondsPerWeek, TAU } from '../utils/constants';
 import { evalPoly } from '../utils/functions';
 import { DataHandler } from './../data/DataHandler';
@@ -67,11 +68,11 @@ export class EpochUTC extends Epoch {
     return new EpochUTC(new Date(dts).getTime() / 1000);
   }
 
-  static fromJ2000TTSeconds(seconds: number): EpochUTC {
+  static fromJ2000TTSeconds(seconds: Seconds): EpochUTC {
     const tInit = new EpochUTC(seconds + 946728000);
     const ls = DataHandler.getInstance().getLeapSeconds(tInit.toJulianDate());
 
-    return tInit.roll(-32.184 - ls);
+    return tInit.roll(-32.184 - ls as Seconds);
   }
 
   static fromDefinitiveString(definitiveString: string): EpochUTC {
@@ -87,7 +88,7 @@ export class EpochUTC extends Epoch {
     return new EpochUTC(dts / 1000);
   }
 
-  roll(seconds: number): EpochUTC {
+  roll(seconds: Seconds): EpochUTC {
     return new EpochUTC(this.posix + seconds);
   }
 
@@ -121,7 +122,7 @@ export class EpochUTC extends Epoch {
   toGPS(): EpochGPS {
     const referenceTime = EpochUTC.fromDateTimeString('1980-01-06T00:00:00.000Z');
     const ls = DataHandler.getInstance().getLeapSeconds(this.toJulianDate());
-    const delta = this.roll(ls - EpochGPS.offset).difference(referenceTime);
+    const delta = this.roll(ls - EpochGPS.offset as Seconds).difference(referenceTime);
     const week = delta / secondsPerWeek;
     const weekFloor = Math.floor(week);
     const seconds = (week - weekFloor) * secondsPerWeek;

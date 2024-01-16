@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+import { Seconds } from '../main';
 import { DataHandler } from '../data/DataHandler';
 import { secondsPerWeek } from '../utils/constants';
 import type { EpochUTC } from './EpochUTC';
@@ -49,7 +50,7 @@ export class EpochGPS {
   static reference: EpochUTC;
 
   // / GPS leap second difference from TAI/UTC offsets.
-  static offset = 19;
+  static offset = 19 as Seconds;
 
   // / Get GPS week accounting for 10-bit rollover.
   get week10Bit(): number {
@@ -67,9 +68,9 @@ export class EpochGPS {
 
   // / Convert this to a UTC epoch.
   toUTC(): EpochUTC {
-    const init = EpochGPS.reference.roll(this.week * secondsPerWeek + this.seconds);
+    const init = EpochGPS.reference.roll((this.week * secondsPerWeek + this.seconds) as Seconds);
     const ls = DataHandler.getInstance().getLeapSeconds(init.toJulianDate());
 
-    return init.roll(-(ls - EpochGPS.offset));
+    return init.roll(-(ls - EpochGPS.offset) as Seconds);
   }
 }

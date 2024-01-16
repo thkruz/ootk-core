@@ -9,6 +9,4 @@
   },
   "include": ["./src/**/*.ts", "./test/**/*.ts"],
   "filesGlob": ["./src/**/*.ts", "./test/**/*.ts"],
-  "ignorePatterns": ["./src/sgp4/asc/**/*.ts"],
-  "exclude": ["./src/sgp4/asc/assembly/index.ts"]
 }

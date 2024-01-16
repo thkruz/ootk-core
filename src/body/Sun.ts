@@ -51,6 +51,7 @@ import {
   RAD2DEG,
   RaDec,
   Radians,
+  Seconds,
   SunTime,
   TAU,
   Vector3D,
@@ -522,7 +523,7 @@ export class Sun {
     const distance = Sun.position(epoch).magnitude();
     const dSec = distance / cKmPerSec;
 
-    return Sun.position(epoch.roll(-dSec));
+    return Sun.position(epoch.roll(-dSec as Seconds));
   }
 
   /**
