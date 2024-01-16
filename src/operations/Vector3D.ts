@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Radians, linearDistance } from '../main';
+import { Kilometers, KilometersPerSecond, Radians, linearDistance } from '../main';
 import { Matrix } from './Matrix';
 import { Vector } from './Vector';
 
@@ -125,13 +125,13 @@ export class Vector3D<T extends number = number> {
   }
 
   // / Return a copy of this [Vector3D] scaled by [n];
-  scale(n: number): Vector3D<T> {
-    return new Vector3D<T>(this.x * n as T, this.y * n as T, this.z * n as T);
+  scale<U extends number>(n: U): Vector3D<U> {
+    return new Vector3D<U>(this.x * n as U, this.y * n as U, this.z * n as U);
   }
 
   // / Return a copy of this [Vector3D] with the elements negated.
   negate(): Vector3D<T> {
-    return this.scale(-1);
+    return this.scale(-1 as T);
   }
 
   /**
@@ -158,8 +158,8 @@ export class Vector3D<T extends number = number> {
   }
 
   // Calculate the dot product of this and another [Vector3D].
-  dot(v: Vector3D): number {
-    return this.x * v.x + this.y * v.y + this.z * v.z;
+  dot<T extends number>(v: Vector3D<T>): T {
+    return this.x * v.x + this.y * v.y + this.z * v.z as T;
   }
 
   // Calculate the outer product between this and another [Vector3D].
@@ -172,11 +172,11 @@ export class Vector3D<T extends number = number> {
   }
 
   // Calculate the cross product of this and another [Vector3D].
-  cross(v: Vector3D<T>): Vector3D<T> {
-    return new Vector3D<T>(
-      (this.y * v.z - this.z * v.y) as T,
-      (this.z * v.x - this.x * v.z) as T,
-      (this.x * v.y - this.y * v.x) as T,
+  cross<U extends number>(v: Vector3D<U>): Vector3D<U> {
+    return new Vector3D<U>(
+      (this.y * v.z - this.z * v.y) as U,
+      (this.z * v.x - this.x * v.z) as U,
+      (this.x * v.y - this.y * v.x) as U,
     );
   }
 
@@ -223,10 +223,10 @@ export class Vector3D<T extends number = number> {
   }
 
   // Calculate the angle _(rad)_ between this and another [Vector3D].
-  angle(v: Vector3D<T>): number {
-    const theta = Math.atan2(this.cross(v).magnitude(), this.dot(v));
+  angle<U extends number>(v: Vector3D<U>): Radians {
+    const theta = Math.atan2(this.cross(v).magnitude(), this.dot(v)) as Radians;
 
-    return isNaN(theta) ? 0 : theta;
+    return isNaN(theta) ? 0 as Radians : theta;
   }
 
   // Calculate the angle _(°)_ between this and another [Vector3D].
@@ -238,7 +238,7 @@ export class Vector3D<T extends number = number> {
    * Return `true` if line-of-sight exists between this and another [Vector3D]
    * with a central body of the given [radius].
    */
-  sight(v: Vector3D, radius: number): boolean {
+  sight(v: Vector3D<KilometersPerSecond>, radius: Kilometers): boolean {
     const r1Mag2 = this.magnitude() ** 2;
     const r2Mag2 = v.magnitude() ** 2;
     const rDot = this.dot(v);

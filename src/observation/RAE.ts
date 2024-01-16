@@ -25,7 +25,7 @@
 import { ITRF } from '../coordinate/ITRF';
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { Degrees, Kilometers, Radians } from '../main';
+import { Degrees, Kilometers, KilometersPerSecond, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, halfPi, RAD2DEG, TAU } from '../utils/constants';
@@ -190,7 +190,7 @@ export class RAE {
       .rotZ(-geo.lon as Radians)
       .add(ecef.position);
 
-    return new ITRF(this.epoch, rEcef, Vector3D.origin as Vector3D<Kilometers>).toJ2000().position;
+    return new ITRF(this.epoch, rEcef, Vector3D.origin as Vector3D<KilometersPerSecond>).toJ2000().position;
   }
 
   /**
@@ -229,7 +229,10 @@ export class RAE {
       (this.rngRate * sEl + this.rng * cEl * this.elRateRad) as Kilometers,
     );
     const pEcef = pSez.rotY(-(po2 - geo.lat) as Radians).rotZ(-geo.lon as Radians);
-    const pDotEcef = pDotSez.rotY(-(po2 - geo.lat) as Radians).rotZ(-geo.lon as Radians);
+    const pDotEcef = pDotSez
+      .rotY(-(po2 - geo.lat) as Radians)
+      // TODO: #13 Intermediate unit type is incorrect.
+      .rotZ(-geo.lon as Radians) as unknown as Vector3D<KilometersPerSecond>;
     const rEcef = pEcef.add(ecef.position);
 
     return new ITRF(this.epoch, rEcef, pDotEcef).toJ2000();

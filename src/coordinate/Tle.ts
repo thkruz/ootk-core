@@ -30,6 +30,7 @@ import {
   Degrees,
   EciVec3,
   Kilometers,
+  KilometersPerSecond,
   Line1Data,
   Line2Data,
   Minutes,
@@ -246,8 +247,8 @@ export class Tle {
 
     return new TEME(
       epoch,
-      new Vector3D<Kilometers>(<Kilometers>r[0], <Kilometers>r[1], <Kilometers>r[2]),
-      new Vector3D<Kilometers>(<Kilometers>v[0], <Kilometers>v[1], <Kilometers>v[2]),
+      new Vector3D(<Kilometers>r[0], <Kilometers>r[1], <Kilometers>r[2]),
+      new Vector3D(<KilometersPerSecond>v[0], <KilometersPerSecond>v[1], <KilometersPerSecond>v[2]),
     );
   }
 
@@ -283,8 +284,8 @@ export class Tle {
 
     return new TEME(
       this.epoch,
-      new Vector3D<Kilometers>(<Kilometers>r[0], <Kilometers>r[1], <Kilometers>r[2]),
-      new Vector3D<Kilometers>(<Kilometers>v[0], <Kilometers>v[1], <Kilometers>v[2]),
+      new Vector3D(<Kilometers>r[0], <Kilometers>r[1], <Kilometers>r[2]),
+      new Vector3D(<KilometersPerSecond>v[0], <KilometersPerSecond>v[1], <KilometersPerSecond>v[2]),
     );
   }
 

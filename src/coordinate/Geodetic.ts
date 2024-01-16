@@ -22,7 +22,7 @@
  */
 
 import { Earth } from '../body/Earth';
-import { AngularDistanceMethod, Degrees, GroundObject, Kilometers, Radians } from '../main';
+import { AngularDistanceMethod, Degrees, GroundObject, Kilometers, KilometersPerSecond, Radians } from '../main';
 import { Vector3D } from '../operations/Vector3D';
 import { EpochUTC } from '../time/EpochUTC';
 import { DEG2RAD, RAD2DEG } from '../utils/constants';
@@ -131,7 +131,7 @@ export class Geodetic {
       ((nVal * (1 - Earth.eccentricitySquared) + this.alt) * sLat) as Kilometers,
     );
 
-    return new ITRF(epoch, r, Vector3D.origin as Vector3D<Kilometers>);
+    return new ITRF(epoch, r, Vector3D.origin as Vector3D<KilometersPerSecond>);
   }
 
   /**

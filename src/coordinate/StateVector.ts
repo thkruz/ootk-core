@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Minutes } from 'src/main';
+import { Kilometers, KilometersPerSecond, Minutes } from 'src/main';
 import { Earth } from '../body/Earth';
 import type { Vector3D } from '../operations/Vector3D';
 import type { EpochUTC } from '../time/EpochUTC';
@@ -35,8 +35,8 @@ import { ClassicalElements } from './ClassicalElements';
 export abstract class StateVector {
   epoch: EpochUTC;
   position: Vector3D<Kilometers>;
-  velocity: Vector3D<Kilometers>;
-  constructor(epoch: EpochUTC, position: Vector3D<Kilometers>, velocity: Vector3D<Kilometers>) {
+  velocity: Vector3D<KilometersPerSecond>;
+  constructor(epoch: EpochUTC, position: Vector3D<Kilometers>, velocity: Vector3D<KilometersPerSecond>) {
     this.epoch = epoch;
     this.position = position;
     this.velocity = velocity;

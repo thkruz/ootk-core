@@ -23,7 +23,7 @@
 
 import { Satellite } from 'src/objects';
 import { PassType } from '../enums/PassType';
-import { Vector3D } from 'src/main';
+import { Vector3D } from '../main';
 
 /**
  * Represents a distinct type.
@@ -42,9 +42,6 @@ type Distinct<T, DistinctName> = T & { __TYPE__: DistinctName };
 
 /**
  * Represents a quantity of days.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Days = Distinct<number, 'Days'>;
 
@@ -58,59 +55,58 @@ export type Hours = Distinct<number, 'Hours'>;
 
 /**
  * Represents a quantity of minutes.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Minutes = Distinct<number, 'Minutes'>;
 
 /**
  * Represents a quantity of seconds.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Seconds = Distinct<number, 'Seconds'>;
 
 /**
  * Represents a quantity of milliseconds.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Milliseconds = Distinct<number, 'Milliseconds'>;
 
 /**
  * Represents a quantity of degrees.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Degrees = Distinct<number, 'Degrees'>;
 
 /**
  * Represents a quantity of radians.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Radians = Distinct<number, 'Radians'>;
 
 /**
  * Represents a quantity of kilometers.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Kilometers = Distinct<number, 'Kilometers'>;
 
 /**
  * Represents a quantity of meters.
- *
- * This type is based on the number type, but is distinct and cannot be used
- * interchangeably with other number-based types.
  */
 export type Meters = Distinct<number, 'Meters'>;
+
+/**
+ * Represents the type for seconds per meter per second.
+ */
+export type SecondsPerMeterPerSecond = Distinct<number, 'SecondsPerMeterPerSecond'>;
+
+/**
+ * Represents a value in kilometers per second.
+ */
+export type KilometersPerSecond = Distinct<number, 'KilometersPerSecond'>;
+
+/**
+ * Represents a value in Radians per second.
+ */
+export type RadiansPerSecond = Distinct<number, 'RadiansPerSecond'>;
+
+/**
+ * Represents a value in meters per second.
+ */
+export type MetersPerSecond = Distinct<number, 'MetersPerSecond'>;
 
 /**
  * Represents a three-dimensional vector.
@@ -717,5 +713,5 @@ export type TleParams = {
 
 export type PositionVelocity = {
   position: Vector3D<Kilometers>;
-  velocity: Vector3D<Kilometers>;
+  velocity: Vector3D<KilometersPerSecond>;
 };
