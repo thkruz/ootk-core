@@ -1,0 +1,7 @@
+{
+  "output": "CHANGELOG.md",
+  "template": "changelog.hbs",
+  "hideCredit": true,
+  "tagPrefix": "v",
+  "commitLimit": false
+}
