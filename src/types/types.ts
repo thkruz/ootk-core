@@ -104,6 +104,11 @@ export type KilometersPerSecond = Distinct<number, 'KilometersPerSecond'>;
 export type RadiansPerSecond = Distinct<number, 'RadiansPerSecond'>;
 
 /**
+ * Represents a value in degrees per second.
+ */
+export type DegreesPerSecond = Distinct<number, 'DegreesPerSecond'>;
+
+/**
  * Represents a value in meters per second.
  */
 export type MetersPerSecond = Distinct<number, 'MetersPerSecond'>;

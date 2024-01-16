@@ -22,7 +22,7 @@
  */
 
 /* eslint-disable no-undefined */
-import { Degrees, Kilometers, Radians } from 'src/main';
+import { Degrees, Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from 'src/main';
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
 import { Vector3D } from '../operations/Vector3D';
@@ -39,9 +39,9 @@ export class RadecGeocentric {
     public rightAscension: Radians,
     public declination: Radians,
     public range?: Kilometers,
-    public rightAscensionRate?: Radians,
-    public declinationRate?: Radians,
-    public rangeRate?: number,
+    public rightAscensionRate?: RadiansPerSecond,
+    public declinationRate?: RadiansPerSecond,
+    public rangeRate?: KilometersPerSecond,
   ) {
     // Nothing to do here.
   }
@@ -65,18 +65,20 @@ export class RadecGeocentric {
     range?: Kilometers,
     rightAscensionRateDegrees?: Degrees,
     declinationRateDegrees?: Degrees,
-    rangeRate?: number,
+    rangeRate?: KilometersPerSecond,
   ): RadecGeocentric {
-    const rightAscensionRate = rightAscensionRateDegrees && rightAscensionRateDegrees * DEG2RAD;
-    const declinationRate = declinationRateDegrees && declinationRateDegrees * DEG2RAD;
+    const rightAscensionRate = rightAscensionRateDegrees
+      ? rightAscensionRateDegrees * DEG2RAD as RadiansPerSecond
+      : undefined;
+    const declinationRate = declinationRateDegrees ? declinationRateDegrees * DEG2RAD as RadiansPerSecond : undefined;
 
     return new RadecGeocentric(
       epoch,
       rightAscensionDegrees * DEG2RAD as Radians,
       declinationDegrees * DEG2RAD as Radians,
       range,
-      rightAscensionRate as Radians,
-      declinationRate as Radians,
+      rightAscensionRate,
+      declinationRate,
       rangeRate,
     );
   }
@@ -99,7 +101,7 @@ export class RadecGeocentric {
     } else {
       rightAscension = Math.atan2(vJ, vI);
     }
-    const rangeRate = state.position.dot(state.velocity) / rMag;
+    const rangeRate = state.position.dot(state.velocity) / rMag as KilometersPerSecond;
     const rightAscensionRate = (vI * rJ - vJ * rI) / (-(rJ * rJ) - rI * rI);
     const declinationRate = (vK - rangeRate * (rK / rMag)) / rIJMag;
 
@@ -108,8 +110,8 @@ export class RadecGeocentric {
       rightAscension % TAU as Radians,
       declination as Radians,
       rMag,
-      rightAscensionRate as Radians,
-      declinationRate as Radians,
+      rightAscensionRate as RadiansPerSecond,
+      declinationRate as RadiansPerSecond,
       rangeRate,
     );
   }
@@ -142,8 +144,8 @@ export class RadecGeocentric {
    * @param range Range _(km)_.
    * @returns A [Vector3D] object.
    */
-  position(range?: number): Vector3D {
-    const r = range ?? this.range ?? 1.0;
+  position(range?: Kilometers): Vector3D<Kilometers> {
+    const r = range ?? this.range ?? 1.0 as Kilometers;
 
     return radecToPosition(this.rightAscension, this.declination, r);
   }
@@ -157,12 +159,12 @@ export class RadecGeocentric {
    * @param rangeRate Range rate _(km/s)_.
    * @returns A [Vector3D] object.
    */
-  velocity(range?: number, rangeRate?: number): Vector3D {
+  velocity(range?: Kilometers, rangeRate?: KilometersPerSecond): Vector3D<KilometersPerSecond> {
     if (!this.rightAscensionRate || !this.declinationRate) {
       throw new Error('Velocity unsolvable, missing ra/dec rates.');
     }
-    const r = range ?? this.range ?? 1.0;
-    const rd = rangeRate ?? this.rangeRate ?? 0.0;
+    const r = range ?? this.range ?? 1.0 as Kilometers;
+    const rd = rangeRate ?? this.rangeRate ?? 0.0 as KilometersPerSecond;
 
     return radecToVelocity(this.rightAscension, this.declination, r, this.rightAscensionRate, this.declinationRate, rd);
   }

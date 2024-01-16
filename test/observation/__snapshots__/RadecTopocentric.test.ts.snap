@@ -48,7 +48,7 @@ exports[`RadecTopocentric should return the angle in degrees 1`] = `0.9999999999
 
 exports[`RadecTopocentric should return the declination in degrees 1`] = `0`;
 
-exports[`RadecTopocentric should return the declination rate in degrees 1`] = `undefined`;
+exports[`RadecTopocentric should return the declination rate in degrees 1`] = `null`;
 
 exports[`RadecTopocentric should return the position 1`] = `
 Vector3D {
@@ -60,7 +60,7 @@ Vector3D {
 
 exports[`RadecTopocentric should return the right ascension in degrees 1`] = `25`;
 
-exports[`RadecTopocentric should return the right ascension rate in degrees 1`] = `undefined`;
+exports[`RadecTopocentric should return the right ascension rate in degrees 1`] = `null`;
 
 exports[`RadecTopocentric should return the velocity 1`] = `
 Vector3D {
