@@ -3,32 +3,35 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.4...1.0.4)
+#### [1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.3...1.0.4)
 
+- refactor: :label: improve type support for radec observations [`942f204`](https://github.com/thkruz/ootk-core/commit/942f204784419bd78fd3a4e803040df4ab79bd8c)
 - build: :arrow_up: update auto-changelog [`be7dc99`](https://github.com/thkruz/ootk-core/commit/be7dc99b371528ba0a8970ae9e58059f35343218)
+- Revert "1.0.4" [`98e034d`](https://github.com/thkruz/ootk-core/commit/98e034dbc5684816e45a10ed250689622e318686)
+- build: :memo: update auto-changelog settings [`f56be2b`](https://github.com/thkruz/ootk-core/commit/f56be2b89c880d6f7d3bcc7e9fc1282d2cdf2989)
 
 #### [v1.0.3](https://github.com/thkruz/ootk-core/compare/v1.0.2...v1.0.3)
 
-
+> 16 January 2024 
 
 - fix: :ambulance: fix rae error using milliseconds instead of seconds [`9553288`](https://github.com/thkruz/ootk-core/commit/955328854d0ed19bed1daf2dd42dbee148a8e5f4)
 
 #### [v1.0.2](https://github.com/thkruz/ootk-core/compare/v1.0.1...v1.0.2)
 
-> 16 January 2024
+> 16 January 2024 
 
 - refactor: :label: add proper velocity types [`32ae737`](https://github.com/thkruz/ootk-core/commit/32ae7371e050503027a49f599f7a369066e7b64a)
 
 #### [v1.0.1](https://github.com/thkruz/ootk-core/compare/v1.0.0...v1.0.1)
 
-> 15 January 2024
+> 15 January 2024 
 
 - refactor: :label: add more typing for Seconds in Epoch calculations [`0419a86`](https://github.com/thkruz/ootk-core/commit/0419a86e4eaa8e29f2281bbee3b3b01f559ec7f4)
 - refactor: :label: improve type support in Vector3D [`e3d3e3a`](https://github.com/thkruz/ootk-core/commit/e3d3e3a1abcd3fcb2832b1cce4d0e40e41db2d35)
 
 ### [v1.0.0](https://github.com/thkruz/ootk-core/compare/v1.0.0-5...v1.0.0)
 
-> 15 January 2024
+> 15 January 2024 
 
 - refactor: :recycle: standardize rng az el syntax [`59f7f53`](https://github.com/thkruz/ootk-core/commit/59f7f53c497d75bda2bf049c20e67d5191d586d7)
 - build: :memo: add auto changelog [`8abc50c`](https://github.com/thkruz/ootk-core/commit/8abc50cd4eb4b437cbea0ccaad9df5853257c386)
@@ -39,13 +42,13 @@ messages, it details updates like bug fixes and new features, providing a clear 
 
 #### [v1.0.0-5](https://github.com/thkruz/ootk-core/compare/v1.0.0-4...v1.0.0-5)
 
-> 15 January 2024
+> 15 January 2024 
 
 - fix: :label: fix typings location in package.json [`0c9173f`](https://github.com/thkruz/ootk-core/commit/0c9173f91a5c1b6784298732cfbaa35ac9af2e37)
 
 #### [v1.0.0-4](https://github.com/thkruz/ootk-core/compare/v1.0.0-3...v1.0.0-4)
 
-> 13 January 2024
+> 13 January 2024 
 
 - feat: :fire: move advanced functions to ootk [`#11`](https://github.com/thkruz/ootk-core/issues/11)
 - feat: :truck: move rf math to ootk [`#3`](https://github.com/thkruz/ootk-core/issues/3)
@@ -88,7 +91,7 @@ messages, it details updates like bug fixes and new features, providing a clear 
 
 #### [v1.0.0-3](https://github.com/thkruz/ootk-core/compare/v1.0.0-2...v1.0.0-3)
 
-> 13 January 2024
+> 13 January 2024 
 
 - ci: :construction_worker: update ci pipeline [`d82cb6c`](https://github.com/thkruz/ootk-core/commit/d82cb6c69c1135a1f77f75183eb16f47acc0110b)
 - docs: :memo: update docs [`02f0922`](https://github.com/thkruz/ootk-core/commit/02f09227bead5c8aa8cb44e1ba6b8119b34be9f6)
@@ -109,7 +112,7 @@ messages, it details updates like bug fixes and new features, providing a clear 
 
 #### [v1.0.0-2](https://github.com/thkruz/ootk-core/compare/v1.0.0-1...v1.0.0-2)
 
-> 13 January 2024
+> 13 January 2024 
 
 - refactor: :recycle: implement strict checks in tsconfig [`b1515cb`](https://github.com/thkruz/ootk-core/commit/b1515cb07794b7ac465bf27ebfb48232140f2e25)
 - feat: :sparkles: sync all commonjs es5 and typescript examples [`adb58fa`](https://github.com/thkruz/ootk-core/commit/adb58faf46de6af12568064d5941026a31942ecf)
@@ -118,7 +121,7 @@ messages, it details updates like bug fixes and new features, providing a clear 
 
 #### [v1.0.0-1](https://github.com/thkruz/ootk-core/compare/v1.0.0-0...v1.0.0-1)
 
-> 11 January 2024
+> 11 January 2024 
 
 - refactor: :recycle: combine Tle classes and improve documentation [`b5b506a`](https://github.com/thkruz/ootk-core/commit/b5b506af622d673fbf03fa4edbb11b405f27099f)
 - test: :white_check_mark: fix tests [`4c2d701`](https://github.com/thkruz/ootk-core/commit/4c2d701dfc25d04a3929956e0ff2d5f94466bd05)
@@ -139,7 +142,7 @@ messages, it details updates like bug fixes and new features, providing a clear 
 
 #### v1.0.0-0
 
-> 7 January 2024
+> 7 January 2024 
 
 - feat: :boom: initial commit [`9893a6a`](https://github.com/thkruz/ootk-core/commit/9893a6acfb5dd51b12d755518c3af120fecc28be)
 - test: :truck: update names and paths [`c48aece`](https://github.com/thkruz/ootk-core/commit/c48aece9a4c8a328cc7778292c4397312c162982)
