@@ -12,7 +12,6 @@ import {
   createVec,
   csch,
   deg2rad,
-  derivative,
   gamma,
   linearInterpolate,
   log10,
@@ -101,11 +100,6 @@ describe('functions', () => {
   // gamma
   it('should be calculate gamma', () => {
     expect(gamma(1)).toMatchSnapshot();
-  });
-
-  // derivative
-  it('should be calculate derivative', () => {
-    expect(derivative((x: number) => x * x, 1)).toMatchSnapshot();
   });
 
   // covariance
