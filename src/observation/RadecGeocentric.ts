@@ -21,8 +21,7 @@
  * SOFTWARE.
  */
 
-/* eslint-disable no-undefined */
-import { Degrees, Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from 'src/main';
+import { Degrees, DegreesPerSecond, Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from 'src/main';
 import { J2000 } from '../coordinate/J2000';
 import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
 import { Vector3D } from '../operations/Vector3D';
@@ -31,32 +30,36 @@ import { DEG2RAD, RAD2DEG, TAU } from '../utils/constants';
 import { angularDistance } from '../utils/functions';
 import { radecToPosition, radecToVelocity } from './ObservationUtils';
 
-// / Geocentric right-ascension and declination.
+/**
+ * Represents a geocentric right ascension and declination observation.
+ *
+ * In geocentric coordinates, observations are considered from the Earth's center. This approach simplifies calculations
+ * for distant celestial objects, as it assumes a uniform observation point that ignores the observer's specific
+ * location on Earth.
+ */
 export class RadecGeocentric {
-  // / Create a new [RadecGeocentric] object.
   constructor(
     public epoch: EpochUTC,
     public rightAscension: Radians,
     public declination: Radians,
     public range?: Kilometers,
-    public rightAscensionRate?: RadiansPerSecond,
-    public declinationRate?: RadiansPerSecond,
-    public rangeRate?: KilometersPerSecond,
+    public rightAscensionRate?: RadiansPerSecond | null,
+    public declinationRate?: RadiansPerSecond | null,
+    public rangeRate?: KilometersPerSecond | null,
   ) {
     // Nothing to do here.
   }
 
   /**
-   * Create a new [RadecGeocentric] object, using degrees for the
-   * angular values.
-   * @param epoch UTC epoch.
-   * @param rightAscensionDegrees Right-ascension
-   * @param declinationDegrees Declination
-   * @param range Range
-   * @param rightAscensionRateDegrees Right-ascension rate (°/s).
-   * @param declinationRateDegrees Declination rate (°/s).
-   * @param rangeRate Range rate (km/s).
-   * @returns A new [RadecGeocentric] object.
+   * Creates a RadecGeocentric object from the given parameters in degrees.
+   * @param epoch - The epoch in UTC.
+   * @param rightAscensionDegrees - The right ascension in degrees.
+   * @param declinationDegrees - The declination in degrees.
+   * @param range - The range in kilometers (optional).
+   * @param rightAscensionRateDegrees - The right ascension rate in degrees per second (optional).
+   * @param declinationRateDegrees - The declination rate in degrees per second (optional).
+   * @param rangeRate - The range rate in kilometers per second (optional).
+   * @returns A new RadecGeocentric object.
    */
   static fromDegrees(
     epoch: EpochUTC,
@@ -69,8 +72,8 @@ export class RadecGeocentric {
   ): RadecGeocentric {
     const rightAscensionRate = rightAscensionRateDegrees
       ? rightAscensionRateDegrees * DEG2RAD as RadiansPerSecond
-      : undefined;
-    const declinationRate = declinationRateDegrees ? declinationRateDegrees * DEG2RAD as RadiansPerSecond : undefined;
+      : null;
+    const declinationRate = declinationRateDegrees ? declinationRateDegrees * DEG2RAD as RadiansPerSecond : null;
 
     return new RadecGeocentric(
       epoch,
@@ -83,7 +86,11 @@ export class RadecGeocentric {
     );
   }
 
-  // / Create a [RadecGeocentric] object from an inertial [state] vector.
+  /**
+   * Creates a RadecGeocentric object from a state vector in J2000 coordinates.
+   * @param state - The J2000 state vector.
+   * @returns A new RadecGeocentric object.
+   */
   static fromStateVector(state: J2000): RadecGeocentric {
     const rI = state.position.x;
     const rJ = state.position.y;
@@ -116,33 +123,42 @@ export class RadecGeocentric {
     );
   }
 
-  // / Right-ascension _(°)_.
-  get rightAscensionDegrees(): number {
-    return this.rightAscension * RAD2DEG;
-  }
-
-  // / Declination _(°)_.
-  get declinationDegrees(): number {
-    return this.declination * RAD2DEG;
-  }
-
-  // / Right-ascension rate _(°/s)_.
-  get rightAscensionRateDegrees(): number | undefined {
-    return this.rightAscensionRate ? this.rightAscensionRate * RAD2DEG : undefined;
-  }
-
-  // / Declination rate _(°/s)_.
-  get declinationRateDegrees(): number | undefined {
-    return this.declinationRate ? this.declinationRate * RAD2DEG : undefined;
+  /**
+   * Gets the right ascension in degrees.
+   * @returns The right ascension in degrees.
+   */
+  get rightAscensionDegrees(): Degrees {
+    return this.rightAscension * RAD2DEG as Degrees;
   }
 
   /**
-   * Return the position relative to the center of the Earth.
-   *
-   * An optional [range] _(km)_ value can be passed to override the value
-   * contained in this observation.
-   * @param range Range _(km)_.
-   * @returns A [Vector3D] object.
+   * Gets the declination in degrees.
+   * @returns The declination in degrees.
+   */
+  get declinationDegrees(): Degrees {
+    return this.declination * RAD2DEG as Degrees;
+  }
+
+  /**
+   * Gets the right ascension rate in degrees per second.
+   * @returns The right ascension rate in degrees per second, or null if it is not available.
+   */
+  get rightAscensionRateDegrees(): DegreesPerSecond | null {
+    return this.rightAscensionRate ? this.rightAscensionRate * RAD2DEG as DegreesPerSecond : null;
+  }
+
+  /**
+   * Gets the rate of change of declination in degrees per second.
+   * @returns The rate of change of declination in degrees per second, or null if not available.
+   */
+  get declinationRateDegrees(): DegreesPerSecond | null {
+    return this.declinationRate ? this.declinationRate * RAD2DEG as DegreesPerSecond : null;
+  }
+
+  /**
+   * Calculates the position vector in geocentric coordinates.
+   * @param range - The range in kilometers (optional). If not provided, it uses the default range or 1.0 kilometer.
+   * @returns The position vector in geocentric coordinates.
    */
   position(range?: Kilometers): Vector3D<Kilometers> {
     const r = range ?? this.range ?? 1.0 as Kilometers;
@@ -151,13 +167,12 @@ export class RadecGeocentric {
   }
 
   /**
-   * Return the velocity relative to the centar of the Earth.
-   *
-   * An optional [range] _(km)_ and [rangeRate] _(km/s)_ value can be passed
-   * to override the value contained in this observation.
-   * @param range Range _(km)_.
-   * @param rangeRate Range rate _(km/s)_.
-   * @returns A [Vector3D] object.
+   * Calculates the velocity vector of the celestial object.
+   * @param range - The range of the celestial object in kilometers. If not provided, it uses the stored range value.
+   * @param rangeRate - The range rate of the celestial object in kilometers per second.
+   * If not provided, it uses the stored range rate value.
+   * @returns The velocity vector of the celestial object in kilometers per second.
+   * @throws Error if the right ascension rate or declination rate is missing.
    */
   velocity(range?: Kilometers, rangeRate?: KilometersPerSecond): Vector3D<KilometersPerSecond> {
     if (!this.rightAscensionRate || !this.declinationRate) {
@@ -170,24 +185,22 @@ export class RadecGeocentric {
   }
 
   /**
-   * Calculate the angular distance _(rad)_ between this and another
-   * [RadecGeocentric] object.
-   * @param radec - The other [RadecGeocentric] object.
-   * @param method - The angular distance method to use.
-   * @returns The angular distance _(rad)_.
+   * Calculates the angular distance between two celestial coordinates (RA and Dec).
+   * @param radec - The celestial coordinates to compare with.
+   * @param method - The method to use for calculating the angular distance. Default is `AngularDistanceMethod.Cosine`.
+   * @returns The angular distance between the two celestial coordinates in radians.
    */
-  angle(radec: RadecGeocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
+  angle(radec: RadecGeocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): Radians {
     return angularDistance(this.rightAscension, this.declination, radec.rightAscension, radec.declination, method);
   }
 
   /**
-   * Calculate the angular distance _(°)_ between this and another
-   * [RadecGeocentric] object.
-   * @param radec - The other [RadecGeocentric] object.
-   * @param method - The angular distance method to use.
-   * @returns The angular distance _(°)_.
+   * Calculates the angle in degrees between two RadecGeocentric objects.
+   * @param radec - The RadecGeocentric object to calculate the angle with.
+   * @param method - The method to use for calculating the angular distance. Default is AngularDistanceMethod.Cosine.
+   * @returns The angle in degrees.
    */
-  angleDegrees(radec: RadecGeocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
-    return this.angle(radec, method) * RAD2DEG;
+  angleDegrees(radec: RadecGeocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): Degrees {
+    return this.angle(radec, method) * RAD2DEG as Degrees;
   }
 }
