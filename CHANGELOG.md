@@ -3,7 +3,17 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.7](https://github.com/thkruz/ootk-core/compare/v1.0.6...1.0.7)
+#### [1.0.8](https://github.com/thkruz/ootk-core/compare/v1.0.7...1.0.8)
+
+- refactor: :fire: move derivative function to ootk [`bd39ed4`](https://github.com/thkruz/ootk-core/commit/bd39ed4133d7c63b9a5e8804659e356f8e67b8e1)
+- test: :adhesive_bandage: fix type in test [`42e4c4a`](https://github.com/thkruz/ootk-core/commit/42e4c4aef0096b983bc907fdd91b981917f30d6c)
+- fix: :sparkles: add missing lla function [`21c2b7b`](https://github.com/thkruz/ootk-core/commit/21c2b7b9ffb295dd99220de10a45d02dc4a22c64)
+- refactor: :fire: remove uneeded type [`b0719df`](https://github.com/thkruz/ootk-core/commit/b0719df9ef712534312d251823f731a2a362cc33)
+- test: :white_check_mark: update snapshots [`d4015d0`](https://github.com/thkruz/ootk-core/commit/d4015d0e3f2766f3f2fafc2700d77d74dcb541b2)
+
+#### [v1.0.7](https://github.com/thkruz/ootk-core/compare/v1.0.6...v1.0.7)
+
+> 17 January 2024 
 
 - build: :construction_worker: add auto build when updating version number [`94dc010`](https://github.com/thkruz/ootk-core/commit/94dc0102bcbfaa276d25993f68810d8ce43fa856)
 - fix: :label: fix typo in package.json [`c4c86ef`](https://github.com/thkruz/ootk-core/commit/c4c86efcba345c6d15ca47ff8367dfbd7c8063e5)
