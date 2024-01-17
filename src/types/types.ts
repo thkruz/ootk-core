@@ -659,12 +659,6 @@ export type OperationsDetails = {
   owner?: string;
   country?: string;
 };
-/**
- * Represents a differentiable function.
- * @param x The input value. @returns The output value.
- */
-
-export type DifferentiableFunction = (x: number) => number;
 
 export type Lookangle = {
   type: PassType;
