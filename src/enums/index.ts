@@ -21,6 +21,8 @@
  * SOFTWARE.
  */
 
+export { OrbitRegime } from './OrbitRegime';
+export { Sgp4OpsMode } from './Sgp4OpsMode';
 export { AngularDiameterMethod } from './AngularDiameterMethod';
 export { AngularDistanceMethod } from './AngularDistanceMethod';
 export { PassType } from './PassType';

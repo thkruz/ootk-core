@@ -21,12 +21,11 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians, Seconds } from '../main';
+import { Minutes, PositionVelocity, Kilometers, Radians, Seconds } from '../main';
 import { EpochUTC } from '../time/EpochUTC';
 import { earthGravityParam, MINUTES_PER_DAY, TAU } from '../utils/constants';
 import { newtonM } from '../utils/functions';
 import { ClassicalElements } from './ClassicalElements';
-import { Minutes, PositionVelocity } from 'src/types/types';
 import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsParams';
 
 /**

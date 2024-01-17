@@ -21,9 +21,7 @@
  * SOFTWARE.
  */
 
-import { Radians } from 'src/main';
-import { Vector } from './Vector';
-import { Vector3D } from './Vector3D';
+import { Vector3D, Vector, Radians } from '../main';
 
 /**
  * A matrix is a rectangular array of numbers or other mathematical objects for

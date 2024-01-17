@@ -21,8 +21,7 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians } from 'src/main';
-import { EpochUTC } from '../time/EpochUTC';
+import { EpochUTC, Kilometers, Radians } from '../main';
 
 export interface EquinoctialElementsParams {
   epoch: EpochUTC;

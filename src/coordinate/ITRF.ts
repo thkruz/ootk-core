@@ -22,7 +22,7 @@
  */
 
 /* eslint-disable class-methods-use-this */
-import { Kilometers, KilometersPerSecond, Radians, Vector3D } from 'src/main';
+import { Kilometers, KilometersPerSecond, Radians, Vector3D } from '../main';
 import { Earth } from '../body/Earth';
 import { Geodetic } from './Geodetic';
 import { J2000 } from './J2000';

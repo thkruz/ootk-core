@@ -21,9 +21,7 @@
  * SOFTWARE.
  */
 
-import { Satellite } from 'src/objects';
-import { PassType } from '../enums/PassType';
-import { Vector3D } from '../main';
+import { Vector3D, PassType, Satellite } from '../main';
 
 /**
  * Represents a distinct type.

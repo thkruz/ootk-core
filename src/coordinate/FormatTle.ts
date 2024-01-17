@@ -21,8 +21,7 @@
  * SOFTWARE.
  */
 
-import { StringifiedNumber, TleParams } from 'src/types/types';
-import { Tle } from './Tle';
+import { Tle, StringifiedNumber, TleParams } from '../main';
 
 /**
  * A class containing static methods for formatting TLEs (Two-Line Elements).
