@@ -89,6 +89,18 @@ export class GroundObject extends BaseObject {
   }
 
   /**
+   * Returns the latitude, longitude, and altitude of the GroundObject.
+   * @returns The latitude, longitude, and altitude as an LlaVec3 object.
+   */
+  lla(): LlaVec3<Degrees, Kilometers> {
+    return {
+      lat: this.lat,
+      lon: this.lon,
+      alt: this.alt,
+    };
+  }
+
+  /**
    * Converts the latitude, longitude, and altitude of the GroundObject to radians and kilometers.
    * @variation optimized version of this.toGeodetic() without class instantiation for better performance and
    * serialization.
