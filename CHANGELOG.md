@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.8](https://github.com/thkruz/ootk-core/compare/v1.0.7...1.0.8)
+#### [1.0.9](https://github.com/thkruz/ootk-core/compare/v1.0.8...1.0.9)
+
+- refactor: :adhesive_bandage: fix import statements [`028a801`](https://github.com/thkruz/ootk-core/commit/028a80113a27465c215d368180adf12ccf9f7b4d)
+
+#### [v1.0.8](https://github.com/thkruz/ootk-core/compare/v1.0.7...v1.0.8)
+
+> 17 January 2024 
 
 - refactor: :fire: move derivative function to ootk [`bd39ed4`](https://github.com/thkruz/ootk-core/commit/bd39ed4133d7c63b9a5e8804659e356f8e67b8e1)
 - test: :adhesive_bandage: fix type in test [`42e4c4a`](https://github.com/thkruz/ootk-core/commit/42e4c4aef0096b983bc907fdd91b981917f30d6c)
