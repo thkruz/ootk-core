@@ -39,7 +39,7 @@ GroundObject {
   "id": undefined,
   "lat": 0,
   "lon": 0,
-  "name": "Unknown Ground Position",
+  "name": "Unknown Ground Object",
   "position": Object {
     "x": 0,
     "y": 0,

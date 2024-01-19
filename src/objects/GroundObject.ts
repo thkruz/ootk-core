@@ -43,7 +43,7 @@ import { BaseObject } from './BaseObject';
 import { Satellite } from './Satellite';
 
 export class GroundObject extends BaseObject {
-  name = 'Unknown Ground Position';
+  name = 'Unknown Ground Object';
   lat: Degrees;
   lon: Degrees;
   alt: Kilometers;
@@ -52,6 +52,7 @@ export class GroundObject extends BaseObject {
     super(info);
 
     this.validateGroundObjectInputData_(info);
+    this.name = info.name ?? this.name;
     this.lat = info.lat;
     this.lon = info.lon;
     this.alt = info.alt;
