@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.9](https://github.com/thkruz/ootk-core/compare/v1.0.8...1.0.9)
+#### [1.0.10](https://github.com/thkruz/ootk-core/compare/v1.0.9...1.0.10)
+
+- fix: :bug: fix missing name property on GroundObjects [`cba039d`](https://github.com/thkruz/ootk-core/commit/cba039d41a7377f6073d23cd97a2cc155f3d08f0)
+
+#### [v1.0.9](https://github.com/thkruz/ootk-core/compare/v1.0.8...v1.0.9)
+
+> 17 January 2024 
 
 - refactor: :adhesive_bandage: fix import statements [`028a801`](https://github.com/thkruz/ootk-core/commit/028a80113a27465c215d368180adf12ccf9f7b4d)
 
