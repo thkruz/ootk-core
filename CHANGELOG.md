@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.10](https://github.com/thkruz/ootk-core/compare/v1.0.9...1.0.10)
+#### [1.0.11](https://github.com/thkruz/ootk-core/compare/v1.0.10...1.0.11)
+
+- fix: :bug: fix output type being expected as input type [`2b3ba86`](https://github.com/thkruz/ootk-core/commit/2b3ba86b9afb4ddaeae023e464db748838ebe46f)
+
+#### [v1.0.10](https://github.com/thkruz/ootk-core/compare/v1.0.9...v1.0.10)
+
+> 19 January 2024 
 
 - fix: :bug: fix missing name property on GroundObjects [`cba039d`](https://github.com/thkruz/ootk-core/commit/cba039d41a7377f6073d23cd97a2cc155f3d08f0)
 
