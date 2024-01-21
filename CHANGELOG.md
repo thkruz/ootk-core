@@ -3,7 +3,14 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.11](https://github.com/thkruz/ootk-core/compare/v1.0.10...1.0.11)
+#### [1.1.0](https://github.com/thkruz/ootk-core/compare/v1.0.11...1.1.0)
+
+- feat: :sparkles: add editTle method to satellite class [`644e9ef`](https://github.com/thkruz/ootk-core/commit/644e9ef5d8aaff6302e7eea4cf1f320e0c049c2d)
+- feat: :sparkles: add toJ2000 method to sensor class [`ff410bd`](https://github.com/thkruz/ootk-core/commit/ff410bd41cab7e78f5af99bcde6f363db52e0f1f)
+
+#### [v1.0.11](https://github.com/thkruz/ootk-core/compare/v1.0.10...v1.0.11)
+
+> 20 January 2024 
 
 - fix: :bug: fix output type being expected as input type [`2b3ba86`](https://github.com/thkruz/ootk-core/commit/2b3ba86b9afb4ddaeae023e464db748838ebe46f)
 
