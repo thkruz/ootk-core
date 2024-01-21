@@ -23,9 +23,10 @@
 
 import { PassType } from '../enums/PassType';
 import { SensorParams } from '../interfaces/SensorParams';
-import { Degrees, Kilometers, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
+import { Degrees, Kilometers, KilometersPerSecond, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
 import { GroundObject } from './GroundObject';
 import { Satellite } from './Satellite';
+import { calcGmst, lla2eci, J2000, Vector3D, EpochUTC } from '../main';
 
 export class Sensor extends GroundObject {
   minRng: Kilometers;
@@ -182,6 +183,17 @@ export class Sensor extends GroundObject {
    */
   isNearEarth(): boolean {
     return this.maxRng <= 6000;
+  }
+
+  toJ2000(date: Date = new Date()): J2000 {
+    const gmst = calcGmst(date).gmst;
+    const position = lla2eci(this.llaRad(), gmst);
+
+    return new J2000(
+      EpochUTC.fromDateTime(date),
+      new Vector3D(position.x, position.y, position.z),
+      new Vector3D(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
+    );
   }
 
   /**
