@@ -116,6 +116,14 @@ export class GroundObject extends BaseObject {
     };
   }
 
+  get latRad(): Radians {
+    return this.lat * DEG2RAD as Radians;
+  }
+
+  get lonRad(): Radians {
+    return this.lon * DEG2RAD as Radians;
+  }
+
   /**
    * Creates a GroundObject object from a Geodetic position.
    * @param geodetic The geodetic coordinates.
