@@ -3,7 +3,14 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.1.0](https://github.com/thkruz/ootk-core/compare/v1.0.11...1.1.0)
+#### [1.1.1](https://github.com/thkruz/ootk-core/compare/v1.1.0...1.1.1)
+
+- refactor: :recycle: move latRad and lonRad to GroundObject class [`79817b2`](https://github.com/thkruz/ootk-core/commit/79817b27b9e0307cd424e1264c9104c1d8b92a1d)
+- refactor: :label: add correct type output to FormatTle [`c16fe23`](https://github.com/thkruz/ootk-core/commit/c16fe23a4af79a9ad0aa063b6e0298bea5c1c116)
+
+#### [v1.1.0](https://github.com/thkruz/ootk-core/compare/v1.0.11...v1.1.0)
+
+> 21 January 2024 
 
 - feat: :sparkles: add editTle method to satellite class [`644e9ef`](https://github.com/thkruz/ootk-core/commit/644e9ef5d8aaff6302e7eea4cf1f320e0c049c2d)
 - feat: :sparkles: add toJ2000 method to sensor class [`ff410bd`](https://github.com/thkruz/ootk-core/commit/ff410bd41cab7e78f5af99bcde6f363db52e0f1f)
