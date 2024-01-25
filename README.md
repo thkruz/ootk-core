@@ -51,9 +51,8 @@ Make sure you are using ESM modules in your package.json:
 
 ```json
 {
-  name: "your project name"
-  type: "module"
-  ...
+  "name": "your project name"
+  "type": "module"
 }
 ```
 
