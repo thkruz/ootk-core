@@ -47,6 +47,18 @@ Install the library with [NPM](https://www.npmjs.com/):
 npm i ootk-core
 ```
 
+Make sure you are using ESM modules in your package.json:
+
+```json
+{
+  name: "your project name"
+  type: "module"
+  ...
+}
+```
+
+Without that line in package.json you may get an `Error [ERR_REQUIRE_ESM]: require() of ES Module` error.
+
 ### Loading the Library
 
 ```js
