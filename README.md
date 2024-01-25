@@ -47,11 +47,10 @@ Install the library with [NPM](https://www.npmjs.com/):
 npm i ootk-core
 ```
 
-Make sure you are using ESM modules in your package.json:
+Make sure you are using ESM modules in your package.json by setting the type to module:
 
 ```json
 {
-  "name": "your project name"
   "type": "module"
 }
 ```
