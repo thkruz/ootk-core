@@ -3,7 +3,14 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.1.1](https://github.com/thkruz/ootk-core/compare/v1.1.0...1.1.1)
+#### [1.1.2](https://github.com/thkruz/ootk-core/compare/v1.1.1...1.1.2)
+
+- refactor: :recycle: add default id [`eae7a33`](https://github.com/thkruz/ootk-core/commit/eae7a33f65b3d67f4b3025af1943b34ef964372d)
+- refactor: :recycle: allow null rcs and vmag [`0453c0a`](https://github.com/thkruz/ootk-core/commit/0453c0a3b05cc6b1a012301fd909f8a31925e7ec)
+
+#### [v1.1.1](https://github.com/thkruz/ootk-core/compare/v1.1.0...v1.1.1)
+
+> 24 January 2024 
 
 - refactor: :recycle: move latRad and lonRad to GroundObject class [`79817b2`](https://github.com/thkruz/ootk-core/commit/79817b27b9e0307cd424e1264c9104c1d8b92a1d)
 - refactor: :label: add correct type output to FormatTle [`c16fe23`](https://github.com/thkruz/ootk-core/commit/c16fe23a4af79a9ad0aa063b6e0298bea5c1c116)
