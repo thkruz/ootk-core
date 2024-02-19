@@ -36,7 +36,7 @@ exports[`GroundObject should create from geodetic 1`] = `
 GroundObject {
   "active": true,
   "alt": 0,
-  "id": undefined,
+  "id": -1,
   "lat": 0,
   "lon": 0,
   "name": "Unknown Ground Object",

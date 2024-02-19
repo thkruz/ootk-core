@@ -25,7 +25,7 @@ import { BaseObjectParams } from '../interfaces/BaseObjectParams';
 import { EciVec3, Kilometers, SpaceObjectType } from '../types/types';
 
 export class BaseObject {
-  id?: number; // Unique ID
+  id: number;
   name: string;
   type: SpaceObjectType;
   position: EciVec3; // Where is the object
@@ -36,7 +36,7 @@ export class BaseObject {
   constructor(info: BaseObjectParams) {
     this.type = info.type ?? SpaceObjectType.UNKNOWN;
     this.name = info.name ?? 'Unknown';
-    this.id = info.id;
+    this.id = info.id ?? -1; // Default to -1 if no id is provided
     this.active = info.active ?? true;
 
     // Default to the center of the earth until position is calculated
