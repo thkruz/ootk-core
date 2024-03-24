@@ -21,13 +21,12 @@
  * SOFTWARE.
  */
 
-import { Kilometers, Radians, Seconds } from '../main';
-import { EpochUTC } from '../time/EpochUTC';
-import { earthGravityParam, MINUTES_PER_DAY, TAU } from '../utils/constants';
-import { newtonM } from '../utils/functions';
-import { ClassicalElements } from './ClassicalElements';
-import { Minutes, PositionVelocity } from 'src/types/types';
-import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsParams';
+import { Minutes, PositionVelocity, Kilometers, Radians, Seconds } from '../main.js';
+import { EpochUTC } from '../time/EpochUTC.js';
+import { earthGravityParam, MINUTES_PER_DAY, TAU } from '../utils/constants.js';
+import { newtonM } from '../utils/functions.js';
+import { ClassicalElements } from './ClassicalElements.js';
+import { EquinoctialElementsParams } from '../interfaces/EquinoctialElementsParams.js';
 
 /**
  * Equinoctial elements are a set of orbital elements used to describe the

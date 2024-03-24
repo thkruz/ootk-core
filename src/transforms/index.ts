@@ -21,5 +21,5 @@
  * SOFTWARE.
  */
 
-export * from './conversions';
-export * from './transforms';
+export * from './conversions.js';
+export * from './transforms.js';

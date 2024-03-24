@@ -21,6 +21,8 @@
  * SOFTWARE.
  */
 
-export { AngularDiameterMethod } from './AngularDiameterMethod';
-export { AngularDistanceMethod } from './AngularDistanceMethod';
-export { PassType } from './PassType';
+export { OrbitRegime } from './OrbitRegime.js';
+export { Sgp4OpsMode } from './Sgp4OpsMode.js';
+export { AngularDiameterMethod } from './AngularDiameterMethod.js';
+export { AngularDistanceMethod } from './AngularDistanceMethod.js';
+export { PassType } from './PassType.js';

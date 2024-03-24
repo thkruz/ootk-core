@@ -21,10 +21,10 @@
  * SOFTWARE.
  */
 
-import { Seconds } from '../main';
-import { DataHandler } from '../data/DataHandler';
-import { secondsPerWeek } from '../utils/constants';
-import type { EpochUTC } from './EpochUTC';
+import { Seconds } from '../main.js';
+import { DataHandler } from '../data/DataHandler.js';
+import { secondsPerWeek } from '../utils/constants.js';
+import type { EpochUTC } from './EpochUTC.js';
 // / Global Positioning System _(GPS)_ formatted epoch.
 export class EpochGPS {
   /**

@@ -1,4 +1,5 @@
-import { ClassicalElements, EpochUTC, J2000, Kilometers, Radians, Vector3D } from './../../src/main';
+import { ClassicalElements, EpochUTC, J2000, Kilometers, KilometersPerSecond, Radians, Vector3D }
+  from './../../src/main';
 
 describe('ClassicalElements', () => {
   const epoch = EpochUTC.fromDateTime(new Date('2024-01-14T14:39:39.914Z'));
@@ -116,9 +117,9 @@ describe('ClassicalElements', () => {
       EpochUTC.fromDateTime(new Date(1705109326817)),
       new Vector3D(1538.223335842895 as Kilometers, 5102.261204021967 as Kilometers, 4432.634965003577 as Kilometers),
       new Vector3D(
-        -7.341518909379302 as Kilometers,
-        0.6516718453998644 as Kilometers,
-        1.7933882499861993 as Kilometers,
+        -7.341518909379302 as KilometersPerSecond,
+        0.6516718453998644 as KilometersPerSecond,
+        1.7933882499861993 as KilometersPerSecond,
       ),
     );
 

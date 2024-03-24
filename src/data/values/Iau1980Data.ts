@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { iau1980 } from './iau1980';
+import { iau1980 } from './iau1980.js';
 
 // / IAU a1, a2, a3, a4, a5, Ai, Bi, Ci, Di coefficients.
 export type Iau1980Entry = [number, number, number, number, number, number, number, number, number];

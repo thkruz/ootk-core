@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-export { BaseObject } from './BaseObject';
-export { GroundObject } from './GroundObject';
-export { Satellite } from './Satellite';
-export { Sensor } from './Sensor';
-export { Star } from './Star';
+export { BaseObject } from './BaseObject.js';
+export { GroundObject } from './GroundObject.js';
+export { Satellite } from './Satellite.js';
+export { Sensor } from './Sensor.js';
+export { Star } from './Star.js';

@@ -21,8 +21,7 @@
  * SOFTWARE.
  */
 
-import { StringifiedNumber, TleParams } from 'src/types/types';
-import { Tle } from './Tle';
+import { Tle, StringifiedNumber, TleParams, TleLine1, TleLine2 } from '../main.js';
 
 /**
  * A class containing static methods for formatting TLEs (Two-Line Elements).
@@ -37,7 +36,7 @@ export abstract class FormatTle {
    * @param tleParams - The parameters used to generate the TLE.
    * @returns An object containing the TLE strings tle1 and tle2.
    */
-  static createTle(tleParams: TleParams): { tle1: string; tle2: string } {
+  static createTle(tleParams: TleParams): { tle1: TleLine1; tle2: TleLine2 } {
     const { inc, meanmo, rasc, argPe, meana, ecen, epochyr, epochday, intl } = tleParams;
     const scc = Tle.convert6DigitToA5(tleParams.scc);
     const epochYrStr = epochyr.padStart(2, '0');
@@ -62,7 +61,7 @@ export abstract class FormatTle {
     const tle1 = `1 ${scc}U ${intlStr} ${epochYrStr}${epochdayStr}${TLE1Ending}`;
     const tle2 = `2 ${scc} ${incStr} ${rascStr} ${ecenStr} ${argPeStr} ${meanaStr} ${meanmoStr} 00010`;
 
-    return { tle1, tle2 };
+    return { tle1: tle1 as TleLine1, tle2: tle2 as TleLine2 };
   }
 
   /**

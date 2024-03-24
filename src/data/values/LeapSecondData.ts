@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { LeapSecond } from './LeapSecond';
+import { LeapSecond } from './LeapSecond.js';
 // / Leap second value tuples.
 const leapSeconds: Array<[number, number]> = [
   [2441317.5, 10],

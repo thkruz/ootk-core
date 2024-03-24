@@ -21,19 +21,19 @@
  * SOFTWARE.
  */
 
-import type { ClassicalElements } from '../coordinate';
-import { Geodetic } from '../coordinate/Geodetic';
-import { ITRF } from '../coordinate/ITRF';
-import { J2000 } from '../coordinate/J2000';
-import { RIC } from '../coordinate/RIC';
-import { Tle } from '../coordinate/Tle';
-import { OptionsParams } from '../interfaces/OptionsParams';
-import { SatelliteParams } from '../interfaces/SatelliteParams';
-import { RAE } from '../observation/RAE';
-import { Vector3D } from '../operations/Vector3D';
-import { Sgp4 } from '../sgp4/sgp4';
-import { EpochUTC } from '../time/EpochUTC';
-import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms';
+import type { ClassicalElements } from '../coordinate/index.js';
+import { Geodetic } from '../coordinate/Geodetic.js';
+import { ITRF } from '../coordinate/ITRF.js';
+import { J2000 } from '../coordinate/J2000.js';
+import { RIC } from '../coordinate/RIC.js';
+import { Tle } from '../coordinate/Tle.js';
+import { OptionsParams } from '../interfaces/OptionsParams.js';
+import { SatelliteParams } from '../interfaces/SatelliteParams.js';
+import { RAE } from '../observation/RAE.js';
+import { Vector3D } from '../operations/Vector3D.js';
+import { Sgp4 } from '../sgp4/sgp4.js';
+import { EpochUTC } from '../time/EpochUTC.js';
+import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms/index.js';
 import {
   Degrees,
   EcfVec3,
@@ -49,57 +49,65 @@ import {
   Seconds,
   TleLine1,
   TleLine2,
-} from '../types/types';
-import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants';
-import { dopplerFactor } from './../utils/functions';
-import { BaseObject } from './BaseObject';
-import { GroundObject } from './GroundObject';
-import { TimeVariables } from '../interfaces/TimeVariables';
+} from '../types/types.js';
+import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants.js';
+import { dopplerFactor } from './../utils/functions.js';
+import { BaseObject } from './BaseObject.js';
+import { GroundObject } from './GroundObject.js';
+import { TimeVariables } from '../interfaces/TimeVariables.js';
 
 /**
  * Represents a satellite object with orbital information and methods for
  * calculating its position and other properties.
  */
 export class Satellite extends BaseObject {
-  apogee: Kilometers;
-  argOfPerigee: Degrees;
-  bstar: number;
-  eccentricity: number;
-  epochDay: number;
-  epochYear: number;
-  inclination: Degrees;
-  intlDes: string;
-  meanAnomaly: Degrees;
-  meanMoDev1: number;
-  meanMoDev2: number;
-  meanMotion: number;
+  apogee!: Kilometers;
+  argOfPerigee!: Degrees;
+  bstar!: number;
+  eccentricity!: number;
+  epochDay!: number;
+  epochYear!: number;
+  inclination!: Degrees;
+  intlDes!: string;
+  meanAnomaly!: Degrees;
+  meanMoDev1!: number;
+  meanMoDev2!: number;
+  meanMotion!: number;
   options: OptionsParams;
-  perigee: Kilometers;
-  period: Minutes;
-  rightAscension: Degrees;
-  satrec: SatelliteRecord;
+  perigee!: Kilometers;
+  period!: Minutes;
+  rightAscension!: Degrees;
+  satrec!: SatelliteRecord;
   /** The satellite catalog number as listed in the TLE. */
-  sccNum: string;
+  sccNum!: string;
   /** The 5 digit alpha-numeric satellite catalog number. */
-  sccNum5: string;
+  sccNum5!: string;
   /** The 6 digit numeric satellite catalog number. */
-  sccNum6: string;
-  tle1: TleLine1;
-  tle2: TleLine2;
+  sccNum6!: string;
+  tle1!: TleLine1;
+  tle2!: TleLine2;
   /** The semi-major axis of the satellite's orbit. */
-  semiMajorAxis: Kilometers;
+  semiMajorAxis!: Kilometers;
   /** The semi-minor axis of the satellite's orbit. */
-  semiMinorAxis: Kilometers;
+  semiMinorAxis!: Kilometers;
 
   constructor(info: SatelliteParams, options?: OptionsParams) {
     super(info);
 
-    const tleData = Tle.parse(info.tle1, info.tle2);
+    this.parseTleAndUpdateOrbit_(info.tle1, info.tle2, info.sccNum);
 
-    this.tle1 = info.tle1;
-    this.tle2 = info.tle2;
+    this.options = options ?? {
+      notes: '',
+    };
+  }
 
-    this.sccNum = info.sccNum ?? tleData.satNum.toString();
+  private parseTleAndUpdateOrbit_(tle1: TleLine1, tle2: TleLine2, sccNum?: string) {
+    const tleData = Tle.parse(tle1, tle2);
+
+    this.tle1 = tle1;
+    this.tle2 = tle2;
+
+    this.sccNum = sccNum ?? tleData.satNum.toString();
     this.sccNum5 = Tle.convert6DigitToA5(this.sccNum);
     this.sccNum6 = Tle.convertA5to6Digit(this.sccNum5);
     this.intlDes = tleData.intlDes;
@@ -119,13 +127,7 @@ export class Satellite extends BaseObject {
     this.semiMinorAxis = (this.semiMajorAxis * Math.sqrt(1 - this.eccentricity ** 2)) as Kilometers;
     this.apogee = (this.semiMajorAxis * (1 + this.eccentricity) - 6371) as Kilometers;
     this.perigee = (this.semiMajorAxis * (1 - this.eccentricity) - 6371) as Kilometers;
-
-    // NOTE: Calculate apogee and perigee
-
-    this.satrec = Sgp4.createSatrec(info.tle1, info.tle2);
-    this.options = options ?? {
-      notes: '',
-    };
+    this.satrec = Sgp4.createSatrec(tle1, tle2);
   }
 
   /**
@@ -163,6 +165,10 @@ export class Satellite extends BaseObject {
     }
 
     return true;
+  }
+
+  editTle(tle1: TleLine1, tle2: TleLine2, sccNum?: string): void {
+    this.parseTleAndUpdateOrbit_(tle1, tle2, sccNum);
   }
 
   /**

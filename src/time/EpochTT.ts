@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Epoch } from './Epoch';
+import { Epoch } from './Epoch.js';
 
 /** Represents a Terrestrial Time (TT) epoch. */
 export class EpochTT extends Epoch {}

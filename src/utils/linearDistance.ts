@@ -1,4 +1,4 @@
-import { Vec3 } from '../types/types';
+import { Vec3 } from '../types/types.js';
 
 /**
  * Calculates the linear distance between two points in three-dimensional space.

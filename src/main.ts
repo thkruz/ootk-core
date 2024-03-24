@@ -26,18 +26,18 @@
  * @see https://github.com/david-rc-dayton/pious_squid
  */
 
-export * from './enums';
-export * from './types/types';
-export * from './interfaces';
-export * from './time';
-export * from './transforms';
-export * from './utils';
-export * from './operations/operations';
-export { BaseObject } from './objects';
-export { Earth } from './body';
-export * from './coordinate';
-export * from './observation';
-export * from './data/DataHandler';
-export * from './sgp4';
-export * from './objects';
-export * from './body';
+export * from './enums/index.js';
+export * from './types/types.js';
+export * from './interfaces/index.js';
+export * from './time/index.js';
+export * from './transforms/index.js';
+export * from './utils/index.js';
+export * from './operations/operations.js';
+export { BaseObject } from './objects/index.js';
+export { Earth } from './body/index.js';
+export * from './coordinate/index.js';
+export * from './observation/index.js';
+export * from './data/DataHandler.js';
+export * from './sgp4/index.js';
+export * from './objects/index.js';
+export * from './body/index.js';

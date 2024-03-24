@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-export * from './ObservationUtils';
-export { RadecGeocentric } from './RadecGeocentric';
-export { RadecTopocentric } from './RadecTopocentric';
-export { RAE } from './RAE';
+export * from './ObservationUtils.js';
+export { RadecGeocentric } from './RadecGeocentric.js';
+export { RadecTopocentric } from './RadecTopocentric.js';
+export { RAE } from './RAE.js';

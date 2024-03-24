@@ -1,4 +1,5 @@
-import { DEG2RAD, Degrees, EpochUTC, J2000, Kilometers, RadecGeocentric, Radians, Vector3D } from './../../src/main';
+import { DEG2RAD, Degrees, EpochUTC, J2000, Kilometers, KilometersPerSecond, RadecGeocentric, Radians, RadiansPerSecond,
+  Vector3D } from './../../src/main';
 describe('RadecGeocentric', () => {
   let radec: RadecGeocentric;
   let exampleDate: Date;
@@ -32,7 +33,7 @@ describe('RadecGeocentric', () => {
     const state = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(7000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
     const radecSv = RadecGeocentric.fromStateVector(state);
 
@@ -73,8 +74,8 @@ describe('RadecGeocentric', () => {
       25 * DEG2RAD as Radians,
       1 * DEG2RAD as Radians,
       1000 as Kilometers,
-      1.5 * DEG2RAD as Radians,
-      2.5 * DEG2RAD as Radians,
+      1.5 * DEG2RAD as RadiansPerSecond,
+      2.5 * DEG2RAD as RadiansPerSecond,
     );
 
     expect(radec2.velocity()).toMatchSnapshot();

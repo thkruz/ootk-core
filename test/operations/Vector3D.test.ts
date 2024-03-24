@@ -1,4 +1,4 @@
-import { DEG2RAD, Radians, Vector, Vector3D } from '../../src/main';
+import { Kilometers, KilometersPerSecond, Vector, Vector3D } from '../../src/main';
 
 describe('Vector3D', () => {
   // fromVector
@@ -43,7 +43,7 @@ describe('Vector3D', () => {
     const v1 = new Vector3D(1, 2, 3);
     const v2 = new Vector3D(4, 5, 6);
 
-    expect(v1.distance(v2)).toMatchSnapshot();
+    expect((v1 as Vector3D).distance(v2)).toMatchSnapshot();
   });
 
   // outer
@@ -72,9 +72,9 @@ describe('Vector3D', () => {
   // sight
   it('should return the sight of a Vector3D', () => {
     const v = new Vector3D(1, 2, 3);
-    const v2 = new Vector3D(4, 5, 6);
+    const v2 = new Vector3D(4 as KilometersPerSecond, 5 as KilometersPerSecond, 6 as KilometersPerSecond);
 
-    expect(v.sight(v2, (20 * DEG2RAD) as Radians)).toMatchSnapshot();
+    expect(v.sight(v2, 20 as Kilometers)).toMatchSnapshot();
   });
 
   // bisect
@@ -82,7 +82,7 @@ describe('Vector3D', () => {
     const v1 = new Vector3D(1, 2, 3);
     const v2 = new Vector3D(4, 5, 6);
 
-    expect(v1.bisect(v2)).toMatchSnapshot();
+    expect((v1 as Vector3D).bisect(v2)).toMatchSnapshot();
   });
 
   // row

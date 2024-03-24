@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { HpAtmosphereEntry } from './HpAtmosphereData';
+import { HpAtmosphereEntry } from './HpAtmosphereData.js';
 
 // / Harris-Priester atmospheric density bracket.
 export class HpAtmosphereResult {

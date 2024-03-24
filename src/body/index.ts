@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-export { Celestial } from './Celestial';
-export { Earth } from './Earth';
-export { Moon } from './Moon';
-export { Sun } from './Sun';
+export { Celestial } from './Celestial.js';
+export { Earth } from './Earth.js';
+export { Moon } from './Moon.js';
+export { Sun } from './Sun.js';

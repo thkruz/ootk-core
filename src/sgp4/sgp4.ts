@@ -36,9 +36,9 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
 
-import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
-import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types';
-import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants';
+import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
+import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types.js';
+import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants.js';
 
 export enum Sgp4GravConstants {
   wgs72old = 'wgs72old',

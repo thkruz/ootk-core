@@ -1,8 +1,8 @@
-import { Epoch } from '../../src/main';
+import { Epoch, Seconds } from '../../src/main';
 
 describe('Epoch', () => {
   it('should be constructed from a POSIX timestamp', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.posix).toEqual(posix);
@@ -10,7 +10,7 @@ describe('Epoch', () => {
 
   // toString
   it('should convert to a string', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.toString()).toMatchSnapshot();
@@ -18,7 +18,7 @@ describe('Epoch', () => {
 
   // toExcelString
   it('should convert to an Excel string', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.toExcelString()).toMatchSnapshot();
@@ -26,8 +26,8 @@ describe('Epoch', () => {
 
   // difference
   it('should calculate the difference between two epochs', () => {
-    const posix1 = 1614556800;
-    const posix2 = 1614556800 + 60;
+    const posix1 = 1614556800 as Seconds;
+    const posix2 = (1614556800 + 60) as Seconds;
     const epoch1 = new Epoch(posix1);
     const epoch2 = new Epoch(posix2);
 
@@ -36,8 +36,8 @@ describe('Epoch', () => {
 
   // equals
   it('should check if two epochs are equal', () => {
-    const posix1 = 1614556800;
-    const posix2 = 1614556800 + 60;
+    const posix1 = 1614556800 as Seconds;
+    const posix2 = (1614556800 + 60) as Seconds;
     const epoch1 = new Epoch(posix1);
     const epoch2 = new Epoch(posix2);
 
@@ -46,7 +46,7 @@ describe('Epoch', () => {
 
   // toDateTime
   it('should convert to a DateTime object', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.toDateTime()).toMatchSnapshot();
@@ -54,7 +54,7 @@ describe('Epoch', () => {
 
   // toEpochYearAndDay
   it('should convert to an epoch year and day', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.toEpochYearAndDay()).toMatchSnapshot();
@@ -62,7 +62,7 @@ describe('Epoch', () => {
 
   // toJulianDate
   it('should convert to a Julian date', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.toJulianDate()).toMatchSnapshot();
@@ -70,7 +70,7 @@ describe('Epoch', () => {
 
   // toJulianCenturies
   it('should convert to Julian centuries', () => {
-    const posix = 1614556800;
+    const posix = 1614556800 as Seconds;
     const epoch = new Epoch(posix);
 
     expect(epoch.toJulianCenturies()).toMatchSnapshot();
@@ -78,8 +78,8 @@ describe('Epoch', () => {
 
   // operatorGreaterThan
   it('should check if one epoch is greater than another', () => {
-    const posix1 = 1614556800;
-    const posix2 = 1614556800 + 60;
+    const posix1 = 1614556800 as Seconds;
+    const posix2 = (1614556800 + 60) as Seconds;
     const epoch1 = new Epoch(posix1);
     const epoch2 = new Epoch(posix2);
 
@@ -88,8 +88,8 @@ describe('Epoch', () => {
 
   // operatorGreaterThanOrEqual
   it('should check if one epoch is greater than or equal to another', () => {
-    const posix1 = 1614556800;
-    const posix2 = 1614556800 + 60;
+    const posix1 = 1614556800 as Seconds;
+    const posix2 = (1614556800 + 60) as Seconds;
     const epoch1 = new Epoch(posix1);
     const epoch2 = new Epoch(posix2);
 
@@ -98,8 +98,8 @@ describe('Epoch', () => {
 
   // operatorLessThan
   it('should check if one epoch is less than another', () => {
-    const posix1 = 1614556800;
-    const posix2 = 1614556800 + 60;
+    const posix1 = 1614556800 as Seconds;
+    const posix2 = (1614556800 + 60) as Seconds;
     const epoch1 = new Epoch(posix1);
     const epoch2 = new Epoch(posix2);
 
@@ -108,8 +108,8 @@ describe('Epoch', () => {
 
   // operatorLessThanOrEqual
   it('should check if one epoch is less than or equal to another', () => {
-    const posix1 = 1614556800;
-    const posix2 = 1614556800 + 60;
+    const posix1 = 1614556800 as Seconds;
+    const posix2 = (1614556800 + 60) as Seconds;
     const epoch1 = new Epoch(posix1);
     const epoch2 = new Epoch(posix2);
 

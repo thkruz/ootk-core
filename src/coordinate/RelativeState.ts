@@ -21,10 +21,10 @@
  * SOFTWARE.
  */
 
-import { Kilometers, KilometersPerSecond } from '../main';
-import { Matrix } from '../operations/Matrix';
-import { Vector3D } from '../operations/Vector3D';
-import { J2000 } from './J2000';
+import { Kilometers, KilometersPerSecond } from '../main.js';
+import { Matrix } from '../operations/Matrix.js';
+import { Vector3D } from '../operations/Vector3D.js';
+import { J2000 } from './J2000.js';
 
 /**
  * Represents the relative state of an object in 3D space.

@@ -37,13 +37,13 @@ import {
   Geodetic,
   BaseObjectParams,
   SpaceObjectType,
-} from '../main';
+} from '../main.js';
 
-import { BaseObject } from './BaseObject';
-import { Satellite } from './Satellite';
+import { BaseObject } from './BaseObject.js';
+import { Satellite } from './Satellite.js';
 
 export class GroundObject extends BaseObject {
-  name = 'Unknown Ground Position';
+  name = 'Unknown Ground Object';
   lat: Degrees;
   lon: Degrees;
   alt: Kilometers;
@@ -52,6 +52,7 @@ export class GroundObject extends BaseObject {
     super(info);
 
     this.validateGroundObjectInputData_(info);
+    this.name = info.name ?? this.name;
     this.lat = info.lat;
     this.lon = info.lon;
     this.alt = info.alt;
@@ -89,6 +90,18 @@ export class GroundObject extends BaseObject {
   }
 
   /**
+   * Returns the latitude, longitude, and altitude of the GroundObject.
+   * @returns The latitude, longitude, and altitude as an LlaVec3 object.
+   */
+  lla(): LlaVec3<Degrees, Kilometers> {
+    return {
+      lat: this.lat,
+      lon: this.lon,
+      alt: this.alt,
+    };
+  }
+
+  /**
    * Converts the latitude, longitude, and altitude of the GroundObject to radians and kilometers.
    * @variation optimized version of this.toGeodetic() without class instantiation for better performance and
    * serialization.
@@ -101,6 +114,14 @@ export class GroundObject extends BaseObject {
       lon: (this.lon * DEG2RAD) as Radians,
       alt: this.alt,
     };
+  }
+
+  get latRad(): Radians {
+    return this.lat * DEG2RAD as Radians;
+  }
+
+  get lonRad(): Radians {
+    return this.lon * DEG2RAD as Radians;
   }
 
   /**

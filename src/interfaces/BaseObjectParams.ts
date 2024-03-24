@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { EciVec3, SpaceObjectType } from '../types/types';
+import { EciVec3, SpaceObjectType } from '../types/types.js';
 
 export interface BaseObjectParams {
   id?: number;

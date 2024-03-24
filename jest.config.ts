@@ -1,7 +1,17 @@
 const jestConfig = {
   testEnvironment: 'node',
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   transform: {
-    '\\.(js|ts|jsx|tsx)$': 'babel-jest',
+    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
   testMatch: ['**/test/**/?(*.)+(spec|test).?(m)[jt]s?(x)'],
   moduleFileExtensions: ['js', 'mjs', 'ts'],

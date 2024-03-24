@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-import { hpAtmosphere } from './hpAtmosphere';
-import { HpAtmosphereResult } from './HpAtmosphereResult';
+import { hpAtmosphere } from './hpAtmosphere.js';
+import { HpAtmosphereResult } from './HpAtmosphereResult.js';
 
 // / Harris-Priester atmosphere entry for height, min, and max density values.
 export type HpAtmosphereEntry = [number, number, number];

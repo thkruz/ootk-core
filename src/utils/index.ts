@@ -1,3 +1,3 @@
-export * from './functions';
-export * from './constants';
-export * from './linearDistance';
+export * from './functions.js';
+export * from './constants.js';
+export * from './linearDistance.js';

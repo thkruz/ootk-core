@@ -1,5 +1,5 @@
-import { Degrees, Kilometers, SpaceObjectType } from '../types/types';
-import { BaseObjectParams } from './BaseObjectParams';
+import { Degrees, Kilometers, SpaceObjectType } from '../types/types.js';
+import { BaseObjectParams } from './BaseObjectParams.js';
 
 export interface SensorParams extends BaseObjectParams{
   /** Altitude in Kilometers */

@@ -21,15 +21,15 @@
  * SOFTWARE.
  */
 
-export * from './ClassicalElements';
-export * from './EquinoctialElements';
-export * from './FormatTle';
-export * from './Geodetic';
-export * from './ITRF';
-export * from './J2000';
-export * from '../enums/OrbitRegime';
-export * from './RelativeState';
-export * from './RIC';
-export * from './StateVector';
-export * from './TEME';
-export * from './Tle';
+export * from './ClassicalElements.js';
+export * from './EquinoctialElements.js';
+export * from './FormatTle.js';
+export * from './Geodetic.js';
+export * from './ITRF.js';
+export * from './J2000.js';
+export * from '../enums/OrbitRegime.js';
+export * from './RelativeState.js';
+export * from './RIC.js';
+export * from './StateVector.js';
+export * from './TEME.js';
+export * from './Tle.js';

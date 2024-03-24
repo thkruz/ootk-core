@@ -1,4 +1,5 @@
-import { DEG2RAD, Degrees, EpochUTC, J2000, Kilometers, RadecTopocentric, Radians, Vector3D } from '../../src/main';
+import { DEG2RAD, Degrees, EpochUTC, J2000, Kilometers, KilometersPerSecond, RadecTopocentric,
+  Radians, RadiansPerSecond, Vector3D } from '../../src/main';
 describe('RadecTopocentric', () => {
   let radec: RadecTopocentric;
   let exampleDate: Date;
@@ -32,12 +33,12 @@ describe('RadecTopocentric', () => {
     const site = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(8000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
     const state = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(7000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
     const radecSv = RadecTopocentric.fromStateVector(state, site);
 
@@ -69,7 +70,7 @@ describe('RadecTopocentric', () => {
     const site = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(8000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
 
     expect(radec.position(site)).toMatchSnapshot();
@@ -82,13 +83,13 @@ describe('RadecTopocentric', () => {
       25 * DEG2RAD as Radians,
       1 * DEG2RAD as Radians,
       1000 as Kilometers,
-      1.5 * DEG2RAD as Radians,
-      2.5 * DEG2RAD as Radians,
+      1.5 * DEG2RAD as RadiansPerSecond,
+      2.5 * DEG2RAD as RadiansPerSecond,
     );
     const site = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(8000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
 
     expect(radec2.velocity(site)).toMatchSnapshot();

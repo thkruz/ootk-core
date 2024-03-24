@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-import { Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from '../main';
-import { Vector3D } from '../operations/Vector3D';
+import { Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from '../main.js';
+import { Vector3D } from '../operations/Vector3D.js';
 
 export const radecToPosition = (ra: Radians, dec: Radians, r: Kilometers): Vector3D<Kilometers> => {
   const ca = Math.cos(ra);

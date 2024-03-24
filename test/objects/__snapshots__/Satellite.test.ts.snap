@@ -101,7 +101,7 @@ Satellite {
   "eccentricity": 0.0005168,
   "epochDay": 203.46960946,
   "epochYear": 22,
-  "id": undefined,
+  "id": -1,
   "inclination": 51.6415,
   "intlDes": "98067A",
   "meanAnomaly": 54.7009,
