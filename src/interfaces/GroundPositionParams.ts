@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Degrees, Kilometers } from '../types/types';
+import { Degrees, Kilometers } from '../types/types.js';
 
 export interface GroundPositionParams {
   lat: Degrees;

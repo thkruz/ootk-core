@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Egm96Entry } from './Egm96Data';
+import { Egm96Entry } from './Egm96Data.js';
 
 // / The first degree 36 EGM-96 normalized coefficients.
 export const egm96 = <Egm96Entry[]>[

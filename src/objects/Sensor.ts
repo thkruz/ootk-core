@@ -21,12 +21,12 @@
  * SOFTWARE.
  */
 
-import { PassType } from '../enums/PassType';
-import { SensorParams } from '../interfaces/SensorParams';
-import { Degrees, Kilometers, KilometersPerSecond, Lookangle, RaeVec3, SpaceObjectType } from '../types/types';
-import { GroundObject } from './GroundObject';
-import { Satellite } from './Satellite';
-import { calcGmst, lla2eci, J2000, Vector3D, EpochUTC } from '../main';
+import { PassType } from '../enums/PassType.js';
+import { SensorParams } from '../interfaces/SensorParams.js';
+import { Degrees, Kilometers, KilometersPerSecond, Lookangle, RaeVec3, SpaceObjectType } from '../types/types.js';
+import { GroundObject } from './GroundObject.js';
+import { Satellite } from './Satellite.js';
+import { calcGmst, lla2eci, J2000, Vector3D, EpochUTC } from '../main.js';
 
 export class Sensor extends GroundObject {
   minRng: Kilometers;

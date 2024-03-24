@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Tle, StringifiedNumber, TleParams, TleLine1, TleLine2 } from '../main';
+import { Tle, StringifiedNumber, TleParams, TleLine1, TleLine2 } from '../main.js';
 
 /**
  * A class containing static methods for formatting TLEs (Two-Line Elements).

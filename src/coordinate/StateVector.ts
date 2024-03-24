@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { ClassicalElements, TAU, Earth, Kilometers, KilometersPerSecond, Minutes, EpochUTC, Vector3D } from '../main';
+import { ClassicalElements, TAU, Earth, Kilometers, KilometersPerSecond, Minutes, EpochUTC, Vector3D } from '../main.js';
 
 /**
  * A state vector is a set of coordinates used to specify the position and

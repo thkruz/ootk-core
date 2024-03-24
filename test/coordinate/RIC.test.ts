@@ -1,4 +1,4 @@
-import { EpochUTC, J2000, Kilometers, Matrix, RIC, Vector3D } from './../../src/main';
+import { EpochUTC, J2000, Kilometers, KilometersPerSecond, Matrix, RIC, Vector3D } from './../../src/main';
 
 describe('RIC', () => {
   let stateVector: J2000;
@@ -9,9 +9,9 @@ describe('RIC', () => {
       EpochUTC.fromDateTime(new Date(1705109326817)),
       new Vector3D(1538.223335842895 as Kilometers, 5102.261204021967 as Kilometers, 4432.634965003577 as Kilometers),
       new Vector3D(
-        -7.341518909379302 as Kilometers,
-        0.6516718453998644 as Kilometers,
-        1.7933882499861993 as Kilometers,
+        -7.341518909379302 as KilometersPerSecond,
+        0.6516718453998644 as KilometersPerSecond,
+        1.7933882499861993 as KilometersPerSecond,
       ),
     );
 
@@ -19,9 +19,9 @@ describe('RIC', () => {
       EpochUTC.fromDateTime(new Date(1705109326817)),
       new Vector3D(1540.223335842895 as Kilometers, 5102.251204021967 as Kilometers, 4432.644965003577 as Kilometers),
       new Vector3D(
-        -7.331518909379302 as Kilometers,
-        0.6516718453998644 as Kilometers,
-        1.7933882499861993 as Kilometers,
+        -7.331518909379302 as KilometersPerSecond,
+        0.6516718453998644 as KilometersPerSecond,
+        1.7933882499861993 as KilometersPerSecond,
       ),
     );
   });

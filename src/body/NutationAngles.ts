@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Radians } from '../main';
+import { Radians } from '../main.js';
 
 /** Represents the nutation angles. */
 export type NutationAngles = {

@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Vector3D, PassType, Satellite } from '../main';
+import { Vector3D, PassType, Satellite } from '../main.js';
 
 /**
  * Represents a distinct type.

@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-import { Kilometers, KilometersPerSecond, Radians, linearDistance } from '../main';
-import { Matrix } from './Matrix';
-import { Vector } from './Vector';
+import { Kilometers, KilometersPerSecond, Radians, linearDistance } from '../main.js';
+import { Matrix } from './Matrix.js';
+import { Vector } from './Vector.js';
 
 // / 3-dimensional vector.
 export class Vector3D<T extends number = number> {

@@ -21,4 +21,4 @@
  * SOFTWARE.
  */
 
-export { Sgp4 } from './sgp4';
+export { Sgp4 } from './sgp4.js';

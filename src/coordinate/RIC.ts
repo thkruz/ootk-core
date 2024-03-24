@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-import { Matrix } from '../operations/Matrix';
-import { J2000 } from './J2000';
-import { RelativeState } from './RelativeState';
+import { Matrix } from '../operations/Matrix.js';
+import { J2000 } from './J2000.js';
+import { RelativeState } from './RelativeState.js';
 
 /**
  * Represents a Radial-Intrack-Crosstrack (RIC) coordinates.

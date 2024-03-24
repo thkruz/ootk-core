@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Radians } from '../main';
+import { Radians } from '../main.js';
 
 /** Represents the precession angles in radians. */
 export type PrecessionAngles = {

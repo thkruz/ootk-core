@@ -37,10 +37,10 @@ import {
   Geodetic,
   BaseObjectParams,
   SpaceObjectType,
-} from '../main';
+} from '../main.js';
 
-import { BaseObject } from './BaseObject';
-import { Satellite } from './Satellite';
+import { BaseObject } from './BaseObject.js';
+import { Satellite } from './Satellite.js';
 
 export class GroundObject extends BaseObject {
   name = 'Unknown Ground Object';

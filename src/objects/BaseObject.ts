@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-import { BaseObjectParams } from '../interfaces/BaseObjectParams';
-import { EciVec3, Kilometers, SpaceObjectType } from '../types/types';
+import { BaseObjectParams } from '../interfaces/BaseObjectParams.js';
+import { EciVec3, Kilometers, SpaceObjectType } from '../types/types.js';
 
 export class BaseObject {
   id: number;

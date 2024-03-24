@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
-import { AngularDiameterMethod } from '../enums/AngularDiameterMethod';
-import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { EcfVec3, Kilometers, Radians, SpaceObjectType } from '../types/types';
-import { angularVelocityOfEarth, cKmPerSec } from './constants';
+import { AngularDiameterMethod } from '../enums/AngularDiameterMethod.js';
+import { AngularDistanceMethod } from '../enums/AngularDistanceMethod.js';
+import { EcfVec3, Kilometers, Radians, SpaceObjectType } from '../types/types.js';
+import { angularVelocityOfEarth, cKmPerSec } from './constants.js';
 
 /**
  * Calculates the factorial of a given number.

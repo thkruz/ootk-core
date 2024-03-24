@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-import { Seconds } from '../main';
-import { secondsPerDay } from '../utils/constants';
+import { Seconds } from '../main.js';
+import { secondsPerDay } from '../utils/constants.js';
 
 // / Base class for [Epoch] data.
 export class Epoch {

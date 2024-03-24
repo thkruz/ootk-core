@@ -21,19 +21,19 @@
  * SOFTWARE.
  */
 
-import type { ClassicalElements } from '../coordinate';
-import { Geodetic } from '../coordinate/Geodetic';
-import { ITRF } from '../coordinate/ITRF';
-import { J2000 } from '../coordinate/J2000';
-import { RIC } from '../coordinate/RIC';
-import { Tle } from '../coordinate/Tle';
-import { OptionsParams } from '../interfaces/OptionsParams';
-import { SatelliteParams } from '../interfaces/SatelliteParams';
-import { RAE } from '../observation/RAE';
-import { Vector3D } from '../operations/Vector3D';
-import { Sgp4 } from '../sgp4/sgp4';
-import { EpochUTC } from '../time/EpochUTC';
-import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms';
+import type { ClassicalElements } from '../coordinate/index.js';
+import { Geodetic } from '../coordinate/Geodetic.js';
+import { ITRF } from '../coordinate/ITRF.js';
+import { J2000 } from '../coordinate/J2000.js';
+import { RIC } from '../coordinate/RIC.js';
+import { Tle } from '../coordinate/Tle.js';
+import { OptionsParams } from '../interfaces/OptionsParams.js';
+import { SatelliteParams } from '../interfaces/SatelliteParams.js';
+import { RAE } from '../observation/RAE.js';
+import { Vector3D } from '../operations/Vector3D.js';
+import { Sgp4 } from '../sgp4/sgp4.js';
+import { EpochUTC } from '../time/EpochUTC.js';
+import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms/index.js';
 import {
   Degrees,
   EcfVec3,
@@ -49,12 +49,12 @@ import {
   Seconds,
   TleLine1,
   TleLine2,
-} from '../types/types';
-import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants';
-import { dopplerFactor } from './../utils/functions';
-import { BaseObject } from './BaseObject';
-import { GroundObject } from './GroundObject';
-import { TimeVariables } from '../interfaces/TimeVariables';
+} from '../types/types.js';
+import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../utils/constants.js';
+import { dopplerFactor } from './../utils/functions.js';
+import { BaseObject } from './BaseObject.js';
+import { GroundObject } from './GroundObject.js';
+import { TimeVariables } from '../interfaces/TimeVariables.js';
 
 /**
  * Represents a satellite object with orbital information and methods for

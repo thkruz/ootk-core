@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import type { EpochUTC } from './EpochUTC';
+import type { EpochUTC } from './EpochUTC.js';
 
 export class EpochWindow {
   start: EpochUTC;

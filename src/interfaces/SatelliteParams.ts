@@ -1,4 +1,4 @@
-import { EciVec3, SpaceObjectType, TleLine1, TleLine2 } from '../types/types';
+import { EciVec3, SpaceObjectType, TleLine1, TleLine2 } from '../types/types.js';
 
 /**
  * Information about a space object.

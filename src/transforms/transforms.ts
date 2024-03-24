@@ -41,8 +41,8 @@ import {
   SezVec3,
   Sgp4,
   TAU,
-} from '../main';
-import { TransformCache } from './TransformCache';
+} from '../main.js';
+import { TransformCache } from './TransformCache.js';
 
 /**
  * Converts ECF to ECI coordinates.

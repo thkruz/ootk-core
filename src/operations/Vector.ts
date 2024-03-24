@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Vector3D, Matrix, Degrees, Radians } from '../main';
+import { Vector3D, Matrix, Degrees, Radians } from '../main.js';
 
 /**
  * A Vector is a mathematical object that has both magnitude and direction.
