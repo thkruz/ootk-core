@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.1.2](https://github.com/thkruz/ootk-core/compare/v1.1.1...1.1.2)
+#### [1.2.0](https://github.com/thkruz/ootk-core/compare/v1.1.2...1.2.0)
+
+- feat: :sparkles: add node support [`12cce99`](https://github.com/thkruz/ootk-core/commit/12cce99ec3dbf8237d04dd4797d3c04786cf4770)
+
+#### [v1.1.2](https://github.com/thkruz/ootk-core/compare/v1.1.1...v1.1.2)
+
+> 19 February 2024 
 
 - refactor: :recycle: add default id [`eae7a33`](https://github.com/thkruz/ootk-core/commit/eae7a33f65b3d67f4b3025af1943b34ef964372d)
 - refactor: :recycle: allow null rcs and vmag [`0453c0a`](https://github.com/thkruz/ootk-core/commit/0453c0a3b05cc6b1a012301fd909f8a31925e7ec)
