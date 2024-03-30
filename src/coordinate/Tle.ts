@@ -563,7 +563,12 @@ export class Tle {
    * @returns The International Designator.
    */
   static intlDes(tleLine1: TleLine1): string {
-    return tleLine1.substring(Tle.intlDes_.start, Tle.intlDes_.stop).trim();
+    const year2 = this.intlDesYear(tleLine1);
+    const year4 = year2 < 57 ? year2 + 2000 : year2 + 1900;
+    const launchNum = this.intlDesLaunchNum(tleLine1);
+    const launchPiece = this.intlDesLaunchPiece(tleLine1);
+
+    return `${year4}-${launchNum.toString().padStart(3, '0')}${launchPiece}`;
   }
 
   /**
