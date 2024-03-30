@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.0](https://github.com/thkruz/ootk-core/compare/v1.1.2...1.2.0)
+#### [1.2.1](https://github.com/thkruz/ootk-core/compare/v1.2.0...1.2.1)
+
+- fix: :bug: fix incorrect international designator formatting [`7da8317`](https://github.com/thkruz/ootk-core/commit/7da831761eace14701d32ae98a79462d5ac4a104)
+
+#### [v1.2.0](https://github.com/thkruz/ootk-core/compare/v1.1.2...v1.2.0)
+
+> 24 March 2024 
 
 - feat: :sparkles: add node support [`12cce99`](https://github.com/thkruz/ootk-core/commit/12cce99ec3dbf8237d04dd4797d3c04786cf4770)
 
