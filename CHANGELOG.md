@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.1](https://github.com/thkruz/ootk-core/compare/v1.2.0...1.2.1)
+#### [1.2.2](https://github.com/thkruz/ootk-core/compare/v1.2.1...1.2.2)
+
+- fix: :bug: fix bug where missing intlDes data returns NaN [`971a5a0`](https://github.com/thkruz/ootk-core/commit/971a5a0b70e7535ab970198e5d7d47b11877ac32)
+
+#### [v1.2.1](https://github.com/thkruz/ootk-core/compare/v1.2.0...v1.2.1)
+
+> 30 March 2024 
 
 - fix: :bug: fix incorrect international designator formatting [`7da8317`](https://github.com/thkruz/ootk-core/commit/7da831761eace14701d32ae98a79462d5ac4a104)
 
