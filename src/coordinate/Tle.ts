@@ -564,6 +564,12 @@ export class Tle {
    */
   static intlDes(tleLine1: TleLine1): string {
     const year2 = this.intlDesYear(tleLine1);
+
+    // Some TLEs don't have a year, so we can't generate an IntlDes
+    if (isNaN(year2)) {
+      return '';
+    }
+
     const year4 = year2 < 57 ? year2 + 2000 : year2 + 1900;
     const launchNum = this.intlDesLaunchNum(tleLine1);
     const launchPiece = this.intlDesLaunchPiece(tleLine1);
