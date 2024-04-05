@@ -1,4 +1,4 @@
-import { EpochUTC } from '../../src/main';
+import { EpochUTC, Seconds } from '../../src/main';
 
 describe('EpochGPS', () => {
   it('now', () => {
@@ -27,7 +27,7 @@ describe('EpochGPS', () => {
   });
 
   it('fromJ2000TTSeconds', () => {
-    const epoch = EpochUTC.fromJ2000TTSeconds(0);
+    const epoch = EpochUTC.fromJ2000TTSeconds(0 as Seconds);
 
     expect(epoch).toMatchSnapshot();
   });
@@ -42,7 +42,7 @@ describe('EpochGPS', () => {
   it('should roll the epoch forward', () => {
     const epoch = EpochUTC.fromDateTime(new Date(2021, 2, 1));
 
-    expect(epoch.roll(60)).toMatchSnapshot();
+    expect(epoch.roll(60 as Seconds)).toMatchSnapshot();
   });
 
   // toMjd

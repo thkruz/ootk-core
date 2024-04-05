@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-export { Epoch } from './Epoch';
-export { EpochGPS } from './EpochGPS';
-export { EpochTAI } from './EpochTAI';
-export { EpochTDB } from './EpochTDB';
-export { EpochTT } from './EpochTT';
-export { EpochUTC } from './EpochUTC';
-export { EpochWindow } from './EpochWindow';
-export { TimeStamped } from './TimeStamped';
+export { Epoch } from './Epoch.js';
+export { EpochGPS } from './EpochGPS.js';
+export { EpochTAI } from './EpochTAI.js';
+export { EpochTDB } from './EpochTDB.js';
+export { EpochTT } from './EpochTT.js';
+export { EpochUTC } from './EpochUTC.js';
+export { EpochWindow } from './EpochWindow.js';
+export { TimeStamped } from './TimeStamped.js';

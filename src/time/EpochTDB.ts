@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Epoch } from './Epoch';
+import { Epoch } from './Epoch.js';
 
 /** Represents an Epoch in TDB (Barycentric Dynamical Time). */
 export class EpochTDB extends Epoch {}

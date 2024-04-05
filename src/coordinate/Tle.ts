@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-import { ClassicalElements, FormatTle, TEME } from '.';
-import { Sgp4OpsMode } from '../enums/Sgp4OpsMode';
-import { Sgp4, Vector3D } from '../main';
-import { Sgp4GravConstants } from '../sgp4/sgp4';
-import { EpochUTC } from '../time/EpochUTC';
+import { ClassicalElements, FormatTle, TEME } from './index.js';
+import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
+import { Sgp4, Vector3D } from '../main.js';
+import { Sgp4GravConstants } from '../sgp4/sgp4.js';
+import { EpochUTC } from '../time/EpochUTC.js';
 import {
   Degrees,
   EciVec3,
@@ -41,10 +41,10 @@ import {
   TleDataFull,
   TleLine1,
   TleLine2,
-} from '../types/types';
-import { DEG2RAD, earthGravityParam, RAD2DEG, secondsPerDay, TAU } from '../utils/constants';
-import { newtonNu, toPrecision } from '../utils/functions';
-import { TleFormatData } from './tle-format-data';
+} from '../types/types.js';
+import { DEG2RAD, earthGravityParam, RAD2DEG, secondsPerDay, TAU } from '../utils/constants.js';
+import { newtonNu, toPrecision } from '../utils/functions.js';
+import { TleFormatData } from './tle-format-data.js';
 
 /**
  * Tle is a static class with a collection of methods for working with TLEs.
@@ -563,7 +563,18 @@ export class Tle {
    * @returns The International Designator.
    */
   static intlDes(tleLine1: TleLine1): string {
-    return tleLine1.substring(Tle.intlDes_.start, Tle.intlDes_.stop).trim();
+    const year2 = this.intlDesYear(tleLine1);
+
+    // Some TLEs don't have a year, so we can't generate an IntlDes
+    if (isNaN(year2)) {
+      return '';
+    }
+
+    const year4 = year2 < 57 ? year2 + 2000 : year2 + 1900;
+    const launchNum = this.intlDesLaunchNum(tleLine1);
+    const launchPiece = this.intlDesLaunchPiece(tleLine1);
+
+    return `${year4}-${launchNum.toString().padStart(3, '0')}${launchPiece}`;
   }
 
   /**

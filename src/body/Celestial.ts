@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { AzEl, Degrees, Kilometers, RAD2DEG, RaDec, Radians, Sun } from '../main';
+import { AzEl, Degrees, Kilometers, RAD2DEG, RaDec, Radians, Sun } from '../main.js';
 
 /**
  * Celestial is a static class that provides methods for calculating the position of celestial objects such as the Sun,

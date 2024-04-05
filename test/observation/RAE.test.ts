@@ -5,6 +5,7 @@ import {
   EpochUTC,
   J2000,
   Kilometers,
+  KilometersPerSecond,
   RAE,
   Radians,
   Vector3D,
@@ -70,12 +71,12 @@ describe('RAE', () => {
     const state = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(7000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
     const site = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(6000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
 
     const rae = RAE.fromStateVector(state, site);
@@ -88,7 +89,7 @@ describe('RAE', () => {
     const site = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(6000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
 
     expect(rae.toStateVector(site)).toMatchSnapshot();
@@ -99,7 +100,7 @@ describe('RAE', () => {
     const site = new J2000(
       EpochUTC.fromDateTime(exampleDate),
       new Vector3D<Kilometers>(6000 as Kilometers, 7000 as Kilometers, 8000 as Kilometers),
-      new Vector3D<Kilometers>(0 as Kilometers, 0 as Kilometers, 0 as Kilometers),
+      new Vector3D<KilometersPerSecond>(0 as KilometersPerSecond, 0 as KilometersPerSecond, 0 as KilometersPerSecond),
     );
 
     expect(rae.position(site)).toMatchSnapshot();

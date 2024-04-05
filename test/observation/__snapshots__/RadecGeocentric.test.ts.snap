@@ -31,14 +31,14 @@ RadecGeocentric {
 exports[`RadecGeocentric should be constructable from degrees 1`] = `
 RadecGeocentric {
   "declination": 0,
-  "declinationRate": undefined,
+  "declinationRate": null,
   "epoch": EpochUTC {
     "posix": 1705109326.817,
   },
   "range": undefined,
   "rangeRate": undefined,
   "rightAscension": 0.4363323129985824,
-  "rightAscensionRate": undefined,
+  "rightAscensionRate": null,
 }
 `;
 
@@ -48,7 +48,7 @@ exports[`RadecGeocentric should return the angle in degrees 1`] = `0.99999999999
 
 exports[`RadecGeocentric should return the declination in degrees 1`] = `0`;
 
-exports[`RadecGeocentric should return the declination rate in degrees 1`] = `undefined`;
+exports[`RadecGeocentric should return the declination rate in degrees 1`] = `null`;
 
 exports[`RadecGeocentric should return the position 1`] = `
 Vector3D {
@@ -60,7 +60,7 @@ Vector3D {
 
 exports[`RadecGeocentric should return the right ascension in degrees 1`] = `25`;
 
-exports[`RadecGeocentric should return the right ascension rate in degrees 1`] = `undefined`;
+exports[`RadecGeocentric should return the right ascension rate in degrees 1`] = `null`;
 
 exports[`RadecGeocentric should return the velocity 1`] = `
 Vector3D {

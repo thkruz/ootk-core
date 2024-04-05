@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
-import { AngularDiameterMethod } from '../enums/AngularDiameterMethod';
-import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { DifferentiableFunction, EcfVec3, Kilometers, Radians, SpaceObjectType } from '../types/types';
-import { angularVelocityOfEarth, cKmPerSec } from './constants';
+import { AngularDiameterMethod } from '../enums/AngularDiameterMethod.js';
+import { AngularDistanceMethod } from '../enums/AngularDistanceMethod.js';
+import { EcfVec3, Kilometers, Radians, SpaceObjectType } from '../types/types.js';
+import { angularVelocityOfEarth, cKmPerSec } from './constants.js';
 
 /**
  * Calculates the factorial of a given number.
@@ -153,11 +153,11 @@ export function wrapAngle(theta: Radians): Radians {
  * @param phi2 - The latitude of the second point in radians.
  * @returns The angular distance between the two points in radians.
  */
-function angularDistanceCosine_(lam1: number, phi1: number, lam2: number, phi2: number): number {
+function angularDistanceCosine_(lam1: number, phi1: number, lam2: number, phi2: number): Radians {
   const a = Math.sin(phi1) * Math.sin(phi2);
   const b = Math.cos(phi1) * Math.cos(phi2) * Math.cos(lam2 - lam1);
 
-  return Math.acos(a + b);
+  return Math.acos(a + b) as Radians;
 }
 
 /**
@@ -168,14 +168,14 @@ function angularDistanceCosine_(lam1: number, phi1: number, lam2: number, phi2: 
  * @param phi2 - The latitude of the second point in radians.
  * @returns The angular distance between the two points in radians.
  */
-function angularDistanceHaversine_(lam1: number, phi1: number, lam2: number, phi2: number): number {
+function angularDistanceHaversine_(lam1: number, phi1: number, lam2: number, phi2: number): Radians {
   const dlam = lam2 - lam1;
   const dphi = phi2 - phi1;
   const sdlam = Math.sin(0.5 * dlam);
   const sdphi = Math.sin(0.5 * dphi);
   const a = sdphi * sdphi + Math.cos(phi1) * Math.cos(phi2) * sdlam * sdlam;
 
-  return 2.0 * Math.asin(Math.min(1.0, Math.sqrt(a)));
+  return 2.0 * Math.asin(Math.min(1.0, Math.sqrt(a))) as Radians;
 }
 
 /**
@@ -194,7 +194,7 @@ export function angularDistance(
   lam2: number,
   phi2: number,
   method: AngularDistanceMethod = AngularDistanceMethod.Cosine,
-): number {
+): Radians {
   switch (method) {
     case AngularDistanceMethod.Cosine:
       return angularDistanceCosine_(lam1, phi1, lam2, phi2);
@@ -297,26 +297,6 @@ export function covariance(a: number[], b: number[], isSample = false): number {
   const m = isSample ? 1 : 0;
 
   return result / (n - m);
-}
-
-/**
- * Calculates the derivative of a differentiable function.
- * @param f The differentiable function.
- * @param h The step size for numerical differentiation. Default value is 1e-3.
- * @returns The derivative function.
- */
-export function derivative(f: DifferentiableFunction, h = 1e-3): DifferentiableFunction {
-  /**
-   * @param x The value at which to calculate the derivative.
-   * @returns The derivative of the function at the given value.
-   */
-  function df(x: number): number {
-    const hh = h * 0.5;
-
-    return (f(x + hh) - f(x - hh)) / h;
-  }
-
-  return df;
 }
 
 /**

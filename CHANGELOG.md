@@ -3,7 +3,85 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.0.5](https://github.com/thkruz/ootk-core/compare/v1.0.4...1.0.5)
+#### [1.2.2](https://github.com/thkruz/ootk-core/compare/v1.2.1...1.2.2)
+
+- fix: :bug: fix bug where missing intlDes data returns NaN [`971a5a0`](https://github.com/thkruz/ootk-core/commit/971a5a0b70e7535ab970198e5d7d47b11877ac32)
+
+#### [v1.2.1](https://github.com/thkruz/ootk-core/compare/v1.2.0...v1.2.1)
+
+> 30 March 2024 
+
+- fix: :bug: fix incorrect international designator formatting [`7da8317`](https://github.com/thkruz/ootk-core/commit/7da831761eace14701d32ae98a79462d5ac4a104)
+
+#### [v1.2.0](https://github.com/thkruz/ootk-core/compare/v1.1.2...v1.2.0)
+
+> 24 March 2024 
+
+- feat: :sparkles: add node support [`12cce99`](https://github.com/thkruz/ootk-core/commit/12cce99ec3dbf8237d04dd4797d3c04786cf4770)
+
+#### [v1.1.2](https://github.com/thkruz/ootk-core/compare/v1.1.1...v1.1.2)
+
+> 19 February 2024 
+
+- refactor: :recycle: add default id [`eae7a33`](https://github.com/thkruz/ootk-core/commit/eae7a33f65b3d67f4b3025af1943b34ef964372d)
+- refactor: :recycle: allow null rcs and vmag [`0453c0a`](https://github.com/thkruz/ootk-core/commit/0453c0a3b05cc6b1a012301fd909f8a31925e7ec)
+
+#### [v1.1.1](https://github.com/thkruz/ootk-core/compare/v1.1.0...v1.1.1)
+
+> 24 January 2024 
+
+- refactor: :recycle: move latRad and lonRad to GroundObject class [`79817b2`](https://github.com/thkruz/ootk-core/commit/79817b27b9e0307cd424e1264c9104c1d8b92a1d)
+- refactor: :label: add correct type output to FormatTle [`c16fe23`](https://github.com/thkruz/ootk-core/commit/c16fe23a4af79a9ad0aa063b6e0298bea5c1c116)
+
+#### [v1.1.0](https://github.com/thkruz/ootk-core/compare/v1.0.11...v1.1.0)
+
+> 21 January 2024 
+
+- feat: :sparkles: add editTle method to satellite class [`644e9ef`](https://github.com/thkruz/ootk-core/commit/644e9ef5d8aaff6302e7eea4cf1f320e0c049c2d)
+- feat: :sparkles: add toJ2000 method to sensor class [`ff410bd`](https://github.com/thkruz/ootk-core/commit/ff410bd41cab7e78f5af99bcde6f363db52e0f1f)
+
+#### [v1.0.11](https://github.com/thkruz/ootk-core/compare/v1.0.10...v1.0.11)
+
+> 20 January 2024 
+
+- fix: :bug: fix output type being expected as input type [`2b3ba86`](https://github.com/thkruz/ootk-core/commit/2b3ba86b9afb4ddaeae023e464db748838ebe46f)
+
+#### [v1.0.10](https://github.com/thkruz/ootk-core/compare/v1.0.9...v1.0.10)
+
+> 19 January 2024 
+
+- fix: :bug: fix missing name property on GroundObjects [`cba039d`](https://github.com/thkruz/ootk-core/commit/cba039d41a7377f6073d23cd97a2cc155f3d08f0)
+
+#### [v1.0.9](https://github.com/thkruz/ootk-core/compare/v1.0.8...v1.0.9)
+
+> 17 January 2024 
+
+- refactor: :adhesive_bandage: fix import statements [`028a801`](https://github.com/thkruz/ootk-core/commit/028a80113a27465c215d368180adf12ccf9f7b4d)
+
+#### [v1.0.8](https://github.com/thkruz/ootk-core/compare/v1.0.7...v1.0.8)
+
+> 17 January 2024 
+
+- refactor: :fire: move derivative function to ootk [`bd39ed4`](https://github.com/thkruz/ootk-core/commit/bd39ed4133d7c63b9a5e8804659e356f8e67b8e1)
+- test: :adhesive_bandage: fix type in test [`42e4c4a`](https://github.com/thkruz/ootk-core/commit/42e4c4aef0096b983bc907fdd91b981917f30d6c)
+- fix: :sparkles: add missing lla function [`21c2b7b`](https://github.com/thkruz/ootk-core/commit/21c2b7b9ffb295dd99220de10a45d02dc4a22c64)
+- refactor: :fire: remove uneeded type [`b0719df`](https://github.com/thkruz/ootk-core/commit/b0719df9ef712534312d251823f731a2a362cc33)
+- test: :white_check_mark: update snapshots [`d4015d0`](https://github.com/thkruz/ootk-core/commit/d4015d0e3f2766f3f2fafc2700d77d74dcb541b2)
+
+#### [v1.0.7](https://github.com/thkruz/ootk-core/compare/v1.0.6...v1.0.7)
+
+> 17 January 2024 
+
+- build: :construction_worker: add auto build when updating version number [`94dc010`](https://github.com/thkruz/ootk-core/commit/94dc0102bcbfaa276d25993f68810d8ce43fa856)
+- fix: :label: fix typo in package.json [`c4c86ef`](https://github.com/thkruz/ootk-core/commit/c4c86efcba345c6d15ca47ff8367dfbd7c8063e5)
+
+#### [v1.0.6](https://github.com/thkruz/ootk-core/compare/v1.0.5...v1.0.6)
+
+> 17 January 2024 
+
+- refactor: :label: improve typing and documentation of radec observations [`549f5fc`](https://github.com/thkruz/ootk-core/commit/549f5fce610f343ee34a69e4283dead4941dff23)
+
+#### [v1.0.5](https://github.com/thkruz/ootk-core/compare/v1.0.4...v1.0.5)
 
 #### [v1.0.4](https://github.com/thkruz/ootk-core/compare/v1.0.3...v1.0.4)
 

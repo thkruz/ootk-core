@@ -8,7 +8,12 @@ module.exports = {
         },
       },
     ],
-    '@babel/preset-typescript',
+    [
+      '@babel/preset-typescript', {
+        'rewriteImportExtensions': true,
+      },
+    ],
   ],
   compact: 'auto',
+
 };

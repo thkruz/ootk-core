@@ -21,42 +21,46 @@
  * SOFTWARE.
  */
 
-/* eslint-disable no-undefined */
-import { Degrees, DegreesPerSecond, Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from 'src/main';
-import { J2000 } from '../coordinate/J2000';
-import { AngularDistanceMethod } from '../enums/AngularDistanceMethod';
-import { Vector3D } from '../operations/Vector3D';
-import { EpochUTC } from '../time/EpochUTC';
-import { DEG2RAD, RAD2DEG, TAU } from '../utils/constants';
-import { angularDistance } from '../utils/functions';
-import { radecToPosition, radecToVelocity } from './ObservationUtils';
+import { Degrees, DegreesPerSecond, Kilometers, KilometersPerSecond, Radians, RadiansPerSecond } from '../main.js';
+import { J2000 } from '../coordinate/J2000.js';
+import { AngularDistanceMethod } from '../enums/AngularDistanceMethod.js';
+import { Vector3D } from '../operations/Vector3D.js';
+import { EpochUTC } from '../time/EpochUTC.js';
+import { DEG2RAD, RAD2DEG, TAU } from '../utils/constants.js';
+import { angularDistance } from '../utils/functions.js';
+import { radecToPosition, radecToVelocity } from './ObservationUtils.js';
 
-// / Topocentric right-ascension and declination.
+/**
+ * Represents a topocentric right ascension and declination observation.
+ *
+ * Topocentric coordinates take into account the observer's exact location on the Earth's surface. This model is crucial
+ * for precise measurements of local astronomical events and nearby celestial objects, where the observer's latitude,
+ * longitude, and altitude can significantly affect the observed position due to parallax. Topocentric coordinates are
+ * particularly important for observations of the Moon, planets, and artificial satellites.
+ */
 export class RadecTopocentric {
-  // / Create a new [RadecTopocentric] object.
   constructor(
     public epoch: EpochUTC,
     public rightAscension: Radians,
     public declination: Radians,
     public range?: Kilometers,
-    public rightAscensionRate?: RadiansPerSecond,
-    public declinationRate?: RadiansPerSecond,
-    public rangeRate?: KilometersPerSecond,
+    public rightAscensionRate?: RadiansPerSecond | null,
+    public declinationRate?: RadiansPerSecond | null,
+    public rangeRate?: KilometersPerSecond | null,
   ) {
     // Nothing to do here.
   }
 
   /**
-   * Create a new [RadecTopocentric] object, using degrees for the
-   * angular values.
+   * Create a new RadecTopocentric object, using degrees for the angular values.
    * @param epoch UTC epoch.
-   * @param rightAscensionDegrees Right-ascension _(°)_.
-   * @param declinationDegrees Declination _(°)_.
-   * @param range Range _(km)_.
-   * @param rightAscensionRateDegrees Right-ascension rate _(°/s)_.
-   * @param declinationRateDegrees Declination rate _(°/s)_.
-   * @param rangeRate Range rate _(km/s)_.
-   * @returns A new [RadecTopocentric] object.
+   * @param rightAscensionDegrees Right-ascension in degrees.
+   * @param declinationDegrees Declination in degrees.
+   * @param range Range in km.
+   * @param rightAscensionRateDegrees Right-ascension rate in degrees per second.
+   * @param declinationRateDegrees Declination rate in degrees per second.
+   * @param rangeRate Range rate in km/s.
+   * @returns A new RadecTopocentric object.
    */
   static fromDegrees(
     epoch: EpochUTC,
@@ -69,10 +73,10 @@ export class RadecTopocentric {
   ): RadecTopocentric {
     const rightAscensionRate = rightAscensionRateDegrees
       ? rightAscensionRateDegrees * DEG2RAD as RadiansPerSecond
-      : undefined;
+      : null;
     const declinationRate = declinationRateDegrees
       ? declinationRateDegrees * DEG2RAD as RadiansPerSecond
-      : undefined;
+      : null;
 
     return new RadecTopocentric(
       epoch,
@@ -86,11 +90,10 @@ export class RadecTopocentric {
   }
 
   /**
-   * Create a [RadecTopocentric] object from an inertial [state] and
-   * [site] vector.
+   * Create a new RadecTopocentric object from a J2000 state vector.
    * @param state Inertial state vector.
    * @param site Site vector.
-   * @returns A new [RadecTopocentric] object.
+   * @returns A new RadecTopocentric object.
    */
   static fromStateVector(state: J2000, site: J2000): RadecTopocentric {
     const p = state.position.subtract(site.position);
@@ -126,24 +129,36 @@ export class RadecTopocentric {
     );
   }
 
-  // / Right-ascension _(°)_.
+  /**
+   * Gets the right ascension in degrees.
+   * @returns The right ascension in degrees.
+   */
   get rightAscensionDegrees(): Degrees {
     return this.rightAscension * RAD2DEG as Degrees;
   }
 
-  // / Declination _(°)_.
+  /**
+   * Gets the declination in degrees.
+   * @returns The declination in degrees.
+   */
   get declinationDegrees(): Degrees {
     return this.declination * RAD2DEG as Degrees;
   }
 
-  // / Right-ascension rate _(°/s)_.
+  /**
+   * Gets the right ascension rate in degrees per second.
+   * @returns The right ascension rate in degrees per second, or null if it is not available.
+   */
   get rightAscensionRateDegrees(): DegreesPerSecond | null {
     return this.rightAscensionRate
       ? this.rightAscensionRate * RAD2DEG as DegreesPerSecond
       : null;
   }
 
-  // / Declination rate _(°/s)_.
+  /**
+   * Gets the rate of change of declination in degrees per second.
+   * @returns The rate of change of declination in degrees per second, or null if the declination rate is not defined.
+   */
   get declinationRateDegrees(): DegreesPerSecond | null {
     return this.declinationRate
       ? this.declinationRate * RAD2DEG as DegreesPerSecond
@@ -151,31 +166,29 @@ export class RadecTopocentric {
   }
 
   /**
-   * Return the position relative to the observer [site].
+   * Return the position relative to the observer site.
    *
-   * An optional [range] _(km)_ value can be passed to override the value
-   * contained in this observation.
+   * An optional range value can be passed to override the value contained in this observation.
    * @param site Observer site.
-   * @param range Range _(km)_.
-   * @returns A [Vector3D] object.
+   * @param range Range in km.
+   * @returns A Vector3D object.
    */
-  position(site: J2000, range?: Kilometers): Vector3D {
+  position(site: J2000, range?: Kilometers): Vector3D<Kilometers> {
     const r = range ?? this.range ?? 1.0 as Kilometers;
 
     return radecToPosition(this.rightAscension, this.declination, r).add(site.position);
   }
 
   /**
-   * Return the velocity relative to the observer [site].
+   * Return the velocity relative to the observer site.
    *
-   * An optional [range] _(km)_ and [rangeRate] _(km/s)_ value can be passed
-   * to override the values contained in this observation.
+   * An optional range and rangeRate value can be passed to override the values contained in this observation.
    * @param site Observer site.
-   * @param range Range _(km)_.
-   * @param rangeRate Range rate _(km/s)_.
-   * @returns A [Vector3D] object.
+   * @param range Range in km.
+   * @param rangeRate Range rate in km/s.
+   * @returns A Vector3D object.
    */
-  velocity(site: J2000, range?: Kilometers, rangeRate?: KilometersPerSecond): Vector3D {
+  velocity(site: J2000, range?: Kilometers, rangeRate?: KilometersPerSecond): Vector3D<KilometersPerSecond> {
     if (!this.rightAscensionRate || !this.declinationRate) {
       throw new Error('Velocity unsolvable, missing ra/dec rates.');
     }
@@ -192,7 +205,11 @@ export class RadecTopocentric {
     ).add(site.velocity);
   }
 
-  // / Convert this observation into a line-of-sight vector.
+  /**
+   * Calculates the line of sight vector in the topocentric coordinate system.
+   * The line of sight vector points from the observer's location towards the celestial object.
+   * @returns The line of sight vector as a Vector3D object.
+   */
   lineOfSight(): Vector3D {
     const ca = Math.cos(this.rightAscension);
     const cd = Math.cos(this.declination);
@@ -203,24 +220,22 @@ export class RadecTopocentric {
   }
 
   /**
-   * Calculate the angular distance _(rad)_ between this and another
-   * [RadecTopocentric] object.
-   * @param radec - The other [RadecTopocentric] object.
+   * Calculate the angular distance between this and another RadecTopocentric object.
+   * @param radec - The other RadecTopocentric object.
    * @param method - The angular distance method to use.
-   * @returns The angular distance _(rad)_.
+   * @returns The angular distance.
    */
-  angle(radec: RadecTopocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
+  angle(radec: RadecTopocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): Radians {
     return angularDistance(this.rightAscension, this.declination, radec.rightAscension, radec.declination, method);
   }
 
   /**
-   * Calculate the angular distance _(°)_ between this and another
-   * [RadecTopocentric] object.
-   * @param radec - The other [RadecTopocentric] object.
+   * Calculate the angular distance between this and another RadecTopocentric object.
+   * @param radec - The other RadecTopocentric object.
    * @param method - The angular distance method to use.
-   * @returns The angular distance _(°)_.
+   * @returns The angular distance
    */
-  angleDegrees(radec: RadecTopocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): number {
-    return this.angle(radec, method) * RAD2DEG;
+  angleDegrees(radec: RadecTopocentric, method: AngularDistanceMethod = AngularDistanceMethod.Cosine): Degrees {
+    return this.angle(radec, method) * RAD2DEG as Degrees;
   }
 }

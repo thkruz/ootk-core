@@ -31,14 +31,14 @@ RadecTopocentric {
 exports[`RadecTopocentric should be constructable from degrees 1`] = `
 RadecTopocentric {
   "declination": 0,
-  "declinationRate": undefined,
+  "declinationRate": null,
   "epoch": EpochUTC {
     "posix": 1705109326.817,
   },
   "range": undefined,
   "rangeRate": undefined,
   "rightAscension": 0.4363323129985824,
-  "rightAscensionRate": undefined,
+  "rightAscensionRate": null,
 }
 `;
 

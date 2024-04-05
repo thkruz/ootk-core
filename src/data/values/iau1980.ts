@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Iau1980Entry } from './Iau1980Data';
+import { Iau1980Entry } from './Iau1980Data.js';
 
 // / Array of the first 4 IAU-1980 coefficients.
 export const iau1980: Iau1980Entry[] = [

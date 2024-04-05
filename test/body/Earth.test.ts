@@ -1,4 +1,4 @@
-import { Earth, EpochUTC, Vector3D } from '../../src/main';
+import { Earth, EpochUTC, Kilometers, Vector3D } from '../../src/main';
 
 describe('Earth', () => {
   let exampleDate = new Date(1705109326817);
@@ -11,7 +11,7 @@ describe('Earth', () => {
 
   // can calculate mean motion from semimajor axis
   it('should calculate mean motion when given a semimajor axis', () => {
-    const semimajorAxis = 7000; // km
+    const semimajorAxis = 7000 as Kilometers;
     const meanMotion = Earth.smaToMeanMotion(semimajorAxis);
 
     expect(meanMotion).toMatchSnapshot();
@@ -42,7 +42,7 @@ describe('Earth', () => {
 
   // can handle semimajor axis of 0 when calculating mean motion
   it('should return NaN when given a semimajor axis of 0', () => {
-    const semimajorAxis = 0;
+    const semimajorAxis = 0 as Kilometers;
     const meanMotion = Earth.smaToMeanMotion(semimajorAxis);
 
     expect(meanMotion).toBe(Infinity);
@@ -50,7 +50,7 @@ describe('Earth', () => {
 
   // can handle negative semimajor axis when calculating mean motion
   it('should return NaN when given a negative semimajor axis', () => {
-    const semimajorAxis = -7000;
+    const semimajorAxis = -7000 as Kilometers;
     const meanMotion = Earth.smaToMeanMotion(semimajorAxis);
 
     expect(meanMotion).toBeNaN();

@@ -55,7 +55,7 @@ import {
   SunTime,
   TAU,
   Vector3D,
-} from '../main';
+} from '../main.js';
 
 /**
  * Sun metrics and operations.

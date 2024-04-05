@@ -1,4 +1,4 @@
-import { Days, Degrees, Milliseconds, Minutes, Radians, Seconds } from '../types/types';
+import { Days, Degrees, Milliseconds, Minutes, Radians, Seconds } from '../types/types.js';
 
 /**
  * Full circle in radians (PI * 2)

@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { DEG2RAD, Degrees, PI, RAD2DEG, Radians } from '../main';
+import { DEG2RAD, Degrees, PI, RAD2DEG, Radians } from '../main.js';
 
 /**
  * Converts radians to degrees.

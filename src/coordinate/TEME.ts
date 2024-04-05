@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-import { Kilometers, KilometersPerSecond, Radians, Vector3D } from '../main';
-import { Earth } from '../body/Earth';
-import type { ClassicalElements } from './ClassicalElements';
-import { J2000 } from './J2000';
-import { StateVector } from './StateVector';
+import { Kilometers, KilometersPerSecond, Radians, Vector3D } from '../main.js';
+import { Earth } from '../body/Earth.js';
+import type { ClassicalElements } from './ClassicalElements.js';
+import { J2000 } from './J2000.js';
+import { StateVector } from './StateVector.js';
 
 /**
  * True Equator Mean Equinox (TEME) is a coordinate system commonly used in satellite tracking and orbit prediction. It

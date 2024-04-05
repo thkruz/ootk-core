@@ -39,9 +39,9 @@ import {
   TAU,
   ttasec2rad,
   Vector3D,
-} from '../main';
-import { NutationAngles } from './NutationAngles';
-import { PrecessionAngles } from './PrecessionAngles';
+} from '../main.js';
+import { NutationAngles } from './NutationAngles.js';
+import { PrecessionAngles } from './PrecessionAngles.js';
 
 // / Earth metrics and operations.
 export class Earth {

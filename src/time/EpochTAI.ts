@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Epoch } from './Epoch';
+import { Epoch } from './Epoch.js';
 
 /** Represents an Epoch in International Atomic Time (TAI). */
 export class EpochTAI extends Epoch {}

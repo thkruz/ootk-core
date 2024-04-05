@@ -1,4 +1,4 @@
-import { Radians } from '../types/types';
+import { Radians } from '../types/types.js';
 
 export interface StarObjectParams {
   ra: Radians;

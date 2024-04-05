@@ -21,9 +21,7 @@
  * SOFTWARE.
  */
 
-import { Satellite } from 'src/objects';
-import { PassType } from '../enums/PassType';
-import { Vector3D } from '../main';
+import { Vector3D, PassType, Satellite } from '../main.js';
 
 /**
  * Represents a distinct type.
@@ -659,12 +657,6 @@ export type OperationsDetails = {
   owner?: string;
   country?: string;
 };
-/**
- * Represents a differentiable function.
- * @param x The input value. @returns The output value.
- */
-
-export type DifferentiableFunction = (x: number) => number;
 
 export type Lookangle = {
   type: PassType;
@@ -699,13 +691,18 @@ export type TleData = {
 export type TleDataFull = Line1Data & Line2Data;
 export type StringifiedNumber = `${number}.${number}`;
 
+/**
+ * Represents a set of data containing both Line 1 and Line 2 TLE information.
+ *
+ * TODO: #22 TleParams types should be more consistent.
+ */
 export type TleParams = {
   sat?: Satellite;
-  inc: StringifiedNumber;
-  meanmo: StringifiedNumber;
-  rasc: StringifiedNumber;
-  argPe: StringifiedNumber;
-  meana: StringifiedNumber;
+  inc: string|number;
+  meanmo: string|number;
+  rasc: string|number;
+  argPe: string|number;
+  meana: string|number;
   ecen: string;
   epochyr: string;
   epochday: string;
