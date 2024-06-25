@@ -357,12 +357,12 @@ export class Tle {
    * @see https://en.wikipedia.org/wiki/Argument_of_perigee
    * @example 69.9862
    * @param tleLine2 The second line of the Tle to parse.
-   * @returns The argument of perigee in degrees (0 to 359.9999).
+   * @returns The argument of perigee in degrees (0 to 360).
    */
   static argOfPerigee(tleLine2: TleLine2): Degrees {
     const argPe = parseFloat(tleLine2.substring(Tle.argPerigee_.start, Tle.argPerigee_.stop));
 
-    if (!(argPe >= 0 && argPe < 360)) {
+    if (!(argPe >= 0 && argPe <= 360)) {
       throw new Error(`Invalid argument of perigee: ${argPe}`);
     }
 
@@ -628,7 +628,7 @@ export class Tle {
    * @see https://en.wikipedia.org/wiki/Mean_Anomaly
    * @example 25.2906
    * @param tleLine2 The second line of the Tle to parse.
-   * @returns The mean anomaly of the satellite. (0 to 359.9999)
+   * @returns The mean anomaly of the satellite. (0 to 360)
    */
   static meanAnomaly(tleLine2: TleLine2): Degrees {
     const meanA = parseFloat(tleLine2.substring(Tle.meanAnom_.start, Tle.meanAnom_.stop));
@@ -713,7 +713,7 @@ export class Tle {
    * northward (ascending) across the Earth's equator (equatorial plane).
    * @example 208.9163
    * @param tleLine2 The second line of the Tle to parse.
-   * @returns The right ascension of the satellite. (0 to 359.9999)
+   * @returns The right ascension of the satellite. (0 to 360)
    */
   static rightAscension(tleLine2: TleLine2): Degrees {
     const rightAscension = parseFloat(tleLine2.substring(Tle.rightAscension_.start, Tle.rightAscension_.stop));
