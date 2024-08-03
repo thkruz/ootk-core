@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Minutes, PositionVelocity, Degrees, Kilometers, Radians, Seconds, KilometersPerSecond } from '../main.js';
+import { Minutes, PositionVelocity, Degrees, Kilometers, Radians, Seconds, KilometersPerSecond, Earth } from '../main.js';
 import { Vector3D } from '../operations/Vector3D.js';
 import { EpochUTC } from '../time/EpochUTC.js';
 import { earthGravityParam, MINUTES_PER_DAY, RAD2DEG, sec2min, TAU } from '../utils/constants.js';
@@ -160,20 +160,20 @@ export class ClassicalElements {
   }
 
   /**
-   * Gets the apogee of the classical elements.
+   * Gets the apogee of the classical elements. It is measured from the surface of the earth.
    * @returns The apogee in kilometers.
    */
   get apogee(): Kilometers {
-    return (this.semimajorAxis * (1.0 + this.eccentricity)) as Kilometers;
+    return (this.semimajorAxis * (1.0 + this.eccentricity) - Earth.radiusMean) as Kilometers;
   }
 
   /**
    * Gets the perigee of the classical elements. The perigee is the point in an
-   * orbit that is closest to the focus (in this case, the Earth).
+   * orbit that is closest to the surface of the earth.
    * @returns The perigee distance in kilometers.
    */
   get perigee(): number {
-    return (this.semimajorAxis * (1.0 - this.eccentricity)) as Kilometers;
+    return (this.semimajorAxis * (1.0 - this.eccentricity) - Earth.radiusMean) as Kilometers;
   }
 
   toString(): string {
