@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.3](https://github.com/thkruz/ootk-core/compare/v1.2.2...1.2.3)
+#### [1.2.4](https://github.com/thkruz/ootk-core/compare/v1.2.3...1.2.4)
+
+- fix: :bug: fix COES ap/pe measuring from center not surface [`a8bc495`](https://github.com/thkruz/ootk-core/commit/a8bc49551d644daacadb42cb0832abf719115754)
+
+#### [v1.2.3](https://github.com/thkruz/ootk-core/compare/v1.2.2...v1.2.3)
+
+> 25 June 2024 
 
 - fix: :bug: fix error when argOfPer is 360 [`2f97430`](https://github.com/thkruz/ootk-core/commit/2f97430eacbbdbeca12fbad7f183b033029d74be)
 - fix: :rotating_light: fix minor linter error [`0efa851`](https://github.com/thkruz/ootk-core/commit/0efa851c8c71c92f463a4318960a0c716742136b)
