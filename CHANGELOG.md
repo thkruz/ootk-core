@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.4](https://github.com/thkruz/ootk-core/compare/v1.2.3...1.2.4)
+#### [1.2.5](https://github.com/thkruz/ootk-core/compare/v1.2.4...1.2.5)
+
+- chore: :page_facing_up: fix incorrect sgp4 license file [`1e6ab39`](https://github.com/thkruz/ootk-core/commit/1e6ab395144bdc3fc2a36fb0542eb599070908ce)
+
+#### [v1.2.4](https://github.com/thkruz/ootk-core/compare/v1.2.3...v1.2.4)
+
+> 3 August 2024 
 
 - fix: :bug: fix COES ap/pe measuring from center not surface [`a8bc495`](https://github.com/thkruz/ootk-core/commit/a8bc49551d644daacadb42cb0832abf719115754)
 
