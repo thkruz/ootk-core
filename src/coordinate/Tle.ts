@@ -496,7 +496,7 @@ export class Tle {
   static epochDay(tleLine1: string): number {
     const epochDay = parseFloat(tleLine1.substring(Tle.epochDay_.start, Tle.epochDay_.stop));
 
-    if (epochDay < 1 || epochDay > 365.99999999) {
+    if (epochDay < 1 || epochDay > 366.99999999) {
       throw new Error('Invalid epoch day');
     }
 
