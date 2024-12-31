@@ -3,7 +3,15 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.5](https://github.com/thkruz/ootk-core/compare/v1.2.4...1.2.5)
+#### [1.2.6](https://github.com/thkruz/ootk-core/compare/v1.2.5...1.2.6)
+
+- refactor: :rotating_light: fix linter error [`8b3ee9b`](https://github.com/thkruz/ootk-core/commit/8b3ee9b45dea70f2e5339c4e9906e3ae6214d602)
+- fix: :ambulance: fix error on leap year [`a9bd6b7`](https://github.com/thkruz/ootk-core/commit/a9bd6b70fe64a6afec5f06d59a0ef30d513b02d9)
+- build: :lock: fix security issues in dependencies [`e9271cf`](https://github.com/thkruz/ootk-core/commit/e9271cf87db4cde3740455dfdaa35b2a34ede8e9)
+
+#### [v1.2.5](https://github.com/thkruz/ootk-core/compare/v1.2.4...v1.2.5)
+
+> 18 September 2024 
 
 - chore: :page_facing_up: fix incorrect sgp4 license file [`1e6ab39`](https://github.com/thkruz/ootk-core/commit/1e6ab395144bdc3fc2a36fb0542eb599070908ce)
 
