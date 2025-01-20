@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.6](https://github.com/thkruz/ootk-core/compare/v1.2.5...1.2.6)
+#### [1.2.7](https://github.com/thkruz/ootk-core/compare/v1.2.6...1.2.7)
+
+- fix: :bug: allow extremely large mean motion due to 18 SDS [`a35ab57`](https://github.com/thkruz/ootk-core/commit/a35ab57b76c15ed960c2d041e62da78865bc36f4)
+
+#### [v1.2.6](https://github.com/thkruz/ootk-core/compare/v1.2.5...v1.2.6)
+
+> 18 September 2024 
 
 - refactor: :rotating_light: fix linter error [`8b3ee9b`](https://github.com/thkruz/ootk-core/commit/8b3ee9b45dea70f2e5339c4e9906e3ae6214d602)
 - fix: :ambulance: fix error on leap year [`a9bd6b7`](https://github.com/thkruz/ootk-core/commit/a9bd6b70fe64a6afec5f06d59a0ef30d513b02d9)
