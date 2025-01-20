@@ -684,12 +684,12 @@ export class Tle {
    * @see https://en.wikipedia.org/wiki/Mean_Motion
    * @example 15.54225995
    * @param tleLine2 The second line of the Tle to parse.
-   * @returns The mean motion of the satellite. (0 to 17)
+   * @returns The mean motion of the satellite. (0 to 18)
    */
   static meanMotion(tleLine2: TleLine2): number {
     const meanMo = parseFloat(tleLine2.substring(Tle.meanMo_.start, Tle.meanMo_.stop));
 
-    if (!(meanMo > 0 && meanMo <= 17)) {
+    if (!(meanMo > 0 && meanMo <= 18)) {
       throw new Error(`Invalid mean motion: ${meanMo}`);
     }
 
