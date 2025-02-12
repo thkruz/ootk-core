@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.7](https://github.com/thkruz/ootk-core/compare/v1.2.6...1.2.7)
+#### [1.2.8](https://github.com/thkruz/ootk-core/compare/v1.2.7...1.2.8)
+
+- fix: :bug: fix typescript issues found in #27 [`005e2af`](https://github.com/thkruz/ootk-core/commit/005e2af6e167146ff0ffb84e6e6af4cf4c95bfc2)
+
+#### [v1.2.7](https://github.com/thkruz/ootk-core/compare/v1.2.6...v1.2.7)
+
+> 20 January 2025 
 
 - fix: :bug: allow extremely large mean motion due to 18 SDS [`a35ab57`](https://github.com/thkruz/ootk-core/commit/a35ab57b76c15ed960c2d041e62da78865bc36f4)
 
