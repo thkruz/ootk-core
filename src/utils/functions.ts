@@ -546,7 +546,7 @@ export const dopplerFactor = (
  * @returns An array of numbers.
  */
 export function createVec(start: number, stop: number, step: number): number[] {
-  const array = [];
+  const array = [] as number[];
 
   for (let i = start; i <= stop; i += step) {
     array.push(i);

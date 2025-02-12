@@ -36,6 +36,10 @@ export class TransformCache {
     if (this.cache_.size > 1000) {
       const firstKey = this.cache_.keys().next().value;
 
+      if (!firstKey) {
+        return;
+      }
+
       this.cache_.delete(firstKey);
     }
   }

@@ -339,7 +339,7 @@ export class Sun {
 
     // Add all other unique times using Jnoon as a reference
     for (let i = 0, len = Sun.times_.length; i < len; i += 1) {
-      time = Sun.times_[i];
+      time = Sun.times_[i]!;
       const angle = time[0] as Degrees;
 
       h0 = <Meters>((angle + dh) * DEG2RAD);
