@@ -3,7 +3,13 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.8](https://github.com/thkruz/ootk-core/compare/v1.2.7...1.2.8)
+#### [1.2.9](https://github.com/thkruz/ootk-core/compare/v1.2.8...1.2.9)
+
+- fix: :ambulance: fix wrong month calculation [`185f96f`](https://github.com/thkruz/ootk-core/commit/185f96f9db9be7d9661a29957224a34e9a4e8ab4)
+
+#### [v1.2.8](https://github.com/thkruz/ootk-core/compare/v1.2.7...v1.2.8)
+
+> 12 February 2025 
 
 - fix: :bug: fix typescript issues found in #27 [`005e2af`](https://github.com/thkruz/ootk-core/commit/005e2af6e167146ff0ffb84e6e6af4cf4c95bfc2)
 
