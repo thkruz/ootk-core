@@ -425,6 +425,11 @@ export function isLeapYear(dateIn: Date): boolean {
 }
 
 /**
+ * An array of the day of the year for each month.
+ */
+type MonthDaysArray = [number, number, number, number, number, number, number, number, number, number, number, number];
+
+/**
  * Calculates the day of the year for a given date.
  * If no date is provided, the current date is used.
  *
@@ -434,8 +439,9 @@ export function isLeapYear(dateIn: Date): boolean {
  * @returns The day of the year as a number.
  */
 export function getDayOfYear(date = new Date()): number {
-  const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-  const mn = date.getMonth();
+
+  const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334] as MonthDaysArray;
+  const mn = date.getUTCMonth() as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
   const dn = date.getUTCDate();
   let dayOfYear = dayCount[mn] + dn;
 
