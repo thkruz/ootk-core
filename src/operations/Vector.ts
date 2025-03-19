@@ -125,7 +125,7 @@ export class Vector<T extends number = number> {
    * @returns A string representation of the x value of the vector.
    */
   get x(): number {
-    return this.elements[0];
+    return this.elements[0] as number;
   }
 
   /**
@@ -133,7 +133,7 @@ export class Vector<T extends number = number> {
    * @returns A string representation of the y value of the vector.
    */
   get y(): number {
-    return this.elements[1];
+    return this.elements[1] as number;
   }
 
   /**
@@ -141,7 +141,7 @@ export class Vector<T extends number = number> {
    * @returns A string representation of the z value of the vector.
    */
   get z(): number {
-    return this.elements[2];
+    return this.elements[2] as number;
   }
 
   /**
@@ -184,7 +184,7 @@ export class Vector<T extends number = number> {
     const output = new Array(this.length);
 
     for (let i = 0; i < this.length; i++) {
-      output[i] = this.elements[i] + v.elements[i];
+      output[i] = (this.elements[i] as number) + (v.elements[i] as number);
     }
 
     return new Vector(output);
@@ -199,7 +199,7 @@ export class Vector<T extends number = number> {
     const output = new Array(this.length);
 
     for (let i = 0; i < this.length; i++) {
-      output[i] = this.elements[i] - v.elements[i];
+      output[i] = (this.elements[i] as number) - (v.elements[i] as number);
     }
 
     return new Vector(output);
@@ -214,7 +214,7 @@ export class Vector<T extends number = number> {
     const output = new Array(this.length);
 
     for (let i = 0; i < this.length; i++) {
-      output[i] = this.elements[i] * n;
+      output[i] = (this.elements[i] as number) * n;
     }
 
     return new Vector(output);
@@ -262,7 +262,7 @@ export class Vector<T extends number = number> {
     let total = 0;
 
     for (let i = 0; i < this.length; i++) {
-      total += this.elements[i] * v.elements[i];
+      total += (this.elements[i] as number) * (v.elements[i] as number);
     }
 
     return total;
@@ -279,7 +279,7 @@ export class Vector<T extends number = number> {
     for (let i = 0; i < this.length; i++) {
       result[i] = [];
       for (let j = 0; j < v.length; j++) {
-        result[i][j] = this.elements[i] * v.elements[j];
+        (result[i] as number[])[j] = (this.elements[i] as number) * (v.elements[j] as number);
       }
     }
 

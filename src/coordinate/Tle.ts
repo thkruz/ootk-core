@@ -54,11 +54,11 @@ export class Tle {
   line2: string;
   epoch: EpochUTC;
   satnum: number;
-  private satrec_: SatelliteRecord;
+  private readonly satrec_: SatelliteRecord;
   /**
    * Mapping of alphabets to their corresponding numeric values.
    */
-  private static alpha5_ = {
+  private static readonly alpha5_ = {
     A: '10',
     B: '11',
     C: '12',
@@ -67,11 +67,13 @@ export class Tle {
     F: '15',
     G: '16',
     H: '17',
+    // I is skipped on purpose
     J: '18',
     K: '19',
     L: '20',
     M: '21',
     N: '22',
+    // O is skipped on purpose
     P: '23',
     Q: '24',
     R: '25',
@@ -83,7 +85,7 @@ export class Tle {
     X: '31',
     Y: '32',
     Z: '33',
-  };
+  } as const;
   /** The argument of perigee field. */
   private static readonly argPerigee_ = new TleFormatData(35, 42);
   /** The BSTAR drag term field. */
@@ -930,7 +932,7 @@ export class Tle {
     }
 
     // Already an alpha 5 number
-    if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0])) {
+    if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0] as string)) {
       return sccNum;
     }
 
@@ -958,9 +960,13 @@ export class Tle {
    * @returns The converted 6-digit SCC number.
    */
   static convertA5to6Digit(sccNum: string): string {
+    if (sccNum.length < 5) {
+      return sccNum;
+    }
+
     const values = sccNum.toUpperCase().split('');
 
-    if (values[0] in Tle.alpha5_) {
+    if (values[0] as string in Tle.alpha5_) {
       const firstLetter = values[0] as keyof typeof Tle.alpha5_;
 
       values[0] = Tle.alpha5_[firstLetter];

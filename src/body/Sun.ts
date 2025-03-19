@@ -179,7 +179,7 @@ export class Sun {
 
     return [
       // central body angle
-      satSun.angle(satPos.negate()) as Radians,
+      satSun.angle(satPos.negate()),
       // central body apparent radius
       Math.asin(Earth.radiusEquator / r) as Radians,
       // sun apparent radius

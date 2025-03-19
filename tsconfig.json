@@ -8,7 +8,7 @@
     "moduleResolution": "Bundler",
     "noEmit": true,
     "strict": true,
-    "strictNullChecks": false,
+    "strictNullChecks": false, // Enable this to support users with strict null checks
   },
   "include": [
     "./src/**/*.ts",
