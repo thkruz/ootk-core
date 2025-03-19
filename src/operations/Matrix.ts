@@ -35,7 +35,7 @@ export class Matrix {
   constructor(elements: number[][]) {
     this.elements = elements;
     this.rows = elements.length;
-    this.columns = elements[0].length;
+    this.columns = (elements[0] as number[]).length;
   }
 
   /**
@@ -62,7 +62,7 @@ export class Matrix {
     for (let i = 0; i < rows; i++) {
       elements[i] = [];
       for (let j = 0; j < columns; j++) {
-        elements[i][j] = value;
+        (elements[i] as number[])[j] = value;
       }
     }
 
@@ -79,11 +79,11 @@ export class Matrix {
     const sinT = Math.sin(theta);
     const result = Matrix.zero(3, 3);
 
-    result.elements[0][0] = 1.0;
-    result.elements[1][1] = cosT;
-    result.elements[1][2] = sinT;
-    result.elements[2][1] = -sinT;
-    result.elements[2][2] = cosT;
+    (result.elements[0] as number[])[0] = 1.0;
+    (result.elements[1] as number[])[1] = cosT;
+    (result.elements[1] as number[])[2] = sinT;
+    (result.elements[2] as number[])[1] = -sinT;
+    (result.elements[2] as number[])[2] = cosT;
 
     return result;
   }
@@ -98,11 +98,11 @@ export class Matrix {
     const sinT = Math.sin(theta);
     const result = Matrix.zero(3, 3);
 
-    result.elements[0][0] = cosT;
-    result.elements[0][2] = -sinT;
-    result.elements[1][1] = 1.0;
-    result.elements[2][0] = sinT;
-    result.elements[2][2] = cosT;
+    (result.elements[0] as number[])[0] = cosT;
+    (result.elements[0] as number[])[2] = -sinT;
+    (result.elements[1] as number[])[1] = 1.0;
+    (result.elements[2] as number[])[0] = sinT;
+    (result.elements[2] as number[])[2] = cosT;
 
     return result;
   }
@@ -117,11 +117,11 @@ export class Matrix {
     const sinT = Math.sin(theta);
     const result = Matrix.zero(3, 3);
 
-    result.elements[0][0] = cosT;
-    result.elements[0][1] = sinT;
-    result.elements[1][0] = -sinT;
-    result.elements[1][1] = cosT;
-    result.elements[2][2] = 1.0;
+    (result.elements[0] as number[])[0] = cosT;
+    (result.elements[0] as number[])[1] = sinT;
+    (result.elements[1] as number[])[0] = -sinT;
+    (result.elements[1] as number[])[1] = cosT;
+    (result.elements[2] as number[])[2] = 1.0;
 
     return result;
   }
@@ -138,7 +138,7 @@ export class Matrix {
     for (let i = 0; i < rows; i++) {
       elements[i] = [];
       for (let j = 0; j < columns; j++) {
-        elements[i][j] = 0.0;
+        (elements[i] as number[])[j] = 0.0;
       }
     }
 
@@ -156,7 +156,7 @@ export class Matrix {
     for (let i = 0; i < dimension; i++) {
       elements[i] = [];
       for (let j = 0; j < dimension; j++) {
-        elements[i][j] = i === j ? 1.0 : 0.0;
+        (elements[i] as number[])[j] = i === j ? 1.0 : 0.0;
       }
     }
 
@@ -175,7 +175,7 @@ export class Matrix {
     for (let i = 0; i < dimension; i++) {
       elements[i] = [];
       for (let j = 0; j < dimension; j++) {
-        elements[i][j] = i === j ? d[i] : 0.0;
+        (elements[i] as number[])[j] = i === j ? d[i] as number : 0.0;
       }
     }
 

@@ -110,8 +110,6 @@ export class Tle {
   private static readonly intlDesLaunchPiece_ = new TleFormatData(15, 17);
   /** The international designator year field. */
   private static readonly intlDesYear_ = new TleFormatData(10, 11);
-  /** The international designator field. */
-  private static readonly intlDes_ = new TleFormatData(10, 17);
   /** The line number field. */
   private static readonly lineNumber_ = new TleFormatData(1, 1);
   /** The mean anomaly field. */

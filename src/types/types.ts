@@ -407,19 +407,19 @@ export interface SatelliteRecord {
  */
 export type StateVectorSgp4 = {
   position:
-    | {
-        x: number;
-        y: number;
-        z: number;
-      }
-    | boolean;
+  | {
+    x: number;
+    y: number;
+    z: number;
+  }
+  | boolean;
   velocity:
-    | {
-        x: number;
-        y: number;
-        z: number;
-      }
-    | boolean;
+  | {
+    x: number;
+    y: number;
+    z: number;
+  }
+  | boolean;
 };
 
 export type PosVel<T> = {
@@ -626,7 +626,27 @@ export type RaDec = {
 export type SunTime = {
   solarNoon: Date;
   nadir: Date;
-} & { [key: string]: Date };
+  goldenHourDuskStart: Date;
+  goldenHourDawnEnd: Date;
+  sunsetStart: Date;
+  sunriseEnd: Date;
+  sunsetEnd: Date;
+  sunriseStart: Date;
+  goldenHourDuskEnd: Date;
+  goldenHourDawnStart: Date;
+  blueHourDuskStart: Date;
+  blueHourDawnEnd: Date;
+  civilDusk: Date;
+  civilDawn: Date;
+  blueHourDuskEnd: Date;
+  blueHourDawnStart: Date;
+  nauticalDusk: Date;
+  nauticalDawn: Date;
+  amateurDusk: Date;
+  amateurDawn: Date;
+  astronomicalDusk: Date;
+  astronomicalDawn: Date;
+};
 
 export type LaunchDetails = {
   launchDate?: string;
@@ -698,11 +718,11 @@ export type StringifiedNumber = `${number}.${number}`;
  */
 export type TleParams = {
   sat?: Satellite;
-  inc: string|number;
-  meanmo: string|number;
-  rasc: string|number;
-  argPe: string|number;
-  meana: string|number;
+  inc: string | number;
+  meanmo: string | number;
+  rasc: string | number;
+  argPe: string | number;
+  meana: string | number;
   ecen: string;
   epochyr: string;
   epochday: string;

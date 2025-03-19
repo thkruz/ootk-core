@@ -73,7 +73,7 @@ export class Sun {
    * - The name of the start time for the phase.
    * - The name of the end time for the phase.
    */
-  private static times_ = [
+  private static readonly times_ = [
     [6, 'goldenHourDawnEnd', 'goldenHourDuskStart'], // GOLDEN_HOUR_2
     [-0.3, 'sunriseEnd', 'sunsetStart'], // SUNRISE_END
     [-0.833, 'sunriseStart', 'sunsetEnd'], // SUNRISE
@@ -84,7 +84,7 @@ export class Sun {
     [-12, 'nauticalDawn', 'nauticalDusk'], // NAUTIC_DAWN
     [-15, 'amateurDawn', 'amateurDusk'],
     [-18, 'astronomicalDawn', 'astronomicalDusk'], // ASTRO_DAWN
-  ];
+  ] as [Degrees, string, string][];
 
   /**
    * Gravitational parameter of the Sun. (km³/s²)
@@ -324,7 +324,7 @@ export class Sun {
       date.setHours(12, 0, 0, 0);
     }
 
-    let time = [];
+    let time: [Degrees, string, string];
     let h0 = <Meters>0;
     let Jset = 0;
     let Jrise = 0;
@@ -332,7 +332,7 @@ export class Sun {
     const { Jnoon, dh, lw, phi, dec, n, M, L } = Sun.calculateJnoon_(lon, lat, alt, date);
 
     // Determine when the sun is at its highest and lowest (darkest) points.
-    const result = {
+    const result: SunTime = {
       solarNoon: Sun.julian2date(Jnoon),
       nadir: Sun.julian2date(Jnoon + 0.5), // https://github.com/mourner/suncalc/pull/125
     } as SunTime;
@@ -340,15 +340,15 @@ export class Sun {
     // Add all other unique times using Jnoon as a reference
     for (let i = 0, len = Sun.times_.length; i < len; i += 1) {
       time = Sun.times_[i]!;
-      const angle = time[0] as Degrees;
+      const angle = time[0];
 
       h0 = <Meters>((angle + dh) * DEG2RAD);
 
       Jset = Sun.getSetJ_(h0, lw, phi, dec, n, M, L);
       Jrise = Jnoon - (Jset - Jnoon);
 
-      result[time[1] as string] = Sun.julian2date(Jrise);
-      result[time[2] as string] = Sun.julian2date(Jset);
+      result[time[1] as keyof SunTime] = Sun.julian2date(Jrise);
+      result[time[2] as keyof SunTime] = Sun.julian2date(Jset);
     }
 
     return result;

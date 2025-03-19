@@ -52,22 +52,22 @@ const leapSeconds: Array<[number, number]> = [
   [2456109.5, 35],
   [2457204.5, 36],
   [2457754.5, 37],
-];
+] as const;
 
 // / Leap second data container.
 class LeapSecondData {
-  private _offsets: LeapSecond[];
-  private _jdFirst: number;
-  private _jdLast: number;
-  private _offsetFirst: number;
-  private _offsetLast: number;
+  private readonly _offsets: LeapSecond[];
+  private readonly _jdFirst: number;
+  private readonly _jdLast: number;
+  private readonly _offsetFirst: number;
+  private readonly _offsetLast: number;
 
   constructor(offsets: LeapSecond[]) {
     this._offsets = offsets;
-    this._jdFirst = this._offsets[0].jd;
-    this._jdLast = this._offsets[this._offsets.length - 1].jd;
-    this._offsetFirst = this._offsets[0].offset;
-    this._offsetLast = this._offsets[this._offsets.length - 1].offset;
+    this._jdFirst = (this._offsets[0] as LeapSecond).jd;
+    this._jdLast = (this._offsets[this._offsets.length - 1] as LeapSecond).jd;
+    this._offsetFirst = (this._offsets[0] as LeapSecond).offset;
+    this._offsetLast = (this._offsets[this._offsets.length - 1] as LeapSecond).offset;
   }
 
   /**
@@ -97,8 +97,11 @@ class LeapSecondData {
       return this._offsetFirst;
     }
     for (let i = 0; i < this._offsets.length - 2; i++) {
-      if (jd >= this._offsets[i].jd && jd < this._offsets[i + 1].jd) {
-        return this._offsets[i].offset;
+      const currentLeapSecond = this._offsets[i] as LeapSecond;
+      const nextLeapSecond = this._offsets[i + 1] as LeapSecond;
+
+      if (jd >= currentLeapSecond.jd && jd < nextLeapSecond.jd) {
+        return currentLeapSecond.offset;
       }
     }
 

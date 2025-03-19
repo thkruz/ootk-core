@@ -36,6 +36,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
 
+import { OmmParsedDataFormat } from 'src/interfaces/OmmFormat.js';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
 import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types.js';
 import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants.js';
@@ -308,122 +309,122 @@ export class Sgp4 {
 
     const satrec = {
       a: null as number | null,
-      am: null,
-      alta: null,
-      altp: null,
-      argpdot: null,
+      am: null as number | null,
+      alta: null as number | null,
+      altp: null as number | null,
+      argpdot: null as number | null,
       argpo: null as number | null,
-      aycof: null,
+      aycof: null as number | null,
       bstar: null as number | null,
-      cc1: null,
-      cc4: null,
-      cc5: null,
-      con41: null,
-      d2: null,
-      d3: null,
-      d4: null,
-      d5232: null,
-      d5421: null,
-      d5433: null,
-      dedt: null,
-      delmo: null,
-      del1: null,
+      cc1: null as number | null,
+      cc4: null as number | null,
+      cc5: null as number | null,
+      con41: null as number | null,
+      d2: null as number | null,
+      d3: null as number | null,
+      d4: null as number | null,
+      d5232: null as number | null,
+      d5421: null as number | null,
+      d5433: null as number | null,
+      dedt: null as number | null,
+      delmo: null as number | null,
+      del1: null as number | null,
       ecco: null as number | null,
-      em: null,
+      em: null as number | null,
       epochdays: null as number | null,
       epochyr: null as number | null,
       error: null as number | null,
-      eta: null,
-      gsto: null,
-      im: null,
+      eta: null as number | null,
+      gsto: null as number | null,
+      im: null as number | null,
       inclo: null as number | null,
-      init: null,
-      isimp: null,
+      init: null as number | null,
+      isimp: null as number | null,
       jdsatepoch: null as number | null,
-      mdot: null,
-      method: null,
+      mdot: null as number | null,
+      method: null as number | null,
       mo: null as number | null,
-      mm: null,
+      mm: null as number | null,
       nddot: null as number | null,
       ndot: null as number | null,
       no: null as number | null,
-      nodecf: null,
-      nodedot: null,
+      nodecf: null as number | null,
+      nodedot: null as number | null,
       nodeo: null as number | null,
-      om: null,
-      Om: null,
-      omgcof: null,
-      operationmode: null,
+      om: null as number | null,
+      Om: null as number | null,
+      omgcof: null as number | null,
+      operationmode: null as number | null,
       satnum: null as string | null,
-      sinmao: null,
-      t: null,
-      t2cof: null,
-      t3cof: null,
-      t4cof: null,
-      t5cof: null,
-      x1mth2: null,
-      x7thm1: null,
-      xlcof: null,
-      xmcof: null,
-      xfact: null,
-      xlamo: null,
-      xli: null,
-      xgh4: null,
-      xgh3: null,
-      xh2: null,
-      xi2: null,
-      xi3: null,
-      xl2: null,
-      xl3: null,
-      xl4: null,
-      zmol: null,
-      zmos: null,
-      dmdt: null,
-      dnodt: null,
-      domdt: null,
-      e3: null,
-      ee2: null,
-      peo: null,
-      pgho: null,
-      pho: null,
-      PInco: null,
-      plo: null,
-      se2: null,
-      se3: null,
-      sgh2: null,
-      sgh3: null,
-      sgh4: null,
-      sh2: null,
-      sh3: null,
-      si2: null,
-      si3: null,
-      sl2: null,
-      sl3: null,
-      sl4: null,
-      xgh2: null,
-      xh3: null,
-      tumin: null,
-      radiusearthkm: null,
-      irez: null,
-      d3210: null,
-      d3222: null,
-      d4410: null,
-      d4422: null,
-      d5220: null,
-      del2: null,
-      del3: null,
-      didt: null,
-      atime: null,
-      j2: null,
-      j3: null,
-      j4: null,
-      mus: null,
-      xke: null,
-      j3oj2: null,
-      xni: null,
-      d2201: null,
-      d2211: null,
-      nm: null,
+      sinmao: null as number | null,
+      t: null as number | null,
+      t2cof: null as number | null,
+      t3cof: null as number | null,
+      t4cof: null as number | null,
+      t5cof: null as number | null,
+      x1mth2: null as number | null,
+      x7thm1: null as number | null,
+      xlcof: null as number | null,
+      xmcof: null as number | null,
+      xfact: null as number | null,
+      xlamo: null as number | null,
+      xli: null as number | null,
+      xgh4: null as number | null,
+      xgh3: null as number | null,
+      xh2: null as number | null,
+      xi2: null as number | null,
+      xi3: null as number | null,
+      xl2: null as number | null,
+      xl3: null as number | null,
+      xl4: null as number | null,
+      zmol: null as number | null,
+      zmos: null as number | null,
+      dmdt: null as number | null,
+      dnodt: null as number | null,
+      domdt: null as number | null,
+      e3: null as number | null,
+      ee2: null as number | null,
+      peo: null as number | null,
+      pgho: null as number | null,
+      pho: null as number | null,
+      PInco: null as number | null,
+      plo: null as number | null,
+      se2: null as number | null,
+      se3: null as number | null,
+      sgh2: null as number | null,
+      sgh3: null as number | null,
+      sgh4: null as number | null,
+      sh2: null as number | null,
+      sh3: null as number | null,
+      si2: null as number | null,
+      si3: null as number | null,
+      sl2: null as number | null,
+      sl3: null as number | null,
+      sl4: null as number | null,
+      xgh2: null as number | null,
+      xh3: null as number | null,
+      tumin: null as number | null,
+      radiusearthkm: null as number | null,
+      irez: null as number | null,
+      d3210: null as number | null,
+      d3222: null as number | null,
+      d4410: null as number | null,
+      d4422: null as number | null,
+      d5220: null as number | null,
+      del2: null as number | null,
+      del3: null as number | null,
+      didt: null as number | null,
+      atime: null as number | null,
+      j2: null as number | null,
+      j3: null as number | null,
+      j4: null as number | null,
+      mus: null as number | null,
+      xke: null as number | null,
+      j3oj2: null as number | null,
+      xni: null as number | null,
+      d2201: null as number | null,
+      d2211: null as number | null,
+      nm: null as number | null,
     };
 
     /*
@@ -453,6 +454,226 @@ export class Sgp4 {
     satrec.argpo = parseFloat(tleLine2.substring(34, 42));
     satrec.mo = parseFloat(tleLine2.substring(43, 51));
     satrec.no = parseFloat(tleLine2.substring(52, 63));
+
+    // ---- find no, ndot, nddot ----
+    satrec.no /= xpdotp; //   Rad/min
+    /** Ootk -- nexp and ibexp are calculated above using template literals */
+    /*
+     * Satrec.nddot = satrec.nddot * Math.pow(10.0, nexp);
+     * satrec.bstar = satrec.bstar * Math.pow(10.0, ibexp);
+     */
+
+    /*
+     * ---- convert to sgp4 units ----
+     * satrec.a = (satrec.no * tumin) ** (-2.0 / 3.0);
+     */
+    /** Ootk -- Not sure why the following two lines are added. 1st and 2nd derivatives aren't even used anymore */
+    /*
+     * Satrec.ndot /= xpdotp * 1440.0; // ? * minperday
+     * satrec.nddot /= xpdotp * 1440.0 * 1440;
+     */
+
+    // ---- find standard orbital elements ----
+    satrec.inclo *= DEG2RAD;
+    satrec.nodeo *= DEG2RAD;
+    satrec.argpo *= DEG2RAD;
+    satrec.mo *= DEG2RAD;
+
+    /*
+     * Sgp4fix not needed here
+     * satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
+     * satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
+     */
+
+    /*
+     * ----------------------------------------------------------------
+     * find sgp4epoch time of element set
+     * remember that sgp4 uses units of days from 0 jan 1950 (sgp4epoch)
+     * and minutes from the epoch (time)
+     * ----------------------------------------------------------------
+     */
+
+    /*
+     * ---------------- temp fix for years from 1957-2056 -------------------
+     * --------- correct fix will occur when year is 4-digit in tle ---------
+     */
+
+    if (satrec.epochyr < 57) {
+      year = satrec.epochyr + 2000;
+    } else {
+      year = satrec.epochyr + 1900;
+    }
+
+    const { mon, day, hr, min, sec } = Sgp4.days2mdhms(year, satrec.epochdays);
+
+    const jdayRes = Sgp4.jday(year, mon, day, hr, min, sec);
+
+    satrec.jdsatepoch = jdayRes.jd + jdayRes.jdFrac;
+
+    //  ---------------- initialize the orbit at sgp4epoch -------------------
+    Sgp4.sgp4init_(satrec as unknown as SatelliteRecord, {
+      whichconst,
+      opsmode,
+      satn: satrec.satnum,
+      epoch: satrec.jdsatepoch - 2433281.5,
+      xbstar: satrec.bstar,
+      xecco: satrec.ecco,
+      xargpo: satrec.argpo,
+      xinclo: satrec.inclo,
+      xndot: satrec.ndot,
+      xnddot: satrec.nddot,
+      xmo: satrec.mo,
+      xno: satrec.no,
+      xnodeo: satrec.nodeo,
+    });
+
+    return satrec as unknown as SatelliteRecord;
+  }
+
+  static createSatrecFromOmm(
+    omm: OmmParsedDataFormat,
+    whichconst = Sgp4GravConstants.wgs72,
+    opsmode = Sgp4OpsMode.IMPROVED,
+  ): SatelliteRecord {
+    let year = 0;
+
+    const satrec = {
+      a: null as number | null,
+      am: null as number | null,
+      alta: null as number | null,
+      altp: null as number | null,
+      argpdot: null as number | null,
+      argpo: null as number | null,
+      aycof: null as number | null,
+      bstar: null as number | null,
+      cc1: null as number | null,
+      cc4: null as number | null,
+      cc5: null as number | null,
+      con41: null as number | null,
+      d2: null as number | null,
+      d3: null as number | null,
+      d4: null as number | null,
+      d5232: null as number | null,
+      d5421: null as number | null,
+      d5433: null as number | null,
+      dedt: null as number | null,
+      delmo: null as number | null,
+      del1: null as number | null,
+      ecco: null as number | null,
+      em: null as number | null,
+      epochdays: null as number | null,
+      epochyr: null as number | null,
+      error: null as number | null,
+      eta: null as number | null,
+      gsto: null as number | null,
+      im: null as number | null,
+      inclo: null as number | null,
+      init: null as number | null,
+      isimp: null as number | null,
+      jdsatepoch: null as number | null,
+      mdot: null as number | null,
+      method: null as number | null,
+      mo: null as number | null,
+      mm: null as number | null,
+      nddot: null as number | null,
+      ndot: null as number | null,
+      no: null as number | null,
+      nodecf: null as number | null,
+      nodedot: null as number | null,
+      nodeo: null as number | null,
+      om: null as number | null,
+      Om: null as number | null,
+      omgcof: null as number | null,
+      operationmode: null as number | null,
+      satnum: null as string | null,
+      sinmao: null as number | null,
+      t: null as number | null,
+      t2cof: null as number | null,
+      t3cof: null as number | null,
+      t4cof: null as number | null,
+      t5cof: null as number | null,
+      x1mth2: null as number | null,
+      x7thm1: null as number | null,
+      xlcof: null as number | null,
+      xmcof: null as number | null,
+      xfact: null as number | null,
+      xlamo: null as number | null,
+      xli: null as number | null,
+      xgh4: null as number | null,
+      xgh3: null as number | null,
+      xh2: null as number | null,
+      xi2: null as number | null,
+      xi3: null as number | null,
+      xl2: null as number | null,
+      xl3: null as number | null,
+      xl4: null as number | null,
+      zmol: null as number | null,
+      zmos: null as number | null,
+      dmdt: null as number | null,
+      dnodt: null as number | null,
+      domdt: null as number | null,
+      e3: null as number | null,
+      ee2: null as number | null,
+      peo: null as number | null,
+      pgho: null as number | null,
+      pho: null as number | null,
+      PInco: null as number | null,
+      plo: null as number | null,
+      se2: null as number | null,
+      se3: null as number | null,
+      sgh2: null as number | null,
+      sgh3: null as number | null,
+      sgh4: null as number | null,
+      sh2: null as number | null,
+      sh3: null as number | null,
+      si2: null as number | null,
+      si3: null as number | null,
+      sl2: null as number | null,
+      sl3: null as number | null,
+      sl4: null as number | null,
+      xgh2: null as number | null,
+      xh3: null as number | null,
+      tumin: null as number | null,
+      radiusearthkm: null as number | null,
+      irez: null as number | null,
+      d3210: null as number | null,
+      d3222: null as number | null,
+      d4410: null as number | null,
+      d4422: null as number | null,
+      d5220: null as number | null,
+      del2: null as number | null,
+      del3: null as number | null,
+      didt: null as number | null,
+      atime: null as number | null,
+      j2: null as number | null,
+      j3: null as number | null,
+      j4: null as number | null,
+      mus: null as number | null,
+      xke: null as number | null,
+      j3oj2: null as number | null,
+      xni: null as number | null,
+      d2201: null as number | null,
+      d2211: null as number | null,
+      nm: null as number | null,
+    };
+
+    const xpdotp = 1440.0 / (2.0 * PI); // 229.1831180523293;
+
+    satrec.error = 0;
+
+    satrec.satnum = omm.NORAD_CAT_ID;
+
+    satrec.epochyr = parseInt(omm.epoch.year.toString().slice(-2));
+    satrec.epochdays = omm.epoch.doy;
+    satrec.ndot = parseFloat(omm.MEAN_MOTION_DOT);
+    satrec.nddot = parseFloat(omm.MEAN_MOTION_DDOT);
+    satrec.bstar = parseFloat(omm.BSTAR);
+    satrec.inclo = parseFloat(omm.INCLINATION);
+    satrec.nodeo = parseFloat(omm.RA_OF_ASC_NODE);
+    satrec.ecco = parseFloat(omm.ECCENTRICITY);
+    satrec.argpo = parseFloat(omm.ARG_OF_PERICENTER);
+    satrec.mo = parseFloat(omm.MEAN_ANOMALY);
+    satrec.no = parseFloat(omm.MEAN_MOTION);
 
     // ---- find no, ndot, nddot ----
     satrec.no /= xpdotp; //   Rad/min
@@ -3097,10 +3318,10 @@ export class Sgp4 {
             d5220 * Math.cos(xomi + xli - g52) +
             d5232 * Math.cos(-xomi + xli - g52) +
             2.0 *
-              (d4410 * Math.cos(x2omi + x2li - g44) +
-                d4422 * Math.cos(x2li - g44) +
-                d5421 * Math.cos(xomi + x2li - g54) +
-                d5433 * Math.cos(-xomi + x2li - g54));
+            (d4410 * Math.cos(x2omi + x2li - g44) +
+              d4422 * Math.cos(x2li - g44) +
+              d5421 * Math.cos(xomi + x2li - g54) +
+              d5433 * Math.cos(-xomi + x2li - g54));
           xnddt *= xldot;
         }
 
@@ -3792,8 +4013,8 @@ export class Sgp4 {
         (satrec.eta * (2.0 + 0.5 * etasq) +
           satrec.ecco * (0.5 + 2.0 * etasq) -
           ((j2 * tsi) / (ao * psisq)) *
-            (-3.0 * satrec.con41 * (1.0 - 2.0 * eeta + etasq * (1.5 - 0.5 * eeta)) +
-              0.75 * satrec.x1mth2 * (2.0 * etasq - eeta * (1.0 + etasq)) * Math.cos(2.0 * satrec.argpo)));
+          (-3.0 * satrec.con41 * (1.0 - 2.0 * eeta + etasq * (1.5 - 0.5 * eeta)) +
+            0.75 * satrec.x1mth2 * (2.0 * etasq - eeta * (1.0 + etasq)) * Math.cos(2.0 * satrec.argpo)));
       satrec.cc5 = 2.0 * coef1 * ao * omeosq * (1.0 + 2.75 * (etasq + eeta) + eeta * etasq);
       const cosio4 = cosio2 * cosio2;
       const temp1 = 1.5 * j2 * PInvsq * satrec.no;

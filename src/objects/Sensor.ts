@@ -80,7 +80,7 @@ export class Sensor extends GroundObject {
    * Checks if the object is a sensor.
    * @returns True if the object is a sensor, false otherwise.
    */
-  isSensor(): boolean {
+  override isSensor(): boolean {
     return true;
   }
 

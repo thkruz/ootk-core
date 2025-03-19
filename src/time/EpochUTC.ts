@@ -76,8 +76,8 @@ export class EpochUTC extends Epoch {
   }
 
   static fromDefinitiveString(definitiveString: string): EpochUTC {
-    const fields = definitiveString.trim().split(' ');
-    const dateFields = fields[0].split('/');
+    const fields = definitiveString.trim().split(' ') as [string, string];
+    const dateFields = fields[0].split('/') as [string, string];
     const day = parseInt(dateFields[0]);
     const year = parseInt(dateFields[1]);
     // eslint-disable-next-line prefer-destructuring
@@ -146,17 +146,17 @@ export class EpochUTC extends Epoch {
     return this.gmstAngle() * RAD2DEG;
   }
 
-  private static gmstPoly_: Float64Array = new Float64Array([
+  private static readonly gmstPoly_: Float64Array = new Float64Array([
     -6.2e-6,
     0.093104,
     876600 * 3600 + 8640184.812866,
     67310.54841,
   ]);
 
-  private static dayOfYearLookup_: number[][] = [
+  private static readonly dayOfYearLookup_: number[][] = [
     [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334],
     [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335],
-  ];
+  ] as const;
 
   private static isLeapYear_(year: number): boolean {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -164,8 +164,10 @@ export class EpochUTC extends Epoch {
 
   private static dayOfYear_(year: number, month: number, day: number): number {
     const dex = EpochUTC.isLeapYear_(year) ? 1 : 0;
+    const dayOfYearArray = EpochUTC.dayOfYearLookup_[dex] as number[];
+    const daysBeforeCurrentMonth = dayOfYearArray[month - 1] as number;
 
-    return EpochUTC.dayOfYearLookup_[dex][month - 1] + day - 1;
+    return daysBeforeCurrentMonth + day - 1;
   }
 
   private static dateToPosix_({ year, month, day, hour, minute, second }: DateToPosixParams): Seconds {

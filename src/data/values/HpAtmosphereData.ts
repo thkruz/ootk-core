@@ -29,14 +29,18 @@ export type HpAtmosphereEntry = [number, number, number];
 
 // / Container for Harris-Priester atmosphere data.
 export class HpAtmosphereData {
-  private _table: HpAtmosphereEntry[];
-  private _hMin: number;
-  private _hMax: number;
+  private readonly _table: HpAtmosphereEntry[];
+  private readonly _hMin: number;
+  private readonly _hMax: number;
 
   constructor(table: HpAtmosphereEntry[]) {
     this._table = table;
+    if (table.length === 0 || typeof table[0]?.[0] === 'undefined') {
+      throw new Error('Table must have at least one valid entry.');
+    }
+
     this._hMin = table[0][0];
-    this._hMax = table[table.length - 1][0];
+    this._hMax = table[table.length - 1]?.[0] ?? 0;
   }
 
   static fromVals(vals: [number, number, number][]): HpAtmosphereData {
@@ -57,11 +61,15 @@ export class HpAtmosphereData {
     }
     let index = 0;
 
-    while (index < this._table.length - 2 && height > this._table[index + 1][0]) {
+    while (index < this._table.length - 2 && height > (this._table[index + 1] as HpAtmosphereEntry)[0]) {
       index++;
     }
 
-    return new HpAtmosphereResult(height, this._table[index], this._table[index + 1]);
+    return new HpAtmosphereResult(
+      height,
+      (this._table[index] as HpAtmosphereEntry),
+      (this._table[index + 1] as HpAtmosphereEntry),
+    );
   }
 }
 
