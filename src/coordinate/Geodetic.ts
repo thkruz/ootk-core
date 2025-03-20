@@ -141,7 +141,7 @@ export class Geodetic {
    * @returns The angle between the two geodetic coordinates in radians.
    */
   angle(g: Geodetic, method: AngularDistanceMethod = AngularDistanceMethod.Haversine): Radians {
-    return angularDistance(this.lon, this.lat, g.lon, g.lat, method) as Radians;
+    return angularDistance(this.lon, this.lat, g.lon, g.lat, method);
   }
 
   /**

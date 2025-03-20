@@ -56,18 +56,18 @@ const leapSeconds: Array<[number, number]> = [
 
 // / Leap second data container.
 class LeapSecondData {
-  private readonly _offsets: LeapSecond[];
-  private readonly _jdFirst: number;
-  private readonly _jdLast: number;
-  private readonly _offsetFirst: number;
-  private readonly _offsetLast: number;
+  private readonly offsets_: LeapSecond[];
+  private readonly jdFirst_: number;
+  private readonly jdLast_: number;
+  private readonly offsetFirst_: number;
+  private readonly offsetLast_: number;
 
   constructor(offsets: LeapSecond[]) {
-    this._offsets = offsets;
-    this._jdFirst = (this._offsets[0] as LeapSecond).jd;
-    this._jdLast = (this._offsets[this._offsets.length - 1] as LeapSecond).jd;
-    this._offsetFirst = (this._offsets[0] as LeapSecond).offset;
-    this._offsetLast = (this._offsets[this._offsets.length - 1] as LeapSecond).offset;
+    this.offsets_ = offsets;
+    this.jdFirst_ = (this.offsets_[0] as LeapSecond).jd;
+    this.jdLast_ = (this.offsets_[this.offsets_.length - 1] as LeapSecond).jd;
+    this.offsetFirst_ = (this.offsets_[0] as LeapSecond).offset;
+    this.offsetLast_ = (this.offsets_[this.offsets_.length - 1] as LeapSecond).offset;
   }
 
   /**
@@ -90,15 +90,15 @@ class LeapSecondData {
 
   // / Return the number of leap seconds for a given Julian date [jd].
   getLeapSeconds(jd: number): number {
-    if (jd >= this._jdLast) {
-      return this._offsetLast;
+    if (jd >= this.jdLast_) {
+      return this.offsetLast_;
     }
-    if (jd <= this._jdFirst) {
-      return this._offsetFirst;
+    if (jd <= this.jdFirst_) {
+      return this.offsetFirst_;
     }
-    for (let i = 0; i < this._offsets.length - 2; i++) {
-      const currentLeapSecond = this._offsets[i] as LeapSecond;
-      const nextLeapSecond = this._offsets[i + 1] as LeapSecond;
+    for (let i = 0; i < this.offsets_.length - 2; i++) {
+      const currentLeapSecond = this.offsets_[i] as LeapSecond;
+      const nextLeapSecond = this.offsets_[i + 1] as LeapSecond;
 
       if (jd >= currentLeapSecond.jd && jd < nextLeapSecond.jd) {
         return currentLeapSecond.offset;

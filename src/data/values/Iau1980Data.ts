@@ -28,11 +28,11 @@ export type Iau1980Entry = [number, number, number, number, number, number, numb
 
 // / Container for IAU-1980 data.
 export class Iau1980Data {
-  private readonly _coeffs: Iau1980Entry[];
+  private readonly coeffs_: Iau1980Entry[];
 
   // / Create a new [Iau1980Data] object.
   constructor(coeffs: Iau1980Entry[]) {
-    this._coeffs = coeffs;
+    this.coeffs_ = coeffs;
   }
 
   /**
@@ -55,7 +55,7 @@ export class Iau1980Data {
 
   // / Get IAU-1980 coefficients for a given row number.
   getCoeffs(row: number): Iau1980Entry {
-    return this._coeffs[row] as Iau1980Entry;
+    return this.coeffs_[row] as Iau1980Entry;
   }
 }
 

@@ -35,7 +35,7 @@ import { leapSecondData } from './values/LeapSecondData.js';
  * [getInstance] method.
  */
 export class DataHandler {
-  private static instance_ = new DataHandler();
+  private static readonly instance_ = new DataHandler();
 
   private constructor() {
     // Prevent instantiation.

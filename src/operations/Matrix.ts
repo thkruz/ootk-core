@@ -413,7 +413,7 @@ export class Matrix {
    * Converts the matrix to reduced row echelon form using the Gaussian
    * elimination method. This method modifies the matrix in-place.
    */
-  private _toReducedRowEchelonForm(): void {
+  private toReducedRowEchelonForm_(): void {
     for (let lead = 0, row = 0; row < this.rows && lead < this.columns; ++row, ++lead) {
       let i = row;
 
@@ -459,7 +459,7 @@ export class Matrix {
       }
       (tmp.elements[row] as number[])[row + this.columns] = 1.0;
     }
-    tmp._toReducedRowEchelonForm();
+    tmp.toReducedRowEchelonForm_();
     const inv = Matrix.zero(this.rows, this.columns);
 
     for (let row = 0; row < this.rows; ++row) {
