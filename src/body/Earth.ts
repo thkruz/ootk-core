@@ -188,7 +188,7 @@ export class Earth {
   }
 
   // / Earth precession `zeta` polynomial coefficients.
-  private static zetaPoly_: Float64Array = Float64Array.from([
+  private static readonly zetaPoly_: Float64Array = Float64Array.from([
     0.017998 * asec2rad,
     0.30188 * asec2rad,
     2306.2181 * asec2rad,
@@ -196,7 +196,7 @@ export class Earth {
   ]);
 
   // / Earth precession `theta` polynomial coefficients.
-  private static thetaPoly_: Float64Array = Float64Array.from([
+  private static readonly thetaPoly_: Float64Array = Float64Array.from([
     -0.041833 * asec2rad,
     -0.42665 * asec2rad,
     2004.3109 * asec2rad,
@@ -204,14 +204,14 @@ export class Earth {
   ]);
 
   // / Earth precession `zed` polynomial coefficients.
-  private static zedPoly_: Float64Array = Float64Array.from([
+  private static readonly zedPoly_: Float64Array = Float64Array.from([
     0.018203 * asec2rad,
     1.09468 * asec2rad,
     2306.2181 * asec2rad,
     0,
   ]);
 
-  private static moonAnomPoly_: Float64Array = Float64Array.from([
+  private static readonly moonAnomPoly_: Float64Array = Float64Array.from([
     1.4343e-5 * DEG2RAD,
     0.0088553 * DEG2RAD,
     (1325.0 * 360.0 + 198.8675605) * DEG2RAD,
@@ -219,7 +219,7 @@ export class Earth {
   ]);
 
   // / Earth nutation Sun anomaly polynomial coefficients.
-  private static sunAnomPoly_: Float64Array = Float64Array.from([
+  private static readonly sunAnomPoly_: Float64Array = Float64Array.from([
     3.8e-8 * DEG2RAD,
     -0.0001537 * DEG2RAD,
     (99.0 * 360.0 + 359.0502911) * DEG2RAD,
@@ -227,7 +227,7 @@ export class Earth {
   ]);
 
   // / Earth nutation Moon latitude polynomial coefficients.
-  private static moonLatPoly_: Float64Array = Float64Array.from([
+  private static readonly moonLatPoly_: Float64Array = Float64Array.from([
     -2.88e-7 * DEG2RAD,
     -0.003542 * DEG2RAD,
     (1342.0 * 360.0 + 82.0174577) * DEG2RAD,
@@ -235,7 +235,7 @@ export class Earth {
   ]);
 
   // / Earth nutation Sun elongation polynomial coefficients.
-  private static sunElongPoly_: Float64Array = Float64Array.from([
+  private static readonly sunElongPoly_: Float64Array = Float64Array.from([
     1.831e-6 * DEG2RAD,
     -0.0017696 * DEG2RAD,
     (1236.0 * 360.0 + 307.1114469) * DEG2RAD,
@@ -243,7 +243,7 @@ export class Earth {
   ]);
 
   // / Earth nutation Moon right-ascension polynomial coefficients.
-  private static moonRaanPoly_: Float64Array = Float64Array.from([
+  private static readonly moonRaanPoly_: Float64Array = Float64Array.from([
     2.139e-6 * DEG2RAD,
     0.0020756 * DEG2RAD,
     -(5.0 * 360.0 + 134.1361851) * DEG2RAD,
@@ -251,7 +251,7 @@ export class Earth {
   ]);
 
   // / Earth nutation mean epsilon polynomial coefficients.
-  private static meanEpsilonPoly_: Float64Array = Float64Array.from([
+  private static readonly meanEpsilonPoly_: Float64Array = Float64Array.from([
     0.001813 * asec2rad,
     -0.00059 * asec2rad,
     -46.815 * asec2rad,
