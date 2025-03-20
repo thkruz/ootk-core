@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+import { Sgp4ErrorCode } from '../sgp4/sgp4-error.js';
 import { Vector3D, PassType, Satellite } from '../main.js';
 
 /**
@@ -316,14 +317,15 @@ export interface SatelliteRecord {
   em: number;
   epochdays: number;
   epochyr: number;
-  error: number;
+  error: Sgp4ErrorCode;
   eta: number;
   gsto: number;
   im: number;
   inclo: number;
-  init: string;
+  init: boolean;
   irez: number;
-  isimp: number;
+  /** is imprecise flag */
+  isimp: boolean;
   j2: number;
   j3: number;
   j3oj2: number;
@@ -369,6 +371,7 @@ export interface SatelliteRecord {
   t4cof: number;
   t5cof: number;
   tumin: number;
+  vkmpersec: number;
   x1mth2: number;
   x7thm1: number;
   xfact: number;
@@ -407,19 +410,19 @@ export interface SatelliteRecord {
  */
 export type StateVectorSgp4 = {
   position:
-    | {
-        x: number;
-        y: number;
-        z: number;
-      }
-    | boolean;
+  | {
+    x: number;
+    y: number;
+    z: number;
+  }
+  | boolean;
   velocity:
-    | {
-        x: number;
-        y: number;
-        z: number;
-      }
-    | boolean;
+  | {
+    x: number;
+    y: number;
+    z: number;
+  }
+  | boolean;
 };
 
 export type PosVel<T> = {
@@ -626,7 +629,27 @@ export type RaDec = {
 export type SunTime = {
   solarNoon: Date;
   nadir: Date;
-} & { [key: string]: Date };
+  goldenHourDuskStart: Date;
+  goldenHourDawnEnd: Date;
+  sunsetStart: Date;
+  sunriseEnd: Date;
+  sunsetEnd: Date;
+  sunriseStart: Date;
+  goldenHourDuskEnd: Date;
+  goldenHourDawnStart: Date;
+  blueHourDuskStart: Date;
+  blueHourDawnEnd: Date;
+  civilDusk: Date;
+  civilDawn: Date;
+  blueHourDuskEnd: Date;
+  blueHourDawnStart: Date;
+  nauticalDusk: Date;
+  nauticalDawn: Date;
+  amateurDusk: Date;
+  amateurDawn: Date;
+  astronomicalDusk: Date;
+  astronomicalDawn: Date;
+};
 
 export type LaunchDetails = {
   launchDate?: string;
@@ -698,11 +721,11 @@ export type StringifiedNumber = `${number}.${number}`;
  */
 export type TleParams = {
   sat?: Satellite;
-  inc: string|number;
-  meanmo: string|number;
-  rasc: string|number;
-  argPe: string|number;
-  meana: string|number;
+  inc: string | number;
+  meanmo: string | number;
+  rasc: string | number;
+  argPe: string | number;
+  meana: string | number;
   ecen: string;
   epochyr: string;
   epochday: string;

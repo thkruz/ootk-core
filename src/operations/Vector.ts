@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -125,7 +125,7 @@ export class Vector<T extends number = number> {
    * @returns A string representation of the x value of the vector.
    */
   get x(): number {
-    return this.elements[0];
+    return this.elements[0] as number;
   }
 
   /**
@@ -133,7 +133,7 @@ export class Vector<T extends number = number> {
    * @returns A string representation of the y value of the vector.
    */
   get y(): number {
-    return this.elements[1];
+    return this.elements[1] as number;
   }
 
   /**
@@ -141,7 +141,7 @@ export class Vector<T extends number = number> {
    * @returns A string representation of the z value of the vector.
    */
   get z(): number {
-    return this.elements[2];
+    return this.elements[2] as number;
   }
 
   /**
@@ -184,7 +184,7 @@ export class Vector<T extends number = number> {
     const output = new Array(this.length);
 
     for (let i = 0; i < this.length; i++) {
-      output[i] = this.elements[i] + v.elements[i];
+      output[i] = (this.elements[i] as number) + (v.elements[i] as number);
     }
 
     return new Vector(output);
@@ -199,7 +199,7 @@ export class Vector<T extends number = number> {
     const output = new Array(this.length);
 
     for (let i = 0; i < this.length; i++) {
-      output[i] = this.elements[i] - v.elements[i];
+      output[i] = (this.elements[i] as number) - (v.elements[i] as number);
     }
 
     return new Vector(output);
@@ -214,7 +214,7 @@ export class Vector<T extends number = number> {
     const output = new Array(this.length);
 
     for (let i = 0; i < this.length; i++) {
-      output[i] = this.elements[i] * n;
+      output[i] = (this.elements[i] as number) * n;
     }
 
     return new Vector(output);
@@ -262,7 +262,7 @@ export class Vector<T extends number = number> {
     let total = 0;
 
     for (let i = 0; i < this.length; i++) {
-      total += this.elements[i] * v.elements[i];
+      total += (this.elements[i] as number) * (v.elements[i] as number);
     }
 
     return total;
@@ -279,7 +279,7 @@ export class Vector<T extends number = number> {
     for (let i = 0; i < this.length; i++) {
       result[i] = [];
       for (let j = 0; j < v.length; j++) {
-        result[i][j] = this.elements[i] * v.elements[j];
+        (result[i] as number[])[j] = (this.elements[i] as number) * (v.elements[j] as number);
       }
     }
 
@@ -296,8 +296,8 @@ export class Vector<T extends number = number> {
 
     for (let i = 0; i < this.length; i++) {
       output[i] =
-        this.elements[(i + 1) % this.length] * v.elements[(i + 2) % this.length] -
-        this.elements[(i + 2) % this.length] * v.elements[(i + 1) % this.length];
+        (this.elements[(i + 1) % this.length] as number) * (v.elements[(i + 2) % this.length] as number) -
+        (this.elements[(i + 2) % this.length] as number) * (v.elements[(i + 1) % this.length] as number);
     }
 
     return new Vector(output);
@@ -314,9 +314,9 @@ export class Vector<T extends number = number> {
     }
 
     return new Matrix([
-      [0, -this.elements[2], this.elements[1]],
-      [this.elements[2], 0, -this.elements[0]],
-      [-this.elements[1], this.elements[0], 0],
+      [0, -(this.elements[2] as number), (this.elements[1] as number)],
+      [(this.elements[2] as number), 0, -(this.elements[0] as number)],
+      [-(this.elements[1] as number), (this.elements[0] as number), 0],
     ]);
   }
 
@@ -331,8 +331,8 @@ export class Vector<T extends number = number> {
     const output = new Array(3);
 
     output[0] = this.elements[0];
-    output[1] = cosT * this.elements[1] + sinT * this.elements[2];
-    output[2] = -sinT * this.elements[1] + cosT * this.elements[2];
+    output[1] = cosT * (this.elements[1] as number) + sinT * (this.elements[2] as number);
+    output[2] = -sinT * (this.elements[1] as number) + cosT * (this.elements[2] as number);
 
     return new Vector(output);
   }
@@ -347,9 +347,9 @@ export class Vector<T extends number = number> {
     const sinT = Math.sin(theta);
     const output = new Array(3);
 
-    output[0] = cosT * this.elements[0] + -sinT * this.elements[2];
-    output[1] = this.elements[1];
-    output[2] = sinT * this.elements[0] + cosT * this.elements[2];
+    output[0] = cosT * (this.elements[0] as number) + -sinT * (this.elements[2] as number);
+    output[1] = this.elements[1] as number;
+    output[2] = sinT * (this.elements[0] as number) + cosT * (this.elements[2] as number);
 
     return new Vector(output);
   }
@@ -364,8 +364,8 @@ export class Vector<T extends number = number> {
     const sinT = Math.sin(theta);
     const output = new Array(3);
 
-    output[0] = cosT * this.elements[0] + sinT * this.elements[1];
-    output[1] = -sinT * this.elements[0] + cosT * this.elements[1];
+    output[0] = cosT * (this.elements[0] as number) + sinT * (this.elements[1] as number);
+    output[1] = -sinT * (this.elements[0] as number) + cosT * (this.elements[1] as number);
     output[2] = this.elements[2];
 
     return new Vector(output);
@@ -478,6 +478,7 @@ export class Vector<T extends number = number> {
    * @returns A new Vector3D object containing the converted elements.
    */
   toVector3D(index: number): Vector3D {
-    return new Vector3D(this.elements[index], this.elements[index + 1], this.elements[index + 2]);
+    return new Vector3D((this.elements[index] as number), (this.elements[index + 1] as number),
+      (this.elements[index + 2] as number));
   }
 }

@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -22,7 +22,7 @@
  */
 
 export class TransformCache {
-  private static cache_: Map<string, unknown> = new Map();
+  private static readonly cache_: Map<string, unknown> = new Map();
 
   static get(key: string): unknown {
     const value = this.cache_.get(key);
@@ -35,6 +35,10 @@ export class TransformCache {
     // Max of 1000 items in the cache
     if (this.cache_.size > 1000) {
       const firstKey = this.cache_.keys().next().value;
+
+      if (!firstKey) {
+        return;
+      }
 
       this.cache_.delete(firstKey);
     }

@@ -1,0 +1,9 @@
+/**
+ * This is the tsconfig extension that is used by the IDE.
+ */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+  },
+}

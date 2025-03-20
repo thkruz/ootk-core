@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -42,7 +42,6 @@ import {
   Sgp4,
   TAU,
 } from '../main.js';
-import { TransformCache } from './TransformCache.js';
 
 /**
  * Converts ECF to ECI coordinates.
@@ -113,14 +112,6 @@ export function eci2ecf<T extends number>(eci: EciVec3<T>, gmst: number): EcfVec
  * @returns array containing lla coordinates
  */
 export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers> {
-  // Check cache
-  const key = `${gmst},${eci.x},${eci.y},${eci.z}`;
-  const cached = TransformCache.get(key);
-
-  if (cached) {
-    return cached as LlaVec3<Degrees, Kilometers>;
-  }
-
   // http://www.celestrak.com/columns/v02n03/
   const a = 6378.137;
   const b = 6356.7523142;
@@ -152,11 +143,7 @@ export function eci2lla(eci: EciVec3, gmst: number): LlaVec3<Degrees, Kilometers
   lon = (lon * RAD2DEG) as Degrees;
   lat = (lat * RAD2DEG) as Degrees;
 
-  const lla = { lon: <Degrees>lon, lat: <Degrees>lat, alt: <Kilometers>alt };
-
-  TransformCache.add(key, lla);
-
-  return lla;
+  return { lon: <Degrees>lon, lat: <Degrees>lat, alt: <Kilometers>alt };
 }
 
 /**
@@ -210,14 +197,6 @@ export function lla2ecf<AltitudeUnits extends number>(lla: LlaVec3<Degrees, Alti
  * @returns The ECI coordinates in meters.
  */
 export function lla2eci(lla: LlaVec3<Radians, Kilometers>, gmst: GreenwichMeanSiderealTime): EciVec3<Kilometers> {
-  // Check cache
-  const key = `${gmst},${lla.lat},${lla.lon},${lla.alt}`;
-  const cached = TransformCache.get(key);
-
-  if (cached) {
-    return cached as EciVec3<Kilometers>;
-  }
-
   const { lat, lon, alt } = lla;
 
   const cosLat = Math.cos(lat);
@@ -228,11 +207,7 @@ export function lla2eci(lla: LlaVec3<Radians, Kilometers>, gmst: GreenwichMeanSi
   const y = (Earth.radiusMean + alt) * cosLat * sinLon;
   const z = (Earth.radiusMean + alt) * sinLat;
 
-  const eci = { x, y, z } as EciVec3<Kilometers>;
-
-  TransformCache.add(key, eci);
-
-  return eci;
+  return { x, y, z } as EciVec3<Kilometers>;
 }
 
 /**
@@ -353,18 +328,8 @@ export function rae2eci<D extends number>(
   lla: LlaVec3<Degrees, D>,
   gmst: number,
 ): EciVec3<D> {
-  // Check cache
-  const key = `${gmst},${rae.rng},${rae.az},${rae.el},${lla.lat},${lla.lon},${lla.alt}`;
-  const cached = TransformCache.get(key);
-
-  if (cached) {
-    return cached as EciVec3<D>;
-  }
-
   const ecf = rae2ecf(rae, lla);
   const eci = ecf2eci(ecf, gmst);
-
-  TransformCache.add(key, eci);
 
   return eci;
 }
@@ -418,20 +383,10 @@ export function ecfRad2rae<D extends number>(lla: LlaVec3<Radians, D>, ecf: EcfV
  * @returns The Right Ascension (RA), Elevation (E), and Azimuth (A) coordinates.
  */
 export function ecf2rae<D extends number>(lla: LlaVec3<Degrees, D>, ecf: EcfVec3<D>): RaeVec3<D, Degrees> {
-  // Check cache
-  const key = `${lla.lat},${lla.lon},${lla.alt},${ecf.x},${ecf.y},${ecf.z}`;
-  const cached = TransformCache.get(key);
-
-  if (cached) {
-    return cached as RaeVec3<D, Degrees>;
-  }
-
   const { lat, lon } = lla;
   const latRad = (lat * DEG2RAD) as Radians;
   const lonRad = (lon * DEG2RAD) as Radians;
   const rae = ecfRad2rae({ lat: latRad, lon: lonRad, alt: lla.alt }, ecf);
-
-  TransformCache.add(key, rae);
 
   return rae;
 }
@@ -499,14 +454,6 @@ export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): Ra
   now = new Date(now);
   const { gmst } = calcGmst(now);
 
-  // Check cache
-  const key = `${gmst},${eci.x},${eci.y},${eci.z},${sensor.lat},${sensor.lon},${sensor.alt}`;
-  const cached = TransformCache.get(key);
-
-  if (cached) {
-    return cached as RaeVec3<Kilometers, Degrees>;
-  }
-
   const positionEcf = eci2ecf(eci, gmst);
   const lla = {
     lat: (sensor.lat * DEG2RAD) as Radians,
@@ -516,7 +463,35 @@ export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): Ra
 
   const rae = ecfRad2rae(lla, positionEcf);
 
-  TransformCache.add(key, rae);
-
   return rae;
+}
+
+/**
+ * Calculates the inertial azimuth of a satellite given its latitude and inclination.
+ * @param lat - The latitude of the satellite in degrees.
+ * @param inc - The inclination of the satellite in degrees.
+ * @returns The inertial azimuth of the satellite in degrees.
+ */
+export function calcInertAz(lat: Degrees, inc: Degrees): Degrees {
+  const phi = lat * DEG2RAD;
+  const i = inc * DEG2RAD;
+
+  const az = Math.asin(Math.cos(i) / Math.cos(phi));
+
+  return <Degrees>(az * RAD2DEG);
+}
+
+/**
+ * Calculates the inclination angle of a satellite from its launch azimuth and latitude.
+ * @param lat - The latitude of the observer in degrees.
+ * @param az - The launch azimuth angle of the satellite in degrees clockwise from north.
+ * @returns The inclination angle of the satellite in degrees.
+ */
+export function calcIncFromAz(lat: number, az: number): number {
+  const phi = lat * DEG2RAD;
+  const beta = az * DEG2RAD;
+
+  const inc = Math.acos(Math.sin(beta) * Math.cos(phi));
+
+  return <Degrees>(inc * RAD2DEG);
 }

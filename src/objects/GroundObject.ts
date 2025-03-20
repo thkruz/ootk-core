@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -43,7 +43,7 @@ import { BaseObject } from './BaseObject.js';
 import { Satellite } from './Satellite.js';
 
 export class GroundObject extends BaseObject {
-  name = 'Unknown Ground Object';
+  override name = 'Unknown Ground Object';
   lat: Degrees;
   lon: Degrees;
   alt: Kilometers;
@@ -156,7 +156,7 @@ export class GroundObject extends BaseObject {
     this.validateParameter(info.alt, 0, null, 'Invalid altitude - must be greater than 0');
   }
 
-  isGroundObject(): boolean {
+  override isGroundObject(): boolean {
     switch (this.type) {
       case SpaceObjectType.INTERGOVERNMENTAL_ORGANIZATION:
       case SpaceObjectType.SUBORBITAL_PAYLOAD_OPERATOR:

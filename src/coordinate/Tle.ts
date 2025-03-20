@@ -1,7 +1,8 @@
+/* eslint-disable max-lines */
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -23,7 +24,7 @@
 
 import { ClassicalElements, FormatTle, TEME } from './index.js';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
-import { Sgp4, Vector3D } from '../main.js';
+import { Satellite, Sgp4, Vector3D } from '../main.js';
 import { Sgp4GravConstants } from '../sgp4/sgp4.js';
 import { EpochUTC } from '../time/EpochUTC.js';
 import {
@@ -43,7 +44,7 @@ import {
   TleLine2,
 } from '../types/types.js';
 import { DEG2RAD, earthGravityParam, RAD2DEG, secondsPerDay, TAU } from '../utils/constants.js';
-import { newtonNu, toPrecision } from '../utils/functions.js';
+import { getDayOfYear, newtonNu, toPrecision } from '../utils/functions.js';
 import { TleFormatData } from './tle-format-data.js';
 
 /**
@@ -54,11 +55,11 @@ export class Tle {
   line2: string;
   epoch: EpochUTC;
   satnum: number;
-  private satrec_: SatelliteRecord;
+  private readonly satrec_: SatelliteRecord;
   /**
    * Mapping of alphabets to their corresponding numeric values.
    */
-  private static alpha5_ = {
+  private static readonly alpha5_ = {
     A: '10',
     B: '11',
     C: '12',
@@ -67,11 +68,13 @@ export class Tle {
     F: '15',
     G: '16',
     H: '17',
+    // I is skipped on purpose
     J: '18',
     K: '19',
     L: '20',
     M: '21',
     N: '22',
+    // O is skipped on purpose
     P: '23',
     Q: '24',
     R: '25',
@@ -83,7 +86,7 @@ export class Tle {
     X: '31',
     Y: '32',
     Z: '33',
-  };
+  } as const;
   /** The argument of perigee field. */
   private static readonly argPerigee_ = new TleFormatData(35, 42);
   /** The BSTAR drag term field. */
@@ -110,8 +113,6 @@ export class Tle {
   private static readonly intlDesLaunchPiece_ = new TleFormatData(15, 17);
   /** The international designator year field. */
   private static readonly intlDesYear_ = new TleFormatData(10, 11);
-  /** The international designator field. */
-  private static readonly intlDes_ = new TleFormatData(10, 17);
   /** The line number field. */
   private static readonly lineNumber_ = new TleFormatData(1, 1);
   /** The mean anomaly field. */
@@ -224,6 +225,44 @@ export class Tle {
     const days = parseFloat(epochStr.substring(2, 14)) - 1;
 
     return EpochUTC.fromDateTimeString(`${year}-01-01T00:00:00.000Z`).roll(days * secondsPerDay as Seconds);
+  }
+
+  static calcElsetAge(
+    sat: Satellite,
+    nowInput?: Date,
+    outputUnits: 'days' | 'hours' | 'minutes' | 'seconds' = 'days',
+  ): number {
+    nowInput ??= new Date();
+    const currentYearFull = nowInput.getUTCFullYear();
+    const currentYearShort = currentYearFull % 100;
+
+    const epochYearShort = parseInt(sat.tle1.substring(18, 20), 10);
+    const epochDayOfYear = parseFloat(sat.tle1.substring(20, 32));
+
+    let epochYearFull: number;
+
+    if (epochYearShort <= currentYearShort) {
+      epochYearFull = 2000 + epochYearShort;
+    } else {
+      epochYearFull = 1900 + epochYearShort;
+    }
+
+    const epochJday = epochDayOfYear + (epochYearFull * 365);
+    const currentJday = getDayOfYear() + (currentYearFull * 365);
+    const currentTime = (nowInput.getUTCHours() * 3600 + nowInput.getUTCMinutes() * 60 +
+      nowInput.getUTCSeconds()) / 86400;
+    const daysOld = (currentJday + currentTime) - epochJday;
+
+    switch (outputUnits) {
+      case 'hours':
+        return daysOld * 24;
+      case 'minutes':
+        return daysOld * 1440;
+      case 'seconds':
+        return daysOld * 86400;
+      default:
+        return daysOld;
+    }
   }
 
   /**
@@ -684,12 +723,12 @@ export class Tle {
    * @see https://en.wikipedia.org/wiki/Mean_Motion
    * @example 15.54225995
    * @param tleLine2 The second line of the Tle to parse.
-   * @returns The mean motion of the satellite. (0 to 17)
+   * @returns The mean motion of the satellite. (0 to 18)
    */
   static meanMotion(tleLine2: TleLine2): number {
     const meanMo = parseFloat(tleLine2.substring(Tle.meanMo_.start, Tle.meanMo_.stop));
 
-    if (!(meanMo > 0 && meanMo <= 17)) {
+    if (!(meanMo > 0 && meanMo <= 18)) {
       throw new Error(`Invalid mean motion: ${meanMo}`);
     }
 
@@ -931,6 +970,10 @@ export class Tle {
       return sccNum;
     }
 
+    if (typeof sccNum[0] !== 'string') {
+      throw new Error('Invalid SCC number');
+    }
+
     // Already an alpha 5 number
     if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0])) {
       return sccNum;
@@ -960,7 +1003,15 @@ export class Tle {
    * @returns The converted 6-digit SCC number.
    */
   static convertA5to6Digit(sccNum: string): string {
+    if (sccNum.length < 5) {
+      return sccNum;
+    }
+
     const values = sccNum.toUpperCase().split('');
+
+    if (!values[0]) {
+      throw new Error('Invalid SCC number');
+    }
 
     if (values[0] in Tle.alpha5_) {
       const firstLetter = values[0] as keyof typeof Tle.alpha5_;

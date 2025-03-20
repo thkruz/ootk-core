@@ -1,7 +1,7 @@
 import { Celestial } from '../../src/body/Celestial';
 import { Moon } from '../../src/body/Moon';
 import { Sun } from '../../src/body/Sun';
-import { Degrees, Meters } from '../../src/main';
+import { Degrees, Meters, SunTime } from '../../src/main';
 
 /*
  * Use number of milliseconds since epoch instead of local year, month, day, etc
@@ -75,7 +75,7 @@ describe('Test for variety of date/time stamps', () => {
 
     for (let i = 0, l = testDateStrings.length; i < l; i++) {
       test(`${testDateStrings[i]}`, () => {
-        const date = new Date(testDateStrings[i]);
+        const date = new Date(testDateStrings[i] as string);
         const testDateDay = date.getDate();
 
         const times = Sun.getTimes(date, lat as Degrees, lng as Degrees);
@@ -93,27 +93,27 @@ describe('Suncalc.js tests', () => {
   const alt = 2000;
 
   const testTimes = {
-    solarNoon: '2013-03-05T10:10:57Z',
-    nadir: '2013-03-05T22:10:57Z',
-    sunriseStart: '2013-03-05T04:34:56Z',
-    sunsetEnd: '2013-03-05T15:46:57Z',
-    sunriseEnd: '2013-03-05T04:38:19Z',
-    sunsetStart: '2013-03-05T15:43:34Z',
-    civilDawn: '2013-03-05T04:02:17Z',
-    civilDusk: '2013-03-05T16:19:36Z',
-    nauticalDawn: '2013-03-05T03:24:31Z',
-    nauticalDusk: '2013-03-05T16:57:22Z',
-    astronomicalDawn: '2013-03-05T02:46:17Z',
-    astronomicalDusk: '2013-03-05T17:35:36Z',
-    goldenHourDawnEnd: '2013-03-05T05:19:01Z',
-    goldenHourDuskStart: '2013-03-05T15:02:52Z',
+    solarNoon: new Date('2013-03-05T10:10:57Z'),
+    nadir: new Date('2013-03-05T22:10:57Z'),
+    sunriseStart: new Date('2013-03-05T04:34:56Z'),
+    sunsetEnd: new Date('2013-03-05T15:46:57Z'),
+    sunriseEnd: new Date('2013-03-05T04:38:19Z'),
+    sunsetStart: new Date('2013-03-05T15:43:34Z'),
+    civilDawn: new Date('2013-03-05T04:02:17Z'),
+    civilDusk: new Date('2013-03-05T16:19:36Z'),
+    nauticalDawn: new Date('2013-03-05T03:24:31Z'),
+    nauticalDusk: new Date('2013-03-05T16:57:22Z'),
+    astronomicalDawn: new Date('2013-03-05T02:46:17Z'),
+    astronomicalDusk: new Date('2013-03-05T17:35:36Z'),
+    goldenHourDawnEnd: new Date('2013-03-05T05:19:01Z'),
+    goldenHourDuskStart: new Date('2013-03-05T15:02:52Z'),
   };
 
   const heightTestTimes = {
-    solarNoon: '2013-03-05T10:10:57Z',
-    nadir: '2013-03-05T22:10:57Z',
-    sunriseStart: '2013-03-05T04:25:07Z',
-    sunsetEnd: '2013-03-05T15:56:46Z',
+    solarNoon: new Date('2013-03-05T10:10:57Z'),
+    nadir: new Date('2013-03-05T22:10:57Z'),
+    sunriseStart: new Date('2013-03-05T04:25:07Z'),
+    sunsetEnd: new Date('2013-03-05T15:56:46Z'),
   };
 
   test('getTimes returns sun phases for the given date and location', () => {
@@ -123,7 +123,7 @@ describe('Suncalc.js tests', () => {
     for (const i in testTimes) {
       const key = i as keyof typeof testTimes;
 
-      expect(times[i].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
+      expect(times[key].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
     }
   });
 
@@ -134,7 +134,7 @@ describe('Suncalc.js tests', () => {
     for (const i in heightTestTimes) {
       const key = i as keyof typeof heightTestTimes;
 
-      expect(times[i].toUTCString()).toEqual(new Date(heightTestTimes[key]).toUTCString());
+      expect(times[key].toUTCString()).toEqual(new Date(heightTestTimes[key]).toUTCString());
     }
   });
 
@@ -169,30 +169,30 @@ describe('Tests from Hypnos3', () => {
   const lat = -34.0;
   const lon = 151.0;
 
-  const testTimes = {
+  const testTimes: SunTime = {
     // southern hemisphere
-    solarNoon: '2013-03-05T02:09:01.832Z',
-    nadir: '2013-03-05T14:09:01.832Z',
-    goldenHourDuskStart: '2013-03-05T07:56:33.416Z',
-    goldenHourDawnEnd: '2013-03-04T20:21:30.248Z',
-    sunsetStart: '2013-03-05T08:27:05.997Z',
-    sunriseEnd: '2013-03-04T19:50:57.667Z',
-    sunsetEnd: '2013-03-05T08:29:41.731Z',
-    sunriseStart: '2013-03-04T19:48:21.933Z',
-    goldenHourDuskEnd: '2013-03-05T08:30:30.554Z',
-    goldenHourDawnStart: '2013-03-04T19:47:33.110Z',
-    blueHourDuskStart: '2013-03-05T08:45:10.179Z',
-    blueHourDawnEnd: '2013-03-04T19:32:53.485Z',
-    civilDusk: '2013-03-05T08:54:59.722Z',
-    civilDawn: '2013-03-04T19:23:03.942Z',
-    blueHourDuskEnd: '2013-03-05T09:04:52.263Z',
-    blueHourDawnStart: '2013-03-04T19:13:11.401Z',
-    nauticalDusk: '2013-03-05T09:24:48.289Z',
-    nauticalDawn: '2013-03-04T18:53:15.375Z',
-    amateurDusk: '2013-03-05T09:39:57.120Z',
-    amateurDawn: '2013-03-04T18:38:06.544Z',
-    astronomicalDusk: '2013-03-05T09:55:18.657Z',
-    astronomicalDawn: '2013-03-04T18:22:45.007Z',
+    solarNoon: new Date('2013-03-05T02:09:01.832Z'),
+    nadir: new Date('2013-03-05T14:09:01.832Z'),
+    goldenHourDuskStart: new Date('2013-03-05T07:56:33.416Z'),
+    goldenHourDawnEnd: new Date('2013-03-04T20:21:30.248Z'),
+    sunsetStart: new Date('2013-03-05T08:27:05.997Z'),
+    sunriseEnd: new Date('2013-03-04T19:50:57.667Z'),
+    sunsetEnd: new Date('2013-03-05T08:29:41.731Z'),
+    sunriseStart: new Date('2013-03-04T19:48:21.933Z'),
+    goldenHourDuskEnd: new Date('2013-03-05T08:30:30.554Z'),
+    goldenHourDawnStart: new Date('2013-03-04T19:47:33.110Z'),
+    blueHourDuskStart: new Date('2013-03-05T08:45:10.179Z'),
+    blueHourDawnEnd: new Date('2013-03-04T19:32:53.485Z'),
+    civilDusk: new Date('2013-03-05T08:54:59.722Z'),
+    civilDawn: new Date('2013-03-04T19:23:03.942Z'),
+    blueHourDuskEnd: new Date('2013-03-05T09:04:52.263Z'),
+    blueHourDawnStart: new Date('2013-03-04T19:13:11.401Z'),
+    nauticalDusk: new Date('2013-03-05T09:24:48.289Z'),
+    nauticalDawn: new Date('2013-03-04T18:53:15.375Z'),
+    amateurDusk: new Date('2013-03-05T09:39:57.120Z'),
+    amateurDawn: new Date('2013-03-04T18:38:06.544Z'),
+    astronomicalDusk: new Date('2013-03-05T09:55:18.657Z'),
+    astronomicalDawn: new Date('2013-03-04T18:22:45.007Z'),
   };
 
   test('southern hemisphere', () => {
@@ -202,7 +202,7 @@ describe('Tests from Hypnos3', () => {
     for (const i in testTimes) {
       const key = i as keyof typeof testTimes;
 
-      expect(times[i].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
+      expect(times[key].toUTCString()).toEqual(new Date(testTimes[key]).toUTCString());
     }
   });
 });

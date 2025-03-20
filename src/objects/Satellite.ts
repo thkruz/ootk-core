@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -31,13 +31,13 @@ import { OptionsParams } from '../interfaces/OptionsParams.js';
 import { SatelliteParams } from '../interfaces/SatelliteParams.js';
 import { RAE } from '../observation/RAE.js';
 import { Vector3D } from '../operations/Vector3D.js';
-import { Sgp4 } from '../sgp4/sgp4.js';
 import { EpochUTC } from '../time/EpochUTC.js';
 import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms/index.js';
 import {
   Degrees,
   EcfVec3,
   EciVec3,
+  GreenwichMeanSiderealTime,
   Kilometers,
   KilometersPerSecond,
   LlaVec3,
@@ -54,7 +54,8 @@ import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../util
 import { dopplerFactor } from './../utils/functions.js';
 import { BaseObject } from './BaseObject.js';
 import { GroundObject } from './GroundObject.js';
-import { TimeVariables } from '../interfaces/TimeVariables.js';
+import { OmmDataFormat, OmmParsedDataFormat } from '../interfaces/OmmFormat.js';
+import { Sgp4 } from '../main.js';
 
 /**
  * Represents a satellite object with orbital information and methods for
@@ -94,7 +95,13 @@ export class Satellite extends BaseObject {
   constructor(info: SatelliteParams, options?: OptionsParams) {
     super(info);
 
-    this.parseTleAndUpdateOrbit_(info.tle1, info.tle2, info.sccNum);
+    if (info.tle1 && info.tle2) {
+      this.parseTleAndUpdateOrbit_(info.tle1, info.tle2, info.sccNum);
+    } else if (info.omm) {
+      this.parseOmmAndUpdateOrbit_(info.omm);
+    } else {
+      throw new Error('tle1 and tle2 or omm must be provided to create a Satellite object.');
+    }
 
     this.options = options ?? {
       notes: '',
@@ -130,11 +137,57 @@ export class Satellite extends BaseObject {
     this.satrec = Sgp4.createSatrec(tle1, tle2);
   }
 
+  private parseOmmAndUpdateOrbit_(omm: OmmDataFormat) {
+    this.sccNum = omm.NORAD_CAT_ID.padStart(5, '0');
+    this.sccNum5 = Tle.convert6DigitToA5(omm.NORAD_CAT_ID);
+    this.sccNum6 = Tle.convertA5to6Digit(this.sccNum5);
+    this.intlDes = omm.OBJECT_ID;
+    const YYYY = omm.EPOCH.slice(0, 4);
+    const MM = omm.EPOCH.slice(5, 7);
+    const DD = omm.EPOCH.slice(8, 10);
+    const hh = omm.EPOCH.slice(11, 13);
+    const mm = omm.EPOCH.slice(14, 16);
+    const ss = omm.EPOCH.slice(17, 23);
+    const epochDateObj = Date.UTC(Number(YYYY), Number(MM) - 1, Number(DD), Number(hh), Number(mm), Number(ss));
+    const dayOfYear = (epochDateObj - Date.UTC(Number(YYYY), 0, 0)) / 86400000;
+
+    const ommParsed: OmmParsedDataFormat = {
+      ...omm,
+      epoch: {
+        year: Number(YYYY),
+        month: Number(MM),
+        day: Number(DD),
+        hour: Number(hh),
+        minute: Number(mm),
+        second: Number(ss),
+        doy: dayOfYear,
+      },
+    };
+
+    this.epochYear = parseInt(YYYY.slice(2, 4));
+    this.epochDay = dayOfYear;
+    this.meanMoDev1 = parseFloat(omm.MEAN_MOTION_DOT);
+    this.meanMoDev2 = parseFloat(omm.MEAN_MOTION_DDOT);
+    this.bstar = parseFloat(omm.BSTAR);
+    this.inclination = parseFloat(omm.INCLINATION) as Degrees;
+    this.rightAscension = parseFloat(omm.RA_OF_ASC_NODE) as Degrees;
+    this.eccentricity = parseFloat(omm.ECCENTRICITY);
+    this.argOfPerigee = parseFloat(omm.ARG_OF_PERICENTER) as Degrees;
+    this.meanAnomaly = parseFloat(omm.MEAN_ANOMALY) as Degrees;
+    this.meanMotion = parseFloat(omm.MEAN_MOTION);
+    this.period = 1440 / this.meanMotion as Minutes;
+    this.semiMajorAxis = ((8681663.653 / this.meanMotion) ** (2 / 3)) as Kilometers;
+    this.semiMinorAxis = (this.semiMajorAxis * Math.sqrt(1 - this.eccentricity ** 2)) as Kilometers;
+    this.apogee = (this.semiMajorAxis * (1 + this.eccentricity) - 6371) as Kilometers;
+    this.perigee = (this.semiMajorAxis * (1 - this.eccentricity) - 6371) as Kilometers;
+    this.satrec = Sgp4.createSatrecFromOmm(ommParsed);
+  }
+
   /**
    * Checks if the object is a satellite.
    * @returns True if the object is a satellite, false otherwise.
    */
-  isSatellite(): boolean {
+  override isSatellite(): boolean {
     return true;
   }
 
@@ -142,7 +195,7 @@ export class Satellite extends BaseObject {
    * Returns whether the satellite is static or not.
    * @returns True if the satellite is static, false otherwise.
    */
-  isStatic(): boolean {
+  override isStatic(): boolean {
     return false;
   }
 
@@ -165,6 +218,10 @@ export class Satellite extends BaseObject {
     }
 
     return true;
+  }
+
+  ageOfElset(nowInput?: Date, outputUnits: 'days' | 'hours' | 'minutes' | 'seconds' = 'days'): number {
+    return Tle.calcElsetAge(this, nowInput, outputUnits);
   }
 
   editTle(tle1: TleLine1, tle2: TleLine2, sccNum?: string): void {
@@ -226,10 +283,13 @@ export class Satellite extends BaseObject {
    * Calculates ECI position at a given time.
    * @variation optimized
    * @param date - The date at which to calculate the ECI position. Optional, defaults to the current date.
+   * @param j - Julian date. Optional, defaults to null.
+   * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The ECI position at the specified date.
    */
-  eci(date: Date = new Date()): PosVel<Kilometers> {
-    const { m } = Satellite.calculateTimeVariables(date, this.satrec);
+  eci(date?: Date, j?: number, gmst?: GreenwichMeanSiderealTime): PosVel<Kilometers> {
+    date ??= new Date();
+    const { m } = Satellite.calculateTimeVariables(date, this.satrec, j, gmst);
 
     if (!m) {
       throw new Error('Propagation failed!');
@@ -287,11 +347,21 @@ export class Satellite extends BaseObject {
    * Calculates LLA position at a given time.
    * @variation optimized
    * @param date - The date at which to calculate the LLA position. Optional, defaults to the current date.
+   * @param j - Julian date. Optional, defaults to null.
+   * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The LLA position at the specified date.
    */
-  lla(date: Date = new Date()): LlaVec3<Degrees, Kilometers> {
-    const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
-    const pos = this.eci(date).position;
+  lla(date?: Date, j?: number, gmst?: GreenwichMeanSiderealTime):
+    LlaVec3<Degrees, Kilometers> {
+    date ??= new Date();
+    if (!j || !gmst) {
+      const timeVar = Satellite.calculateTimeVariables(date, this.satrec);
+
+      j = timeVar.j;
+      gmst = timeVar.gmst;
+    }
+
+    const pos = this.eci(date, j, gmst).position as EciVec3<Kilometers>;
     const lla = eci2lla(pos, gmst);
 
     return lla;
@@ -352,11 +422,15 @@ export class Satellite extends BaseObject {
    * @variation optimized
    * @param observer - The observer's position on the ground.
    * @param date - The date at which to calculate the RAE vector. Optional, defaults to the current date.
+   * @param j - Julian date. Optional, defaults to null.
+   * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The RAE vector for the given sensor and time.
    */
-  rae(observer: GroundObject, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
-    const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
-    const eci = this.eci(date).position;
+  rae(observer: GroundObject, date?: Date, j?: number, gmst?: GreenwichMeanSiderealTime):
+    RaeVec3<Kilometers, Degrees> {
+    date ??= new Date();
+    gmst ??= Satellite.calculateTimeVariables(date, this.satrec).gmst;
+    const eci = this.eci(date, j, gmst).position;
     const ecf = eci2ecf(eci, gmst);
 
     return ecf2rae(observer, ecf);
@@ -402,10 +476,14 @@ export class Satellite extends BaseObject {
    * Calculates the time variables for a given date relative to the TLE epoch.
    * @param date Date to calculate
    * @param satrec Satellite orbital information
+   * @param j Julian date
+   * @param gmst Greenwich Mean Sidereal Time
    * @returns Time variables
    */
-  private static calculateTimeVariables(date: Date, satrec?: SatelliteRecord): TimeVariables {
-    const j = jday(
+  private static calculateTimeVariables(
+    date: Date, satrec?: SatelliteRecord, j?: number, gmst?: GreenwichMeanSiderealTime,
+  ) {
+    j ??= jday(
       date.getUTCFullYear(),
       date.getUTCMonth() + 1,
       date.getUTCDate(),
@@ -413,7 +491,8 @@ export class Satellite extends BaseObject {
       date.getUTCMinutes(),
       date.getUTCSeconds(),
     ) + date.getUTCMilliseconds() * MILLISECONDS_TO_DAYS;
-    const gmst = Sgp4.gstime(j);
+    gmst ??= Sgp4.gstime(j);
+
     const m = satrec ? (j - satrec.jdsatepoch) * MINUTES_PER_DAY : null;
 
     return { gmst, m, j };

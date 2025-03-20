@@ -1,11 +1,11 @@
 {
   "name": "ootk-core",
-  "version": "1.2.6",
+  "version": "1.3.1",
   "type": "module",
   "module": "dist/main.js",
   "description": "Orbital Object Toolkit. A modern typed replacement for satellite.js including SGP4 propagation, TLE parsing, Sun and Moon calculations, and more.",
   "scripts": {
-    "build": "npm run clean && npx tsc -p tsconfig.build.json",
+    "build": "set NODE_ENV=production&& npm run clean && npx tsc -p tsconfig.build.json",
     "clean": "node ./scripts/cleanup.mjs",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
@@ -34,24 +34,25 @@
     "url": "https://github.com/thkruz/ootk-core/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.7",
-    "@babel/plugin-transform-runtime": "^7.23.7",
-    "@babel/preset-env": "^7.23.8",
-    "@babel/preset-typescript": "^7.23.3",
-    "@types/jest": "^29.5.11",
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-transform-runtime": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
-    "auto-changelog": "^2.4.0",
+    "auto-changelog": "^2.5.0",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^9.1.3",
-    "eslint": "^8.56.0",
+    "babel-loader": "^9.2.1",
+    "eslint": "^8.57.1",
     "eslint-plugin-jsdoc": "^48.0.2",
-    "fix-esm-import-path": "^1.5.0",
+    "fix-esm-import-path": "^1.10.1",
     "jest": "^28.1.3",
+    "serve": "^14.2.4",
     "ts-jest": "^28.0.8",
     "ts-node": "^10.9.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.3"
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
   },
   "homepage": "https://github.com/thkruz/ootk-core"
 }

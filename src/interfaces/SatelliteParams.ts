@@ -1,4 +1,5 @@
 import { EciVec3, SpaceObjectType, TleLine1, TleLine2 } from '../types/types.js';
+import { OmmDataFormat } from './OmmFormat.js';
 
 /**
  * Information about a space object.
@@ -7,8 +8,9 @@ import { EciVec3, SpaceObjectType, TleLine1, TleLine2 } from '../types/types.js'
 export interface SatelliteParams {
   name?: string;
   rcs?: number | null;
-  tle1: TleLine1;
-  tle2: TleLine2;
+  omm?: OmmDataFormat;
+  tle1?: TleLine1;
+  tle2?: TleLine2;
   type?: SpaceObjectType;
   vmag?: number | null;
   sccNum?: string;

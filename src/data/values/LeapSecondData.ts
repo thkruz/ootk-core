@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -52,22 +52,22 @@ const leapSeconds: Array<[number, number]> = [
   [2456109.5, 35],
   [2457204.5, 36],
   [2457754.5, 37],
-];
+] as const;
 
 // / Leap second data container.
 class LeapSecondData {
-  private _offsets: LeapSecond[];
-  private _jdFirst: number;
-  private _jdLast: number;
-  private _offsetFirst: number;
-  private _offsetLast: number;
+  private readonly offsets_: LeapSecond[];
+  private readonly jdFirst_: number;
+  private readonly jdLast_: number;
+  private readonly offsetFirst_: number;
+  private readonly offsetLast_: number;
 
   constructor(offsets: LeapSecond[]) {
-    this._offsets = offsets;
-    this._jdFirst = this._offsets[0].jd;
-    this._jdLast = this._offsets[this._offsets.length - 1].jd;
-    this._offsetFirst = this._offsets[0].offset;
-    this._offsetLast = this._offsets[this._offsets.length - 1].offset;
+    this.offsets_ = offsets;
+    this.jdFirst_ = (this.offsets_[0] as LeapSecond).jd;
+    this.jdLast_ = (this.offsets_[this.offsets_.length - 1] as LeapSecond).jd;
+    this.offsetFirst_ = (this.offsets_[0] as LeapSecond).offset;
+    this.offsetLast_ = (this.offsets_[this.offsets_.length - 1] as LeapSecond).offset;
   }
 
   /**
@@ -90,15 +90,18 @@ class LeapSecondData {
 
   // / Return the number of leap seconds for a given Julian date [jd].
   getLeapSeconds(jd: number): number {
-    if (jd >= this._jdLast) {
-      return this._offsetLast;
+    if (jd >= this.jdLast_) {
+      return this.offsetLast_;
     }
-    if (jd <= this._jdFirst) {
-      return this._offsetFirst;
+    if (jd <= this.jdFirst_) {
+      return this.offsetFirst_;
     }
-    for (let i = 0; i < this._offsets.length - 2; i++) {
-      if (jd >= this._offsets[i].jd && jd < this._offsets[i + 1].jd) {
-        return this._offsets[i].offset;
+    for (let i = 0; i < this.offsets_.length - 2; i++) {
+      const currentLeapSecond = this.offsets_[i] as LeapSecond;
+      const nextLeapSecond = this.offsets_[i + 1] as LeapSecond;
+
+      if (jd >= currentLeapSecond.jd && jd < nextLeapSecond.jd) {
+        return currentLeapSecond.offset;
       }
     }
 

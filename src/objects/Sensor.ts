@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -80,7 +80,7 @@ export class Sensor extends GroundObject {
    * Checks if the object is a sensor.
    * @returns True if the object is a sensor, false otherwise.
    */
-  isSensor(): boolean {
+  override isSensor(): boolean {
     return true;
   }
 

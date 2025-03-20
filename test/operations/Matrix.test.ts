@@ -12,7 +12,7 @@ describe('Matrix', () => {
 
     expect(matrix.elements).toEqual(elements);
     expect(matrix.rows).toBe(elements.length);
-    expect(matrix.columns).toBe(elements[0].length);
+    expect(matrix.columns).toBe((elements[0] as number[]).length);
   });
 
   // should add two matrices correctly

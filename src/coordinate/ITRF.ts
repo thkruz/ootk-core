@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -94,7 +94,7 @@ export class ITRF extends StateVector {
     const ast = this.epoch.gmstAngle() + n.eqEq;
     const rTOD = this.position.rotZ(-ast as Radians);
     const vTOD = this.velocity
-    // TODO: #13 Intermediate unit type is incorrect.
+      // TODO: #13 Intermediate unit type is incorrect.
       .add(Earth.rotation.cross(this.position) as unknown as Vector3D<KilometersPerSecond>)
       .rotZ(-ast as Radians);
     const rMOD = rTOD.rotX(n.eps).rotZ(n.dPsi).rotX(-n.mEps);

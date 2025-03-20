@@ -3,7 +3,49 @@
 This is an automatic changelog that automatically records all changes made to the project. Generated from Git commit
 messages, it details updates like bug fixes and new features, providing a clear history of the project's development.
 
-#### [1.2.6](https://github.com/thkruz/ootk-core/compare/v1.2.5...1.2.6)
+#### [1.3.1](https://github.com/thkruz/ootk-core/compare/v1.2.9...1.3.1)
+
+- fix: :label: implement stricter typing [`3663a1e`](https://github.com/thkruz/ootk-core/commit/3663a1e019a3452d5a3b3e334caff748739a7cb9)
+- chore: :memo: update copyright [`6547bcb`](https://github.com/thkruz/ootk-core/commit/6547bcb264798cbc6a961c2640cc5ce208f2fb4e)
+- fix: :zap: remove slow caching process [`d147d0c`](https://github.com/thkruz/ootk-core/commit/d147d0c46e2de427db4b945cd380c19c188f9dc0)
+- refactor: :zap: minor performance improvements [`7dd587d`](https://github.com/thkruz/ootk-core/commit/7dd587dfc1208cd388afdbe3be0dfeaf6d6dec36)
+- refactor: :recycle: remove unnecessary object creation in sgp4init_ [`36155b1`](https://github.com/thkruz/ootk-core/commit/36155b1ff58748f36f7d40a00c884ad47e0215bf)
+- test: :white_check_mark: add more test coverage [`1ce84f1`](https://github.com/thkruz/ootk-core/commit/1ce84f1a242afe954005109cc459e6006a51e008)
+- fix: :label: implement stricter typing [`d379c25`](https://github.com/thkruz/ootk-core/commit/d379c25729f747309c08b818b54fec33621ef06c)
+- feat: :sparkles: add more functions from keeptrack.space [`ad2693a`](https://github.com/thkruz/ootk-core/commit/ad2693a70184d3f28f9c62340edffc9588aa55f1)
+- refactor: :coffin: remove benchmark that didn't work [`9110c69`](https://github.com/thkruz/ootk-core/commit/9110c69baced18bd5355d88c39ca14b2fb604238)
+- refactor: :label: add readonly to constants [`fca69f5`](https://github.com/thkruz/ootk-core/commit/fca69f5d2154df0dc7b5a2b030a247cddd735946)
+- fix: :rotating_light: fix linter errors [`2158517`](https://github.com/thkruz/ootk-core/commit/2158517c07e40b4276fb34d1d9f3d65eb854da06)
+- test: :white_check_mark: add more test coverage [`8da9c09`](https://github.com/thkruz/ootk-core/commit/8da9c0940725fc99dedcd75a08f5e3095ca92746)
+- test: :white_check_mark: add testing to Egm96Data [`ddce958`](https://github.com/thkruz/ootk-core/commit/ddce9586db1a7a1b0c230d1098dcfb29a723ef1a)
+- build: :arrow_up: bump dependencies [`d5ce9a3`](https://github.com/thkruz/ootk-core/commit/d5ce9a31a584f50b7961fac633b196370adb16db)
+- refactor: :label: add readonly to constants [`cc09a35`](https://github.com/thkruz/ootk-core/commit/cc09a357f15805e12f514d39ac57be5ac9eddd3c)
+- refactor: :label: add readonly to constants [`7d8e081`](https://github.com/thkruz/ootk-core/commit/7d8e081dfb1acabfd4fcafede13932782a0b567c)
+- refactor: :label: add readonly to constants [`0b27267`](https://github.com/thkruz/ootk-core/commit/0b27267f76ab55c2d490ba0f0b9d3d9a6feba773)
+- refactor: :zap: reduce recalculating constants [`baa0b68`](https://github.com/thkruz/ootk-core/commit/baa0b68668d5ad5f82faf0fcd78ee88af3ad396e)
+- test: :camera_flash: update snapshots for new satrec [`9e3cde7`](https://github.com/thkruz/ootk-core/commit/9e3cde734d358bba9932e01dbf2c7b320ac7ee39)
+
+#### [v1.2.9](https://github.com/thkruz/ootk-core/compare/v1.2.8...v1.2.9)
+
+> 1 March 2025 
+
+- fix: :ambulance: fix wrong month calculation [`185f96f`](https://github.com/thkruz/ootk-core/commit/185f96f9db9be7d9661a29957224a34e9a4e8ab4)
+
+#### [v1.2.8](https://github.com/thkruz/ootk-core/compare/v1.2.7...v1.2.8)
+
+> 12 February 2025 
+
+- fix: :bug: fix typescript issues found in #27 [`005e2af`](https://github.com/thkruz/ootk-core/commit/005e2af6e167146ff0ffb84e6e6af4cf4c95bfc2)
+
+#### [v1.2.7](https://github.com/thkruz/ootk-core/compare/v1.2.6...v1.2.7)
+
+> 20 January 2025 
+
+- fix: :bug: allow extremely large mean motion due to 18 SDS [`a35ab57`](https://github.com/thkruz/ootk-core/commit/a35ab57b76c15ed960c2d041e62da78865bc36f4)
+
+#### [v1.2.6](https://github.com/thkruz/ootk-core/compare/v1.2.5...v1.2.6)
+
+> 18 September 2024 
 
 - refactor: :rotating_light: fix linter error [`8b3ee9b`](https://github.com/thkruz/ootk-core/commit/8b3ee9b45dea70f2e5339c4e9906e3ae6214d602)
 - fix: :ambulance: fix error on leap year [`a9bd6b7`](https://github.com/thkruz/ootk-core/commit/a9bd6b70fe64a6afec5f06d59a0ef30d513b02d9)

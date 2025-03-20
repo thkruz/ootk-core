@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -29,14 +29,18 @@ export type HpAtmosphereEntry = [number, number, number];
 
 // / Container for Harris-Priester atmosphere data.
 export class HpAtmosphereData {
-  private _table: HpAtmosphereEntry[];
-  private _hMin: number;
-  private _hMax: number;
+  private readonly table_: HpAtmosphereEntry[];
+  private readonly hMin_: number;
+  private readonly hMax_: number;
 
   constructor(table: HpAtmosphereEntry[]) {
-    this._table = table;
-    this._hMin = table[0][0];
-    this._hMax = table[table.length - 1][0];
+    this.table_ = table;
+    if (table.length === 0 || typeof table[0]?.[0] === 'undefined') {
+      throw new Error('Table must have at least one valid entry.');
+    }
+
+    this.hMin_ = table[0][0];
+    this.hMax_ = table[table.length - 1]?.[0] ?? 0;
   }
 
   static fromVals(vals: [number, number, number][]): HpAtmosphereData {
@@ -52,16 +56,20 @@ export class HpAtmosphereData {
   }
 
   getAtmosphere(height: number): HpAtmosphereResult | null {
-    if (height < this._hMin || height > this._hMax) {
+    if (height < this.hMin_ || height > this.hMax_) {
       return null;
     }
     let index = 0;
 
-    while (index < this._table.length - 2 && height > this._table[index + 1][0]) {
+    while (index < this.table_.length - 2 && height > (this.table_[index + 1] as HpAtmosphereEntry)[0]) {
       index++;
     }
 
-    return new HpAtmosphereResult(height, this._table[index], this._table[index + 1]);
+    return new HpAtmosphereResult(
+      height,
+      (this.table_[index] as HpAtmosphereEntry),
+      (this.table_[index + 1] as HpAtmosphereEntry),
+    );
   }
 }
 

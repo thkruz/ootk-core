@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -74,10 +74,10 @@ export class Epoch {
   }
 
   private getDayOfYear_(date: Date): number {
-    const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+    const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334] as const;
     const mn = date.getUTCMonth();
     const dn = date.getUTCDate();
-    let dayOfYear = dayCount[mn] + dn;
+    let dayOfYear = (dayCount[mn] as number) + dn;
 
     if (mn > 1 && this.isLeapYear_(date)) {
       dayOfYear++;

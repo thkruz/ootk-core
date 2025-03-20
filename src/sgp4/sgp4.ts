@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -19,31 +19,33 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * @copyright © 2012–2016 Brandon Rhodes
+ * @copyright (c) 2012–2016 Brandon Rhodes
  * This was ported from the python-sgp4 library by Brandon Rhodes.
  */
 
 // NOTE: This file is meant to maintain as much of the original format as possible.
-/* eslint-disable no-lonely-if */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable complexity */
-/* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
-/* eslint-disable max-params */
-/* eslint-disable no-shadow */
-/* eslint-disable init-declarations */
 /* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
+/* eslint-disable @typescript-eslint/no-loss-of-precision */
 
+import { OmmParsedDataFormat } from '../interfaces/OmmFormat.js';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
 import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types.js';
 import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants.js';
+import { Sgp4ErrorCode } from './sgp4-error.js';
+import { Tle } from '../main.js';
 
 export enum Sgp4GravConstants {
   wgs72old = 'wgs72old',
   wgs72 = 'wgs72',
   wgs84 = 'wgs84',
+}
+
+export enum Sgp4Methods {
+  NEAR_EARTH = 'n',
+  DEEP_SPACE = 'd',
 }
 
 interface DsInitParams {
@@ -121,6 +123,20 @@ interface DsInitParams {
   xni: number;
 }
 
+/** Ootk -- Some variables imported from outside the class at the top */
+const fasx2 = 0.13130908;
+const fasx4 = 2.8843198;
+const fasx6 = 0.37448087;
+const g22 = 5.7686396;
+const g32 = 0.95240898;
+const g44 = 1.8014998;
+const g52 = 1.050833;
+const g54 = 4.4108898;
+const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
+const stepp = 720.0;
+const stepn = -720.0;
+const step2 = 259200.0;
+
 /*
  *     ----------------------------------------------------------------
  *
@@ -180,8 +196,6 @@ interface DsInitParams {
  *       ----------------------------------------------------------------
  */
 export class Sgp4 {
-  // Dot
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -214,11 +228,18 @@ export class Sgp4 {
     const magv1 = Sgp4.mag_(vec1);
     const magv2 = Sgp4.mag_(vec2);
 
-    if (magv1 * magv2 > small * small) {
-      let temp = Sgp4.dot_(vec1, vec2) / (magv1 * magv2);
+    const magnitudeProduct = magv1 * magv2;
 
-      if (Math.abs(temp) > 1.0) {
-        temp = Number(Sgp4.sgn_(temp));
+    if (magnitudeProduct > small * small) {
+      let temp = Sgp4.dot_(vec1, vec2) / (magnitudeProduct);
+
+      // Clamp to [-1, 1] to avoid NaN from floating point errors
+      if (temp > 1.0) {
+        temp = 1.0;
+      }
+
+      if (temp < -1.0) {
+        temp = -1.0;
       }
 
       return Math.acos(temp);
@@ -226,8 +247,6 @@ export class Sgp4 {
 
     return unknown;
   }
-
-  // Angle
 
   /*
    * -----------------------------------------------------------------------------
@@ -254,8 +273,6 @@ export class Sgp4 {
   private static asinh_(xval: number): number {
     return Math.log(xval + Math.sqrt(xval * xval + 1.0));
   }
-
-  // Getgravconst
 
   /*
    * -----------------------------------------------------------------------------
@@ -307,132 +324,14 @@ export class Sgp4 {
     let year = 0;
 
     const satrec = {
-      a: null as number | null,
-      am: null,
-      alta: null,
-      altp: null,
-      argpdot: null,
-      argpo: null as number | null,
-      aycof: null,
-      bstar: null as number | null,
-      cc1: null,
-      cc4: null,
-      cc5: null,
-      con41: null,
-      d2: null,
-      d3: null,
-      d4: null,
-      d5232: null,
-      d5421: null,
-      d5433: null,
-      dedt: null,
-      delmo: null,
-      del1: null,
-      ecco: null as number | null,
-      em: null,
-      epochdays: null as number | null,
-      epochyr: null as number | null,
-      error: null as number | null,
-      eta: null,
-      gsto: null,
-      im: null,
-      inclo: null as number | null,
-      init: null,
-      isimp: null,
-      jdsatepoch: null as number | null,
-      mdot: null,
-      method: null,
-      mo: null as number | null,
-      mm: null,
-      nddot: null as number | null,
-      ndot: null as number | null,
-      no: null as number | null,
-      nodecf: null,
-      nodedot: null,
-      nodeo: null as number | null,
-      om: null,
-      Om: null,
-      omgcof: null,
-      operationmode: null,
-      satnum: null as string | null,
-      sinmao: null,
-      t: null,
-      t2cof: null,
-      t3cof: null,
-      t4cof: null,
-      t5cof: null,
-      x1mth2: null,
-      x7thm1: null,
-      xlcof: null,
-      xmcof: null,
-      xfact: null,
-      xlamo: null,
-      xli: null,
-      xgh4: null,
-      xgh3: null,
-      xh2: null,
-      xi2: null,
-      xi3: null,
-      xl2: null,
-      xl3: null,
-      xl4: null,
-      zmol: null,
-      zmos: null,
-      dmdt: null,
-      dnodt: null,
-      domdt: null,
-      e3: null,
-      ee2: null,
-      peo: null,
-      pgho: null,
-      pho: null,
-      PInco: null,
-      plo: null,
-      se2: null,
-      se3: null,
-      sgh2: null,
-      sgh3: null,
-      sgh4: null,
-      sh2: null,
-      sh3: null,
-      si2: null,
-      si3: null,
-      sl2: null,
-      sl3: null,
-      sl4: null,
-      xgh2: null,
-      xh3: null,
-      tumin: null,
-      radiusearthkm: null,
-      irez: null,
-      d3210: null,
-      d3222: null,
-      d4410: null,
-      d4422: null,
-      d5220: null,
-      del2: null,
-      del3: null,
-      didt: null,
-      atime: null,
-      j2: null,
-      j3: null,
-      j4: null,
-      mus: null,
-      xke: null,
-      j3oj2: null,
-      xni: null,
-      d2201: null,
-      d2211: null,
-      nm: null,
-    };
+      error: Sgp4ErrorCode.NO_ERROR,
+    } as SatelliteRecord;
 
     /*
      * Sgp4fix no longer needed
      * getgravconst( whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2 );
      */
     const xpdotp = 1440.0 / (2.0 * PI); // 229.1831180523293;
-
-    satrec.error = 0;
 
     satrec.satnum = tleLine1.substring(2, 7);
 
@@ -446,7 +345,6 @@ export class Sgp4 {
       `${tleLine1.substring(53, 54)}.${tleLine1.substring(54, 59)}E${tleLine1.substring(59, 61)}`,
     );
 
-    // Satrec.satnum = tleLine2.substring(2, 7);
     satrec.inclo = parseFloat(tleLine2.substring(8, 16));
     satrec.nodeo = parseFloat(tleLine2.substring(17, 25));
     satrec.ecco = parseFloat(`.${tleLine2.substring(26, 33)}`);
@@ -529,7 +427,109 @@ export class Sgp4 {
     return satrec as unknown as SatelliteRecord;
   }
 
-  // Mag
+  static createSatrecFromOmm(
+    omm: OmmParsedDataFormat,
+    whichconst = Sgp4GravConstants.wgs72,
+    opsmode = Sgp4OpsMode.IMPROVED,
+  ): SatelliteRecord {
+    let year = 0;
+
+    const satrec = {
+      error: Sgp4ErrorCode.NO_ERROR,
+    } as SatelliteRecord;
+
+    const xpdotp = 1440.0 / (2.0 * PI); // 229.1831180523293;
+
+    satrec.error = Sgp4ErrorCode.NO_ERROR;
+
+    satrec.satnum = omm.NORAD_CAT_ID;
+
+    satrec.epochyr = parseInt(omm.epoch.year.toString().slice(-2));
+    satrec.epochdays = omm.epoch.doy;
+    satrec.ndot = parseFloat(omm.MEAN_MOTION_DOT);
+    satrec.nddot = parseFloat(omm.MEAN_MOTION_DDOT);
+    satrec.bstar = parseFloat(omm.BSTAR);
+    satrec.inclo = parseFloat(omm.INCLINATION);
+    satrec.nodeo = parseFloat(omm.RA_OF_ASC_NODE);
+    satrec.ecco = parseFloat(omm.ECCENTRICITY);
+    satrec.argpo = parseFloat(omm.ARG_OF_PERICENTER);
+    satrec.mo = parseFloat(omm.MEAN_ANOMALY);
+    satrec.no = parseFloat(omm.MEAN_MOTION);
+
+    // ---- find no, ndot, nddot ----
+    satrec.no /= xpdotp; //   Rad/min
+    /** Ootk -- nexp and ibexp are calculated above using template literals */
+    /*
+     * Satrec.nddot = satrec.nddot * Math.pow(10.0, nexp);
+     * satrec.bstar = satrec.bstar * Math.pow(10.0, ibexp);
+     */
+
+    /*
+     * ---- convert to sgp4 units ----
+     * satrec.a = (satrec.no * tumin) ** (-2.0 / 3.0);
+     */
+    /** Ootk -- Not sure why the following two lines are added. 1st and 2nd derivatives aren't even used anymore */
+    /*
+     * Satrec.ndot /= xpdotp * 1440.0; // ? * minperday
+     * satrec.nddot /= xpdotp * 1440.0 * 1440;
+     */
+
+    // ---- find standard orbital elements ----
+    satrec.inclo *= DEG2RAD;
+    satrec.nodeo *= DEG2RAD;
+    satrec.argpo *= DEG2RAD;
+    satrec.mo *= DEG2RAD;
+
+    /*
+     * Sgp4fix not needed here
+     * satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
+     * satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
+     */
+
+    /*
+     * ----------------------------------------------------------------
+     * find sgp4epoch time of element set
+     * remember that sgp4 uses units of days from 0 jan 1950 (sgp4epoch)
+     * and minutes from the epoch (time)
+     * ----------------------------------------------------------------
+     */
+
+    /*
+     * ---------------- temp fix for years from 1957-2056 -------------------
+     * --------- correct fix will occur when year is 4-digit in tle ---------
+     */
+
+    if (satrec.epochyr < 57) {
+      year = satrec.epochyr + 2000;
+    } else {
+      year = satrec.epochyr + 1900;
+    }
+
+    const { mon, day, hr, min, sec } = Sgp4.days2mdhms(year, satrec.epochdays);
+
+    const jdayRes = Sgp4.jday(year, mon, day, hr, min, sec);
+
+    satrec.jdsatepoch = jdayRes.jd + jdayRes.jdFrac;
+
+    //  ---------------- initialize the orbit at sgp4epoch -------------------
+    Sgp4.sgp4init_(satrec as unknown as SatelliteRecord, {
+      whichconst,
+      opsmode,
+      satn: satrec.satnum,
+      epoch: satrec.jdsatepoch - 2433281.5,
+      xbstar: satrec.bstar,
+      xecco: satrec.ecco,
+      xargpo: satrec.argpo,
+      xinclo: satrec.inclo,
+      xndot: satrec.ndot,
+      xnddot: satrec.nddot,
+      xmo: satrec.mo,
+      xno: satrec.no,
+      xnodeo: satrec.nodeo,
+    });
+
+    return satrec as unknown as SatelliteRecord;
+  }
 
   /*
    * -----------------------------------------------------------------------------
@@ -555,16 +555,12 @@ export class Sgp4 {
    * ----------------------------------------------------------------------------
    */
   private static cross_(vec1: Vec3Flat, vec2: Vec3Flat): Vec3Flat {
-    const outvec: Vec3Flat = [0, 0, 0];
-
-    outvec[0] = vec1[1] * vec2[2] - vec1[2] * vec2[1];
-    outvec[1] = vec1[2] * vec2[0] - vec1[0] * vec2[2];
-    outvec[2] = vec1[0] * vec2[1] - vec1[1] * vec2[0];
-
-    return outvec;
+    return [
+      vec1[1] * vec2[2] - vec1[2] * vec2[1],
+      vec1[2] * vec2[0] - vec1[0] * vec2[2],
+      vec1[0] * vec2[1] - vec1[1] * vec2[0],
+    ];
   }
-
-  // Jday
 
   /*
    * -----------------------------------------------------------------------------
@@ -628,8 +624,8 @@ export class Sgp4 {
     let i = 1;
     let inttemp = 0;
 
-    while (dayofyr > inttemp + lmonth[i - 1] && i < 12) {
-      inttemp += lmonth[i - 1];
+    while (dayofyr > inttemp + (lmonth[i - 1] as number) && i < 12) {
+      inttemp += (lmonth[i - 1] as number);
       i += 1;
     }
 
@@ -652,8 +648,6 @@ export class Sgp4 {
       sec,
     };
   }
-
-  // End cross
 
   /*
    * -----------------------------------------------------------------------------
@@ -678,11 +672,9 @@ export class Sgp4 {
    *    none.
    * ---------------------------------------------------------------------------
    */
-  private static dot_(x: Vec3Flat, y: Vec3Flat): number {
-    return x[0] * y[0] + x[1] * y[1] + x[2] * y[2];
+  private static dot_(v1: Vec3Flat, v2: Vec3Flat): number {
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
   }
-
-  // Twoline2rv
 
   /*
    * -----------------------------------------------------------------------------
@@ -715,7 +707,8 @@ export class Sgp4 {
     const tut1 = (jdut1 - 2451545.0) / 36525.0;
 
     let temp =
-      -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 + (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
+      -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 +
+      (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
 
     temp = ((temp * DEG2RAD) / 240.0) % TAU; // 360/86400 = 1/240, to deg, to rad
 
@@ -726,8 +719,6 @@ export class Sgp4 {
 
     return temp as GreenwichMeanSiderealTime;
   }
-
-  // Days2mdhms
 
   /*
    * -----------------------------------------------------------------------------
@@ -821,8 +812,6 @@ export class Sgp4 {
     };
   }
 
-  // Rv2coe
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -889,8 +878,6 @@ export class Sgp4 {
     return { jd, jdFrac };
   }
 
-  // Sgn
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -913,11 +900,9 @@ export class Sgp4 {
    *    none.
    * ---------------------------------------------------------------------------
    */
-  private static mag_(x: Vec3Flat): number {
-    return Math.sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
+  private static mag_(v: Vec3Flat): number {
+    return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   }
-
-  // Asinh
 
   /*
    * -----------------------------------------------------------------------------
@@ -1005,8 +990,6 @@ export class Sgp4 {
       m,
     };
   }
-
-  // Sgp4init
 
   /*
    *----------------------------------------------------------------------------
@@ -1108,12 +1091,11 @@ export class Sgp4 {
      * Sgp4fix identify constants and allow alternate values
      * getgravconst( whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2 );
      */
-    const { xke, j2, j3oj2 } = satrec;
-    const vkmpersec = (satrec.radiusearthkm * satrec.xke) / 60.0;
+    const { xke, j2, j3oj2, vkmpersec } = satrec;
 
     // --------------------- clear sgp4 error flag -----------------
     satrec.t = tsince;
-    satrec.error = 0;
+    satrec.error = Sgp4ErrorCode.NO_ERROR;
 
     //  ------- update for secular gravity and atmospheric drag -----
     const xmdf = satrec.mo + satrec.mdot * satrec.t;
@@ -1127,7 +1109,7 @@ export class Sgp4 {
     let tempe = satrec.bstar * satrec.cc4 * satrec.t;
     let templ = satrec.t2cof * t2;
 
-    if (satrec.isimp !== 1) {
+    if (!satrec.isimp) {
       const delomg = satrec.omgcof * satrec.t;
       //  Sgp4fix use mutliply for speed instead of pow
       const delmtemp = 1.0 + satrec.eta * Math.cos(xmdf);
@@ -1148,55 +1130,20 @@ export class Sgp4 {
     let em = satrec.ecco;
     let inclm = satrec.inclo;
 
-    if (satrec.method === 'd') {
-      const tc = satrec.t;
-
-      const dspaceResult = Sgp4.dspace_(
-        satrec.irez,
-        satrec.d2201,
-        satrec.d2211,
-        satrec.d3210,
-        satrec.d3222,
-        satrec.d4410,
-        satrec.d4422,
-        satrec.d5220,
-        satrec.d5232,
-        satrec.d5421,
-        satrec.d5433,
-        satrec.dedt,
-        satrec.del1,
-        satrec.del2,
-        satrec.del3,
-        satrec.didt,
-        satrec.dmdt,
-        satrec.dnodt,
-        satrec.domdt,
-        satrec.argpo,
-        satrec.argpdot,
-        satrec.t,
-        tc,
-        satrec.gsto,
-        satrec.xfact,
-        satrec.xlamo,
-        satrec.no,
-        satrec.atime,
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
+      [em, argpm, inclm, mm, nodem, nm] = Sgp4.dspace_(
         em,
         argpm,
         inclm,
-        satrec.xli,
         mm,
-        satrec.xni,
         nodem,
         nm,
+        satrec,
       );
-
-      [em, argpm, inclm, mm, nodem, nm] = dspaceResult;
-    } // If methjod = d
+    }
 
     if (nm <= 0.0) {
-      // Printf("// error nm %f\n", nm);
-      satrec.error = 2;
-      // Sgp4fix add return
+      satrec.error = Sgp4ErrorCode.MEAN_MOTION_NEGATIVE;
 
       return { position: false, velocity: false };
     }
@@ -1212,12 +1159,7 @@ export class Sgp4 {
      */
     /* istanbul ignore next | This is no longer possible*/
     if (em >= 1.0 || em < -0.001) {
-      /*
-       * || (am < 0.95)
-       * printf("// error em %f\n", em);
-       */
-      satrec.error = 1;
-      // Sgp4fix to return if there is an error in eccentricity
+      satrec.error = Sgp4ErrorCode.MEAN_MOTION_NEGATIVE;
 
       return { position: false, velocity: false };
     }
@@ -1259,23 +1201,20 @@ export class Sgp4 {
     let sinip = sinim;
     let cosip = cosim;
 
-    if (satrec.method === 'd') {
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
       const dpperParameters = {
         inclo: satrec.inclo,
-        init: 'n',
+        init: false,
         ep,
         inclp: xincp,
         nodep,
         argpp,
         mp,
         opsmode: satrec.operationmode,
+        satrec,
       };
 
-      const dpperResult = Sgp4.dpper_(satrec, dpperParameters);
-
-      ({ ep, nodep, argpp, mp } = dpperResult);
-
-      xincp = dpperResult.inclp;
+      ({ ep, nodep, argpp, mp, inclp: xincp } = Sgp4.dpper_(dpperParameters));
 
       if (xincp < 0.0) {
         xincp = -xincp;
@@ -1283,16 +1222,14 @@ export class Sgp4 {
         argpp -= PI;
       }
       if (ep < 0.0 || ep > 1.0) {
-        //  Printf("// error ep %f\n", ep);
-        satrec.error = 3;
-        //  Sgp4fix add return
+        satrec.error = Sgp4ErrorCode.PERT_ELEMENTS_INVALID;
 
         return { position: false, velocity: false };
       }
     }
 
     //  -------------------- long period periodics ------------------
-    if (satrec.method === 'd') {
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
       sinip = Math.sin(xincp);
       cosip = Math.cos(xincp);
       satrec.aycof = -0.5 * j3oj2 * sinip;
@@ -1346,9 +1283,7 @@ export class Sgp4 {
     const pl = am * (1.0 - el2);
 
     if (pl < 0.0) {
-      //  Printf("// error pl %f\n", pl);
-      satrec.error = 4;
-      //  Sgp4fix add return
+      satrec.error = Sgp4ErrorCode.SEMI_LATUS_RECTUM_NEGATIVE;
 
       return { position: false, velocity: false };
     }
@@ -1370,7 +1305,7 @@ export class Sgp4 {
     const temp2 = temp1 * temp;
 
     // -------------- update for short period periodics ------------
-    if (satrec.method === 'd') {
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
       const cosisq = cosip * cosip;
 
       satrec.con41 = 3.0 * cosisq - 1.0;
@@ -1383,8 +1318,7 @@ export class Sgp4 {
     /** Moved this up to reduce unnecessary computation if you are going to return false anyway */
     // Sgp4fix for decaying satellites
     if (mrt < 1.0) {
-      // Printf("// decay condition %11.6f \n",mrt);
-      satrec.error = 6;
+      satrec.error = Sgp4ErrorCode.SATELLITE_DECAYED;
 
       return {
         position: false,
@@ -1563,7 +1497,7 @@ export class Sgp4 {
 
       rdotv = Sgp4.dot_(r, v);
       for (i = 0; i <= 2; i++) {
-        ebar[i] = (c1 * r[i] - rdotv * v[i]) / mus;
+        ebar[i] = (c1 * (r[i] as number) - rdotv * (v[i] as number)) / mus;
       }
       ecc = Sgp4.mag_(ebar);
 
@@ -1594,11 +1528,9 @@ export class Sgp4 {
           // --------------  circular inclined ---------------
           typeorbit = 3;
         }
-      } else {
         // - elliptical, parabolic, hyperbolic equatorial --
-        if (incl < small || Math.abs(incl - PI) < small) {
-          typeorbit = 4;
-        }
+      } else if (incl < small || Math.abs(incl - PI) < small) {
+        typeorbit = 4;
       }
 
       // ----------  find right ascension of the ascending node ------------
@@ -1716,6 +1648,11 @@ export class Sgp4 {
     };
   }
 
+  /**
+   * Determines the sign of a given number.
+   * @param x - The input number to evaluate.
+   * @returns `-1.0` if the input number is less than `0.0`, otherwise `1.0`.
+   */
   private static sgn_(x: number): number {
     if (x < 0.0) {
       return -1.0;
@@ -1724,7 +1661,14 @@ export class Sgp4 {
     return 1.0;
   }
 
-  // Newtonnu
+  /**
+   * Computes the hyperbolic sine of a given number.
+   *
+   * The hyperbolic sine is calculated using the formula:
+   * sinh(x) = (e^x - e^(-x)) / 2
+   * @param x - The input number for which to calculate the hyperbolic sine.
+   * @returns The hyperbolic sine of the input number.
+   */
   private static sinh_(x: number): number {
     return (Math.exp(x) - Math.exp(-x)) / 2;
   }
@@ -1798,7 +1742,6 @@ export class Sgp4 {
    * ----------------------------------------------------------------------------
    */
   private static dpper_(
-    satrec: SatelliteRecord,
     options: {
       ep: number;
       inclp: number;
@@ -1806,7 +1749,8 @@ export class Sgp4 {
       argpp: number;
       mp: number;
       opsmode: string;
-      init: string;
+      init: boolean;
+      satrec: SatelliteRecord;
     },
   ): { ep: number; inclp: number; nodep: number; argpp: number; mp: number } {
     const {
@@ -1842,10 +1786,10 @@ export class Sgp4 {
       xl4,
       zmol,
       zmos,
-    } = satrec;
+    } = options.satrec;
 
     let { ep, inclp, nodep, argpp, mp } = options;
-    const { opsmode = 'i', init } = options;
+    const { opsmode = Sgp4OpsMode.IMPROVED, init } = options;
 
     //  ---------------------- constants -----------------------------
     /** Ootk -- Some variables imported from outside the class at the top */
@@ -1858,7 +1802,7 @@ export class Sgp4 {
     let zm = zmos + zns * t;
     // Be sure that the initial call has time set to zero
 
-    if (init === 'y') {
+    if (init) {
       zm = zmos;
     }
     let zf = zm + 2.0 * zes * Math.sin(zm);
@@ -1872,7 +1816,7 @@ export class Sgp4 {
     const shs = sh2 * f2 + sh3 * f3;
 
     zm = zmol + znl * t;
-    if (init === 'y') {
+    if (init) {
       zm = zmol;
     }
     zf = zm + 2.0 * zel * Math.sin(zm);
@@ -1890,7 +1834,7 @@ export class Sgp4 {
     let pgh = sghs + sghl;
     let ph = shs + shll;
 
-    if (init === 'n') {
+    if (!init) {
       pe -= peo;
       PInc -= PInco;
       pl -= plo;
@@ -1966,7 +1910,7 @@ export class Sgp4 {
         mp += pl;
         argpp = xls - mp - cosip * nodep;
       }
-    } // If init == 'n'
+    } // If !init
 
     return {
       ep,
@@ -1976,8 +1920,6 @@ export class Sgp4 {
       mp,
     };
   }
-
-  // Dpper
 
   /*
    *-----------------------------------------------------------------------------
@@ -2151,7 +2093,6 @@ export class Sgp4 {
     const zcosis = 0.91744867;
     const zcosgs = 0.1945905;
     const zsings = -0.98088458;
-    const TAU = 2.0 * Math.PI;
 
     //  --------------------- local variables ------------------------
     let s1 = 0,
@@ -2433,8 +2374,6 @@ export class Sgp4 {
     };
   }
 
-  // Dscom
-
   /*
    *-----------------------------------------------------------------------------
    *
@@ -2605,7 +2544,6 @@ export class Sgp4 {
       mm,
       nm,
       nodem,
-      irez,
       atime,
       d2201,
       d2211,
@@ -2617,11 +2555,6 @@ export class Sgp4 {
       d5232,
       d5421,
       d5433,
-      dedt,
-      didt,
-      dmdt,
-      dnodt,
-      domdt,
       del1,
       del2,
       del3,
@@ -2639,8 +2572,6 @@ export class Sgp4 {
     const root22 = 1.7891679e-6;
     const root44 = 7.3636953e-9;
     const root54 = 2.1765803e-9;
-    // IDEA: Any way to fix this?
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
     const root32 = 3.7393792e-7;
     const root52 = 1.1428639e-7;
@@ -2655,7 +2586,8 @@ export class Sgp4 {
      */
 
     // -------------------- deep space initialization ------------
-    irez = 0;
+    let irez = 0;
+
     if (nm < 0.0052359877 && nm > 0.0034906585) {
       irez = 1;
     }
@@ -2680,9 +2612,9 @@ export class Sgp4 {
     const sgs = sghs - cosim * shs;
 
     // ------------------------- do lunar terms ------------------
-    dedt = ses + s1 * znl * s5;
-    didt = sis + s2 * znl * (z11 + z13);
-    dmdt = sls - znl * s3 * (z1 + z3 - 14.0 - 6.0 * emsq);
+    const dedt = ses + s1 * znl * s5;
+    const didt = sis + s2 * znl * (z11 + z13);
+    const dmdt = sls - znl * s3 * (z1 + z3 - 14.0 - 6.0 * emsq);
     const sghl = s4 * znl * (z31 + z33 - 6.0);
     let shll = -znl * s2 * (z21 + z23);
 
@@ -2690,8 +2622,9 @@ export class Sgp4 {
     if (inclm < 5.2359877e-2 || inclm > PI - 5.2359877e-2) {
       shll = 0.0;
     }
-    domdt = sgs + sghl;
-    dnodt = shs;
+    let domdt = sgs + sghl;
+    let dnodt = shs;
+
     if (sinim !== 0.0) {
       domdt -= (cosim / sinim) * shll;
       dnodt += shll / sinim;
@@ -2870,8 +2803,6 @@ export class Sgp4 {
     };
   }
 
-  // Dsinit
-
   /*
    *-----------------------------------------------------------------------------
    *
@@ -2947,107 +2878,69 @@ export class Sgp4 {
    *----------------------------------------------------------------------------
    */
   private static dspace_(
-    irez: number,
-    d2201: number,
-    d2211: number,
-    d3210: number,
-    d3222: number,
-    d4410: number,
-    d4422: number,
-    d5220: number,
-    d5232: number,
-    d5421: number,
-    d5433: number,
-    dedt: number,
-    del1: number,
-    del2: number,
-    del3: number,
-    didt: number,
-    dmdt: number,
-    dnodt: number,
-    domdt: number,
-    argpo: number,
-    argpdot: number,
-    t: number,
-    tc: number,
-    gsto: number,
-    xfact: number,
-    xlamo: number,
-    no: number,
-    atime: number,
     em: number,
     argpm: number,
     inclm: number,
-    xli: number,
     mm: number,
-    xni: number,
     nodem: number,
     nm: number,
+    satrec: SatelliteRecord,
   ): [em: number, argpm: number, inclm: number, mm: number, nodem: number, nm: number] {
-    /** Ootk -- Some variables imported from outside the class at the top */
-    const fasx2 = 0.13130908;
-    const fasx4 = 2.8843198;
-    const fasx6 = 0.37448087;
-    const g22 = 5.7686396;
-    const g32 = 0.95240898;
-    const g44 = 1.8014998;
-    const g52 = 1.050833;
-    const g54 = 4.4108898;
-    // IDEA: Any way to fix this?
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
-    const stepp = 720.0;
-    const stepn = -720.0;
-    const step2 = 259200.0;
+
+    let {
+      atime,
+      xli,
+      xni,
+    } = satrec;
+    const {
+      dedt,
+      didt,
+      dmdt,
+      dnodt,
+      domdt,
+      irez,
+      d2201,
+      d2211,
+      d3210,
+      d3222,
+      d4410,
+      d4422,
+      d5220,
+      d5232,
+      d5421,
+      d5433,
+      xfact,
+      xlamo,
+      gsto,
+      argpo,
+      t,
+      no,
+      argpdot,
+      del1,
+      del2,
+      del3,
+    } = satrec;
 
     //  ----------- calculate deep space resonance effects -----------
     let dndt = 0.0;
-    const theta = (gsto + tc * rptim) % TAU;
+    const theta = (gsto + t * rptim) % TAU;
 
+    // Apply time-dependent perturbations
     em += dedt * t;
-
     inclm += didt * t;
     argpm += domdt * t;
     nodem += dnodt * t;
     mm += dmdt * t;
 
-    /*
-     * Sgp4fix for negative inclinations
-     * the following if statement should be commented out
-     * if (inclm < 0.0)
-     * {
-     *   inclm = -inclm;
-     *   argpm = argpm - PI;
-     *   nodem = nodem + PI;
-     * }
-     */
-
-    /* - update resonances : numerical (euler-maclaurin) integration - */
-    /* ------------------------- epoch restart ----------------------  */
-    /*
-     *   Sgp4fix for propagator problems
-     *   the following integration works for negative time steps and periods
-     *   the specific changes are unknown because the original code was so convoluted
-     */
-
-    // Sgp4fix take out atime = 0.0 and fix for faster operation
-    // Ft = 0.0; /** Ootk -- This has no value */
     if (irez !== 0) {
-      //  Sgp4fix streamline check
+      // Simplified deep space resonance handling
       if (atime === 0.0 || t * atime <= 0.0 || Math.abs(t) < Math.abs(atime)) {
         atime = 0.0;
         xni = no;
         xli = xlamo;
       }
 
-      // Sgp4fix move check outside loop
-      let delt;
-
-      if (t > 0.0) {
-        delt = stepp;
-      } else {
-        delt = stepn;
-      }
+      const delt = t > 0.0 ? stepp : stepn;
 
       let ft = 0;
       let x2li = 0;
@@ -3056,9 +2949,9 @@ export class Sgp4 {
       let xnddt = 0;
       let xndt = 0;
       let xomi = 0;
-      let iretn = 381; // Added for do loop
+      let iretn = true; // Added for do loop
 
-      while (iretn === 381) {
+      while (iretn) {
         /*
          *  ------------------- dot terms calculated -------------
          *  ----------- near - synchronous resonance terms -------
@@ -3097,10 +2990,10 @@ export class Sgp4 {
             d5220 * Math.cos(xomi + xli - g52) +
             d5232 * Math.cos(-xomi + xli - g52) +
             2.0 *
-              (d4410 * Math.cos(x2omi + x2li - g44) +
-                d4422 * Math.cos(x2li - g44) +
-                d5421 * Math.cos(xomi + x2li - g54) +
-                d5433 * Math.cos(-xomi + x2li - g54));
+            (d4410 * Math.cos(x2omi + x2li - g44) +
+              d4422 * Math.cos(x2li - g44) +
+              d5421 * Math.cos(xomi + x2li - g54) +
+              d5433 * Math.cos(-xomi + x2li - g54));
           xnddt *= xldot;
         }
 
@@ -3108,20 +3001,15 @@ export class Sgp4 {
          *  ----------------------- integrator -------------------
          *  sgp4fix move end checks to end of routine
          */
-        if (Math.abs(t - atime) >= stepp) {
-          // Iret = 0; /** Ootk -- This has no value */
-          iretn = 381;
-        } else {
+        if (Math.abs(t - atime) < stepp) {
           ft = t - atime;
-          iretn = 0;
-        }
-
-        if (iretn === 381) {
+          iretn = false;
+        } else {
           xli += xldot * delt + xndt * step2;
           xni += xndt * delt + xnddt * step2;
           atime += delt;
         }
-      } // While iretn = 381
+      }
 
       nm = xni + xndt * ft + xnddt * ft * ft * 0.5;
       const xl = xli + xldot * ft + xndt * ft * ft * 0.5;
@@ -3232,8 +3120,6 @@ export class Sgp4 {
     };
   }
 
-  // Dspace
-
   /*
    *-----------------------------------------------------------------------------
    *
@@ -3288,17 +3174,11 @@ export class Sgp4 {
    *    vallado, crawford, hujsak, kelso  2006
    *----------------------------------------------------------------------------
    */
-  private static initl_(options: {
-    opsmode: string;
-    ecco: number;
-    epoch: number;
-    inclo: number;
-    xke: number;
-    j2: number;
+  private static initl_(
+    satrec: SatelliteRecord,
+    epoch: number,
+  ): {
     no: number;
-  }): {
-    no: number;
-    method: string;
     ainv: number;
     ao: number;
     con41: number;
@@ -3308,6 +3188,7 @@ export class Sgp4 {
     eccsq: number;
     omeosq: number;
     posq: number;
+    /** radius of perigee as a ratio */
     rp: number;
     rteosq: number;
     sinio: number;
@@ -3319,12 +3200,10 @@ export class Sgp4 {
      * sgp4fix just pass in xke and j2
      * gravconsttype whichconst,
      */
-    const { opsmode, ecco, epoch, inclo, xke, j2 } = options;
-    let { no } = options;
+    const { operationmode, ecco, inclo, xke, j2 } = satrec;
+    let { no } = satrec;
 
     /* --------------------- local variables ------------------------ */
-    const { PI } = Math;
-    const TAU = PI * 2;
     const x2o3 = 2.0 / 3.0;
 
     // Sgp4fix use old way of finding gst
@@ -3361,13 +3240,12 @@ export class Sgp4 {
     const ainv = 1.0 / ao;
     const posq = po * po;
     const rp = ao * (1.0 - ecco);
-    const method = 'n';
 
     //  Sgp4fix modern approach to finding sidereal time
     /** Ootk -- Continue allowing AFSPC mode for SGP4 Validation */
     let gsto;
 
-    if (opsmode === 'a') {
+    if (operationmode === Sgp4OpsMode.AFSPC) {
       /*
        *  Sgp4fix use old way of finding gst
        *  count integer number of days from 0 jan 1970
@@ -3377,13 +3255,8 @@ export class Sgp4 {
       const tfrac = ts70 - ds70;
 
       //  Find greenwich location at epoch
-
-      // IDEA: Precision issues in JavaScript...
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       const c1 = 1.72027916940703639e-2;
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       const thgr70 = 1.7321343856509374;
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       const fk5r = 5.07551419432269442e-15;
       const c1p2p = c1 + TAU;
 
@@ -3393,12 +3266,22 @@ export class Sgp4 {
         gsto += TAU;
       }
     } else {
-      gsto = Sgp4.gstime(epoch + 2433281.5);
+      const jdut1 = epoch + 2433281.5;
+      const tut1 = (jdut1 - 2451545.0) / 36525.0;
+
+      gsto = -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 +
+        (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
+
+      gsto = ((gsto * DEG2RAD) / 240.0) % TAU; // 360/86400 = 1/240, to deg, to rad
+
+      //  ------------------------ check quadrants ---------------------
+      if (gsto < 0.0) {
+        gsto += TAU;
+      }
     }
 
     return {
       no,
-      method,
       ainv,
       ao,
       con41,
@@ -3414,8 +3297,6 @@ export class Sgp4 {
       gsto,
     };
   }
-
-  // Initl
 
   /*
    *-----------------------------------------------------------------------------
@@ -3518,7 +3399,6 @@ export class Sgp4 {
       xnodeo: number;
     },
   ): void {
-    /* eslint-disable no-param-reassign */
     const {
       whichconst = Sgp4GravConstants.wgs72,
       opsmode = Sgp4OpsMode.IMPROVED,
@@ -3543,8 +3423,8 @@ export class Sgp4 {
      */
 
     // ----------- set all near earth variables to zero ------------
-    satrec.isimp = 0;
-    satrec.method = 'n';
+    satrec.isimp = false;
+    satrec.method = Sgp4Methods.NEAR_EARTH;
     satrec.aycof = 0.0;
     satrec.con41 = 0.0;
     satrec.cc1 = 0.0;
@@ -3644,6 +3524,7 @@ export class Sgp4 {
     satrec.j3 = gravResults.j3;
     satrec.j4 = gravResults.j4;
     satrec.j3oj2 = gravResults.j3oj2;
+    satrec.vkmpersec = (satrec.radiusearthkm * satrec.xke) / 60.0;
     const { j2 } = gravResults;
     const { j4 } = gravResults;
     const { xke } = gravResults;
@@ -3651,7 +3532,7 @@ export class Sgp4 {
 
     // -------------------------------------------------------------------------
 
-    satrec.error = 0;
+    satrec.error = Sgp4ErrorCode.NO_ERROR;
     satrec.operationmode = opsmode;
 
     // New alpha5 or 9-digit number
@@ -3660,13 +3541,8 @@ export class Sgp4 {
      * Ex. A2525 = 102525
      * Ex. Z1234 = 351234
      */
-    const leadingChar = satn.split('')[0].toLowerCase(); // Using uppercase will break the -96 math.
 
-    if (isNaN(parseInt(leadingChar)) && leadingChar !== ' ') {
-      satrec.satnum = parseInt(leadingChar.charCodeAt(0) - 96 + 9 + satrec.satnum.slice(1, 5)).toString();
-    } else {
-      satrec.satnum = satn;
-    }
+    satrec.satnum = Tle.convertA5to6Digit(satn);
 
     /*
      * Sgp4fix - note the following variables are also passed directly via satrec.
@@ -3701,22 +3577,11 @@ export class Sgp4 {
     const qzms2ttemp = (120.0 - 78.0) / satrec.radiusearthkm;
     const qzms2t = qzms2ttemp * qzms2ttemp * qzms2ttemp * qzms2ttemp;
 
-    satrec.init = 'y';
+    satrec.init = true;
     satrec.t = 0.0;
 
     // Sgp4fix remove satn as it is not needed in initl
-    const initlOptions = {
-      ecco: satrec.ecco,
-      epoch,
-      inclo: satrec.inclo,
-      no: satrec.no,
-      method: satrec.method,
-      opsmode: satrec.operationmode,
-      xke: satrec.xke,
-      j2: satrec.j2,
-    };
-
-    const initlResult = Sgp4.initl_(initlOptions);
+    const initlResult = Sgp4.initl_(satrec, epoch);
 
     const { ao, con42, cosio, cosio2, eccsq, omeosq, posq, rp, rteosq, sinio } = initlResult;
 
@@ -3726,7 +3591,7 @@ export class Sgp4 {
     satrec.a = (satrec.no * satrec.tumin) ** (-2.0 / 3.0);
     satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
     satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
-    satrec.error = 0;
+    satrec.error = Sgp4ErrorCode.NO_ERROR;
 
     /*
      * Sgp4fix remove this check as it is unnecessary
@@ -3740,18 +3605,18 @@ export class Sgp4 {
      */
 
     if (omeosq >= 0.0 || satrec.no >= 0.0) {
-      satrec.isimp = 0;
+      satrec.isimp = false;
       if (rp < 220.0 / satrec.radiusearthkm + 1.0) {
-        satrec.isimp = 1;
+        satrec.isimp = true;
       }
       let sfour = ss;
       let qzms24 = qzms2t;
-      const perige = (rp - 1.0) * satrec.radiusearthkm;
+      const perigee = (rp - 1.0) * satrec.radiusearthkm;
 
       // - for perigees below 156 km, s and qoms2t are altered -
-      if (perige < 156.0) {
-        sfour = perige - 78.0;
-        if (perige < 98.0) {
+      if (perigee < 156.0) {
+        sfour = perigee - 78.0;
+        if (perigee < 98.0) {
           sfour = 20.0;
         }
         // Sgp4fix use multiply for speed instead of pow
@@ -3792,8 +3657,8 @@ export class Sgp4 {
         (satrec.eta * (2.0 + 0.5 * etasq) +
           satrec.ecco * (0.5 + 2.0 * etasq) -
           ((j2 * tsi) / (ao * psisq)) *
-            (-3.0 * satrec.con41 * (1.0 - 2.0 * eeta + etasq * (1.5 - 0.5 * eeta)) +
-              0.75 * satrec.x1mth2 * (2.0 * etasq - eeta * (1.0 + etasq)) * Math.cos(2.0 * satrec.argpo)));
+          (-3.0 * satrec.con41 * (1.0 - 2.0 * eeta + etasq * (1.5 - 0.5 * eeta)) +
+            0.75 * satrec.x1mth2 * (2.0 * etasq - eeta * (1.0 + etasq)) * Math.cos(2.0 * satrec.argpo)));
       satrec.cc5 = 2.0 * coef1 * ao * omeosq * (1.0 + 2.75 * (etasq + eeta) + eeta * etasq);
       const cosio4 = cosio2 * cosio2;
       const temp1 = 1.5 * j2 * PInvsq * satrec.no;
@@ -3838,8 +3703,8 @@ export class Sgp4 {
 
       // --------------- deep space initialization -------------
       if (TAU / satrec.no >= 225.0) {
-        satrec.method = 'd';
-        satrec.isimp = 1;
+        satrec.method = Sgp4Methods.DEEP_SPACE;
+        satrec.isimp = true;
         const tc = 0.0;
         const inclm = satrec.inclo;
 
@@ -3959,9 +3824,10 @@ export class Sgp4 {
           argpp: satrec.argpo,
           mp: satrec.mo,
           opsmode: satrec.operationmode,
+          satrec,
         };
 
-        const dpperResult = Sgp4.dpper_(satrec, dpperOptions);
+        const dpperResult = Sgp4.dpper_(dpperOptions);
 
         satrec.ecco = dpperResult.ep;
         satrec.inclo = dpperResult.inclp;
@@ -4082,7 +3948,7 @@ export class Sgp4 {
       }
 
       // ----------- set variables if not deep space -----------
-      if (satrec.isimp !== 1) {
+      if (!satrec.isimp) {
         const cc1sq = satrec.cc1 * satrec.cc1;
 
         satrec.d2 = 4.0 * ao * tsi * cc1sq;
@@ -4108,16 +3974,11 @@ export class Sgp4 {
     }
     Sgp4.propagate(satrec, 0);
 
-    satrec.init = 'n';
+    satrec.init = false;
 
     /*
      * Sgp4fix return boolean. satrec.error contains any error codes
      *  return satrec; -- no reason to return anything in JS
      */
   }
-
-  /*
-   * #endregion Private Static Methods (7)
-   * Invjday
-   */
 }

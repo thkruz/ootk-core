@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -29,11 +29,11 @@ export type Egm96Entry = [number, number, number, number];
 
 // / Container for EGM-96 data.
 export class Egm96Data {
-  private _coeffs: Egm96Entry[];
+  private readonly coeffs_: Egm96Entry[];
 
   // / Create a new [Egm96Data] object.
   constructor(coeffs: Egm96Entry[]) {
-    this._coeffs = coeffs;
+    this.coeffs_ = coeffs;
   }
 
   /**
@@ -62,7 +62,7 @@ export class Egm96Data {
 
   // / Return de-normalized EGM-96 coefficients for a given [l] and [m] index.
   getCoeffs(l: number, m: number): Egm96Entry {
-    return this._coeffs[Egm96Data.index_(l, m)];
+    return this.coeffs_[Egm96Data.index_(l, m)] as Egm96Entry;
   }
 
   // / Return the EGM-96 index for a given [l] and [m] lookup.
