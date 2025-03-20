@@ -88,10 +88,10 @@ export class Moon {
   }
 
   // / Moon gravitational parameter _(km³/s²)_.
-  static mu = 4902.799;
+  static readonly mu = 4902.799;
 
   // / Moon equatorial radius _(km)_.
-  static radiusEquator = 1738.0;
+  static readonly radiusEquator = 1738.0;
 
   // / Calculate the Moon's ECI position _(km)_ for a given UTC [epoch].
   static eci(epoch: EpochUTC = EpochUTC.fromDateTime(new Date())): Vector3D<Kilometers> {
@@ -134,7 +134,7 @@ export class Moon {
     return rMOD
       .rotZ(p.zed)
       .rotY(-p.theta as Radians)
-      .rotZ(p.zeta) as Vector3D<Kilometers>;
+      .rotZ(p.zeta);
   }
 
   /**
@@ -461,7 +461,7 @@ export class Moon {
     return { rise, set, ye };
   }
 
-  private static moonCycles_ = [
+  private static readonly moonCycles_ = [
     {
       from: 0,
       to: 0.033863193308711,
