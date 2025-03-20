@@ -46,25 +46,25 @@ export class Vector3D<T extends number = number> {
   }
 
   // / Origin vector.
-  static origin = new Vector3D<number>(0, 0, 0);
+  static readonly origin = new Vector3D<number>(0, 0, 0);
 
   // / X-axis unit vector.
-  static xAxis = new Vector3D<number>(1, 0, 0);
+  static readonly xAxis = new Vector3D<number>(1, 0, 0);
 
   // / Y-axis unit vector.
-  static yAxis = new Vector3D<number>(0, 1, 0);
+  static readonly yAxis = new Vector3D<number>(0, 1, 0);
 
   // / Z-axis unit vector.
-  static zAxis = new Vector3D<number>(0, 0, 1);
+  static readonly zAxis = new Vector3D<number>(0, 0, 1);
 
   // / Negative x-axis unit vector.
-  static xAxisNeg = new Vector3D<number>(-1, 0, 0);
+  static readonly xAxisNeg = new Vector3D<number>(-1, 0, 0);
 
   // / Negative y-axis unit vector.
-  static yAxisNeg = new Vector3D<number>(0, -1, 0);
+  static readonly yAxisNeg = new Vector3D<number>(0, -1, 0);
 
   // / Negative z-axis unit vector.
-  static zAxisNeg = new Vector3D<number>(0, 0, -1);
+  static readonly zAxisNeg = new Vector3D<number>(0, 0, -1);
 
   // / Convert this to a [List] of doubles.
   toList() {
