@@ -48,6 +48,11 @@ export enum Sgp4GravConstants {
   wgs84 = 'wgs84',
 }
 
+export enum Sgp4Methods {
+  NEAR_EARTH = 'n',
+  DEEP_SPACE = 'd',
+}
+
 interface DsInitParams {
   xke: number;
   cosim: number;
@@ -122,6 +127,22 @@ interface DsInitParams {
   xli: number;
   xni: number;
 }
+
+/** Ootk -- Some variables imported from outside the class at the top */
+const fasx2 = 0.13130908;
+const fasx4 = 2.8843198;
+const fasx6 = 0.37448087;
+const g22 = 5.7686396;
+const g32 = 0.95240898;
+const g44 = 1.8014998;
+const g52 = 1.050833;
+const g54 = 4.4108898;
+// IDEA: Any way to fix this?
+// eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
+const stepp = 720.0;
+const stepn = -720.0;
+const step2 = 259200.0;
 
 /*
  *     ----------------------------------------------------------------
@@ -234,8 +255,6 @@ export class Sgp4 {
     return unknown;
   }
 
-  // Angle
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -261,8 +280,6 @@ export class Sgp4 {
   private static asinh_(xval: number): number {
     return Math.log(xval + Math.sqrt(xval * xval + 1.0));
   }
-
-  // Getgravconst
 
   /*
    * -----------------------------------------------------------------------------
@@ -314,124 +331,8 @@ export class Sgp4 {
     let year = 0;
 
     const satrec = {
-      a: null as number | null,
-      am: null as number | null,
-      alta: null as number | null,
-      altp: null as number | null,
-      argpdot: null as number | null,
-      argpo: null as number | null,
-      aycof: null as number | null,
-      bstar: null as number | null,
-      cc1: null as number | null,
-      cc4: null as number | null,
-      cc5: null as number | null,
-      con41: null as number | null,
-      d2: null as number | null,
-      d3: null as number | null,
-      d4: null as number | null,
-      d5232: null as number | null,
-      d5421: null as number | null,
-      d5433: null as number | null,
-      dedt: null as number | null,
-      delmo: null as number | null,
-      del1: null as number | null,
-      ecco: null as number | null,
-      em: null as number | null,
-      epochdays: null as number | null,
-      epochyr: null as number | null,
       error: Sgp4ErrorCode.NO_ERROR,
-      eta: null as number | null,
-      gsto: null as number | null,
-      im: null as number | null,
-      inclo: null as number | null,
-      init: null as number | null,
-      isimp: null as number | null,
-      jdsatepoch: null as number | null,
-      mdot: null as number | null,
-      method: null as number | null,
-      mo: null as number | null,
-      mm: null as number | null,
-      nddot: null as number | null,
-      ndot: null as number | null,
-      no: null as number | null,
-      nodecf: null as number | null,
-      nodedot: null as number | null,
-      nodeo: null as number | null,
-      om: null as number | null,
-      Om: null as number | null,
-      omgcof: null as number | null,
-      operationmode: null as number | null,
-      satnum: null as string | null,
-      sinmao: null as number | null,
-      t: null as number | null,
-      t2cof: null as number | null,
-      t3cof: null as number | null,
-      t4cof: null as number | null,
-      t5cof: null as number | null,
-      x1mth2: null as number | null,
-      x7thm1: null as number | null,
-      xlcof: null as number | null,
-      xmcof: null as number | null,
-      xfact: null as number | null,
-      xlamo: null as number | null,
-      xli: null as number | null,
-      xgh4: null as number | null,
-      xgh3: null as number | null,
-      xh2: null as number | null,
-      xi2: null as number | null,
-      xi3: null as number | null,
-      xl2: null as number | null,
-      xl3: null as number | null,
-      xl4: null as number | null,
-      zmol: null as number | null,
-      zmos: null as number | null,
-      dmdt: null as number | null,
-      dnodt: null as number | null,
-      domdt: null as number | null,
-      e3: null as number | null,
-      ee2: null as number | null,
-      peo: null as number | null,
-      pgho: null as number | null,
-      pho: null as number | null,
-      PInco: null as number | null,
-      plo: null as number | null,
-      se2: null as number | null,
-      se3: null as number | null,
-      sgh2: null as number | null,
-      sgh3: null as number | null,
-      sgh4: null as number | null,
-      sh2: null as number | null,
-      sh3: null as number | null,
-      si2: null as number | null,
-      si3: null as number | null,
-      sl2: null as number | null,
-      sl3: null as number | null,
-      sl4: null as number | null,
-      xgh2: null as number | null,
-      xh3: null as number | null,
-      tumin: null as number | null,
-      radiusearthkm: null as number | null,
-      irez: null as number | null,
-      d3210: null as number | null,
-      d3222: null as number | null,
-      d4410: null as number | null,
-      d4422: null as number | null,
-      d5220: null as number | null,
-      del2: null as number | null,
-      del3: null as number | null,
-      didt: null as number | null,
-      atime: null as number | null,
-      j2: null as number | null,
-      j3: null as number | null,
-      j4: null as number | null,
-      mus: null as number | null,
-      xke: null as number | null,
-      j3oj2: null as number | null,
-      xni: null as number | null,
-      d2201: null as number | null,
-      d2211: null as number | null,
-      nm: null as number | null,
-    };
+    } as SatelliteRecord;
 
     /*
      * Sgp4fix no longer needed
@@ -542,124 +443,8 @@ export class Sgp4 {
     let year = 0;
 
     const satrec = {
-      a: null as number | null,
-      am: null as number | null,
-      alta: null as number | null,
-      altp: null as number | null,
-      argpdot: null as number | null,
-      argpo: null as number | null,
-      aycof: null as number | null,
-      bstar: null as number | null,
-      cc1: null as number | null,
-      cc4: null as number | null,
-      cc5: null as number | null,
-      con41: null as number | null,
-      d2: null as number | null,
-      d3: null as number | null,
-      d4: null as number | null,
-      d5232: null as number | null,
-      d5421: null as number | null,
-      d5433: null as number | null,
-      dedt: null as number | null,
-      delmo: null as number | null,
-      del1: null as number | null,
-      ecco: null as number | null,
-      em: null as number | null,
-      epochdays: null as number | null,
-      epochyr: null as number | null,
       error: Sgp4ErrorCode.NO_ERROR,
-      eta: null as number | null,
-      gsto: null as number | null,
-      im: null as number | null,
-      inclo: null as number | null,
-      init: null as number | null,
-      isimp: null as number | null,
-      jdsatepoch: null as number | null,
-      mdot: null as number | null,
-      method: null as number | null,
-      mo: null as number | null,
-      mm: null as number | null,
-      nddot: null as number | null,
-      ndot: null as number | null,
-      no: null as number | null,
-      nodecf: null as number | null,
-      nodedot: null as number | null,
-      nodeo: null as number | null,
-      om: null as number | null,
-      Om: null as number | null,
-      omgcof: null as number | null,
-      operationmode: null as number | null,
-      satnum: null as string | null,
-      sinmao: null as number | null,
-      t: null as number | null,
-      t2cof: null as number | null,
-      t3cof: null as number | null,
-      t4cof: null as number | null,
-      t5cof: null as number | null,
-      x1mth2: null as number | null,
-      x7thm1: null as number | null,
-      xlcof: null as number | null,
-      xmcof: null as number | null,
-      xfact: null as number | null,
-      xlamo: null as number | null,
-      xli: null as number | null,
-      xgh4: null as number | null,
-      xgh3: null as number | null,
-      xh2: null as number | null,
-      xi2: null as number | null,
-      xi3: null as number | null,
-      xl2: null as number | null,
-      xl3: null as number | null,
-      xl4: null as number | null,
-      zmol: null as number | null,
-      zmos: null as number | null,
-      dmdt: null as number | null,
-      dnodt: null as number | null,
-      domdt: null as number | null,
-      e3: null as number | null,
-      ee2: null as number | null,
-      peo: null as number | null,
-      pgho: null as number | null,
-      pho: null as number | null,
-      PInco: null as number | null,
-      plo: null as number | null,
-      se2: null as number | null,
-      se3: null as number | null,
-      sgh2: null as number | null,
-      sgh3: null as number | null,
-      sgh4: null as number | null,
-      sh2: null as number | null,
-      sh3: null as number | null,
-      si2: null as number | null,
-      si3: null as number | null,
-      sl2: null as number | null,
-      sl3: null as number | null,
-      sl4: null as number | null,
-      xgh2: null as number | null,
-      xh3: null as number | null,
-      tumin: null as number | null,
-      radiusearthkm: null as number | null,
-      irez: null as number | null,
-      d3210: null as number | null,
-      d3222: null as number | null,
-      d4410: null as number | null,
-      d4422: null as number | null,
-      d5220: null as number | null,
-      del2: null as number | null,
-      del3: null as number | null,
-      didt: null as number | null,
-      atime: null as number | null,
-      j2: null as number | null,
-      j3: null as number | null,
-      j4: null as number | null,
-      mus: null as number | null,
-      xke: null as number | null,
-      j3oj2: null as number | null,
-      xni: null as number | null,
-      d2201: null as number | null,
-      d2211: null as number | null,
-      nm: null as number | null,
-    };
+    } as SatelliteRecord;
 
     const xpdotp = 1440.0 / (2.0 * PI); // 229.1831180523293;
 
@@ -754,8 +539,6 @@ export class Sgp4 {
     return satrec as unknown as SatelliteRecord;
   }
 
-  // Mag
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -786,8 +569,6 @@ export class Sgp4 {
       vec1[0] * vec2[1] - vec1[1] * vec2[0],
     ];
   }
-
-  // Jday
 
   /*
    * -----------------------------------------------------------------------------
@@ -876,8 +657,6 @@ export class Sgp4 {
     };
   }
 
-  // End cross
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -904,8 +683,6 @@ export class Sgp4 {
   private static dot_(v1: Vec3Flat, v2: Vec3Flat): number {
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
   }
-
-  // Twoline2rv
 
   /*
    * -----------------------------------------------------------------------------
@@ -949,8 +726,6 @@ export class Sgp4 {
 
     return temp as GreenwichMeanSiderealTime;
   }
-
-  // Days2mdhms
 
   /*
    * -----------------------------------------------------------------------------
@@ -1044,8 +819,6 @@ export class Sgp4 {
     };
   }
 
-  // Rv2coe
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -1112,8 +885,6 @@ export class Sgp4 {
     return { jd, jdFrac };
   }
 
-  // Sgn
-
   /*
    * -----------------------------------------------------------------------------
    *
@@ -1137,15 +908,8 @@ export class Sgp4 {
    * ---------------------------------------------------------------------------
    */
   private static mag_(v: Vec3Flat): number {
-    // Use direct array indexing for better performance
-    const x = v[0];
-    const y = v[1];
-    const z = v[2];
-
-    return Math.sqrt(x * x + y * y + z * z);
+    return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   }
-
-  // Asinh
 
   /*
    * -----------------------------------------------------------------------------
@@ -1233,8 +997,6 @@ export class Sgp4 {
       m,
     };
   }
-
-  // Sgp4init
 
   /*
    *----------------------------------------------------------------------------
@@ -1355,7 +1117,7 @@ export class Sgp4 {
     let tempe = satrec.bstar * satrec.cc4 * satrec.t;
     let templ = satrec.t2cof * t2;
 
-    if (satrec.isimp !== 1) {
+    if (!satrec.isimp) {
       const delomg = satrec.omgcof * satrec.t;
       //  Sgp4fix use mutliply for speed instead of pow
       const delmtemp = 1.0 + satrec.eta * Math.cos(xmdf);
@@ -1376,11 +1138,8 @@ export class Sgp4 {
     let em = satrec.ecco;
     let inclm = satrec.inclo;
 
-    if (satrec.method === 'd') {
-      const tc = satrec.t;
-
-      const dspaceResult = Sgp4.dspace_(
-        tc,
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
+      [em, argpm, inclm, mm, nodem, nm] = Sgp4.dspace_(
         em,
         argpm,
         inclm,
@@ -1389,9 +1148,7 @@ export class Sgp4 {
         nm,
         satrec,
       );
-
-      [em, argpm, inclm, mm, nodem, nm] = dspaceResult;
-    } // If methjod = d
+    }
 
     if (nm <= 0.0) {
       satrec.error = Sgp4ErrorCode.MEAN_MOTION_NEGATIVE;
@@ -1452,10 +1209,10 @@ export class Sgp4 {
     let sinip = sinim;
     let cosip = cosim;
 
-    if (satrec.method === 'd') {
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
       const dpperParameters = {
         inclo: satrec.inclo,
-        init: 'n',
+        init: false,
         ep,
         inclp: xincp,
         nodep,
@@ -1484,7 +1241,7 @@ export class Sgp4 {
     }
 
     //  -------------------- long period periodics ------------------
-    if (satrec.method === 'd') {
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
       sinip = Math.sin(xincp);
       cosip = Math.cos(xincp);
       satrec.aycof = -0.5 * j3oj2 * sinip;
@@ -1560,7 +1317,7 @@ export class Sgp4 {
     const temp2 = temp1 * temp;
 
     // -------------- update for short period periodics ------------
-    if (satrec.method === 'd') {
+    if (satrec.method === Sgp4Methods.DEEP_SPACE) {
       const cosisq = cosip * cosip;
 
       satrec.con41 = 3.0 * cosisq - 1.0;
@@ -1905,6 +1662,11 @@ export class Sgp4 {
     };
   }
 
+  /**
+   * Determines the sign of a given number.
+   * @param x - The input number to evaluate.
+   * @returns `-1.0` if the input number is less than `0.0`, otherwise `1.0`.
+   */
   private static sgn_(x: number): number {
     if (x < 0.0) {
       return -1.0;
@@ -1913,7 +1675,14 @@ export class Sgp4 {
     return 1.0;
   }
 
-  // Newtonnu
+  /**
+   * Computes the hyperbolic sine of a given number.
+   *
+   * The hyperbolic sine is calculated using the formula:
+   * sinh(x) = (e^x - e^(-x)) / 2
+   * @param x - The input number for which to calculate the hyperbolic sine.
+   * @returns The hyperbolic sine of the input number.
+   */
   private static sinh_(x: number): number {
     return (Math.exp(x) - Math.exp(-x)) / 2;
   }
@@ -1994,7 +1763,7 @@ export class Sgp4 {
       argpp: number;
       mp: number;
       opsmode: string;
-      init: string;
+      init: boolean;
       satrec: SatelliteRecord;
     },
   ): { ep: number; inclp: number; nodep: number; argpp: number; mp: number } {
@@ -2034,7 +1803,7 @@ export class Sgp4 {
     } = options.satrec;
 
     let { ep, inclp, nodep, argpp, mp } = options;
-    const { opsmode = 'i', init } = options;
+    const { opsmode = Sgp4OpsMode.IMPROVED, init } = options;
 
     //  ---------------------- constants -----------------------------
     /** Ootk -- Some variables imported from outside the class at the top */
@@ -2047,7 +1816,7 @@ export class Sgp4 {
     let zm = zmos + zns * t;
     // Be sure that the initial call has time set to zero
 
-    if (init === 'y') {
+    if (init) {
       zm = zmos;
     }
     let zf = zm + 2.0 * zes * Math.sin(zm);
@@ -2061,7 +1830,7 @@ export class Sgp4 {
     const shs = sh2 * f2 + sh3 * f3;
 
     zm = zmol + znl * t;
-    if (init === 'y') {
+    if (init) {
       zm = zmol;
     }
     zf = zm + 2.0 * zel * Math.sin(zm);
@@ -2079,7 +1848,7 @@ export class Sgp4 {
     let pgh = sghs + sghl;
     let ph = shs + shll;
 
-    if (init === 'n') {
+    if (!init) {
       pe -= peo;
       PInc -= PInco;
       pl -= plo;
@@ -2155,7 +1924,7 @@ export class Sgp4 {
         mp += pl;
         argpp = xls - mp - cosip * nodep;
       }
-    } // If init == 'n'
+    } // If !init
 
     return {
       ep,
@@ -2165,8 +1934,6 @@ export class Sgp4 {
       mp,
     };
   }
-
-  // Dpper
 
   /*
    *-----------------------------------------------------------------------------
@@ -2340,7 +2107,6 @@ export class Sgp4 {
     const zcosis = 0.91744867;
     const zcosgs = 0.1945905;
     const zsings = -0.98088458;
-    const TAU = 2.0 * Math.PI;
 
     //  --------------------- local variables ------------------------
     let s1 = 0,
@@ -2622,8 +2388,6 @@ export class Sgp4 {
     };
   }
 
-  // Dscom
-
   /*
    *-----------------------------------------------------------------------------
    *
@@ -2794,7 +2558,6 @@ export class Sgp4 {
       mm,
       nm,
       nodem,
-      irez,
       atime,
       d2201,
       d2211,
@@ -2806,11 +2569,6 @@ export class Sgp4 {
       d5232,
       d5421,
       d5433,
-      dedt,
-      didt,
-      dmdt,
-      dnodt,
-      domdt,
       del1,
       del2,
       del3,
@@ -2844,7 +2602,8 @@ export class Sgp4 {
      */
 
     // -------------------- deep space initialization ------------
-    irez = 0;
+    let irez = 0;
+
     if (nm < 0.0052359877 && nm > 0.0034906585) {
       irez = 1;
     }
@@ -2869,9 +2628,9 @@ export class Sgp4 {
     const sgs = sghs - cosim * shs;
 
     // ------------------------- do lunar terms ------------------
-    dedt = ses + s1 * znl * s5;
-    didt = sis + s2 * znl * (z11 + z13);
-    dmdt = sls - znl * s3 * (z1 + z3 - 14.0 - 6.0 * emsq);
+    const dedt = ses + s1 * znl * s5;
+    const didt = sis + s2 * znl * (z11 + z13);
+    const dmdt = sls - znl * s3 * (z1 + z3 - 14.0 - 6.0 * emsq);
     const sghl = s4 * znl * (z31 + z33 - 6.0);
     let shll = -znl * s2 * (z21 + z23);
 
@@ -2879,8 +2638,9 @@ export class Sgp4 {
     if (inclm < 5.2359877e-2 || inclm > PI - 5.2359877e-2) {
       shll = 0.0;
     }
-    domdt = sgs + sghl;
-    dnodt = shs;
+    let domdt = sgs + sghl;
+    let dnodt = shs;
+
     if (sinim !== 0.0) {
       domdt -= (cosim / sinim) * shll;
       dnodt += shll / sinim;
@@ -3059,8 +2819,6 @@ export class Sgp4 {
     };
   }
 
-  // Dsinit
-
   /*
    *-----------------------------------------------------------------------------
    *
@@ -3136,7 +2894,6 @@ export class Sgp4 {
    *----------------------------------------------------------------------------
    */
   private static dspace_(
-    tc: number,
     em: number,
     argpm: number,
     inclm: number,
@@ -3145,21 +2902,6 @@ export class Sgp4 {
     nm: number,
     satrec: SatelliteRecord,
   ): [em: number, argpm: number, inclm: number, mm: number, nodem: number, nm: number] {
-    /** Ootk -- Some variables imported from outside the class at the top */
-    const fasx2 = 0.13130908;
-    const fasx4 = 2.8843198;
-    const fasx6 = 0.37448087;
-    const g22 = 5.7686396;
-    const g32 = 0.95240898;
-    const g44 = 1.8014998;
-    const g52 = 1.050833;
-    const g54 = 4.4108898;
-    // IDEA: Any way to fix this?
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
-    const stepp = 720.0;
-    const stepn = -720.0;
-    const step2 = 259200.0;
 
     let {
       atime,
@@ -3197,7 +2939,7 @@ export class Sgp4 {
 
     //  ----------- calculate deep space resonance effects -----------
     let dndt = 0.0;
-    const theta = (gsto + tc * rptim) % TAU;
+    const theta = (gsto + t * rptim) % TAU;
 
     // Apply time-dependent perturbations
     em += dedt * t;
@@ -3223,9 +2965,9 @@ export class Sgp4 {
       let xnddt = 0;
       let xndt = 0;
       let xomi = 0;
-      let iretn = 381; // Added for do loop
+      let iretn = true; // Added for do loop
 
-      while (iretn === 381) {
+      while (iretn) {
         /*
          *  ------------------- dot terms calculated -------------
          *  ----------- near - synchronous resonance terms -------
@@ -3275,20 +3017,15 @@ export class Sgp4 {
          *  ----------------------- integrator -------------------
          *  sgp4fix move end checks to end of routine
          */
-        if (Math.abs(t - atime) >= stepp) {
-          // Iret = 0; /** Ootk -- This has no value */
-          iretn = 381;
-        } else {
+        if (Math.abs(t - atime) < stepp) {
           ft = t - atime;
-          iretn = 0;
-        }
-
-        if (iretn === 381) {
+          iretn = false;
+        } else {
           xli += xldot * delt + xndt * step2;
           xni += xndt * delt + xnddt * step2;
           atime += delt;
         }
-      } // While iretn = 381
+      }
 
       nm = xni + xndt * ft + xnddt * ft * ft * 0.5;
       const xl = xli + xldot * ft + xndt * ft * ft * 0.5;
@@ -3398,8 +3135,6 @@ export class Sgp4 {
       j3oj2,
     };
   }
-
-  // Dspace
 
   /*
    *-----------------------------------------------------------------------------
@@ -3528,13 +3263,13 @@ export class Sgp4 {
     const ainv = 1.0 / ao;
     const posq = po * po;
     const rp = ao * (1.0 - ecco);
-    const method = 'n';
+    const method = Sgp4Methods.NEAR_EARTH;
 
     //  Sgp4fix modern approach to finding sidereal time
     /** Ootk -- Continue allowing AFSPC mode for SGP4 Validation */
     let gsto;
 
-    if (opsmode === 'a') {
+    if (opsmode === Sgp4OpsMode.AFSPC) {
       /*
        *  Sgp4fix use old way of finding gst
        *  count integer number of days from 0 jan 1970
@@ -3560,7 +3295,17 @@ export class Sgp4 {
         gsto += TAU;
       }
     } else {
-      gsto = Sgp4.gstime(epoch + 2433281.5);
+      const jdut1 = epoch + 2433281.5;
+      const tut1 = (jdut1 - 2451545.0) / 36525.0;
+
+      gsto = -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 + (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
+
+      gsto = ((gsto * DEG2RAD) / 240.0) % TAU; // 360/86400 = 1/240, to deg, to rad
+
+      //  ------------------------ check quadrants ---------------------
+      if (gsto < 0.0) {
+        gsto += TAU;
+      }
     }
 
     return {
@@ -3581,8 +3326,6 @@ export class Sgp4 {
       gsto,
     };
   }
-
-  // Initl
 
   /*
    *-----------------------------------------------------------------------------
@@ -3710,8 +3453,8 @@ export class Sgp4 {
      */
 
     // ----------- set all near earth variables to zero ------------
-    satrec.isimp = 0;
-    satrec.method = 'n';
+    satrec.isimp = false;
+    satrec.method = Sgp4Methods.NEAR_EARTH;
     satrec.aycof = 0.0;
     satrec.con41 = 0.0;
     satrec.cc1 = 0.0;
@@ -3868,7 +3611,7 @@ export class Sgp4 {
     const qzms2ttemp = (120.0 - 78.0) / satrec.radiusearthkm;
     const qzms2t = qzms2ttemp * qzms2ttemp * qzms2ttemp * qzms2ttemp;
 
-    satrec.init = 'y';
+    satrec.init = true;
     satrec.t = 0.0;
 
     // Sgp4fix remove satn as it is not needed in initl
@@ -3907,9 +3650,9 @@ export class Sgp4 {
      */
 
     if (omeosq >= 0.0 || satrec.no >= 0.0) {
-      satrec.isimp = 0;
+      satrec.isimp = false;
       if (rp < 220.0 / satrec.radiusearthkm + 1.0) {
-        satrec.isimp = 1;
+        satrec.isimp = true;
       }
       let sfour = ss;
       let qzms24 = qzms2t;
@@ -4005,8 +3748,8 @@ export class Sgp4 {
 
       // --------------- deep space initialization -------------
       if (TAU / satrec.no >= 225.0) {
-        satrec.method = 'd';
-        satrec.isimp = 1;
+        satrec.method = Sgp4Methods.DEEP_SPACE;
+        satrec.isimp = true;
         const tc = 0.0;
         const inclm = satrec.inclo;
 
@@ -4250,7 +3993,7 @@ export class Sgp4 {
       }
 
       // ----------- set variables if not deep space -----------
-      if (satrec.isimp !== 1) {
+      if (!satrec.isimp) {
         const cc1sq = satrec.cc1 * satrec.cc1;
 
         satrec.d2 = 4.0 * ao * tsi * cc1sq;
@@ -4276,16 +4019,11 @@ export class Sgp4 {
     }
     Sgp4.propagate(satrec, 0);
 
-    satrec.init = 'n';
+    satrec.init = false;
 
     /*
      * Sgp4fix return boolean. satrec.error contains any error codes
      *  return satrec; -- no reason to return anything in JS
      */
   }
-
-  /*
-   * #endregion Private Static Methods (7)
-   * Invjday
-   */
 }

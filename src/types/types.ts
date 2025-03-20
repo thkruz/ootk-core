@@ -322,9 +322,9 @@ export interface SatelliteRecord {
   gsto: number;
   im: number;
   inclo: number;
-  init: string;
+  init: boolean;
   irez: number;
-  isimp: number;
+  isimp: boolean;
   j2: number;
   j3: number;
   j3oj2: number;
