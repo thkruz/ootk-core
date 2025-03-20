@@ -1091,8 +1091,7 @@ export class Sgp4 {
      * Sgp4fix identify constants and allow alternate values
      * getgravconst( whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2 );
      */
-    const { xke, j2, j3oj2 } = satrec;
-    const vkmpersec = (satrec.radiusearthkm * satrec.xke) / 60.0;
+    const { xke, j2, j3oj2, vkmpersec } = satrec;
 
     // --------------------- clear sgp4 error flag -----------------
     satrec.t = tsince;
@@ -3525,6 +3524,7 @@ export class Sgp4 {
     satrec.j3 = gravResults.j3;
     satrec.j4 = gravResults.j4;
     satrec.j3oj2 = gravResults.j3oj2;
+    satrec.vkmpersec = (satrec.radiusearthkm * satrec.xke) / 60.0;
     const { j2 } = gravResults;
     const { j4 } = gravResults;
     const { xke } = gravResults;

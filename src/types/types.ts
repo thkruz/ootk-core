@@ -371,6 +371,7 @@ export interface SatelliteRecord {
   t4cof: number;
   t5cof: number;
   tumin: number;
+  vkmpersec: number;
   x1mth2: number;
   x7thm1: number;
   xfact: number;
