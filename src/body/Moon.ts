@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -122,11 +122,11 @@ export class Moon {
     const r = new Vector3D(
       rMag * Math.cos(phiEcl * dtr) * Math.cos(lamEcl * dtr),
       rMag *
-        (Math.cos(obq * dtr) * Math.cos(phiEcl * dtr) * Math.sin(lamEcl * dtr) -
-          Math.sin(obq * dtr) * Math.sin(phiEcl * dtr)),
+      (Math.cos(obq * dtr) * Math.cos(phiEcl * dtr) * Math.sin(lamEcl * dtr) -
+        Math.sin(obq * dtr) * Math.sin(phiEcl * dtr)),
       rMag *
-        (Math.sin(obq * dtr) * Math.cos(phiEcl * dtr) * Math.sin(lamEcl * dtr) +
-          Math.cos(obq * dtr) * Math.sin(phiEcl * dtr)),
+      (Math.sin(obq * dtr) * Math.cos(phiEcl * dtr) * Math.sin(lamEcl * dtr) +
+        Math.cos(obq * dtr) * Math.sin(phiEcl * dtr)),
     );
     const rMOD = r.scale(Earth.radiusEquator);
     const p = Earth.precession(epoch);

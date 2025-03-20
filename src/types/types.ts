@@ -1,7 +1,7 @@
 /**
  * @author Theodore Kruczek.
  * @license MIT
- * @copyright (c) 2022-2024 Theodore Kruczek Permission is
+ * @copyright (c) 2022-2025 Theodore Kruczek Permission is
  * hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the
  * Software without restriction, including without limitation the rights to use,
@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+import { Sgp4ErrorCode } from 'src/sgp4/sgp4-error.js';
 import { Vector3D, PassType, Satellite } from '../main.js';
 
 /**
@@ -316,7 +317,7 @@ export interface SatelliteRecord {
   em: number;
   epochdays: number;
   epochyr: number;
-  error: number;
+  error: Sgp4ErrorCode;
   eta: number;
   gsto: number;
   im: number;
