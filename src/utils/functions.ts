@@ -439,7 +439,6 @@ type MonthDaysArray = [number, number, number, number, number, number, number, n
  * @returns The day of the year as a number.
  */
 export function getDayOfYear(date = new Date()): number {
-
   const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334] as MonthDaysArray;
   const mn = date.getUTCMonth() as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
   const dn = date.getUTCDate();

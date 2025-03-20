@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /**
  * @author Theodore Kruczek.
  * @license MIT
@@ -23,7 +24,7 @@
 
 import { ClassicalElements, FormatTle, TEME } from './index.js';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
-import { Sgp4, Vector3D } from '../main.js';
+import { Satellite, Sgp4, Vector3D } from '../main.js';
 import { Sgp4GravConstants } from '../sgp4/sgp4.js';
 import { EpochUTC } from '../time/EpochUTC.js';
 import {
@@ -43,7 +44,7 @@ import {
   TleLine2,
 } from '../types/types.js';
 import { DEG2RAD, earthGravityParam, RAD2DEG, secondsPerDay, TAU } from '../utils/constants.js';
-import { newtonNu, toPrecision } from '../utils/functions.js';
+import { getDayOfYear, newtonNu, toPrecision } from '../utils/functions.js';
 import { TleFormatData } from './tle-format-data.js';
 
 /**
@@ -224,6 +225,44 @@ export class Tle {
     const days = parseFloat(epochStr.substring(2, 14)) - 1;
 
     return EpochUTC.fromDateTimeString(`${year}-01-01T00:00:00.000Z`).roll(days * secondsPerDay as Seconds);
+  }
+
+  static calcElsetAge(
+    sat: Satellite,
+    nowInput?: Date,
+    outputUnits: 'days' | 'hours' | 'minutes' | 'seconds' = 'days',
+  ): number {
+    nowInput ??= new Date();
+    const currentYearFull = nowInput.getUTCFullYear();
+    const currentYearShort = currentYearFull % 100;
+
+    const epochYearShort = parseInt(sat.tle1.substring(18, 20), 10);
+    const epochDayOfYear = parseFloat(sat.tle1.substring(20, 32));
+
+    let epochYearFull: number;
+
+    if (epochYearShort <= currentYearShort) {
+      epochYearFull = 2000 + epochYearShort;
+    } else {
+      epochYearFull = 1900 + epochYearShort;
+    }
+
+    const epochJday = epochDayOfYear + (epochYearFull * 365);
+    const currentJday = getDayOfYear() + (currentYearFull * 365);
+    const currentTime = (nowInput.getUTCHours() * 3600 + nowInput.getUTCMinutes() * 60 +
+      nowInput.getUTCSeconds()) / 86400;
+    const daysOld = (currentJday + currentTime) - epochJday;
+
+    switch (outputUnits) {
+      case 'hours':
+        return daysOld * 24;
+      case 'minutes':
+        return daysOld * 1440;
+      case 'seconds':
+        return daysOld * 86400;
+      default:
+        return daysOld;
+    }
   }
 
   /**

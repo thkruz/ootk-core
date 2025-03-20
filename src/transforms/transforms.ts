@@ -465,3 +465,33 @@ export function eci2rae(now: Date, eci: EciVec3<Kilometers>, sensor: Sensor): Ra
 
   return rae;
 }
+
+/**
+ * Calculates the inertial azimuth of a satellite given its latitude and inclination.
+ * @param lat - The latitude of the satellite in degrees.
+ * @param inc - The inclination of the satellite in degrees.
+ * @returns The inertial azimuth of the satellite in degrees.
+ */
+export function calcInertAz(lat: Degrees, inc: Degrees): Degrees {
+  const phi = lat * DEG2RAD;
+  const i = inc * DEG2RAD;
+
+  const az = Math.asin(Math.cos(i) / Math.cos(phi));
+
+  return <Degrees>(az * RAD2DEG);
+}
+
+/**
+ * Calculates the inclination angle of a satellite from its launch azimuth and latitude.
+ * @param lat - The latitude of the observer in degrees.
+ * @param az - The launch azimuth angle of the satellite in degrees clockwise from north.
+ * @returns The inclination angle of the satellite in degrees.
+ */
+export function calcIncFromAz(lat: number, az: number): number {
+  const phi = lat * DEG2RAD;
+  const beta = az * DEG2RAD;
+
+  const inc = Math.acos(Math.sin(beta) * Math.cos(phi));
+
+  return <Degrees>(inc * RAD2DEG);
+}

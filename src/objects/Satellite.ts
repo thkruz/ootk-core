@@ -220,6 +220,10 @@ export class Satellite extends BaseObject {
     return true;
   }
 
+  ageOfElset(nowInput?: Date, outputUnits: 'days' | 'hours' | 'minutes' | 'seconds' = 'days'): number {
+    return Tle.calcElsetAge(this, nowInput, outputUnits);
+  }
+
   editTle(tle1: TleLine1, tle2: TleLine2, sccNum?: string): void {
     this.parseTleAndUpdateOrbit_(tle1, tle2, sccNum);
   }
