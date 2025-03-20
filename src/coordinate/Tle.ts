@@ -932,7 +932,7 @@ export class Tle {
     }
 
     // Already an alpha 5 number
-    if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0] as string)) {
+    if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0])) {
       return sccNum;
     }
 
@@ -966,7 +966,7 @@ export class Tle {
 
     const values = sccNum.toUpperCase().split('');
 
-    if (values[0] as string in Tle.alpha5_) {
+    if (values[0] in Tle.alpha5_) {
       const firstLetter = values[0] as keyof typeof Tle.alpha5_;
 
       values[0] = Tle.alpha5_[firstLetter];

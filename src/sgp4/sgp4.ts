@@ -24,23 +24,18 @@
  */
 
 // NOTE: This file is meant to maintain as much of the original format as possible.
-/* eslint-disable no-lonely-if */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable complexity */
-/* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
-/* eslint-disable max-params */
-/* eslint-disable no-shadow */
-/* eslint-disable init-declarations */
 /* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
+/* eslint-disable @typescript-eslint/no-loss-of-precision */
 
-import { OmmParsedDataFormat } from 'src/interfaces/OmmFormat.js';
+import { OmmParsedDataFormat } from '../interfaces/OmmFormat.js';
 import { Sgp4OpsMode } from '../enums/Sgp4OpsMode.js';
 import { GreenwichMeanSiderealTime, SatelliteRecord, StateVectorSgp4, Vec3Flat } from '../types/types.js';
 import { DEG2RAD, PI, TAU, temp4, x2o3 } from '../utils/constants.js';
 import { Sgp4ErrorCode } from './sgp4-error.js';
+import { Tle } from '../main.js';
 
 export enum Sgp4GravConstants {
   wgs72old = 'wgs72old',
@@ -137,8 +132,6 @@ const g32 = 0.95240898;
 const g44 = 1.8014998;
 const g52 = 1.050833;
 const g54 = 4.4108898;
-// IDEA: Any way to fix this?
-// eslint-disable-next-line @typescript-eslint/no-loss-of-precision
 const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
 const stepp = 720.0;
 const stepn = -720.0;
@@ -352,7 +345,6 @@ export class Sgp4 {
       `${tleLine1.substring(53, 54)}.${tleLine1.substring(54, 59)}E${tleLine1.substring(59, 61)}`,
     );
 
-    // Satrec.satnum = tleLine2.substring(2, 7);
     satrec.inclo = parseFloat(tleLine2.substring(8, 16));
     satrec.nodeo = parseFloat(tleLine2.substring(17, 25));
     satrec.ecco = parseFloat(`.${tleLine2.substring(26, 33)}`);
@@ -715,7 +707,8 @@ export class Sgp4 {
     const tut1 = (jdut1 - 2451545.0) / 36525.0;
 
     let temp =
-      -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 + (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
+      -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 +
+      (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
 
     temp = ((temp * DEG2RAD) / 240.0) % TAU; // 360/86400 = 1/240, to deg, to rad
 
@@ -1222,11 +1215,7 @@ export class Sgp4 {
         satrec,
       };
 
-      const dpperResult = Sgp4.dpper_(dpperParameters);
-
-      ({ ep, nodep, argpp, mp } = dpperResult);
-
-      xincp = dpperResult.inclp;
+      ({ ep, nodep, argpp, mp, inclp: xincp } = Sgp4.dpper_(dpperParameters));
 
       if (xincp < 0.0) {
         xincp = -xincp;
@@ -1540,11 +1529,9 @@ export class Sgp4 {
           // --------------  circular inclined ---------------
           typeorbit = 3;
         }
-      } else {
         // - elliptical, parabolic, hyperbolic equatorial --
-        if (incl < small || Math.abs(incl - PI) < small) {
-          typeorbit = 4;
-        }
+      } else if (incl < small || Math.abs(incl - PI) < small) {
+        typeorbit = 4;
       }
 
       // ----------  find right ascension of the ascending node ------------
@@ -2586,8 +2573,6 @@ export class Sgp4 {
     const root22 = 1.7891679e-6;
     const root44 = 7.3636953e-9;
     const root54 = 2.1765803e-9;
-    // IDEA: Any way to fix this?
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const rptim = 4.37526908801129966e-3; // Equates to 7.29211514668855e-5 rad/sec
     const root32 = 3.7393792e-7;
     const root52 = 1.1428639e-7;
@@ -3190,17 +3175,11 @@ export class Sgp4 {
    *    vallado, crawford, hujsak, kelso  2006
    *----------------------------------------------------------------------------
    */
-  private static initl_(options: {
-    opsmode: string;
-    ecco: number;
-    epoch: number;
-    inclo: number;
-    xke: number;
-    j2: number;
+  private static initl_(
+    satrec: SatelliteRecord,
+    epoch: number,
+  ): {
     no: number;
-  }): {
-    no: number;
-    method: string;
     ainv: number;
     ao: number;
     con41: number;
@@ -3210,6 +3189,7 @@ export class Sgp4 {
     eccsq: number;
     omeosq: number;
     posq: number;
+    /** radius of perigee as a ratio */
     rp: number;
     rteosq: number;
     sinio: number;
@@ -3221,12 +3201,10 @@ export class Sgp4 {
      * sgp4fix just pass in xke and j2
      * gravconsttype whichconst,
      */
-    const { opsmode, ecco, epoch, inclo, xke, j2 } = options;
-    let { no } = options;
+    const { operationmode, ecco, inclo, xke, j2 } = satrec;
+    let { no } = satrec;
 
     /* --------------------- local variables ------------------------ */
-    const { PI } = Math;
-    const TAU = PI * 2;
     const x2o3 = 2.0 / 3.0;
 
     // Sgp4fix use old way of finding gst
@@ -3263,13 +3241,12 @@ export class Sgp4 {
     const ainv = 1.0 / ao;
     const posq = po * po;
     const rp = ao * (1.0 - ecco);
-    const method = Sgp4Methods.NEAR_EARTH;
 
     //  Sgp4fix modern approach to finding sidereal time
     /** Ootk -- Continue allowing AFSPC mode for SGP4 Validation */
     let gsto;
 
-    if (opsmode === Sgp4OpsMode.AFSPC) {
+    if (operationmode === Sgp4OpsMode.AFSPC) {
       /*
        *  Sgp4fix use old way of finding gst
        *  count integer number of days from 0 jan 1970
@@ -3279,13 +3256,8 @@ export class Sgp4 {
       const tfrac = ts70 - ds70;
 
       //  Find greenwich location at epoch
-
-      // IDEA: Precision issues in JavaScript...
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       const c1 = 1.72027916940703639e-2;
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       const thgr70 = 1.7321343856509374;
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       const fk5r = 5.07551419432269442e-15;
       const c1p2p = c1 + TAU;
 
@@ -3298,7 +3270,8 @@ export class Sgp4 {
       const jdut1 = epoch + 2433281.5;
       const tut1 = (jdut1 - 2451545.0) / 36525.0;
 
-      gsto = -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 + (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
+      gsto = -6.2e-6 * tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 +
+        (876600.0 * 3600 + 8640184.812866) * tut1 + 67310.54841; // Sec
 
       gsto = ((gsto * DEG2RAD) / 240.0) % TAU; // 360/86400 = 1/240, to deg, to rad
 
@@ -3310,7 +3283,6 @@ export class Sgp4 {
 
     return {
       no,
-      method,
       ainv,
       ao,
       con41,
@@ -3428,7 +3400,6 @@ export class Sgp4 {
       xnodeo: number;
     },
   ): void {
-    /* eslint-disable no-param-reassign */
     const {
       whichconst = Sgp4GravConstants.wgs72,
       opsmode = Sgp4OpsMode.IMPROVED,
@@ -3570,13 +3541,8 @@ export class Sgp4 {
      * Ex. A2525 = 102525
      * Ex. Z1234 = 351234
      */
-    const leadingChar = satn.split('')[0].toLowerCase(); // Using uppercase will break the -96 math.
 
-    if (isNaN(parseInt(leadingChar)) && leadingChar !== ' ') {
-      satrec.satnum = parseInt(leadingChar.charCodeAt(0) - 96 + 9 + satrec.satnum.slice(1, 5)).toString();
-    } else {
-      satrec.satnum = satn;
-    }
+    satrec.satnum = Tle.convertA5to6Digit(satn);
 
     /*
      * Sgp4fix - note the following variables are also passed directly via satrec.
@@ -3615,18 +3581,7 @@ export class Sgp4 {
     satrec.t = 0.0;
 
     // Sgp4fix remove satn as it is not needed in initl
-    const initlOptions = {
-      ecco: satrec.ecco,
-      epoch,
-      inclo: satrec.inclo,
-      no: satrec.no,
-      method: satrec.method,
-      opsmode: satrec.operationmode,
-      xke: satrec.xke,
-      j2: satrec.j2,
-    };
-
-    const initlResult = Sgp4.initl_(initlOptions);
+    const initlResult = Sgp4.initl_(satrec, epoch);
 
     const { ao, con42, cosio, cosio2, eccsq, omeosq, posq, rp, rteosq, sinio } = initlResult;
 
@@ -3656,12 +3611,12 @@ export class Sgp4 {
       }
       let sfour = ss;
       let qzms24 = qzms2t;
-      const perige = (rp - 1.0) * satrec.radiusearthkm;
+      const perigee = (rp - 1.0) * satrec.radiusearthkm;
 
       // - for perigees below 156 km, s and qoms2t are altered -
-      if (perige < 156.0) {
-        sfour = perige - 78.0;
-        if (perige < 98.0) {
+      if (perigee < 156.0) {
+        sfour = perigee - 78.0;
+        if (perigee < 98.0) {
           sfour = 20.0;
         }
         // Sgp4fix use multiply for speed instead of pow

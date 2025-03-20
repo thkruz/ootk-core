@@ -324,6 +324,7 @@ export interface SatelliteRecord {
   inclo: number;
   init: boolean;
   irez: number;
+  /** is imprecise flag */
   isimp: boolean;
   j2: number;
   j3: number;
