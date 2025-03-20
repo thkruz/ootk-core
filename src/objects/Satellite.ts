@@ -283,7 +283,8 @@ export class Satellite extends BaseObject {
    * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The ECI position at the specified date.
    */
-  eci(date: Date = new Date(), j = null as number, gmst = null as GreenwichMeanSiderealTime): PosVel<Kilometers> {
+  eci(date?: Date, j?: number, gmst?: GreenwichMeanSiderealTime): PosVel<Kilometers> {
+    date ??= new Date();
     const { m } = Satellite.calculateTimeVariables(date, this.satrec, j, gmst);
 
     if (!m) {
@@ -346,8 +347,9 @@ export class Satellite extends BaseObject {
    * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The LLA position at the specified date.
    */
-  lla(date: Date = new Date(), j = null as number, gmst = null as GreenwichMeanSiderealTime):
+  lla(date?: Date, j?: number, gmst?: GreenwichMeanSiderealTime):
     LlaVec3<Degrees, Kilometers> {
+    date ??= new Date();
     if (!j || !gmst) {
       const timeVar = Satellite.calculateTimeVariables(date, this.satrec);
 
@@ -420,8 +422,9 @@ export class Satellite extends BaseObject {
    * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The RAE vector for the given sensor and time.
    */
-  rae(observer: GroundObject, date: Date = new Date(), j: number = null, gmst: GreenwichMeanSiderealTime = null):
+  rae(observer: GroundObject, date?: Date, j?: number, gmst?: GreenwichMeanSiderealTime):
     RaeVec3<Kilometers, Degrees> {
+    date ??= new Date();
     gmst ??= Satellite.calculateTimeVariables(date, this.satrec).gmst;
     const eci = this.eci(date, j, gmst).position;
     const ecf = eci2ecf(eci, gmst);

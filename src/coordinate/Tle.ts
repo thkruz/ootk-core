@@ -931,6 +931,10 @@ export class Tle {
       return sccNum;
     }
 
+    if (typeof sccNum[0] !== 'string') {
+      throw new Error('Invalid SCC number');
+    }
+
     // Already an alpha 5 number
     if (RegExp(/[A-Z]/iu, 'u').test(sccNum[0])) {
       return sccNum;
@@ -965,6 +969,10 @@ export class Tle {
     }
 
     const values = sccNum.toUpperCase().split('');
+
+    if (!values[0]) {
+      throw new Error('Invalid SCC number');
+    }
 
     if (values[0] in Tle.alpha5_) {
       const firstLetter = values[0] as keyof typeof Tle.alpha5_;
