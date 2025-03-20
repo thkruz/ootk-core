@@ -35,4 +35,48 @@ describe('HpAtmosphereData', () => {
       new HpAtmosphereData(invalidTable);
     }).toThrow('Table must have at least one valid entry.');
   });
+
+  // Test HpAtmosphereData.getAtmosphere with valid height
+  it('should return HpAtmosphereResult for valid height', () => {
+    const table: HpAtmosphereEntry[] = [
+      [0, 1, 2],
+      [10, 3, 4],
+      [20, 5, 6],
+    ];
+
+    const data = new HpAtmosphereData(table);
+    const result = data.getAtmosphere(10);
+
+    expect(result?.height).toBe(10);
+    expect(result?.hp0).toEqual([0, 1, 2]);
+    expect(result?.hp1).toEqual([10, 3, 4]);
+  });
+
+  // Test HpAtmosphereData.getAtmosphere with height below min
+  it('should return null for height below min', () => {
+    const table: HpAtmosphereEntry[] = [
+      [0, 1, 2],
+      [10, 3, 4],
+      [20, 5, 6],
+    ];
+
+    const data = new HpAtmosphereData(table);
+    const result = data.getAtmosphere(-5);
+
+    expect(result).toBeNull();
+  });
+
+  // Test HpAtmosphereData.getAtmosphere with height above max
+  it('should return null for height above max', () => {
+    const table: HpAtmosphereEntry[] = [
+      [0, 1, 2],
+      [10, 3, 4],
+      [20, 5, 6],
+    ];
+
+    const data = new HpAtmosphereData(table);
+    const result = data.getAtmosphere(25);
+
+    expect(result).toBeNull();
+  });
 });
