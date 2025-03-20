@@ -31,13 +31,13 @@ import { OptionsParams } from '../interfaces/OptionsParams.js';
 import { SatelliteParams } from '../interfaces/SatelliteParams.js';
 import { RAE } from '../observation/RAE.js';
 import { Vector3D } from '../operations/Vector3D.js';
-import { Sgp4 } from '../sgp4/sgp4.js';
 import { EpochUTC } from '../time/EpochUTC.js';
 import { ecf2rae, eci2ecf, eci2lla, jday } from '../transforms/index.js';
 import {
   Degrees,
   EcfVec3,
   EciVec3,
+  GreenwichMeanSiderealTime,
   Kilometers,
   KilometersPerSecond,
   LlaVec3,
@@ -54,8 +54,8 @@ import { DEG2RAD, MILLISECONDS_TO_DAYS, MINUTES_PER_DAY, RAD2DEG } from '../util
 import { dopplerFactor } from './../utils/functions.js';
 import { BaseObject } from './BaseObject.js';
 import { GroundObject } from './GroundObject.js';
-import { TimeVariables } from '../interfaces/TimeVariables.js';
-import { OmmDataFormat, OmmParsedDataFormat } from 'src/interfaces/OmmFormat.js';
+import { OmmDataFormat, OmmParsedDataFormat } from '../interfaces/OmmFormat.js';
+import { Sgp4 } from '../main.js';
 
 /**
  * Represents a satellite object with orbital information and methods for
@@ -279,10 +279,12 @@ export class Satellite extends BaseObject {
    * Calculates ECI position at a given time.
    * @variation optimized
    * @param date - The date at which to calculate the ECI position. Optional, defaults to the current date.
+   * @param j - Julian date. Optional, defaults to null.
+   * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The ECI position at the specified date.
    */
-  eci(date: Date = new Date()): PosVel<Kilometers> {
-    const { m } = Satellite.calculateTimeVariables(date, this.satrec);
+  eci(date: Date = new Date(), j = null as number, gmst = null as GreenwichMeanSiderealTime): PosVel<Kilometers> {
+    const { m } = Satellite.calculateTimeVariables(date, this.satrec, j, gmst);
 
     if (!m) {
       throw new Error('Propagation failed!');
@@ -340,11 +342,20 @@ export class Satellite extends BaseObject {
    * Calculates LLA position at a given time.
    * @variation optimized
    * @param date - The date at which to calculate the LLA position. Optional, defaults to the current date.
+   * @param j - Julian date. Optional, defaults to null.
+   * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The LLA position at the specified date.
    */
-  lla(date: Date = new Date()): LlaVec3<Degrees, Kilometers> {
-    const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
-    const pos = this.eci(date).position;
+  lla(date: Date = new Date(), j = null as number, gmst = null as GreenwichMeanSiderealTime):
+    LlaVec3<Degrees, Kilometers> {
+    if (!j || !gmst) {
+      const timeVar = Satellite.calculateTimeVariables(date, this.satrec);
+
+      j = timeVar.j;
+      gmst = timeVar.gmst;
+    }
+
+    const pos = this.eci(date, j, gmst).position as EciVec3<Kilometers>;
     const lla = eci2lla(pos, gmst);
 
     return lla;
@@ -405,11 +416,14 @@ export class Satellite extends BaseObject {
    * @variation optimized
    * @param observer - The observer's position on the ground.
    * @param date - The date at which to calculate the RAE vector. Optional, defaults to the current date.
+   * @param j - Julian date. Optional, defaults to null.
+   * @param gmst - Greenwich Mean Sidereal Time. Optional, defaults to null.
    * @returns The RAE vector for the given sensor and time.
    */
-  rae(observer: GroundObject, date: Date = new Date()): RaeVec3<Kilometers, Degrees> {
-    const { gmst } = Satellite.calculateTimeVariables(date, this.satrec);
-    const eci = this.eci(date).position;
+  rae(observer: GroundObject, date: Date = new Date(), j: number = null, gmst: GreenwichMeanSiderealTime = null):
+    RaeVec3<Kilometers, Degrees> {
+    gmst ??= Satellite.calculateTimeVariables(date, this.satrec).gmst;
+    const eci = this.eci(date, j, gmst).position;
     const ecf = eci2ecf(eci, gmst);
 
     return ecf2rae(observer, ecf);
@@ -455,10 +469,14 @@ export class Satellite extends BaseObject {
    * Calculates the time variables for a given date relative to the TLE epoch.
    * @param date Date to calculate
    * @param satrec Satellite orbital information
+   * @param j Julian date
+   * @param gmst Greenwich Mean Sidereal Time
    * @returns Time variables
    */
-  private static calculateTimeVariables(date: Date, satrec?: SatelliteRecord): TimeVariables {
-    const j = jday(
+  private static calculateTimeVariables(
+    date: Date, satrec?: SatelliteRecord, j?: number, gmst?: GreenwichMeanSiderealTime,
+  ) {
+    j ??= jday(
       date.getUTCFullYear(),
       date.getUTCMonth() + 1,
       date.getUTCDate(),
@@ -466,7 +484,8 @@ export class Satellite extends BaseObject {
       date.getUTCMinutes(),
       date.getUTCSeconds(),
     ) + date.getUTCMilliseconds() * MILLISECONDS_TO_DAYS;
-    const gmst = Sgp4.gstime(j);
+    gmst ??= Sgp4.gstime(j);
+
     const m = satrec ? (j - satrec.jdsatepoch) * MINUTES_PER_DAY : null;
 
     return { gmst, m, j };

@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Sgp4ErrorCode } from 'src/sgp4/sgp4-error.js';
+import { Sgp4ErrorCode } from '../sgp4/sgp4-error.js';
 import { Vector3D, PassType, Satellite } from '../main.js';
 
 /**

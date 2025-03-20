@@ -22,7 +22,7 @@
  */
 
 export class TransformCache {
-  private static cache_: Map<string, unknown> = new Map();
+  private static readonly cache_: Map<string, unknown> = new Map();
 
   static get(key: string): unknown {
     const value = this.cache_.get(key);

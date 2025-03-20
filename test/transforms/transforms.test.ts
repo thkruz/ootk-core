@@ -129,7 +129,19 @@ describe('Latitude & longitude conversions', () => {
 
 describe('Rae2Sez', () => {
   it('should convert valid RAE coordinates to SEZ', () => {
-    const { rae, sez } = transformsData.validRae2Sez[0];
+    const { rae, sez } = transformsData.validRae2Sez[0] as {
+      rae: {
+        rng: Kilometers;
+        az: Radians;
+        el: Radians;
+      }
+      sez: {
+        s: number;
+        e: number;
+        z: number;
+      };
+    };
+
     const sezCoordinates = rae2sez(rae);
 
     expect(sezCoordinates.s).toBeCloseTo(sez.s);
